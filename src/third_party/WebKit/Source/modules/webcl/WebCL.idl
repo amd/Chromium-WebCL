@@ -1,0 +1,479 @@
+/*
+ * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided the following conditions
+ * are met:
+ * 
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ * 
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ * ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ * NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+
+ [
+Conditional=WEBCL,
+//	CanBeConstructed,
+	CustomConstructor,
+//	CustomConstructFunction,
+	] interface WebCL {
+		/* Error Codes */
+		const unsigned long   SUCCESS                                  = 0;
+		const unsigned long   DEVICE_NOT_FOUND                         = -1;
+		const unsigned long   DEVICE_NOT_AVAILABLE                     = -2;
+		const unsigned long   COMPILER_NOT_AVAILABLE                   = -3;
+		const unsigned long   MEM_OBJECT_ALLOCATION_FAILURE            = -4;
+		const unsigned long   OUT_OF_RESOURCES                         = -5;
+		const unsigned long   OUT_OF_HOST_MEMORY                       = -6;
+		const unsigned long   PROFILING_INFO_NOT_AVAILABLE             = -7;
+		const unsigned long   MEM_COPY_OVERLAP                         = -8;
+		const unsigned long   IMAGE_FORMAT_MISMATCH                    = -9;
+		const unsigned long   IMAGE_FORMAT_NOT_SUPPORTED               = -10;
+		const unsigned long   BUILD_PROGRAM_FAILURE                    = -11;
+		const unsigned long   MAP_FAILURE                              = -12;
+		const unsigned long   MISALIGNED_SUB_BUFFER_OFFSET             = -13;
+		const unsigned long   EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST = -14;
+
+		const unsigned long   INVALID_VALUE                            = -30;
+		const unsigned long   INVALID_DEVICE_TYPE                      = -31;
+		const unsigned long   INVALID_PLATFORM                         = -32;
+		const unsigned long   INVALID_DEVICE                           = -33;
+		const unsigned long   INVALID_CONTEXT                          = -34;
+		const unsigned long   INVALID_QUEUE_PROPERTIES                 = -35;
+		const unsigned long   INVALID_COMMAND_QUEUE                    = -36;
+		const unsigned long   INVALID_HOST_PTR                         = -37;
+		const unsigned long   INVALID_MEM_OBJECT                       = -38;
+		const unsigned long   INVALID_IMAGE_FORMAT_DESCRIPTOR          = -39;
+		const unsigned long   INVALID_IMAGE_SIZE                       = -40;
+		const unsigned long   INVALID_SAMPLER                          = -41;
+		const unsigned long   INVALID_BINARY                           = -42;
+		const unsigned long   INVALID_BUILD_OPTIONS                    = -43;
+		const unsigned long   INVALID_PROGRAM                          = -44;
+		const unsigned long   INVALID_PROGRAM_EXECUTABLE               = -45;
+		const unsigned long   INVALID_KERNEL_NAME                      = -46;
+		const unsigned long   INVALID_KERNEL_DEFINITION                = -47;
+		const unsigned long   INVALID_KERNEL                           = -48;
+		const unsigned long   INVALID_ARG_INDEX                        = -49;
+		const unsigned long   INVALID_ARG_VALUE                        = -50;
+		const unsigned long   INVALID_ARG_SIZE                         = -51;
+		const unsigned long   INVALID_KERNEL_ARGS                      = -52;
+		const unsigned long   INVALID_WORK_DIMENSION                   = -53;
+		const unsigned long   INVALID_WORK_GROUP_SIZE                  = -54;
+		const unsigned long   INVALID_WORK_ITEM_SIZE                   = -55;
+		const unsigned long   INVALID_GLOBAL_OFFSET                    = -56;
+		const unsigned long   INVALID_EVENT_WAIT_LIST                  = -57;
+		const unsigned long   INVALID_EVENT                            = -58;
+		const unsigned long   INVALID_OPERATION                        = -59;
+		const unsigned long   INVALID_GL_OBJECT                        = -60;
+		const unsigned long   INVALID_BUFFER_SIZE                      = -61;
+		const unsigned long   INVALID_MIP_LEVEL                        = -62;
+		const unsigned long   INVALID_GLOBAL_WORK_SIZE                 = -63;
+		const unsigned long   INVALID_PROPERTY                         = -64;
+
+		/* OpenCL Version */
+		const unsigned long   VERSION_1_0                              = 1;
+		const unsigned long   VERSION_1_1                              = 1;  // sg: ??
+
+		/* cl_platform_info */
+		const unsigned long   PLATFORM_PROFILE                         = 0x0900;
+		const unsigned long   PLATFORM_VERSION                         = 0x0901;
+		const unsigned long   PLATFORM_NAME                            = 0x0902;
+		const unsigned long   PLATFORM_VENDOR                          = 0x0903;
+		const unsigned long   PLATFORM_EXTENSIONS                      = 0x0904;
+
+		/* cl_device_type - bitfield */
+		const unsigned long   DEVICE_TYPE_DEFAULT                      = 0x1; // (1 << 0);
+		const unsigned long   DEVICE_TYPE_CPU                          = 0x2; // (1 << 1);
+		const unsigned long   DEVICE_TYPE_GPU                          = 0x4; // (1 << 2);
+		const unsigned long   DEVICE_TYPE_ACCELERATOR                  = 0x8; // (1 << 3);
+		const unsigned long   DEVICE_TYPE_ALL                          = 0xFFFFFFFF;
+
+		/* cl_device_info */
+		const unsigned long   DEVICE_TYPE                              = 0x1000;
+		const unsigned long   DEVICE_VENDOR_ID                         = 0x1001;
+		const unsigned long   DEVICE_MAX_COMPUTE_UNITS                 = 0x1002;
+		const unsigned long   DEVICE_MAX_WORK_ITEM_DIMENSIONS          = 0x1003;
+		const unsigned long   DEVICE_MAX_WORK_GROUP_SIZE               = 0x1004;
+		const unsigned long   DEVICE_MAX_WORK_ITEM_SIZES               = 0x1005;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_CHAR       = 0x1006;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_SHORT      = 0x1007;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_INT        = 0x1008;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_LONG       = 0x1009;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT      = 0x100A;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE     = 0x100B;
+		const unsigned long   DEVICE_MAX_CLOCK_FREQUENCY               = 0x100C;
+		const unsigned long   DEVICE_ADDRESS_BITS                      = 0x100D;
+		const unsigned long   DEVICE_MAX_READ_IMAGE_ARGS               = 0x100E;
+		const unsigned long   DEVICE_MAX_WRITE_IMAGE_ARGS              = 0x100F;
+		const unsigned long   DEVICE_MAX_MEM_ALLOC_SIZE                = 0x1010;
+		const unsigned long   DEVICE_IMAGE2D_MAX_WIDTH                 = 0x1011;
+		const unsigned long   DEVICE_IMAGE2D_MAX_HEIGHT                = 0x1012;
+		const unsigned long   DEVICE_IMAGE3D_MAX_WIDTH                 = 0x1013;
+		const unsigned long   DEVICE_IMAGE3D_MAX_HEIGHT                = 0x1014;
+		const unsigned long   DEVICE_IMAGE3D_MAX_DEPTH                 = 0x1015;
+		const unsigned long   DEVICE_IMAGE_SUPPORT                     = 0x1016;
+		const unsigned long   DEVICE_MAX_PARAMETER_SIZE                = 0x1017;
+		const unsigned long   DEVICE_MAX_SAMPLERS                      = 0x1018;
+		const unsigned long   DEVICE_MEM_BASE_ADDR_ALIGN               = 0x1019;
+		const unsigned long   DEVICE_MIN_DATA_TYPE_ALIGN_SIZE          = 0x101A;
+		const unsigned long   DEVICE_SINGLE_FP_CONFIG                  = 0x101B;
+		const unsigned long   DEVICE_GLOBAL_MEM_CACHE_TYPE             = 0x101C;
+		const unsigned long   DEVICE_GLOBAL_MEM_CACHELINE_SIZE         = 0x101D;
+		const unsigned long   DEVICE_GLOBAL_MEM_CACHE_SIZE             = 0x101E;
+		const unsigned long   DEVICE_GLOBAL_MEM_SIZE                   = 0x101F;
+		const unsigned long   DEVICE_MAX_CONSTANT_BUFFER_SIZE          = 0x1020;
+		const unsigned long   DEVICE_MAX_CONSTANT_ARGS                 = 0x1021;
+		const unsigned long   DEVICE_LOCAL_MEM_TYPE                    = 0x1022;
+		const unsigned long   DEVICE_LOCAL_MEM_SIZE                    = 0x1023;
+		const unsigned long   DEVICE_ERROR_CORRECTION_SUPPORT          = 0x1024;
+		const unsigned long   DEVICE_PROFILING_TIMER_RESOLUTION        = 0x1025;
+		const unsigned long   DEVICE_ENDIAN_LITTLE                     = 0x1026;
+		const unsigned long   DEVICE_AVAILABLE                         = 0x1027;
+		const unsigned long   DEVICE_COMPILER_AVAILABLE                = 0x1028;
+		const unsigned long   DEVICE_EXECUTION_CAPABILITIES            = 0x1029;
+		const unsigned long   DEVICE_QUEUE_PROPERTIES                  = 0x102A;
+		const unsigned long   DEVICE_NAME                              = 0x102B;
+		const unsigned long   DEVICE_VENDOR                            = 0x102C;
+		const unsigned long   DRIVER_VERSION                           = 0x102D;
+		const unsigned long   DEVICE_PROFILE                           = 0x102E;
+		const unsigned long   DEVICE_VERSION                           = 0x102F;
+		const unsigned long   DEVICE_EXTENSIONS                        = 0x1030;
+		const unsigned long   DEVICE_PLATFORM                          = 0x1031;
+		/* = 0x1032 reserved for  DEVICE_DOUBLE_FP_CONFIG */
+		/* = 0x1033 reserved for  DEVICE_HALF_FP_CONFIG */
+		const unsigned long   DEVICE_DOUBLE_FP_CONFIG		   = 0x1032;
+		const unsigned long   DEVICE_HALF_FP_CONFIG		 	   = 0x1033;
+		const unsigned long   DEVICE_PREFERRED_VECTOR_WIDTH_HALF       = 0x1034;
+		const unsigned long   DEVICE_HOST_UNIFIED_MEMORY               = 0x1035;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_CHAR          = 0x1036;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_SHORT         = 0x1037;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_INT           = 0x1038;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_LONG          = 0x1039;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_FLOAT         = 0x103A;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE        = 0x103B;
+		const unsigned long   DEVICE_NATIVE_VECTOR_WIDTH_HALF          = 0x103C;
+		const unsigned long   DEVICE_OPENCL_C_VERSION                  = 0x103D;
+
+		/* cl_device_fp_config - bitfield */
+		const unsigned long   FP_DENORM                                = 0x01; // (1 << 0);
+		const unsigned long   FP_INF_NAN                               = 0x02; // (1 << 1);
+		const unsigned long   FP_ROUND_TO_NEAREST                      = 0x04; // (1 << 2);
+		const unsigned long   FP_ROUND_TO_ZERO                         = 0x08; // (1 << 3);
+		const unsigned long   FP_ROUND_TO_INF                          = 0x10; // (1 << 4);
+		const unsigned long   FP_FMA                                   = 0x20; // (1 << 5);
+		const unsigned long   FP_SOFT_FLOAT                            = 0x40; // (1 << 6);
+
+		/* cl_device_mem_cache_type */
+		const unsigned long   NONE                                     = 0x0;
+		const unsigned long   READ_ONLY_CACHE                          = 0x1;
+		const unsigned long   READ_WRITE_CACHE                         = 0x2;
+
+		/* cl_device_local_mem_type */
+		const unsigned long   LOCAL                                    = 0x1;
+		const unsigned long   GLOBAL                                   = 0x2;
+
+		/* cl_device_exec_capabilities - bitfield */
+		const unsigned long   EXEC_KERNEL                              = 0x1; // (1 << 0);
+		const unsigned long   EXEC_NATIVE_KERNEL                       = 0x2; // (1 << 1);
+
+		/* cl_command_queue_properties - bitfield */
+		const unsigned long   QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE      = 0x1; // (1 << 0);
+		const unsigned long   QUEUE_PROFILING_ENABLE                   = 0x2; // (1 << 1);
+
+		/* cl_context_info  */
+		const unsigned long   CONTEXT_REFERENCE_COUNT                  = 0x1080;
+		const unsigned long   CONTEXT_DEVICES                          = 0x1081;
+		const unsigned long   CONTEXT_PROPERTIES                       = 0x1082;
+		const unsigned long   CONTEXT_NUM_DEVICES                      = 0x1083;
+
+		/* cl_context_info + cl_context_properties */
+		const unsigned long   CONTEXT_PLATFORM                         = 0x1084;
+
+		/* cl_command_queue_info */
+		const unsigned long   QUEUE_CONTEXT                            = 0x1090;
+		const unsigned long   QUEUE_DEVICE                             = 0x1091;
+		const unsigned long   QUEUE_REFERENCE_COUNT                    = 0x1092;
+		const unsigned long   QUEUE_PROPERTIES                         = 0x1093;
+
+		/* cl_mem_flags - bitfield */
+		const unsigned long   MEM_READ_WRITE                           = 0x01; // (1 << 0);
+		const unsigned long   MEM_WRITE_ONLY                           = 0x02; // (1 << 1);
+		const unsigned long   MEM_READ_ONLY                            = 0x04; // (1 << 2);
+		const unsigned long   MEM_USE_HOST_PTR                         = 0x08; // (1 << 3);
+		const unsigned long   MEM_ALLOC_HOST_PTR                       = 0x10; // (1 << 4);
+		const unsigned long   MEM_COPY_HOST_PTR                        = 0x20; // (1 << 5);
+
+		/* cl_channel_order */
+		const unsigned long   R                                        = 0x10B0;
+		const unsigned long   A                                        = 0x10B1;
+		const unsigned long   RG                                       = 0x10B2;
+		const unsigned long   RA                                       = 0x10B3;
+		const unsigned long   RGB                                      = 0x10B4;
+		const unsigned long   RGBA                                     = 0x10B5;
+		const unsigned long   BGRA                                     = 0x10B6;
+		const unsigned long   ARGB                                     = 0x10B7;
+		const unsigned long   INTENSITY                                = 0x10B8;
+		const unsigned long   LUMINANCE                                = 0x10B9;
+		const unsigned long   Rx                                       = 0x10BA;
+		const unsigned long   RGx                                      = 0x10BB;
+		const unsigned long   RGBx                                     = 0x10BC;
+
+		/* cl_channel_type */
+		const unsigned long   SNORM_INT8                               = 0x10D0;
+		const unsigned long   SNORM_INT16                              = 0x10D1;
+		const unsigned long   UNORM_INT8                               = 0x10D2;
+		const unsigned long   UNORM_INT16                              = 0x10D3;
+		const unsigned long   UNORM_SHORT_565                          = 0x10D4;
+		const unsigned long   UNORM_SHORT_555                          = 0x10D5;
+		const unsigned long   UNORM_INT_101010                         = 0x10D6;
+		const unsigned long   SIGNED_INT8                              = 0x10D7;
+		const unsigned long   SIGNED_INT16                             = 0x10D8;
+		const unsigned long   SIGNED_INT32                             = 0x10D9;
+		const unsigned long   UNSIGNED_INT8                            = 0x10DA;
+		const unsigned long   UNSIGNED_INT16                           = 0x10DB;
+		const unsigned long   UNSIGNED_INT32                           = 0x10DC;
+		const unsigned long   HALF_FLOAT                               = 0x10DD;
+		const unsigned long   FLOAT                                    = 0x10DE;
+
+		/* cl_mem_object_type */
+		const unsigned long   MEM_OBJECT_BUFFER                        = 0x10F0;
+		const unsigned long   MEM_OBJECT_IMAGE2D                       = 0x10F1;
+		const unsigned long   MEM_OBJECT_IMAGE3D                       = 0x10F2;
+
+		/* cl_mem_info */
+		const unsigned long   MEM_TYPE                                 = 0x1100;
+		const unsigned long   MEM_FLAGS                                = 0x1101;
+		const unsigned long   MEM_SIZE                                 = 0x1102;
+		const unsigned long   MEM_HOST_PTR                             = 0x1103;
+		const unsigned long   MEM_MAP_COUNT                            = 0x1104;
+		const unsigned long   MEM_REFERENCE_COUNT                      = 0x1105;
+		const unsigned long   MEM_CONTEXT                              = 0x1106;
+		const unsigned long   MEM_ASSOCIATED_MEMOBJECT                 = 0x1107;
+		const unsigned long   MEM_OFFSET                               = 0x1108;
+
+		/* cl_image_info */
+		const unsigned long   IMAGE_FORMAT                             = 0x1110;
+		const unsigned long   IMAGE_ELEMENT_SIZE                       = 0x1111;
+		const unsigned long   IMAGE_ROW_PITCH                          = 0x1112;
+		const unsigned long   IMAGE_SLICE_PITCH                        = 0x1113;
+		const unsigned long   IMAGE_WIDTH                              = 0x1114;
+		const unsigned long   IMAGE_HEIGHT                             = 0x1115;
+		const unsigned long   IMAGE_DEPTH                              = 0x1116;
+
+		/* cl_addressing_mode */
+		const unsigned long   ADDRESS_NONE                             = 0x1130;
+		const unsigned long   ADDRESS_CLAMP_TO_EDGE                    = 0x1131;
+		const unsigned long   ADDRESS_CLAMP                            = 0x1132;
+		const unsigned long   ADDRESS_REPEAT                           = 0x1133;
+		const unsigned long   ADDRESS_MIRRORED_REPEAT                  = 0x1134;
+
+		/* cl_filter_mode */
+		const unsigned long   FILTER_NEAREST                           = 0x1140;
+		const unsigned long   FILTER_LINEAR                            = 0x1141;
+
+		/* cl_sampler_info */
+		const unsigned long   SAMPLER_REFERENCE_COUNT                  = 0x1150;
+		const unsigned long   SAMPLER_CONTEXT                          = 0x1151;
+		const unsigned long   SAMPLER_NORMALIZED_COORDS                = 0x1152;
+		const unsigned long   SAMPLER_ADDRESSING_MODE                  = 0x1153;
+		const unsigned long   SAMPLER_FILTER_MODE                      = 0x1154;
+
+		/* cl_map_flags - bitfield */
+		const unsigned long   MAP_READ                                 = 0x1; // (1 << 0);
+		const unsigned long   MAP_WRITE                                = 0x2; // (1 << 1);
+
+		/* cl_program_info */
+		const unsigned long   PROGRAM_REFERENCE_COUNT                  = 0x1160;
+		const unsigned long   PROGRAM_CONTEXT                          = 0x1161;
+		const unsigned long   PROGRAM_NUM_DEVICES                      = 0x1162;
+		const unsigned long   PROGRAM_DEVICES                          = 0x1163;
+		const unsigned long   PROGRAM_SOURCE                           = 0x1164;
+		const unsigned long   PROGRAM_BINARY_SIZES                     = 0x1165;
+		const unsigned long   PROGRAM_BINARIES                         = 0x1166;
+
+		/* cl_program_build_info */
+		const unsigned long   PROGRAM_BUILD_STATUS                     = 0x1181;
+		const unsigned long   PROGRAM_BUILD_OPTIONS                    = 0x1182;
+		const unsigned long   PROGRAM_BUILD_LOG                        = 0x1183;
+
+		/* cl_build_status */
+		const unsigned long   BUILD_SUCCESS                            = 0;
+		const unsigned long   BUILD_NONE                               = -1;
+		const unsigned long   BUILD_ERROR                              = -2;
+		const unsigned long   BUILD_IN_PROGRESS                        = -3;
+
+		/* cl_kernel_info */
+		const unsigned long   KERNEL_FUNCTION_NAME                     = 0x1190;
+		const unsigned long   KERNEL_NUM_ARGS                          = 0x1191;
+		const unsigned long   KERNEL_REFERENCE_COUNT                   = 0x1192;
+		const unsigned long   KERNEL_CONTEXT                           = 0x1193;
+		const unsigned long   KERNEL_PROGRAM                           = 0x1194;
+
+		/* cl_kernel_work_group_info */
+		const unsigned long   KERNEL_WORK_GROUP_SIZE                   = 0x11B0;
+		const unsigned long   KERNEL_COMPILE_WORK_GROUP_SIZE           = 0x11B1;
+		const unsigned long   KERNEL_LOCAL_MEM_SIZE                    = 0x11B2;
+		const unsigned long   KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE = 0x11B3;
+		const unsigned long   KERNEL_PRIVATE_MEM_SIZE                  = 0x11B4;
+
+		/* cl_event_info  */
+		const unsigned long   EVENT_COMMAND_QUEUE                      = 0x11D0;
+		const unsigned long   EVENT_COMMAND_TYPE                       = 0x11D1;
+		const unsigned long   EVENT_REFERENCE_COUNT                    = 0x11D2;
+		const unsigned long   EVENT_COMMAND_EXECUTION_STATUS           = 0x11D3;
+		const unsigned long   EVENT_CONTEXT                            = 0x11D4;
+
+		/* cl_command_type */
+		const unsigned long   COMMAND_NDRANGE_KERNEL                   = 0x11F0;
+		const unsigned long   COMMAND_TASK                             = 0x11F1;
+		const unsigned long   COMMAND_NATIVE_KERNEL                    = 0x11F2;
+		const unsigned long   COMMAND_READ_BUFFER                      = 0x11F3;
+		const unsigned long   COMMAND_WRITE_BUFFER                     = 0x11F4;
+		const unsigned long   COMMAND_COPY_BUFFER                      = 0x11F5;
+		const unsigned long   COMMAND_READ_IMAGE                       = 0x11F6;
+		const unsigned long   COMMAND_WRITE_IMAGE                      = 0x11F7;
+		const unsigned long   COMMAND_COPY_IMAGE                       = 0x11F8;
+		const unsigned long   COMMAND_COPY_IMAGE_TO_BUFFER             = 0x11F9;
+		const unsigned long   COMMAND_COPY_BUFFER_TO_IMAGE             = 0x11FA;
+		const unsigned long   COMMAND_MAP_BUFFER                       = 0x11FB;
+		const unsigned long   COMMAND_MAP_IMAGE                        = 0x11FC;
+		const unsigned long   COMMAND_UNMAP_MEM_OBJECT                 = 0x11FD;
+		const unsigned long   COMMAND_MARKER                           = 0x11FE;
+		const unsigned long   COMMAND_ACQUIRE_GL_OBJECTS               = 0x11FF;
+		const unsigned long   COMMAND_RELEASE_GL_OBJECTS               = 0x1200;
+		const unsigned long   COMMAND_READ_BUFFER_RECT                 = 0x1201;
+		const unsigned long   COMMAND_WRITE_BUFFER_RECT                = 0x1202;
+		const unsigned long   COMMAND_COPY_BUFFER_RECT                 = 0x1203;
+		const unsigned long   COMMAND_USER                             = 0x1204;
+
+		/* command execution status */
+		const unsigned long   COMPLETE                                 = 0x0;
+		const unsigned long   RUNNING                                  = 0x1;
+		const unsigned long   SUBMITTED                                = 0x2;
+		const unsigned long   QUEUED                                   = 0x3;
+
+		/* cl_buffer_create_type  */
+		const unsigned long   BUFFER_CREATE_TYPE_REGION                = 0x1220;
+
+		/* cl_profiling_info  */
+		const unsigned long   PROFILING_COMMAND_QUEUED                 = 0x1280;
+		const unsigned long   PROFILING_COMMAND_SUBMIT                 = 0x1281;
+		const unsigned long   PROFILING_COMMAND_START                  = 0x1282;
+		const unsigned long   PROFILING_COMMAND_END                    = 0x1283;
+
+		 /* cl_kernel_arg_type */
+		const unsigned long   KERNEL_ARG_CHAR                          = 0x2000;
+		const unsigned long   KERNEL_ARG_UCHAR                         = 0x2001;
+		const unsigned long   KERNEL_ARG_SHORT                         = 0x2002;
+		const unsigned long   KERNEL_ARG_USHORT                        = 0x2003;
+		const unsigned long   KERNEL_ARG_INT                           = 0x2004;
+		const unsigned long   KERNEL_ARG_UINT                          = 0x2005;
+		const unsigned long   KERNEL_ARG_LONG                          = 0x2006;
+		const unsigned long   KERNEL_ARG_ULONG                         = 0x2007;
+		const unsigned long   KERNEL_ARG_FLOAT                         = 0x2008;
+
+		const unsigned long   KERNEL_ARG_CHAR2                         = 0x2020;
+		const unsigned long   KERNEL_ARG_UCHAR2                        = 0x2021;
+		const unsigned long   KERNEL_ARG_SHORT2                        = 0x2022;
+		const unsigned long   KERNEL_ARG_USHORT2                       = 0x2023;
+		const unsigned long   KERNEL_ARG_INT2                          = 0x2024;
+		const unsigned long   KERNEL_ARG_UINT2                         = 0x2025;
+		const unsigned long   KERNEL_ARG_LONG2                         = 0x2026;
+		const unsigned long   KERNEL_ARG_ULONG2                        = 0x2027;
+		const unsigned long   KERNEL_ARG_FLOAT2                        = 0x2028;		
+		const unsigned long   KERNEL_ARG_CHAR3                         = 0x2030;
+		const unsigned long   KERNEL_ARG_UCHAR3                        = 0x2031;
+		const unsigned long   KERNEL_ARG_SHORT3                        = 0x2032;
+		const unsigned long   KERNEL_ARG_USHORT3                       = 0x2033;
+		const unsigned long   KERNEL_ARG_INT3                          = 0x2034;
+		const unsigned long   KERNEL_ARG_UINT3                         = 0x2035;
+		const unsigned long   KERNEL_ARG_LONG3                         = 0x2036;
+		const unsigned long   KERNEL_ARG_ULONG3                        = 0x2037;
+		const unsigned long   KERNEL_ARG_FLOAT3                        = 0x2038;		
+		const unsigned long   KERNEL_ARG_CHAR4                         = 0x2040;
+		const unsigned long   KERNEL_ARG_UCHAR4                        = 0x2041;
+		const unsigned long   KERNEL_ARG_SHORT4                        = 0x2042;
+		const unsigned long   KERNEL_ARG_USHORT4                       = 0x2043;
+		const unsigned long   KERNEL_ARG_INT4                          = 0x2044;
+		const unsigned long   KERNEL_ARG_UINT4                         = 0x2045;
+		const unsigned long   KERNEL_ARG_LONG4                         = 0x2046;
+		const unsigned long   KERNEL_ARG_ULONG4                        = 0x2047;
+		const unsigned long   KERNEL_ARG_FLOAT4                        = 0x2048;		
+		const unsigned long   KERNEL_ARG_CHAR8                         = 0x2080;
+		const unsigned long   KERNEL_ARG_UCHAR8                        = 0x2081;
+		const unsigned long   KERNEL_ARG_SHORT8                        = 0x2082;
+		const unsigned long   KERNEL_ARG_USHORT8                       = 0x2083;
+		const unsigned long   KERNEL_ARG_INT8                          = 0x2084;
+		const unsigned long   KERNEL_ARG_UINT8                         = 0x2085;
+		const unsigned long   KERNEL_ARG_LONG8                         = 0x2086;
+		const unsigned long   KERNEL_ARG_ULONG8                        = 0x2087;
+		const unsigned long   KERNEL_ARG_FLOAT8                        = 0x2088;		
+		const unsigned long   KERNEL_ARG_CHAR16                        = 0x2100;
+		const unsigned long   KERNEL_ARG_UCHAR16                       = 0x2101;
+		const unsigned long   KERNEL_ARG_SHORT16                       = 0x2102;
+		const unsigned long   KERNEL_ARG_USHORT16                      = 0x2103;
+		const unsigned long   KERNEL_ARG_INT16                         = 0x2104;
+		const unsigned long   KERNEL_ARG_UINT16                        = 0x2105;
+		const unsigned long   KERNEL_ARG_LONG16                        = 0x2106;
+		const unsigned long   KERNEL_ARG_ULONG16                       = 0x2107;
+		const unsigned long   KERNEL_ARG_FLOAT16                       = 0x2108;
+		const unsigned long   KERNEL_ARG_IMAGE2D                       = 0x2200;
+		const unsigned long   KERNEL_ARG_IMAGE3D                       = 0x2201;
+		const unsigned long   KERNEL_ARG_SAMPLER                       = 0x2202;
+		const unsigned long   KERNEL_ARG_MEM	                     = 0x2203;
+
+		/* cl_gl_texture_info param value */
+	    
+	    const unsigned long   OBJECT_BUFFER 	                       = 0x2000;
+        const unsigned long   OBJECT_TEXTURE2D 	                       = 0x2001;
+        const unsigned long   OBJECT_TEXTURE3D                         = 0x2002;
+        const unsigned long   OBJECT_RENDERBUFFER                      = 0x2003;
+        const unsigned long   TEXTURE_TARGET                           = 0x2004;
+        const unsigned long   MIPMAP_LEVEL    		                   = 0x2005;
+	
+
+		[RaisesException] WebCLPlatformList getPlatforms();			
+		
+		[StrictTypeChecking, Custom,RaisesException]  void getImageInfo(WebCLImage image, 
+				long param_name);
+
+		// Availble in OpenCL 1.1		
+		[RaisesException] void waitForEvents(WebCLEventList events);
+		[RaisesException] WebCLContext createContext(long contextProperties, 
+				 WebCLDeviceList devices, 
+				 long notify, 
+				 long user_data);
+		//WebCLContext createContext() raises(DOMException);
+		[RaisesException] WebCLContext createContext(long contextProperties, 
+				 WebCLDevice device, 
+				 long notify, 
+				 long user_data);	
+		[RaisesException] WebCLContext createContextFromType( long contextProperties,
+				 long deviceType, 
+				 long notify,
+				 long user_data);
+		[RaisesException] WebCLContext createSharedContext( long deviceType, 
+				 long notify,
+				 long userData);
+		// From latest WebCL Spec
+		[RaisesException] WebCLContext createContext( [Default=Undefined] optional  WebCLContextProperties properties);
+		[RaisesException] void unloadCompiler();
+
+	};
+

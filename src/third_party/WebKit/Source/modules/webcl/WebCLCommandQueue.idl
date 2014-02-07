@@ -1,0 +1,110 @@
+/*
+* Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
+* 
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided the following conditions
+* are met:
+* 
+* 1.  Redistributions of source code must retain the above copyright
+*     notice, this list of conditions and the following disclaimer.
+* 
+* 2.  Redistributions in binary form must reproduce the above copyright
+*     notice, this list of conditions and the following disclaimer in the
+*     documentation and/or other materials provided with the distribution.
+* 
+* THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+* CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+* BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+* ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+* INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+* DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+* NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+
+	 [
+		Conditional=WEBCL,
+	] interface WebCLCommandQueue {
+	[StrictTypeChecking, Custom,RaisesException]  void getInfo(long queuenfo);
+	[RaisesException] void enqueueWriteBuffer( WebCLMem bufferId, 
+				 boolean blockingWrite, 
+				 long offset, 
+				 long bufferSize, 
+				 ArrayBufferView ptr,
+				 optional WebCLEventList eventWaitList,
+                 optional WebCLEvent event);
+
+	[RaisesException] WebCLEvent enqueueWriteBuffer( WebCLMem bufferId, 
+				 boolean blockingWrite, 
+				 long offset, 
+				 long bufferSize, 
+				 ImageData ptr, 
+				 long eventWaitList);
+
+	[RaisesException] void enqueueReadBuffer( WebCLMem bufferId, 
+				 boolean blockingRead, 
+				 long offset, 
+				 long bufferSize, 
+				 ArrayBufferView ptr, 
+				 optional WebCLEventList eventWaitList,
+                                 optional WebCLEvent event);
+	
+	[RaisesException] WebCLEvent enqueueReadBuffer( WebCLMem bufferId, 
+				 boolean blockingRead, 
+				 long offset, 
+				 long bufferSize, 
+				 ImageData ptr, 
+				 long eventWaitList);
+
+	
+	[RaisesException] void enqueueNDRangeKernel( WebCLKernel kernel,
+				 Int32Array offsets,  Int32Array globalWorkSize,
+				 Int32Array localWorkSize,  optional WebCLEventList eventWaitList, 
+				 optional WebCLEvent event);		
+
+		//[Custom] void finish(in WebCLFinishCallback notifyCallback, in long userData) raises(DOMException);
+		[Custom,RaisesException] void finish();
+		[RaisesException] void flush();
+		[RaisesException] void releaseCL();
+		[RaisesException] WebCLEvent enqueueWriteImage( WebCLMem image, 
+				 boolean blockingWrite, 
+				 Int32Array origin, 
+				 Int32Array region, 
+				 HTMLCanvasElement canvasElement, 
+				 long eventWaitList);
+		
+		//long enqueueReadImage(in WebCLMem image,
+		//		in boolean blockingRead,
+		//		in Int32Array origin,
+		//		in Int32Array region,
+		//		in HTMLCanvasElement canvasElement,
+		//		in long eventWaitList) raises(DOMException);
+
+		[RaisesException] void enqueueAcquireGLObjects( WebCLMem MemObjects,
+				 optional WebCLEventList eventWaitList,  
+                optional WebCLEvent event);
+
+		[RaisesException] void enqueueReleaseGLObjects( WebCLMem memObjects,
+				optional WebCLEventList eventWaitList,
+                optional WebCLEvent event);
+
+		[RaisesException] void enqueueCopyBuffer( WebCLMem srcBuffer,
+				 WebCLMem dstBuffer,
+				 long cb);
+
+		[RaisesException] void enqueueBarrier();
+
+		[RaisesException] void enqueueMarker(WebCLEvent event);
+		
+		[RaisesException] void enqueueWaitForEvents(WebCLEventList events);
+		
+		[RaisesException] WebCLEvent enqueueTask( WebCLKernel kernel,
+							long eventWaitList);
+
+	
+	};
+
