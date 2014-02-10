@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{02C0ED6F-2310-0D03-ADC4-040749B592C1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>api</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;$(OutDir)obj\global_intermediate;..\..\..\..;..\..\..\..\third_party\skia\src\core;..\..\..\..\third_party\skia\include\core;..\..\..\..\third_party\skia\include\effects;..\..\..\..\third_party\skia\include\pdf;..\..\..\..\third_party\skia\include\gpu;..\..\..\..\third_party\skia\include\lazy;..\..\..\..\third_party\skia\include\pathops;..\..\..\..\third_party\skia\include\pipe;..\..\..\..\third_party\skia\include\ports;..\..\..\..\third_party\skia\include\utils;..\..\..\..\skia\ext;..\..\..\..\skia\config;$(OutDir)obj\global_intermediate\protoc_out;..\..\..\..\third_party\libjingle\overrides;..\..\..\..\third_party\libjingle\source;..\..\..\..\testing\gtest\include;..\..\..\..\third_party;..\..\..\..\third_party\webrtc;..\..\..\..\third_party\third_party\platformsdk_win7\files\Include;..\..\..\..\third_party\expat\files\lib;..\..\..\..\third_party\jsoncpp\overrides\include;..\..\..\..\third_party\jsoncpp\source\include;..\..\..\..\third_party\cacheinvalidation\overrides;..\..\..\..\third_party\cacheinvalidation\src;..\..\..\..\third_party\protobuf\vsprojects;..\..\..\..\third_party\protobuf\src;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="api.gyp"/>
+    <None Include="content_settings.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="input_ime.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="desktop_capture.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="preferences_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="virtual_keyboard_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="chromeos_info_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="font_settings.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="bookmarks.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="management.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="debugger.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="i18n.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="storage.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="permissions.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="terminal_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="system_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="media_player_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="command_line_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="runtime.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="tabs.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="metrics_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="top_sites.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="webview.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="networking_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="sessions.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="idle.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="experimental_accessibility.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="file_browser_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="manifest_types.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="bookmark_manager_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="enterprise_platform_keys_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="infobars.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="context_menus.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="test.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="adview.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="web_navigation.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="echo_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="web_request.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="windows.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="events.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="page_capture.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browsing_data.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="activity_log_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="history.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="cookies.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="webstore_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="extension.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="cloud_print_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="omnibox.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="experimental_history.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\cpp_bundle_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\cpp_util.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\cpp_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\h_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\model.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\idl_schema.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\json_schema.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\util_cc_helper.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\cpp_type_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\compiler.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\tools\json_schema_compiler\code.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="app_runtime.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="file_system.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="webrtc_cast_udp_transport.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="dial.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="dns.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="system_cpu.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="braille_display_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="app_current_window_internal.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="usb.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="experimental_identity.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="developer_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="experimental_discovery.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="media_galleries_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="principals_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="autotest_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="system_storage.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="webrtc_logging_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="location.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="media_galleries.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="system_memory.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="cast_channel.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="sync_file_system.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="image_writer_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="music_manager_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="system_display.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="app_window.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="signed_in_devices.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="webrtc_audio_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="mdns.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="sockets_tcp_server.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="audio.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="alarms.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="tab_capture.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="push_messaging.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="socket.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="hangouts_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="downloads.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="serial.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="identity_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="downloads_internal.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="feedback_private.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="system_indicator.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="notifications.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="sockets_udp.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="webrtc_cast_send_transport.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="identity.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="sockets_tcp.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="bluetooth.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="idltest.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="power.idl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\context_menus.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\management.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\storage.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmarks.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\history.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webview.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\windows.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\image_writer_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_discovery.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_identity.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads_internal.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_navigation.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\test.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\enterprise_platform_keys_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_history.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_udp.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_memory.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\terminal_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dial.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\serial.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_system.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\i18n.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\push_messaging.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\command_line_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\alarms.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sync_file_system.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_request.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\audio.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tabs.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_cpu.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\feedback_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\page_capture.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_send_transport.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\location.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\input_ime.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_browser_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_window.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\debugger.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_current_window_internal.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\permissions.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dns.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bluetooth.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cookies.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\power.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\manifest_types.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tab_capture.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_api.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_accessibility.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_storage.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\echo_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webstore_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_indicator.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\networking_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\virtual_keyboard_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\signed_in_devices.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\idle.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\runtime.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\activity_log_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\events.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\content_settings.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\font_settings.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\braille_display_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\metrics_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp_server.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cloud_print_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_display.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_schemas.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_audio_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\desktop_capture.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sessions.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmark_manager_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\notifications.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_logging_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\omnibox.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\developer_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\usb.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_runtime.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cast_channel.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\autotest_private.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_udp_transport.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\socket.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\mdns.h"/>
+    <ClInclude Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\hangouts_private.h"/>
+    <ClInclude Include="..\..\..\..\tools\json_schema_compiler\util.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\notifications.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_display.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sessions.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_indicator.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tab_capture.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cloud_print_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_request.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\push_messaging.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_api.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_discovery.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_logging_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\debugger.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\power.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\runtime.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\braille_display_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\i18n.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\location.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_audio_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\events.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\terminal_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\usb.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\enterprise_platform_keys_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\networking_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_navigation.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\storage.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_runtime.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\signed_in_devices.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\desktop_capture.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\idle.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\alarms.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_browser_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\mdns.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\hangouts_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_history.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sync_file_system.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\font_settings.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_identity.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cookies.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dns.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\image_writer_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_udp_transport.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_send_transport.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_storage.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\permissions.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmarks.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\feedback_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_schemas.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bluetooth.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp_server.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_window.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\windows.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\context_menus.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\socket.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\echo_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\input_ime.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\autotest_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cast_channel.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_udp.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\activity_log_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\content_settings.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webstore_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\command_line_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\management.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\test.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_accessibility.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dial.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\omnibox.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tabs.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_current_window_internal.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_cpu.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_memory.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmark_manager_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\manifest_types.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\developer_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\metrics_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads_internal.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\history.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\virtual_keyboard_private.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webview.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\page_capture.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\audio.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_system.cc"/>
+    <ClCompile Include="$(OutDir)obj\global_intermediate\chrome\common\extensions\api\serial.cc"/>
+    <ClCompile Include="..\..\..\..\tools\json_schema_compiler\util.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="api_rules.mk">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set /a NUMBER_OF_PROCESSORS_PLUS_1=%NUMBER_OF_PROCESSORS%+1&amp;&amp; set INTDIR=$(IntDir)&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;make\&quot; \&quot;OutDir=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`\&quot; \&quot;IntDir=`cygpath -m \\\&quot;${INTDIR}\\\&quot;`\&quot; \&quot;-j\&quot; \&quot;${NUMBER_OF_PROCESSORS_PLUS_1}\&quot; \&quot;-f\&quot; \&quot;api_rules.mk\&quot;&quot;</Command>
+      <Message>Running external rules for api</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\common\extensions\api\context_menus.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\management.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\notifications.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\storage.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\permissions.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmarks.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmarks.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cookies.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_display.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\history.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\test.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_send_transport.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cloud_print_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\power.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\braille_display_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_indicator.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webview.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bluetooth.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tab_capture.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cloud_print_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\manifest_types.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tab_capture.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\windows.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\image_writer_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_discovery.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_request.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\push_messaging.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp_server.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\mdns.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_identity.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_window.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\windows.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_discovery.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads_internal.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\context_menus.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_navigation.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_audio_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sessions.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webview.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\socket.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_accessibility.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_logging_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\debugger.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_storage.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\power.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\echo_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\echo_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webstore_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\enterprise_platform_keys_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_history.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\input_ime.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_indicator.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\runtime.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_udp.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\braille_display_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_memory.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\i18n.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\networking_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\location.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_audio_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\terminal_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\virtual_keyboard_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\signed_in_devices.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\terminal_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dial.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\serial.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_system.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\idle.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\runtime.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\activity_log_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\push_messaging.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\signed_in_devices.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\events.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cast_channel.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\identity_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\usb.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\content_settings.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_udp.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\font_settings.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\activity_log_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\command_line_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\enterprise_platform_keys_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\alarms.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sync_file_system.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_display.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_request.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\metrics_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\networking_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\content_settings.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\audio.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webstore_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\command_line_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tabs.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\web_navigation.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_accessibility.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sockets_tcp_server.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\management.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_cpu.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\test.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\storage.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_runtime.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dial.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\page_capture.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sessions.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_memory.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmark_manager_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\feedback_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\omnibox.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\location.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\events.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_logging_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\tabs.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\idle.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\desktop_capture.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_current_window_internal.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_cpu.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\input_ime.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_browser_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\alarms.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\autotest_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_browser_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\notifications.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bookmark_manager_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_window.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\manifest_types.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\i18n.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\media_galleries_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\desktop_capture.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\developer_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\debugger.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\metrics_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_current_window_internal.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\hangouts_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\omnibox.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads_internal.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\permissions.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\history.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\downloads.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\feedback_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_history.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\sync_file_system.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\font_settings.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\developer_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\usb.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\virtual_keyboard_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\experimental_identity.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cookies.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\app_runtime.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\cast_channel.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\autotest_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\page_capture.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\audio.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dns.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\image_writer_private.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_udp_transport.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_udp_transport.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\webrtc_cast_send_transport.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\file_system.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\socket.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\serial.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\dns.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\mdns.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\bluetooth.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\hangouts_private.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\system_storage.cc</Outputs>
+      <AdditionalInputs>developer_private.idl;media_galleries.idl;app_runtime.idl;tabs.json;file_system.idl;networking_private.json;input_ime.json;context_menus.json;system_display.idl;push_messaging.idl;hangouts_private.idl;desktop_capture.json;..\..\..\..\tools\json_schema_compiler\model.py;events.json;..\..\..\..\tools\json_schema_compiler\cpp_util.py;webrtc_cast_udp_transport.idl;metrics_private.json;virtual_keyboard_private.json;omnibox.json;..\..\..\..\tools\json_schema_compiler\util.cc;test.json;font_settings.json;page_capture.json;cast_channel.idl;serial.idl;system_storage.idl;identity_private.idl;idle.json;downloads_internal.idl;sync_file_system.idl;image_writer_private.idl;debugger.json;echo_private.json;i18n.json;feedback_private.idl;media_galleries_private.idl;storage.json;history.json;system_memory.idl;dial.idl;bookmarks.json;autotest_private.idl;system_indicator.idl;notifications.idl;permissions.json;bluetooth.idl;dns.idl;sockets_udp.idl;..\..\..\..\tools\json_schema_compiler\json_schema.py;web_request.json;webview.json;..\..\..\..\tools\json_schema_compiler\cc_generator.py;sessions.json;management.json;webrtc_cast_send_transport.idl;signed_in_devices.idl;..\..\..\..\tools\json_schema_compiler\h_generator.py;identity.idl;..\..\..\..\tools\json_schema_compiler\code.py;experimental_accessibility.json;..\..\..\..\tools\json_schema_compiler\util.h;system_cpu.idl;activity_log_private.json;windows.json;webstore_private.json;terminal_private.json;file_browser_private.json;cloud_print_private.json;system_private.json;sockets_tcp.idl;..\..\..\..\tools\json_schema_compiler\idl_schema.py;braille_display_private.idl;audio.idl;content_settings.json;app_window.idl;webrtc_logging_private.idl;..\..\..\..\tools\json_schema_compiler\util_cc_helper.py;experimental_discovery.idl;app_current_window_internal.idl;power.idl;manifest_types.json;usb.idl;web_navigation.json;socket.idl;webrtc_audio_private.idl;mdns.idl;experimental_identity.idl;sockets_tcp_server.idl;location.idl;cookies.json;..\..\..\..\tools\json_schema_compiler\cpp_type_generator.py;..\..\..\..\tools\json_schema_compiler\compiler.py;downloads.idl;command_line_private.json;..\..\..\..\tools\json_schema_compiler\cpp_generator.py;runtime.json;alarms.idl;bookmark_manager_private.json;tab_capture.idl;experimental_history.json;enterprise_platform_keys_private.json</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\tools\json_schema_compiler\cc_generator.py">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../../../../tools/json_schema_compiler/compiler.py\&quot; \&quot;--root=../../../..\&quot; \&quot;--destdir=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate\&quot; \&quot;--namespace=extensions::api\&quot; \&quot;--generator=cpp-bundle\&quot; \&quot;activity_log_private.json\&quot; \&quot;alarms.idl\&quot; \&quot;app_current_window_internal.idl\&quot; \&quot;app_runtime.idl\&quot; \&quot;app_window.idl\&quot; \&quot;audio.idl\&quot; \&quot;autotest_private.idl\&quot; \&quot;bluetooth.idl\&quot; \&quot;bookmark_manager_private.json\&quot; \&quot;bookmarks.json\&quot; \&quot;braille_display_private.idl\&quot; \&quot;cast_channel.idl\&quot; \&quot;cloud_print_private.json\&quot; \&quot;command_line_private.json\&quot; \&quot;content_settings.json\&quot; \&quot;context_menus.json\&quot; \&quot;cookies.json\&quot; \&quot;debugger.json\&quot; \&quot;desktop_capture.json\&quot; \&quot;developer_private.idl\&quot; \&quot;dial.idl\&quot; \&quot;dns.idl\&quot; \&quot;downloads.idl\&quot; \&quot;downloads_internal.idl\&quot; \&quot;echo_private.json\&quot; \&quot;enterprise_platform_keys_private.json\&quot; \&quot;events.json\&quot; \&quot;experimental_accessibility.json\&quot; \&quot;experimental_discovery.idl\&quot; \&quot;experimental_history.json\&quot; \&quot;experimental_identity.idl\&quot; \&quot;feedback_private.idl\&quot; \&quot;file_browser_private.json\&quot; \&quot;file_system.idl\&quot; \&quot;font_settings.json\&quot; \&quot;hangouts_private.idl\&quot; \&quot;history.json\&quot; \&quot;i18n.json\&quot; \&quot;identity.idl\&quot; \&quot;identity_private.idl\&quot; \&quot;idle.json\&quot; \&quot;image_writer_private.idl\&quot; \&quot;input_ime.json\&quot; \&quot;location.idl\&quot; \&quot;management.json\&quot; \&quot;manifest_types.json\&quot; \&quot;mdns.idl\&quot; \&quot;media_galleries.idl\&quot; \&quot;media_galleries_private.idl\&quot; \&quot;metrics_private.json\&quot; \&quot;networking_private.json\&quot; \&quot;notifications.idl\&quot; \&quot;omnibox.json\&quot; \&quot;page_capture.json\&quot; \&quot;permissions.json\&quot; \&quot;power.idl\&quot; \&quot;push_messaging.idl\&quot; \&quot;runtime.json\&quot; \&quot;serial.idl\&quot; \&quot;sessions.json\&quot; \&quot;signed_in_devices.idl\&quot; \&quot;socket.idl\&quot; \&quot;sockets_tcp.idl\&quot; \&quot;sockets_tcp_server.idl\&quot; \&quot;sockets_udp.idl\&quot; \&quot;storage.json\&quot; \&quot;sync_file_system.idl\&quot; \&quot;system_cpu.idl\&quot; \&quot;system_display.idl\&quot; \&quot;system_indicator.idl\&quot; \&quot;system_memory.idl\&quot; \&quot;system_private.json\&quot; \&quot;system_storage.idl\&quot; \&quot;tab_capture.idl\&quot; \&quot;tabs.json\&quot; \&quot;terminal_private.json\&quot; \&quot;test.json\&quot; \&quot;usb.idl\&quot; \&quot;virtual_keyboard_private.json\&quot; \&quot;web_navigation.json\&quot; \&quot;web_request.json\&quot; \&quot;webrtc_audio_private.idl\&quot; \&quot;webstore_private.json\&quot; \&quot;webview.json\&quot; \&quot;windows.json\&quot; \&quot;webrtc_cast_send_transport.idl\&quot; \&quot;webrtc_cast_udp_transport.idl\&quot; \&quot;webrtc_logging_private.idl\&quot; \&quot;adview.json\&quot; \&quot;browsing_data.json\&quot; \&quot;chromeos_info_private.json\&quot; \&quot;extension.json\&quot; \&quot;idltest.idl\&quot; \&quot;infobars.json\&quot; \&quot;media_player_private.json\&quot; \&quot;music_manager_private.idl\&quot; \&quot;preferences_private.json\&quot; \&quot;principals_private.idl\&quot; \&quot;top_sites.json\&quot;&quot;</Command>
+      <Message>Generating C++ API bundle code</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_api.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_schemas.h;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_api.cc;$(OutDir)obj\global_intermediate\chrome\common\extensions\api\generated_schemas.cc</Outputs>
+      <AdditionalInputs>developer_private.idl;media_galleries.idl;app_runtime.idl;tabs.json;file_system.idl;infobars.json;networking_private.json;input_ime.json;context_menus.json;system_display.idl;push_messaging.idl;serial.idl;hangouts_private.idl;desktop_capture.json;preferences_private.json;..\..\..\..\tools\json_schema_compiler\h_generator.py;webrtc_cast_udp_transport.idl;metrics_private.json;virtual_keyboard_private.json;omnibox.json;test.json;chromeos_info_private.json;font_settings.json;page_capture.json;browsing_data.json;cast_channel.idl;adview.json;management.json;identity_private.idl;downloads_internal.idl;sync_file_system.idl;events.json;image_writer_private.idl;debugger.json;echo_private.json;i18n.json;feedback_private.idl;music_manager_private.idl;principals_private.idl;storage.json;history.json;system_memory.idl;dial.idl;bookmarks.json;system_indicator.idl;autotest_private.idl;notifications.idl;permissions.json;bluetooth.idl;dns.idl;sockets_udp.idl;web_request.json;..\..\..\..\tools\json_schema_compiler\cpp_util.py;webview.json;..\..\..\..\tools\json_schema_compiler\util_cc_helper.py;sessions.json;system_storage.idl;webrtc_cast_send_transport.idl;signed_in_devices.idl;identity.idl;idle.json;experimental_accessibility.json;top_sites.json;system_cpu.idl;activity_log_private.json;windows.json;webstore_private.json;extension.json;terminal_private.json;file_browser_private.json;cloud_print_private.json;..\..\..\..\tools\json_schema_compiler\compiler.py;system_private.json;sockets_tcp.idl;braille_display_private.idl;audio.idl;content_settings.json;app_window.idl;webrtc_logging_private.idl;idltest.idl;experimental_discovery.idl;app_current_window_internal.idl;..\..\..\..\tools\json_schema_compiler\idl_schema.py;power.idl;manifest_types.json;usb.idl;web_navigation.json;socket.idl;..\..\..\..\tools\json_schema_compiler\code.py;webrtc_audio_private.idl;mdns.idl;media_player_private.json;experimental_identity.idl;sockets_tcp_server.idl;location.idl;cookies.json;..\..\..\..\tools\json_schema_compiler\json_schema.py;downloads.idl;command_line_private.json;..\..\..\..\tools\json_schema_compiler\cpp_type_generator.py;media_galleries_private.idl;runtime.json;..\..\..\..\tools\json_schema_compiler\model.py;alarms.idl;..\..\..\..\tools\json_schema_compiler\cpp_bundle_generator.py;bookmark_manager_private.json;tab_capture.idl;experimental_history.json;enterprise_platform_keys_private.json</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\skia\skia.vcxproj">
+      <Project>{1675822D-E10E-2CF0-C356-D6CEA6C5DC47}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\sync\sync.vcxproj">
+      <Project>{317E773F-1EEE-F7E7-6222-5BB1D1074C57}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

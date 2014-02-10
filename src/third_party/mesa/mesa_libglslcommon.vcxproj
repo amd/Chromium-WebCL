@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C83EC31D-64AC-1D2F-FC52-FBDEF60F2D26}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mesa_libglslcommon</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4018;4065;4090;4099;4273;4291;4345;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4018;4065;4090;4099;4273;4291;4345;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4018;4065;4090;4099;4273;4291;4345;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4018;4065;4090;4099;4273;4291;4345;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;src\include\c99;..\..\third_party\wtl\include;src\src\gallium\auxiliary;src\src\gallium\include;src\src\glsl;src\src\glsl\glcpp;src\src\mapi;src\src\mapi\glapi;src\src\mesa;src\src\mesa\main;src\include;src\chromium_gensrc\mesa;src\chromium_gensrc\mesa\main;src\chromium_gensrc\mesa\program;src\chromium_gensrc\mesa\glapi;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>MAPI_ABI_HEADER=&quot;glapi_mapi_tmp_shared.h&quot;;PACKAGE_NAME=&quot;Mesa&quot;;PACKAGE_TARNAME=&quot;mesa&quot;;PACKAGE_VERSION=&quot;9.0.3&quot;;PACKAGE_STRING=&quot;Mesa\ 9.0.3&quot;;PACKAGE_BUGREPORT=&quot;https://bugs.freedesktop.org/enter_bug.cgi\%3Fproduct=Mesa&quot;;PACKAGE_URL=&quot;&quot;;PACKAGE=&quot;mesa&quot;;VERSION=&quot;9.0.3&quot;;STDC_HEADERS=1;HAVE_SYS_TYPES_H=1;HAVE_SYS_STAT_H=1;HAVE_STDLIB_H=1;HAVE_STRING_H=1;HAVE_MEMORY_H=1;HAVE_STRINGS_H=1;HAVE_INTTYPES_H=1;HAVE_STDINT_H=1;HAVE_DLFCN_H=1;LT_OBJDIR=&quot;.libs/&quot;;YYTEXT_POINTER=1;HAVE_LIBEXPAT=1;HAVE_LIBXCB_DRI2=1;FEATURE_GL=1;MAPI_MODE_GLAPI;IN_DRI_DRIVER;USE_XCB;GLX_INDIRECT_RENDERING;GLX_DIRECT_RENDERING;USE_EXTERNAL_DXTN_LIB=1;IN_DRI_DRIVER;HAVE_ALIAS;HAVE_MINCORE;HAVE_LIBUDEV;_GLAPI_NO_EXPORTS;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MESA_EGL_NO_X11_HEADERS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="mesa.gyp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chromium_gensrc\mesa\glcpp-parse.h"/>
+    <ClInclude Include="src\chromium_gensrc\mesa\main\dispatch.h"/>
+    <ClInclude Include="src\src\glsl\linker.h"/>
+    <ClInclude Include="src\src\glsl\standalone_scaffolding.h"/>
+    <ClInclude Include="src\src\glsl\ralloc.h"/>
+    <ClInclude Include="src\src\glsl\ir_expression_flattening.h"/>
+    <ClInclude Include="src\src\glsl\ir_print_visitor.h"/>
+    <ClInclude Include="src\src\glsl\loop_analysis.h"/>
+    <ClInclude Include="src\src\glsl\ir_basic_block.h"/>
+    <ClInclude Include="src\src\glsl\glsl_parser_extras.h"/>
+    <ClInclude Include="src\src\glsl\strtod.h"/>
+    <ClInclude Include="src\src\glsl\glsl_symbol_table.h"/>
+    <ClInclude Include="src\src\glsl\ir_reader.h"/>
+    <ClInclude Include="src\src\glsl\program.h"/>
+    <ClInclude Include="src\src\glsl\s_expression.h"/>
+    <ClInclude Include="src\src\glsl\ir_variable_refcount.h"/>
+    <ClInclude Include="src\src\glsl\ir_rvalue_visitor.h"/>
+    <ClInclude Include="src\src\glsl\ir_builder.h"/>
+    <ClInclude Include="src\src\glsl\glsl_types.h"/>
+    <ClInclude Include="src\src\glsl\ir_hierarchical_visitor.h"/>
+    <ClInclude Include="src\src\glsl\ir.h"/>
+    <ClInclude Include="src\src\glsl\glcpp\glcpp.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\chromium_gensrc\mesa\glcpp-parse.c"/>
+    <ClCompile Include="src\chromium_gensrc\mesa\glsl_lexer.cc"/>
+    <ClCompile Include="src\chromium_gensrc\mesa\glsl_parser.cc"/>
+    <ClCompile Include="src\chromium_gensrc\mesa\glcpp-lex.c"/>
+    <ClCompile Include="src\src\glsl\ir_import_prototypes.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_copy_propagation_elements.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_vector.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_constant_expression.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_jumps.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_print_visitor.cpp"/>
+    <ClCompile Include="src\src\glsl\link_uniforms.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_clip_distance.cpp"/>
+    <ClCompile Include="src\src\glsl\ralloc.c"/>
+    <ClCompile Include="src\src\glsl\opt_array_splitting.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_function.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_validate.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_function_can_inline.cpp"/>
+    <ClCompile Include="src\src\glsl\loop_controls.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_noop_swizzle.cpp"/>
+    <ClCompile Include="src\src\glsl\standalone_scaffolding.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_mat_op_to_vec.cpp"/>
+    <ClCompile Include="src\src\glsl\linker.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_tree_grafting.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_dead_code_local.cpp"/>
+    <ClCompile Include="src\src\glsl\loop_unroll.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_variable_index_to_cond_assign.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_constant_variable.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_dead_code.cpp"/>
+    <ClCompile Include="src\src\glsl\loop_analysis.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_ubo_reference.cpp"/>
+    <ClCompile Include="src\src\glsl\ast_function.cpp"/>
+    <ClCompile Include="src\src\glsl\strtod.c"/>
+    <ClCompile Include="src\src\glsl\opt_swizzle_swizzle.cpp"/>
+    <ClCompile Include="src\src\glsl\ast_to_hir.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_function_detect_recursion.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_constant_propagation.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_basic_block.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_discard_flow.cpp"/>
+    <ClCompile Include="src\src\glsl\builtin_variables.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_vec_index_to_cond_assign.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_texture_projection.cpp"/>
+    <ClCompile Include="src\src\glsl\hir_field_selection.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_noise.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_clone.cpp"/>
+    <ClCompile Include="src\src\glsl\glsl_types.cpp"/>
+    <ClCompile Include="src\src\glsl\glsl_parser_extras.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_structure_splitting.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_constant_folding.cpp"/>
+    <ClCompile Include="src\src\glsl\s_expression.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_instructions.cpp"/>
+    <ClCompile Include="src\src\glsl\link_uniform_initializers.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_redundant_jumps.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_vec_index_to_swizzle.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_function_inlining.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_discard.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_rvalue_visitor.cpp"/>
+    <ClCompile Include="src\src\glsl\link_functions.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_reader.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_variable_refcount.cpp"/>
+    <ClCompile Include="src\src\glsl\ast_type.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_hierarchical_visitor.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_copy_propagation.cpp"/>
+    <ClCompile Include="src\src\glsl\ast_expr.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_if_to_cond_assign.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_algebraic.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_hv_accept.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_builder.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_dead_functions.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_expression_flattening.cpp"/>
+    <ClCompile Include="src\src\glsl\opt_if_simplification.cpp"/>
+    <ClCompile Include="src\src\glsl\lower_output_reads.cpp"/>
+    <ClCompile Include="src\src\glsl\ir_set_program_inouts.cpp"/>
+    <ClCompile Include="src\src\glsl\ir.cpp"/>
+    <ClCompile Include="src\src\glsl\glsl_symbol_table.cpp"/>
+    <ClCompile Include="src\src\glsl\glcpp\pp.c"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="mesa_headers.vcxproj">
+      <Project>{C386C795-7C09-E18F-2381-2688CD8B2923}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

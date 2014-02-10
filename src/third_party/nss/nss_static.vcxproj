@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8078147F-4EAE-DDAC-1720-44E6B24A8585}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>nss_static</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>MultiByte</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4018;4101;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4018;4101;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4018;4101;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4018;4101;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;nss\lib\base;nss\lib\certdb;nss\lib\certhigh;nss\lib\cryptohi;nss\lib\dev;nss\lib\freebl;nss\lib\freebl\ecl;nss\lib\freebl\mpi;nss\lib\nss;nss\lib\pk11wrap;nss\lib\pkcs7;nss\lib\pki;nss\lib\smime;nss\lib\softoken;nss\lib\ssl;nss\lib\util;nspr\pr\include;nspr\lib\ds;nspr\lib\libc\include;..\sqlite;..\..;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;MP_API_COMPATIBLE;NSS_DISABLE_DBM;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;RIJNDAEL_INCLUDE_TABLES;SHLIB_VERSION=&quot;3&quot;;SOFTOKEN_SHLIB_VERSION=&quot;3&quot;;USE_UTIL_DIRECTLY;NSS_DISABLE_ROOT_CERTS;NSS_DISABLE_LIBPKIX;SHLIB_SUFFIX=&quot;dll&quot;;SHLIB_PREFIX=&quot;&quot;;SOFTOKEN_LIB_NAME=&quot;softokn3.dll&quot;;XP_PC;WIN95;NSS_X86_OR_X64;NSS_X86;_X86_;MP_ASSEMBLY_MULTIPLY;MP_ASSEMBLY_SQUARE;MP_ASSEMBLY_DIV_2DX1D;MP_USE_UINT_DIGIT;MP_NO_MP_WORD;NO_NSPR_10_SUPPORT;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="nss.gyp"/>
+    <None Include="nss\lib\freebl\rijndael32.tab"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="nss\lib\pki\pkistore.h"/>
+    <ClInclude Include="nss\lib\pki\nsspki.h"/>
+    <ClInclude Include="nss\lib\pki\pkim.h"/>
+    <ClInclude Include="nss\lib\pki\pki.h"/>
+    <ClInclude Include="nss\lib\pki\pki3hack.h"/>
+    <ClInclude Include="nss\lib\pki\nsspkit.h"/>
+    <ClInclude Include="nss\lib\pki\pkit.h"/>
+    <ClInclude Include="nss\lib\pki\pkitm.h"/>
+    <ClInclude Include="nss\lib\smime\cms.h"/>
+    <ClInclude Include="nss\lib\smime\cmslocal.h"/>
+    <ClInclude Include="nss\lib\smime\cmst.h"/>
+    <ClInclude Include="nss\lib\smime\smime.h"/>
+    <ClInclude Include="nss\lib\smime\cmsreclist.h"/>
+    <ClInclude Include="nss\lib\certhigh\ocspti.h"/>
+    <ClInclude Include="nss\lib\certhigh\ocspt.h"/>
+    <ClInclude Include="nss\lib\certhigh\ocsp.h"/>
+    <ClInclude Include="nss\lib\certhigh\ocspi.h"/>
+    <ClInclude Include="nss\lib\nss\nss.h"/>
+    <ClInclude Include="nss\lib\nss\nssrenam.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\pk11sdr.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\secmodi.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\pk11priv.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\secmod.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\secmodt.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\pk11pub.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\secpkcs5.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\pk11func.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\secmodti.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\dev3hack.h"/>
+    <ClInclude Include="nss\lib\pk11wrap\pk11pqg.h"/>
+    <ClInclude Include="nss\lib\dev\nssdevt.h"/>
+    <ClInclude Include="nss\lib\dev\ckhelper.h"/>
+    <ClInclude Include="nss\lib\dev\devt.h"/>
+    <ClInclude Include="nss\lib\dev\dev.h"/>
+    <ClInclude Include="nss\lib\dev\devtm.h"/>
+    <ClInclude Include="nss\lib\dev\nssdev.h"/>
+    <ClInclude Include="nss\lib\dev\devm.h"/>
+    <ClInclude Include="nss\lib\util\utilparst.h"/>
+    <ClInclude Include="nss\lib\util\nssilock.h"/>
+    <ClInclude Include="nss\lib\util\ciferfam.h"/>
+    <ClInclude Include="nss\lib\util\nssilckt.h"/>
+    <ClInclude Include="nss\lib\util\hasht.h"/>
+    <ClInclude Include="nss\lib\util\secdert.h"/>
+    <ClInclude Include="nss\lib\util\SECerrs.h"/>
+    <ClInclude Include="nss\lib\util\nsslocks.h"/>
+    <ClInclude Include="nss\lib\util\secasn1t.h"/>
+    <ClInclude Include="nss\lib\util\nssutil.h"/>
+    <ClInclude Include="nss\lib\util\secerr.h"/>
+    <ClInclude Include="nss\lib\util\nssb64t.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11f.h"/>
+    <ClInclude Include="nss\lib\util\secoid.h"/>
+    <ClInclude Include="nss\lib\util\secdig.h"/>
+    <ClInclude Include="nss\lib\util\utilpars.h"/>
+    <ClInclude Include="nss\lib\util\secdigt.h"/>
+    <ClInclude Include="nss\lib\util\secder.h"/>
+    <ClInclude Include="nss\lib\util\secitem.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11.h"/>
+    <ClInclude Include="nss\lib\util\base64.h"/>
+    <ClInclude Include="nss\lib\util\secasn1.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11t.h"/>
+    <ClInclude Include="nss\lib\util\nssrwlk.h"/>
+    <ClInclude Include="nss\lib\util\nssb64.h"/>
+    <ClInclude Include="nss\lib\util\secoidt.h"/>
+    <ClInclude Include="nss\lib\util\seccomon.h"/>
+    <ClInclude Include="nss\lib\util\utilrename.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11u.h"/>
+    <ClInclude Include="nss\lib\util\secport.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11p.h"/>
+    <ClInclude Include="nss\lib\util\nssrwlkt.h"/>
+    <ClInclude Include="nss\lib\util\utilmodt.h"/>
+    <ClInclude Include="nss\lib\util\portreg.h"/>
+    <ClInclude Include="nss\lib\util\pkcs11n.h"/>
+    <ClInclude Include="nss\lib\ssl\sslerr.h"/>
+    <ClInclude Include="nss\lib\base\nssbase.h"/>
+    <ClInclude Include="nss\lib\base\nssbaset.h"/>
+    <ClInclude Include="nss\lib\base\base.h"/>
+    <ClInclude Include="nss\lib\base\baset.h"/>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_pl_system.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_sample_modules.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_certstore.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_pl_pki.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_util.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_checker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_params.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_certsel.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkixt.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_results.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_crlsel.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_revchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\include\pkix_errorstrings.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\certsel\pkix_certselector.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\certsel\pkix_comcertselparams.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\top\pkix_lifecycle.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\top\pkix_build.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\top\pkix_validate.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\results\pkix_buildresult.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\results\pkix_verifynode.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\results\pkix_valresult.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\results\pkix_policynode.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\util\pkix_logger.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\util\pkix_error.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\util\pkix_list.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\util\pkix_tools.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\crlsel\pkix_comcrlselparams.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\crlsel\pkix_crlselector.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_ocspchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_signaturechecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_certchainchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_nameconstraintschecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_policychecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_expirationchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_revocationchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_targetcertchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_ekuchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_namechainingchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_revocationmethod.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_basicconstraintschecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\checker\pkix_crlchecker.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\params\pkix_procparams.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\params\pkix_valparams.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\params\pkix_trustanchor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\params\pkix_resourcelimits.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix\store\pkix_store.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocspresponse.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_cert.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crldp.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_x500name.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocspcertid.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_date.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicymap.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crlentry.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_publickey.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crl.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_generalname.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_infoaccess.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocsprequest.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_nameconstraints.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_basicconstraints.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicyqualifier.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicyinfo.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_mem.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_object.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_hashtable.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_string.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_oid.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_bigint.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_monitorlock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_common.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_lifecycle.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_mutex.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_primhash.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_rwlock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_bytearray.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapt.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_httpdefaultclient.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapdefaultclient.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapresponse.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_nsscontext.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_httpcertstore.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_colcertstore.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapcertstore.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldaprequest.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_aiamgr.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_pk11certstore.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="nss\lib\certdb\certdb.h"/>
+    <ClInclude Include="nss\lib\certdb\certt.h"/>
+    <ClInclude Include="nss\lib\certdb\genname.h"/>
+    <ClInclude Include="nss\lib\certdb\certi.h"/>
+    <ClInclude Include="nss\lib\certdb\certxutl.h"/>
+    <ClInclude Include="nss\lib\certdb\xconst.h"/>
+    <ClInclude Include="nss\lib\certdb\cert.h"/>
+    <ClInclude Include="nss\lib\cryptohi\cryptoht.h"/>
+    <ClInclude Include="nss\lib\cryptohi\key.h"/>
+    <ClInclude Include="nss\lib\cryptohi\keyi.h"/>
+    <ClInclude Include="nss\lib\cryptohi\keyt.h"/>
+    <ClInclude Include="nss\lib\cryptohi\sechash.h"/>
+    <ClInclude Include="nss\lib\cryptohi\cryptohi.h"/>
+    <ClInclude Include="nss\lib\cryptohi\keyhi.h"/>
+    <ClInclude Include="nss\lib\cryptohi\keythi.h"/>
+    <ClInclude Include="nss\lib\softoken\sftkdbti.h"/>
+    <ClInclude Include="nss\lib\softoken\lowpbe.h"/>
+    <ClInclude Include="nss\lib\softoken\sftkdbt.h"/>
+    <ClInclude Include="nss\lib\softoken\lowkeyti.h"/>
+    <ClInclude Include="nss\lib\softoken\pkcs11i.h"/>
+    <ClInclude Include="nss\lib\softoken\sdb.h"/>
+    <ClInclude Include="nss\lib\softoken\sftkpars.h"/>
+    <ClInclude Include="nss\lib\softoken\softkver.h"/>
+    <ClInclude Include="nss\lib\softoken\softoken.h"/>
+    <ClInclude Include="nss\lib\softoken\pkcs11ni.h"/>
+    <ClInclude Include="nss\lib\softoken\softoknt.h"/>
+    <ClInclude Include="nss\lib\softoken\lowkeyi.h"/>
+    <ClInclude Include="nss\lib\softoken\lgglue.h"/>
+    <ClInclude Include="nss\lib\softoken\sftkdb.h"/>
+    <ClInclude Include="nss\lib\pkcs7\pkcs7t.h"/>
+    <ClInclude Include="nss\lib\pkcs7\secpkcs7.h"/>
+    <ClInclude Include="nss\lib\pkcs7\p7local.h"/>
+    <ClInclude Include="nss\lib\pkcs7\secmime.h"/>
+    <ClInclude Include="nss\lib\freebl\des.h"/>
+    <ClInclude Include="nss\lib\freebl\seed.h"/>
+    <ClInclude Include="nss\lib\freebl\blapii.h"/>
+    <ClInclude Include="nss\lib\freebl\blapit.h"/>
+    <ClInclude Include="nss\lib\freebl\camellia.h"/>
+    <ClInclude Include="nss\lib\freebl\ctr.h"/>
+    <ClInclude Include="nss\lib\freebl\secmpi.h"/>
+    <ClInclude Include="nss\lib\freebl\hmacct.h"/>
+    <ClInclude Include="nss\lib\freebl\cts.h"/>
+    <ClInclude Include="nss\lib\freebl\sha_fast.h"/>
+    <ClInclude Include="nss\lib\freebl\build_config_mac.h"/>
+    <ClInclude Include="nss\lib\freebl\chacha20poly1305.h"/>
+    <ClInclude Include="nss\lib\freebl\blapi.h"/>
+    <ClInclude Include="nss\lib\freebl\sha256.h"/>
+    <ClInclude Include="nss\lib\freebl\shsign.h"/>
+    <ClInclude Include="nss\lib\freebl\gcm.h"/>
+    <ClInclude Include="nss\lib\freebl\alghmac.h"/>
+    <ClInclude Include="nss\lib\freebl\secrng.h"/>
+    <ClInclude Include="nss\lib\freebl\ec.h"/>
+    <ClInclude Include="nss\lib\freebl\pqg.h"/>
+    <ClInclude Include="nss\lib\freebl\rijndael.h"/>
+    <ClInclude Include="nss\lib\freebl\chacha20\chacha20.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ec2.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ecl.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ecp.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ecl-curve.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ecl-exp.h"/>
+    <ClInclude Include="nss\lib\freebl\ecl\ecl-priv.h"/>
+    <ClInclude Include="nss\lib\freebl\poly1305\poly1305.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mplogic.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mp_gf2m.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mpprime.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\logtab.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mp_gf2m-priv.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mpi-priv.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mpi.h"/>
+    <ClInclude Include="nss\lib\freebl\mpi\mpi-config.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nss\lib\pki\pki3hack.c"/>
+    <ClCompile Include="nss\lib\pki\tdcache.c"/>
+    <ClCompile Include="nss\lib\pki\pkistore.c"/>
+    <ClCompile Include="nss\lib\pki\certdecode.c"/>
+    <ClCompile Include="nss\lib\pki\trustdomain.c"/>
+    <ClCompile Include="nss\lib\pki\asymmkey.c"/>
+    <ClCompile Include="nss\lib\pki\cryptocontext.c"/>
+    <ClCompile Include="nss\lib\pki\symmkey.c"/>
+    <ClCompile Include="nss\lib\pki\certificate.c"/>
+    <ClCompile Include="nss\lib\pki\pkibase.c"/>
+    <ClCompile Include="nss\lib\certhigh\certhigh.c"/>
+    <ClCompile Include="nss\lib\certhigh\ocspsig.c"/>
+    <ClCompile Include="nss\lib\certhigh\certhtml.c"/>
+    <ClCompile Include="nss\lib\certhigh\xcrldist.c"/>
+    <ClCompile Include="nss\lib\certhigh\certreq.c"/>
+    <ClCompile Include="nss\lib\certhigh\ocsp.c"/>
+    <ClCompile Include="nss\lib\certhigh\certvfy.c"/>
+    <ClCompile Include="nss\lib\certhigh\crlv2.c"/>
+    <ClCompile Include="nss\lib\certhigh\certvfypkixprint.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\certhigh\certvfypkix.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\nss\utilwrap.c"/>
+    <ClCompile Include="nss\lib\nss\nssinit.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11sdr.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11auth.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11merge.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11load.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11skey.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11akey.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11slot.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11pars.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11util.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11mech.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11nobj.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11err.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11obj.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11list.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11kea.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11cxt.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11pk12.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11pbe.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11cert.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\dev3hack.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\pk11pqg.c"/>
+    <ClCompile Include="nss\lib\pk11wrap\debug_module.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\dev\devslot.c"/>
+    <ClCompile Include="nss\lib\dev\devutil.c"/>
+    <ClCompile Include="nss\lib\dev\ckhelper.c"/>
+    <ClCompile Include="nss\lib\dev\devtoken.c"/>
+    <ClCompile Include="nss\lib\util\secasn1d.c"/>
+    <ClCompile Include="nss\lib\util\dersubr.c"/>
+    <ClCompile Include="nss\lib\util\secitem.c"/>
+    <ClCompile Include="nss\lib\util\templates.c"/>
+    <ClCompile Include="nss\lib\util\secoid.c"/>
+    <ClCompile Include="nss\lib\util\sectime.c"/>
+    <ClCompile Include="nss\lib\util\secdig.c"/>
+    <ClCompile Include="nss\lib\util\quickder.c"/>
+    <ClCompile Include="nss\lib\util\utilpars.c"/>
+    <ClCompile Include="nss\lib\util\secport.c"/>
+    <ClCompile Include="nss\lib\util\oidstring.c"/>
+    <ClCompile Include="nss\lib\util\nssb64e.c"/>
+    <ClCompile Include="nss\lib\util\derdec.c"/>
+    <ClCompile Include="nss\lib\util\utilmod.c"/>
+    <ClCompile Include="nss\lib\util\errstrs.c"/>
+    <ClCompile Include="nss\lib\util\utf8.c"/>
+    <ClCompile Include="nss\lib\util\nssilock.c"/>
+    <ClCompile Include="nss\lib\util\nssb64d.c"/>
+    <ClCompile Include="nss\lib\util\secalgid.c"/>
+    <ClCompile Include="nss\lib\util\derenc.c"/>
+    <ClCompile Include="nss\lib\util\dertime.c"/>
+    <ClCompile Include="nss\lib\util\secasn1u.c"/>
+    <ClCompile Include="nss\lib\util\secasn1e.c"/>
+    <ClCompile Include="nss\lib\util\nssrwlk.c"/>
+    <ClCompile Include="nss\lib\util\portreg.c"/>
+    <ClCompile Include="nss\lib\base\hashops.c"/>
+    <ClCompile Include="nss\lib\base\error.c"/>
+    <ClCompile Include="nss\lib\base\list.c"/>
+    <ClCompile Include="nss\lib\base\hash.c"/>
+    <ClCompile Include="nss\lib\base\item.c"/>
+    <ClCompile Include="nss\lib\base\nssutf8.c"/>
+    <ClCompile Include="nss\lib\base\tracker.c"/>
+    <ClCompile Include="nss\lib\base\libc.c"/>
+    <ClCompile Include="nss\lib\base\arena.c"/>
+    <ClCompile Include="nss\lib\base\errorval.c"/>
+    <ClCompile Include="nss\lib\libpkix\pkix\certsel\pkix_certselector.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\certsel\pkix_comcertselparams.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\top\pkix_build.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\top\pkix_validate.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\top\pkix_lifecycle.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\results\pkix_buildresult.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\results\pkix_verifynode.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\results\pkix_valresult.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\results\pkix_policynode.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\util\pkix_logger.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\util\pkix_tools.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\util\pkix_list.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\util\pkix_errpaths.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\util\pkix_error.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\crlsel\pkix_comcrlselparams.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\crlsel\pkix_crlselector.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_ocspchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_basicconstraintschecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_policychecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_signaturechecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_certchainchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_revocationchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_nameconstraintschecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_namechainingchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_revocationmethod.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_ekuchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_expirationchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_crlchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\checker\pkix_targetcertchecker.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\params\pkix_resourcelimits.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\params\pkix_trustanchor.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\params\pkix_procparams.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\params\pkix_valparams.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix\store\pkix_store.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocspresponse.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_cert.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crl.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocspcertid.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_generalname.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicymap.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_basicconstraints.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_date.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_publickey.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_x500name.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_infoaccess.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crldp.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_crlentry.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_nameconstraints.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicyqualifier.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_certpolicyinfo.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\pki\pkix_pl_ocsprequest.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_oid.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_bigint.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_bytearray.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_lifecycle.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_primhash.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_mem.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_string.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_hashtable.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_error.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_common.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_rwlock.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_monitorlock.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_object.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\system\pkix_pl_mutex.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapdefaultclient.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_httpdefaultclient.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_nsscontext.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_socket.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_colcertstore.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldaptemplates.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_httpcertstore.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldaprequest.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapcertstore.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_aiamgr.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_ldapresponse.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\libpkix\pkix_pl_nss\module\pkix_pl_pk11certstore.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\certdb\certdb.c"/>
+    <ClCompile Include="nss\lib\certdb\genname.c"/>
+    <ClCompile Include="nss\lib\certdb\crl.c"/>
+    <ClCompile Include="nss\lib\certdb\xauthkid.c"/>
+    <ClCompile Include="nss\lib\certdb\certxutl.c"/>
+    <ClCompile Include="nss\lib\certdb\alg1485.c"/>
+    <ClCompile Include="nss\lib\certdb\xbsconst.c"/>
+    <ClCompile Include="nss\lib\certdb\xconst.c"/>
+    <ClCompile Include="nss\lib\certdb\certv3.c"/>
+    <ClCompile Include="nss\lib\certdb\stanpcertdb.c"/>
+    <ClCompile Include="nss\lib\certdb\secname.c"/>
+    <ClCompile Include="nss\lib\certdb\polcyxtn.c"/>
+    <ClCompile Include="nss\lib\cryptohi\dsautil.c"/>
+    <ClCompile Include="nss\lib\cryptohi\seckey.c"/>
+    <ClCompile Include="nss\lib\cryptohi\secsign.c"/>
+    <ClCompile Include="nss\lib\cryptohi\secvfy.c"/>
+    <ClCompile Include="nss\lib\cryptohi\sechash.c"/>
+    <ClCompile Include="nss\lib\softoken\tlsprf.c"/>
+    <ClCompile Include="nss\lib\softoken\lowpbe.c"/>
+    <ClCompile Include="nss\lib\softoken\sdb.c"/>
+    <ClCompile Include="nss\lib\softoken\lowkey.c"/>
+    <ClCompile Include="nss\lib\softoken\softkver.c"/>
+    <ClCompile Include="nss\lib\softoken\sftkhmac.c"/>
+    <ClCompile Include="nss\lib\softoken\sftkpwd.c"/>
+    <ClCompile Include="nss\lib\softoken\sftkpars.c"/>
+    <ClCompile Include="nss\lib\softoken\rsawrapr.c"/>
+    <ClCompile Include="nss\lib\softoken\pkcs11.c"/>
+    <ClCompile Include="nss\lib\softoken\padbuf.c"/>
+    <ClCompile Include="nss\lib\softoken\fipstokn.c"/>
+    <ClCompile Include="nss\lib\softoken\lgglue.c"/>
+    <ClCompile Include="nss\lib\softoken\fipstest.c"/>
+    <ClCompile Include="nss\lib\softoken\sftkdb.c"/>
+    <ClCompile Include="nss\lib\softoken\pkcs11u.c"/>
+    <ClCompile Include="nss\lib\softoken\fipsaudt.c"/>
+    <ClCompile Include="nss\lib\softoken\pkcs11c.c"/>
+    <ClCompile Include="nss\lib\softoken\ecdecode.c"/>
+    <ClCompile Include="nss\lib\softoken\jpakesftk.c"/>
+    <ClCompile Include="nss\lib\pkcs7\p7common.c"/>
+    <ClCompile Include="nss\lib\pkcs7\p7encode.c"/>
+    <ClCompile Include="nss\lib\pkcs7\certread.c"/>
+    <ClCompile Include="nss\lib\pkcs7\p7local.c"/>
+    <ClCompile Include="nss\lib\pkcs7\p7create.c"/>
+    <ClCompile Include="nss\lib\pkcs7\secmime.c"/>
+    <ClCompile Include="nss\lib\pkcs7\p7decode.c"/>
+    <ClCompile Include="nss\lib\freebl\rawhash.c"/>
+    <ClCompile Include="nss\lib\freebl\dh.c"/>
+    <ClCompile Include="nss\lib\freebl\des.c"/>
+    <ClCompile Include="nss\lib\freebl\seed.c"/>
+    <ClCompile Include="nss\lib\freebl\chacha20poly1305.c"/>
+    <ClCompile Include="nss\lib\freebl\alg2268.c"/>
+    <ClCompile Include="nss\lib\freebl\aeskeywrap.c"/>
+    <ClCompile Include="nss\lib\freebl\camellia.c"/>
+    <ClCompile Include="nss\lib\freebl\shvfy.c"/>
+    <ClCompile Include="nss\lib\freebl\rsa.c"/>
+    <ClCompile Include="nss\lib\freebl\ctr.c"/>
+    <ClCompile Include="nss\lib\freebl\md2.c"/>
+    <ClCompile Include="nss\lib\freebl\cts.c"/>
+    <ClCompile Include="nss\lib\freebl\arcfour.c"/>
+    <ClCompile Include="nss\lib\freebl\desblapi.c"/>
+    <ClCompile Include="nss\lib\freebl\sha_fast.c"/>
+    <ClCompile Include="nss\lib\freebl\md5.c"/>
+    <ClCompile Include="nss\lib\freebl\drbg.c"/>
+    <ClCompile Include="nss\lib\freebl\tlsprfalg.c"/>
+    <ClCompile Include="nss\lib\freebl\dsa.c"/>
+    <ClCompile Include="nss\lib\freebl\arcfive.c"/>
+    <ClCompile Include="nss\lib\freebl\gcm.c"/>
+    <ClCompile Include="nss\lib\freebl\alghmac.c"/>
+    <ClCompile Include="nss\lib\freebl\pqg.c"/>
+    <ClCompile Include="nss\lib\freebl\ec.c"/>
+    <ClCompile Include="nss\lib\freebl\jpake.c"/>
+    <ClCompile Include="nss\lib\freebl\rijndael.c"/>
+    <ClCompile Include="nss\lib\freebl\hmacct.c"/>
+    <ClCompile Include="nss\lib\freebl\sysrand.c"/>
+    <ClCompile Include="nss\lib\freebl\sha512.c"/>
+    <ClCompile Include="nss\lib\freebl\unix_rand.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\win_rand.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\chacha20\chacha20.c"/>
+    <ClCompile Include="nss\lib\freebl\chacha20\chacha20_vec.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_jac.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_521.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecl_curve.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_384.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ec_naf.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_256.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_jm.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_256_32.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_aff.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecp_mont.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecl_gf.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecl.c"/>
+    <ClCompile Include="nss\lib\freebl\ecl\ecl_mult.c"/>
+    <ClCompile Include="nss\lib\freebl\poly1305\poly1305.c"/>
+    <ClCompile Include="nss\lib\freebl\poly1305\poly1305-donna-x64-sse2-incremental-source.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\mpi\mpi.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mpmontg.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mp_gf2m.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mplogic.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mpprime.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mpi_x86_asm.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\mpcpucache.c"/>
+    <ClCompile Include="nss\lib\freebl\mpi\primes.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\mpi\mpi_amd64.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\mpi\mpi_arm.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="nss\lib\freebl\mpi\mpi_arm_mac.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="nspr.vcxproj">
+      <Project>{81C68B05-C196-94F4-7009-F9233F2AF4B9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{69087E37-7D4A-64A0-1A88-03A12AE8B439}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>v8_base.ia32</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;ENABLE_DISASSEMBLER;V8_ENABLE_CHECKS;OBJECT_PRINT;VERIFY_HEAP;DEBUG;ENABLE_EXTRA_CHECKS;ENABLE_HANDLE_ZAPPING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../..;$(OutDir)obj/global_intermediate;..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;ENABLE_DISASSEMBLER;V8_ENABLE_CHECKS;OBJECT_PRINT;VERIFY_HEAP;DEBUG;ENABLE_EXTRA_CHECKS;ENABLE_HANDLE_ZAPPING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../..;$(OutDir)obj/global_intermediate;..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../..;$(OutDir)obj/global_intermediate;..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../..;$(OutDir)obj/global_intermediate;..\..\src;..\..\..\third_party\wtl\include;..\..\..\third_party\icu\source\i18n;..\..\..\third_party\icu\source\common;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;V8_TARGET_ARCH_IA32;ENABLE_DEBUGGER_SUPPORT;V8_I18N_SUPPORT;BUILDING_V8_SHARED;V8_SHARED;U_USING_ICU_NAMESPACE=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="v8.gyp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\runtime-profiler.h"/>
+    <ClInclude Include="..\..\src\preparser.h"/>
+    <ClInclude Include="..\..\src\dtoa.h"/>
+    <ClInclude Include="..\..\src\checks.h"/>
+    <ClInclude Include="..\..\src\store-buffer-inl.h"/>
+    <ClInclude Include="..\..\src\regexp-macro-assembler.h"/>
+    <ClInclude Include="..\..\src\property-details.h"/>
+    <ClInclude Include="..\..\src\hydrogen-representation-changes.h"/>
+    <ClInclude Include="..\..\src\disasm.h"/>
+    <ClInclude Include="..\..\src\elements-kind.h"/>
+    <ClInclude Include="..\..\src\hydrogen-uint32-analysis.h"/>
+    <ClInclude Include="..\..\src\hydrogen.h"/>
+    <ClInclude Include="..\..\src\allocation-site-scopes.h"/>
+    <ClInclude Include="..\..\src\profile-generator-inl.h"/>
+    <ClInclude Include="..\..\src\transitions-inl.h"/>
+    <ClInclude Include="..\..\src\cached-powers.h"/>
+    <ClInclude Include="..\..\src\conversions.h"/>
+    <ClInclude Include="..\..\src\scanner.h"/>
+    <ClInclude Include="..\..\src\builtins.h"/>
+    <ClInclude Include="..\..\src\factory.h"/>
+    <ClInclude Include="..\..\src\handles-inl.h"/>
+    <ClInclude Include="..\..\src\zone-inl.h"/>
+    <ClInclude Include="..\..\src\rewriter.h"/>
+    <ClInclude Include="..\..\src\double.h"/>
+    <ClInclude Include="..\..\src\messages.h"/>
+    <ClInclude Include="..\..\src\heap-profiler.h"/>
+    <ClInclude Include="..\..\src\typing.h"/>
+    <ClInclude Include="..\..\src\list.h"/>
+    <ClInclude Include="..\..\src\accessors.h"/>
+    <ClInclude Include="..\..\src\atomicops.h"/>
+    <ClInclude Include="..\..\src\interpreter-irregexp.h"/>
+    <ClInclude Include="..\..\src\hydrogen-bch.h"/>
+    <ClInclude Include="..\..\src\ast.h"/>
+    <ClInclude Include="..\..\src\v8threads.h"/>
+    <ClInclude Include="..\..\src\vm-state.h"/>
+    <ClInclude Include="..\..\src\circular-queue.h"/>
+    <ClInclude Include="..\..\src\ic-inl.h"/>
+    <ClInclude Include="..\..\src\unicode.h"/>
+    <ClInclude Include="..\..\src\interface.h"/>
+    <ClInclude Include="..\..\src\contexts.h"/>
+    <ClInclude Include="..\..\src\hydrogen-load-elimination.h"/>
+    <ClInclude Include="..\..\src\func-name-inferrer.h"/>
+    <ClInclude Include="..\..\src\dateparser-inl.h"/>
+    <ClInclude Include="..\..\src\bytecodes-irregexp.h"/>
+    <ClInclude Include="..\..\src\hydrogen-sce.h"/>
+    <ClInclude Include="..\..\src\spaces.h"/>
+    <ClInclude Include="..\..\src\jsregexp.h"/>
+    <ClInclude Include="..\..\src\unbound-queue.h"/>
+    <ClInclude Include="..\..\src\heap-inl.h"/>
+    <ClInclude Include="..\..\src\lithium.h"/>
+    <ClInclude Include="..\..\src\lithium-codegen.h"/>
+    <ClInclude Include="..\..\src\liveedit.h"/>
+    <ClInclude Include="..\..\src\elements.h"/>
+    <ClInclude Include="..\..\src\date.h"/>
+    <ClInclude Include="..\..\src\log-utils.h"/>
+    <ClInclude Include="..\..\src\variables.h"/>
+    <ClInclude Include="..\..\src\circular-queue-inl.h"/>
+    <ClInclude Include="..\..\src\api.h"/>
+    <ClInclude Include="..\..\src\v8.h"/>
+    <ClInclude Include="..\..\src\cpu.h"/>
+    <ClInclude Include="..\..\src\hydrogen-gvn.h"/>
+    <ClInclude Include="..\..\src\objects.h"/>
+    <ClInclude Include="..\..\src\serialize.h"/>
+    <ClInclude Include="..\..\src\v8utils.h"/>
+    <ClInclude Include="..\..\src\isolate.h"/>
+    <ClInclude Include="..\..\src\hydrogen-environment-liveness.h"/>
+    <ClInclude Include="..\..\src\hydrogen-range-analysis.h"/>
+    <ClInclude Include="..\..\src\bignum-dtoa.h"/>
+    <ClInclude Include="..\..\src\objects-visiting.h"/>
+    <ClInclude Include="..\..\src\debug-agent.h"/>
+    <ClInclude Include="..\..\src\arguments.h"/>
+    <ClInclude Include="..\..\src\char-predicates-inl.h"/>
+    <ClInclude Include="..\..\src\preparse-data.h"/>
+    <ClInclude Include="..\..\src\once.h"/>
+    <ClInclude Include="..\..\src\hydrogen-dce.h"/>
+    <ClInclude Include="..\..\src\data-flow.h"/>
+    <ClInclude Include="..\..\src\strtod.h"/>
+    <ClInclude Include="..\..\src\unique.h"/>
+    <ClInclude Include="..\..\src\allocation.h"/>
+    <ClInclude Include="..\..\src\hydrogen-infer-types.h"/>
+    <ClInclude Include="..\..\src\unicode-inl.h"/>
+    <ClInclude Include="..\..\src\string-search.h"/>
+    <ClInclude Include="..\..\src\hydrogen-osr.h"/>
+    <ClInclude Include="..\..\src\spaces-inl.h"/>
+    <ClInclude Include="..\..\src\handles.h"/>
+    <ClInclude Include="..\..\src\json-stringifier.h"/>
+    <ClInclude Include="..\..\src\gdb-jit.h"/>
+    <ClInclude Include="..\..\src\regexp-macro-assembler-tracer.h"/>
+    <ClInclude Include="..\..\src\objects-inl.h"/>
+    <ClInclude Include="..\..\src\scopeinfo.h"/>
+    <ClInclude Include="..\..\src\hydrogen-escape-analysis.h"/>
+    <ClInclude Include="..\..\src\regexp-stack.h"/>
+    <ClInclude Include="..\..\src\heap.h"/>
+    <ClInclude Include="..\..\src\hydrogen-canonicalize.h"/>
+    <ClInclude Include="..\..\src\flags.h"/>
+    <ClInclude Include="..\..\src\profile-generator.h"/>
+    <ClInclude Include="..\..\src\token.h"/>
+    <ClInclude Include="..\..\src\flag-definitions.h"/>
+    <ClInclude Include="..\..\src\cpu-profiler-inl.h"/>
+    <ClInclude Include="..\..\src\optimizing-compiler-thread.h"/>
+    <ClInclude Include="..\..\src\hydrogen-mark-unreachable.h"/>
+    <ClInclude Include="..\..\src\vm-state-inl.h"/>
+    <ClInclude Include="..\..\src\sweeper-thread.h"/>
+    <ClInclude Include="..\..\src\string-stream.h"/>
+    <ClInclude Include="..\..\src\hydrogen-bce.h"/>
+    <ClInclude Include="..\..\src\version.h"/>
+    <ClInclude Include="..\..\src\compilation-cache.h"/>
+    <ClInclude Include="..\..\src\debug.h"/>
+    <ClInclude Include="..\..\src\zone.h"/>
+    <ClInclude Include="..\..\src\macro-assembler.h"/>
+    <ClInclude Include="..\..\src\runtime.h"/>
+    <ClInclude Include="..\..\src\smart-pointers.h"/>
+    <ClInclude Include="..\..\src\jsregexp-inl.h"/>
+    <ClInclude Include="..\..\src\lithium-allocator-inl.h"/>
+    <ClInclude Include="..\..\src\execution.h"/>
+    <ClInclude Include="..\..\src\counters.h"/>
+    <ClInclude Include="..\..\src\win32-math.h"/>
+    <ClInclude Include="..\..\src\dateparser.h"/>
+    <ClInclude Include="..\..\src\ic.h"/>
+    <ClInclude Include="..\..\src\log-inl.h"/>
+    <ClInclude Include="..\..\src\assembler.h"/>
+    <ClInclude Include="..\..\src\cpu-profiler.h"/>
+    <ClInclude Include="..\..\src\json-parser.h"/>
+    <ClInclude Include="..\..\src\compiler.h"/>
+    <ClInclude Include="..\..\src\disassembler.h"/>
+    <ClInclude Include="..\..\src\global-handles.h"/>
+    <ClInclude Include="..\..\src\list-inl.h"/>
+    <ClInclude Include="..\..\src\regexp-macro-assembler-irregexp.h"/>
+    <ClInclude Include="..\..\src\uri.h"/>
+    <ClInclude Include="..\..\src\safepoint-table.h"/>
+    <ClInclude Include="..\..\src\hydrogen-infer-representation.h"/>
+    <ClInclude Include="..\..\src\frames-inl.h"/>
+    <ClInclude Include="..\..\src\deoptimizer.h"/>
+    <ClInclude Include="..\..\src\apiutils.h"/>
+    <ClInclude Include="..\..\src\heap-snapshot-generator.h"/>
+    <ClInclude Include="..\..\src\hydrogen-redundant-phi.h"/>
+    <ClInclude Include="..\..\src\effects.h"/>
+    <ClInclude Include="..\..\src\lithium-allocator.h"/>
+    <ClInclude Include="..\..\src\full-codegen.h"/>
+    <ClInclude Include="..\..\src\preparse-data-format.h"/>
+    <ClInclude Include="..\..\src\mark-compact.h"/>
+    <ClInclude Include="..\..\src\char-predicates.h"/>
+    <ClInclude Include="..\..\src\bootstrapper.h"/>
+    <ClInclude Include="..\..\src\fixed-dtoa.h"/>
+    <ClInclude Include="..\..\src\store-buffer.h"/>
+    <ClInclude Include="..\..\src\type-info.h"/>
+    <ClInclude Include="..\..\src\fast-dtoa.h"/>
+    <ClInclude Include="..\..\src\conversions-inl.h"/>
+    <ClInclude Include="..\..\src\property.h"/>
+    <ClInclude Include="..\..\src\hydrogen-dehoist.h"/>
+    <ClInclude Include="..\..\src\bignum.h"/>
+    <ClInclude Include="..\..\src\platform.h"/>
+    <ClInclude Include="..\..\src\globals.h"/>
+    <ClInclude Include="..\..\src\hashmap.h"/>
+    <ClInclude Include="..\..\src\i18n.h"/>
+    <ClInclude Include="..\..\src\parser.h"/>
+    <ClInclude Include="..\..\src\diy-fp.h"/>
+    <ClInclude Include="..\..\src\incremental-marking.h"/>
+    <ClInclude Include="..\..\src\allocation-tracker.h"/>
+    <ClInclude Include="..\..\src\regexp-macro-assembler-irregexp-inl.h"/>
+    <ClInclude Include="..\..\src\hydrogen-minus-zero.h"/>
+    <ClInclude Include="..\..\src\heap-snapshot-generator-inl.h"/>
+    <ClInclude Include="..\..\src\assert-scope.h"/>
+    <ClInclude Include="..\..\src\scopes.h"/>
+    <ClInclude Include="..\..\src\scanner-character-streams.h"/>
+    <ClInclude Include="..\..\src\icu_util.h"/>
+    <ClInclude Include="..\..\src\code-stubs.h"/>
+    <ClInclude Include="..\..\src\utils.h"/>
+    <ClInclude Include="..\..\src\sampler.h"/>
+    <ClInclude Include="..\..\src\prettyprinter.h"/>
+    <ClInclude Include="..\..\src\utils-inl.h"/>
+    <ClInclude Include="..\..\src\hydrogen-mark-deoptimize.h"/>
+    <ClInclude Include="..\..\src\hydrogen-check-elimination.h"/>
+    <ClInclude Include="..\..\src\log.h"/>
+    <ClInclude Include="..\..\src\v8checks.h"/>
+    <ClInclude Include="..\..\src\hydrogen-alias-analysis.h"/>
+    <ClInclude Include="..\..\src\v8memory.h"/>
+    <ClInclude Include="..\..\src\hydrogen-flow-engine.h"/>
+    <ClInclude Include="..\..\src\unbound-queue-inl.h"/>
+    <ClInclude Include="..\..\src\transitions.h"/>
+    <ClInclude Include="..\..\src\code.h"/>
+    <ClInclude Include="..\..\src\small-pointer-list.h"/>
+    <ClInclude Include="..\..\src\types.h"/>
+    <ClInclude Include="..\..\src\codegen.h"/>
+    <ClInclude Include="..\..\src\hydrogen-instructions.h"/>
+    <ClInclude Include="..\..\src\v8globals.h"/>
+    <ClInclude Include="..\..\src\frames.h"/>
+    <ClInclude Include="..\..\src\natives.h"/>
+    <ClInclude Include="..\..\src\v8conversions.h"/>
+    <ClInclude Include="..\..\src\snapshot.h"/>
+    <ClInclude Include="..\..\src\stub-cache.h"/>
+    <ClInclude Include="..\..\src\hydrogen-removable-simulates.h"/>
+    <ClInclude Include="..\..\src\lazy-instance.h"/>
+    <ClInclude Include="..\..\src\v8-counters.h"/>
+    <ClInclude Include="..\..\src\ia32\frames-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\regexp-macro-assembler-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\lithium-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\code-stubs-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\codegen-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\lithium-gap-resolver-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\assembler-ia32-inl.h"/>
+    <ClInclude Include="..\..\src\ia32\assembler-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\macro-assembler-ia32.h"/>
+    <ClInclude Include="..\..\src\ia32\lithium-codegen-ia32.h"/>
+    <ClInclude Include="..\..\src\utils\random-number-generator.h"/>
+    <ClInclude Include="..\..\src\extensions\statistics-extension.h"/>
+    <ClInclude Include="..\..\src\extensions\externalize-string-extension.h"/>
+    <ClInclude Include="..\..\src\extensions\gc-extension.h"/>
+    <ClInclude Include="..\..\src\platform\socket.h"/>
+    <ClInclude Include="..\..\src\platform\time.h"/>
+    <ClInclude Include="..\..\src\platform\semaphore.h"/>
+    <ClInclude Include="..\..\src\platform\mutex.h"/>
+    <ClInclude Include="..\..\src\platform\condition-variable.h"/>
+    <ClInclude Include="..\..\src\platform\elapsed-timer.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\hydrogen-infer-types.cc"/>
+    <ClCompile Include="..\..\src\full-codegen.cc"/>
+    <ClCompile Include="..\..\src\execution.cc"/>
+    <ClCompile Include="..\..\src\preparser.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-dehoist.cc"/>
+    <ClCompile Include="..\..\src\optimizing-compiler-thread.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-mark-unreachable.cc"/>
+    <ClCompile Include="..\..\src\hydrogen.cc"/>
+    <ClCompile Include="..\..\src\allocation-site-scopes.cc"/>
+    <ClCompile Include="..\..\src\regexp-macro-assembler.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-sce.cc"/>
+    <ClCompile Include="..\..\src\builtins.cc"/>
+    <ClCompile Include="..\..\src\global-handles.cc"/>
+    <ClCompile Include="..\..\src\platform-win32.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-range-analysis.cc"/>
+    <ClCompile Include="..\..\src\regexp-macro-assembler-irregexp.cc"/>
+    <ClCompile Include="..\..\src\dtoa.cc"/>
+    <ClCompile Include="..\..\src\debug-agent.cc"/>
+    <ClCompile Include="..\..\src\objects-printer.cc"/>
+    <ClCompile Include="..\..\src\token.cc"/>
+    <ClCompile Include="..\..\src\code-stubs.cc"/>
+    <ClCompile Include="..\..\src\store-buffer.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-bce.cc"/>
+    <ClCompile Include="..\..\src\icu_util.cc"/>
+    <ClCompile Include="..\..\src\type-info.cc"/>
+    <ClCompile Include="..\..\src\runtime-profiler.cc"/>
+    <ClCompile Include="..\..\src\handles.cc"/>
+    <ClCompile Include="..\..\src\scopes.cc"/>
+    <ClCompile Include="..\..\src\factory.cc"/>
+    <ClCompile Include="..\..\src\api.cc"/>
+    <ClCompile Include="..\..\src\date.cc"/>
+    <ClCompile Include="..\..\src\win32-math.cc"/>
+    <ClCompile Include="..\..\src\elements-kind.cc"/>
+    <ClCompile Include="..\..\src\accessors.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-check-elimination.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-load-elimination.cc"/>
+    <ClCompile Include="..\..\src\func-name-inferrer.cc"/>
+    <ClCompile Include="..\..\src\scopeinfo.cc"/>
+    <ClCompile Include="..\..\src\bootstrapper.cc"/>
+    <ClCompile Include="..\..\src\fixed-dtoa.cc"/>
+    <ClCompile Include="..\..\src\log.cc"/>
+    <ClCompile Include="..\..\src\safepoint-table.cc"/>
+    <ClCompile Include="..\..\src\frames.cc"/>
+    <ClCompile Include="..\..\src\compiler.cc"/>
+    <ClCompile Include="..\..\src\preparse-data.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-infer-representation.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-environment-liveness.cc"/>
+    <ClCompile Include="..\..\src\regexp-stack.cc"/>
+    <ClCompile Include="..\..\src\i18n.cc"/>
+    <ClCompile Include="..\..\src\v8threads.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-minus-zero.cc"/>
+    <ClCompile Include="..\..\src\counters.cc"/>
+    <ClCompile Include="..\..\src\string-search.cc"/>
+    <ClCompile Include="..\..\src\log-utils.cc"/>
+    <ClCompile Include="..\..\src\cpu-profiler.cc"/>
+    <ClCompile Include="..\..\src\lithium-allocator.cc"/>
+    <ClCompile Include="..\..\src\gdb-jit.cc"/>
+    <ClCompile Include="..\..\src\version.cc"/>
+    <ClCompile Include="..\..\src\utils.cc"/>
+    <ClCompile Include="..\..\src\incremental-marking.cc"/>
+    <ClCompile Include="..\..\src\sweeper-thread.cc"/>
+    <ClCompile Include="..\..\src\deoptimizer.cc"/>
+    <ClCompile Include="..\..\src\scanner-character-streams.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-mark-deoptimize.cc"/>
+    <ClCompile Include="..\..\src\assembler.cc"/>
+    <ClCompile Include="..\..\src\allocation-tracker.cc"/>
+    <ClCompile Include="..\..\src\disassembler.cc"/>
+    <ClCompile Include="..\..\src\debug.cc"/>
+    <ClCompile Include="..\..\src\allocation.cc"/>
+    <ClCompile Include="..\..\src\spaces.cc"/>
+    <ClCompile Include="..\..\src\v8-counters.cc"/>
+    <ClCompile Include="..\..\src\isolate.cc"/>
+    <ClCompile Include="..\..\src\cached-powers.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-representation-changes.cc"/>
+    <ClCompile Include="..\..\src\stub-cache.cc"/>
+    <ClCompile Include="..\..\src\compilation-cache.cc"/>
+    <ClCompile Include="..\..\src\data-flow.cc"/>
+    <ClCompile Include="..\..\src\checks.cc"/>
+    <ClCompile Include="..\..\src\contexts.cc"/>
+    <ClCompile Include="..\..\src\flags.cc"/>
+    <ClCompile Include="..\..\src\bignum.cc"/>
+    <ClCompile Include="..\..\src\heap-profiler.cc"/>
+    <ClCompile Include="..\..\src\ast.cc"/>
+    <ClCompile Include="..\..\src\snapshot-common.cc"/>
+    <ClCompile Include="..\..\src\interface.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-uint32-analysis.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-redundant-phi.cc"/>
+    <ClCompile Include="..\..\src\v8utils.cc"/>
+    <ClCompile Include="..\..\src\arguments.cc"/>
+    <ClCompile Include="..\..\src\liveedit.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-dce.cc"/>
+    <ClCompile Include="..\..\src\scanner.cc"/>
+    <ClCompile Include="..\..\src\objects-debug.cc"/>
+    <ClCompile Include="..\..\src\interpreter-irregexp.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-escape-analysis.cc"/>
+    <ClCompile Include="..\..\src\heap.cc"/>
+    <ClCompile Include="..\..\src\parser.cc"/>
+    <ClCompile Include="..\..\src\variables.cc"/>
+    <ClCompile Include="..\..\src\types.cc"/>
+    <ClCompile Include="..\..\src\lithium-codegen.cc"/>
+    <ClCompile Include="..\..\src\dateparser.cc"/>
+    <ClCompile Include="..\..\src\v8conversions.cc"/>
+    <ClCompile Include="..\..\src\objects-visiting.cc"/>
+    <ClCompile Include="..\..\src\conversions.cc"/>
+    <ClCompile Include="..\..\src\sampler.cc"/>
+    <ClCompile Include="..\..\src\objects.cc"/>
+    <ClCompile Include="..\..\src\prettyprinter.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-instructions.cc"/>
+    <ClCompile Include="..\..\src\typing.cc"/>
+    <ClCompile Include="..\..\src\runtime.cc"/>
+    <ClCompile Include="..\..\src\codegen.cc"/>
+    <ClCompile Include="..\..\src\bignum-dtoa.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-bch.cc"/>
+    <ClCompile Include="..\..\src\zone.cc"/>
+    <ClCompile Include="..\..\src\jsregexp.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-osr.cc"/>
+    <ClCompile Include="..\..\src\string-stream.cc"/>
+    <ClCompile Include="..\..\src\elements.cc"/>
+    <ClCompile Include="..\..\src\serialize.cc"/>
+    <ClCompile Include="..\..\src\regexp-macro-assembler-tracer.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-removable-simulates.cc"/>
+    <ClCompile Include="..\..\src\messages.cc"/>
+    <ClCompile Include="..\..\src\v8.cc"/>
+    <ClCompile Include="..\..\src\unicode.cc"/>
+    <ClCompile Include="..\..\src\profile-generator.cc"/>
+    <ClCompile Include="..\..\src\lithium.cc"/>
+    <ClCompile Include="..\..\src\ic.cc"/>
+    <ClCompile Include="..\..\src\cpu.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-canonicalize.cc"/>
+    <ClCompile Include="..\..\src\atomicops_internals_x86_gcc.cc"/>
+    <ClCompile Include="..\..\src\once.cc"/>
+    <ClCompile Include="..\..\src\fast-dtoa.cc"/>
+    <ClCompile Include="..\..\src\property.cc"/>
+    <ClCompile Include="..\..\src\diy-fp.cc"/>
+    <ClCompile Include="..\..\src\transitions.cc"/>
+    <ClCompile Include="..\..\src\strtod.cc"/>
+    <ClCompile Include="..\..\src\heap-snapshot-generator.cc"/>
+    <ClCompile Include="..\..\src\code-stubs-hydrogen.cc"/>
+    <ClCompile Include="..\..\src\rewriter.cc"/>
+    <ClCompile Include="..\..\src\mark-compact.cc"/>
+    <ClCompile Include="..\..\src\hydrogen-gvn.cc"/>
+    <ClCompile Include="..\..\src\ia32\ic-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\debug-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\cpu-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\macro-assembler-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\frames-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\code-stubs-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\lithium-codegen-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\full-codegen-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\lithium-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\regexp-macro-assembler-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\builtins-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\disasm-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\codegen-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\deoptimizer-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\stub-cache-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\lithium-gap-resolver-ia32.cc"/>
+    <ClCompile Include="..\..\src\ia32\assembler-ia32.cc"/>
+    <ClCompile Include="..\..\src\utils\random-number-generator.cc"/>
+    <ClCompile Include="..\..\src\extensions\externalize-string-extension.cc"/>
+    <ClCompile Include="..\..\src\extensions\statistics-extension.cc"/>
+    <ClCompile Include="..\..\src\extensions\gc-extension.cc"/>
+    <ClCompile Include="..\..\src\platform\socket.cc"/>
+    <ClCompile Include="..\..\src\platform\time.cc"/>
+    <ClCompile Include="..\..\src\platform\mutex.cc"/>
+    <ClCompile Include="..\..\src\platform\semaphore.cc"/>
+    <ClCompile Include="..\..\src\platform\condition-variable.cc"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\third_party\icu\icui18n.vcxproj">
+      <Project>{734BBEFB-C97B-AD4F-708C-4475EBF75F8C}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\third_party\icu\icuuc.vcxproj">
+      <Project>{52CED90A-C1F5-3186-A0D7-AB99702DFDEA}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\third_party\icu\icudata.vcxproj">
+      <Project>{3EFEA776-164D-3D11-6681-28406F9BD9A0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

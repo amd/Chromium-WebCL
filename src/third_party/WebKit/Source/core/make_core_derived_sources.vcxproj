@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{16CC5410-BE2C-1EDF-D1AC-520FC3E55547}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>make_core_derived_sources</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="make_core_derived_sources.props"/>
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="core_derived_sources.gyp"/>
+    <None Include="xml\xmlattrs.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="xml\xmlnsattrs.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_names.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_element_factory.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\license.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_style_shorthands.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_css_value_keywords.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_style_builder.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\in_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_css_property_names.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_event_factory.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_token_matcher.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\name_utilities.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\in_file.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\template_expander.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\name_macros.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\make_qualified_names.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\preprocessor.pm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\hasher.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\ElementWrapperFactory.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\StylePropertyShorthand.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\ElementWrapperFactory.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\MakeQualifiedNames.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\ElementFactory.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\MakeQualifiedNames.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\StyleBuilderFunctions.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\ElementFactory.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\StyleBuilderFunctions.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\MakeNames.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\StylePropertyShorthand.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\StyleBuilder.cpp.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\MakeNames.h.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\build\scripts\templates\macros.tmpl">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\..\third_party\markupsafe\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="svg\xlinkattrs.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="svg\SVGAttributeNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="svg\SVGTagNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="events\EventTargetFactory.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="events\EventAliases.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="events\EventTypeNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\blink\EventInterfaces.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="html\HTMLTagNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="html\HTMLAttributeNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="html\parser\HTMLEntityNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="html\parser\MathMLTagNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="html\parser\MathMLAttributeNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="fetch\FetchInitiatorTypeNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeChromiumLinux.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeChromiumSkia.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\quirks.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\mediaControls.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\mediaControlsAndroid.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\CSSProperties.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\SVGCSSValueKeywords.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeChromium.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\html.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\CSSShorthands.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\svg.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeChromiumAndroid.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\CSSPropertyNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\SVGCSSPropertyNames.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\CSSValueKeywords.in">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeWinQuirks.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\view-source.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\fullscreen.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\xhtmlmp.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="css\themeWin.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\core\html\HTMLMetaElement-in.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\core\css\CSSParser-in.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <bison Include="xml\XPathGrammar.y"/>
+    <bison Include="css\CSSGrammar.y"/>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="css\make-css-file-arrays.pl">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/action_useragentstylesheets.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/UserAgentStyleSheets.h\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/UserAgentStyleSheetsData.cpp\&quot; \&quot;css/html.css\&quot; \&quot;css/quirks.css\&quot; \&quot;css/view-source.css\&quot; \&quot;css/themeChromium.css\&quot; \&quot;css/themeChromiumAndroid.css\&quot; \&quot;css/themeChromiumLinux.css\&quot; \&quot;css/themeChromiumSkia.css\&quot; \&quot;css/themeWin.css\&quot; \&quot;css/themeWinQuirks.css\&quot; \&quot;css/svg.css\&quot; \&quot;css/mediaControls.css\&quot; \&quot;css/mediaControlsAndroid.css\&quot; \&quot;css/fullscreen.css\&quot; \&quot;css/xhtmlmp.css\&quot; \&quot;--\&quot; \&quot;css/make-css-file-arrays.pl\&quot; \&quot;../build/scripts/preprocessor.pm\&quot; \&quot;--\&quot; \&quot;--defines\&quot; \&quot;\\\&quot;ENABLE_CUSTOM_SCHEME_HANDLER=0\\\&quot; \\\&quot;ENABLE_ENCRYPTED_MEDIA_V2=1\\\&quot; \\\&quot;ENABLE_SVG_FONTS=1\\\&quot; \\\&quot;ENABLE_GDI_FONTS_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_HARFBUZZ_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_TOUCH_ICON_LOADING=0\\\&quot; \\\&quot;WTF_USE_CONCATENATED_IMPULSE_RESPONSES=1\\\&quot; \\\&quot;ENABLE_CALENDAR_PICKER=1\\\&quot; \\\&quot;ENABLE_INPUT_SPEECH=1\\\&quot; \\\&quot;ENABLE_INPUT_MULTIPLE_FIELDS_UI=1\\\&quot; \\\&quot;ENABLE_LEGACY_NOTIFICATIONS=1\\\&quot; \\\&quot;ENABLE_MEDIA_CAPTURE=0\\\&quot; \\\&quot;ENABLE_NAVIGATOR_CONTENT_UTILS=1\\\&quot; \\\&quot;ENABLE_ORIENTATION_EVENTS=0\\\&quot; \\\&quot;ENABLE_WEB_AUDIO=1\\\&quot; \\\&quot;WTF_USE_WEBAUDIO_FFMPEG=1\\\&quot; \\\&quot;ENABLE_OPENTYPE_VERTICAL=1\\\&quot; \\\&quot;WTF_USE_DEFAULT_RENDER_THEME=1\\\&quot;\&quot;&quot;</Command>
+      <Message>UserAgentStyleSheets</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\UserAgentStyleSheets.h;$(OutDir)obj\global_intermediate\blink\UserAgentStyleSheetsData.cpp</Outputs>
+      <AdditionalInputs>css\mediaControls.css;css\fullscreen.css;css\themeChromiumSkia.css;css\svg.css;css\themeChromiumLinux.css;css\themeChromiumAndroid.css;css\view-source.css;css\html.css;..\build\scripts\preprocessor.pm;css\quirks.css;css\mediaControlsAndroid.css;css\themeWin.css;css\themeWinQuirks.css;css\themeChromium.css;css\xhtmlmp.css</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\bindings\v8\custom\V8ArrayBufferViewCustomScript.js">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\build\scripts\xxd.py&quot; &quot;V8ArrayBufferViewCustomScript_js&quot; &quot;..\bindings\v8\custom\V8ArrayBufferViewCustomScript.js&quot; &quot;$(OutDir)obj\global_intermediate\blink\V8ArrayBufferViewCustomScript.h&quot;</Command>
+      <Message>Generating V8ArrayBufferViewCustomScript.h from V8ArrayBufferViewCustomScript.js</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\V8ArrayBufferViewCustomScript.h</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\third_party\jinja2\__init__.py">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_css_property_names.py\&quot; \&quot;css/CSSPropertyNames.in\&quot; \&quot;css/SVGCSSPropertyNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot; \&quot;--defines\&quot; \&quot;\\\&quot;ENABLE_CUSTOM_SCHEME_HANDLER=0\\\&quot; \\\&quot;ENABLE_ENCRYPTED_MEDIA_V2=1\\\&quot; \\\&quot;ENABLE_SVG_FONTS=1\\\&quot; \\\&quot;ENABLE_GDI_FONTS_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_HARFBUZZ_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_TOUCH_ICON_LOADING=0\\\&quot; \\\&quot;WTF_USE_CONCATENATED_IMPULSE_RESPONSES=1\\\&quot; \\\&quot;ENABLE_CALENDAR_PICKER=1\\\&quot; \\\&quot;ENABLE_INPUT_SPEECH=1\\\&quot; \\\&quot;ENABLE_INPUT_MULTIPLE_FIELDS_UI=1\\\&quot; \\\&quot;ENABLE_LEGACY_NOTIFICATIONS=1\\\&quot; \\\&quot;ENABLE_MEDIA_CAPTURE=0\\\&quot; \\\&quot;ENABLE_NAVIGATOR_CONTENT_UTILS=1\\\&quot; \\\&quot;ENABLE_ORIENTATION_EVENTS=0\\\&quot; \\\&quot;ENABLE_WEB_AUDIO=1\\\&quot; \\\&quot;WTF_USE_WEBAUDIO_FFMPEG=1\\\&quot; \\\&quot;ENABLE_OPENTYPE_VERTICAL=1\\\&quot; \\\&quot;WTF_USE_DEFAULT_RENDER_THEME=1\\\&quot;\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_style_shorthands.py\&quot; \&quot;css/CSSShorthands.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_style_builder.py\&quot; \&quot;css/CSSProperties.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;../build/scripts/make_css_value_keywords.py\&quot; \&quot;css/CSSValueKeywords.in\&quot; \&quot;css/SVGCSSValueKeywords.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot; \&quot;--defines\&quot; \&quot;\\\&quot;ENABLE_CUSTOM_SCHEME_HANDLER=0\\\&quot; \\\&quot;ENABLE_ENCRYPTED_MEDIA_V2=1\\\&quot; \\\&quot;ENABLE_SVG_FONTS=1\\\&quot; \\\&quot;ENABLE_GDI_FONTS_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_HARFBUZZ_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_TOUCH_ICON_LOADING=0\\\&quot; \\\&quot;WTF_USE_CONCATENATED_IMPULSE_RESPONSES=1\\\&quot; \\\&quot;ENABLE_CALENDAR_PICKER=1\\\&quot; \\\&quot;ENABLE_INPUT_SPEECH=1\\\&quot; \\\&quot;ENABLE_INPUT_MULTIPLE_FIELDS_UI=1\\\&quot; \\\&quot;ENABLE_LEGACY_NOTIFICATIONS=1\\\&quot; \\\&quot;ENABLE_MEDIA_CAPTURE=0\\\&quot; \\\&quot;ENABLE_NAVIGATOR_CONTENT_UTILS=1\\\&quot; \\\&quot;ENABLE_ORIENTATION_EVENTS=0\\\&quot; \\\&quot;ENABLE_WEB_AUDIO=1\\\&quot; \\\&quot;WTF_USE_WEBAUDIO_FFMPEG=1\\\&quot; \\\&quot;ENABLE_OPENTYPE_VERTICAL=1\\\&quot; \\\&quot;WTF_USE_DEFAULT_RENDER_THEME=1\\\&quot;\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_element_factory.py\&quot; \&quot;html/HTMLTagNames.in\&quot; \&quot;html/HTMLAttributeNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_element_factory.py\&quot; \&quot;svg/SVGTagNames.in\&quot; \&quot;svg/SVGAttributeNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_event_factory.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/EventInterfaces.in\&quot; \&quot;events/EventAliases.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_names.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/EventInterfaces.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_event_factory.py\&quot; \&quot;events/EventTargetFactory.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_names.py\&quot; \&quot;events/EventTargetFactory.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_qualified_names.py\&quot; \&quot;html/parser/MathMLTagNames.in\&quot; \&quot;html/parser/MathMLAttributeNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot; \&quot;--defines\&quot; \&quot;\\\&quot;ENABLE_CUSTOM_SCHEME_HANDLER=0\\\&quot; \\\&quot;ENABLE_ENCRYPTED_MEDIA_V2=1\\\&quot; \\\&quot;ENABLE_SVG_FONTS=1\\\&quot; \\\&quot;ENABLE_GDI_FONTS_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_HARFBUZZ_ON_WINDOWS=0\\\&quot; \\\&quot;ENABLE_TOUCH_ICON_LOADING=0\\\&quot; \\\&quot;WTF_USE_CONCATENATED_IMPULSE_RESPONSES=1\\\&quot; \\\&quot;ENABLE_CALENDAR_PICKER=1\\\&quot; \\\&quot;ENABLE_INPUT_SPEECH=1\\\&quot; \\\&quot;ENABLE_INPUT_MULTIPLE_FIELDS_UI=1\\\&quot; \\\&quot;ENABLE_LEGACY_NOTIFICATIONS=1\\\&quot; \\\&quot;ENABLE_MEDIA_CAPTURE=0\\\&quot; \\\&quot;ENABLE_NAVIGATOR_CONTENT_UTILS=1\\\&quot; \\\&quot;ENABLE_ORIENTATION_EVENTS=0\\\&quot; \\\&quot;ENABLE_WEB_AUDIO=1\\\&quot; \\\&quot;WTF_USE_WEBAUDIO_FFMPEG=1\\\&quot; \\\&quot;ENABLE_OPENTYPE_VERTICAL=1\\\&quot; \\\&quot;WTF_USE_DEFAULT_RENDER_THEME=1\\\&quot;\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_names.py\&quot; \&quot;fetch/FetchInitiatorTypeNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_names.py\&quot; \&quot;events/EventTypeNames.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_qualified_names.py\&quot; \&quot;svg/xlinkattrs.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_qualified_names.py\&quot; \&quot;xml/xmlnsattrs.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_qualified_names.py\&quot; \&quot;xml/xmlattrs.in\&quot; \&quot;--output_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_token_matcher.py\&quot; \&quot;../core/css/CSSParser-in.cpp\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/CSSParser.cpp\&quot;&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/make_token_matcher.py\&quot; \&quot;../core/html/HTMLMetaElement-in.cpp\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/HTMLMetaElement.cpp\&quot;&quot;</Command>
+      <Message>CSSPropertyNames, and also StylePropertyShorthand, and also StyleBuilder, and also CSSValueKeywords, and also HTMLElementFactory, and also SVGNames, and also EventFactory, and also EventNames, and also EventTargetFactory, and also EventTargetNames, and also MathMLNames, and also FetchInitiatorTypeNames, and also EventTypeNames, and also XLinkNames, and also XMLNSNames, and also XMLNames, and also MakeTokenMatcher, and also MakeTokenMatcherForViewport</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\CSSPropertyNames.cpp;$(OutDir)obj\global_intermediate\blink\V8HTMLElementWrapperFactory.cpp;$(OutDir)obj\global_intermediate\blink\EventTargetHeaders.h;$(OutDir)obj\global_intermediate\blink\XMLNSNames.h;$(OutDir)obj\global_intermediate\blink\EventTargetNames.cpp;$(OutDir)obj\global_intermediate\blink\HTMLElementFactory.h;$(OutDir)obj\global_intermediate\blink\HTMLNames.cpp;$(OutDir)obj\global_intermediate\blink\StylePropertyShorthand.cpp;$(OutDir)obj\global_intermediate\blink\SVGNames.cpp;$(OutDir)obj\global_intermediate\blink\HTMLNames.h;$(OutDir)obj\global_intermediate\blink\HTMLElementFactory.cpp;$(OutDir)obj\global_intermediate\blink\StyleBuilder.cpp;$(OutDir)obj\global_intermediate\blink\EventInterfaces.h;$(OutDir)obj\global_intermediate\blink\EventTypeNames.h;$(OutDir)obj\global_intermediate\blink\StyleBuilderFunctions.cpp;$(OutDir)obj\global_intermediate\blink\MathMLNames.cpp;$(OutDir)obj\global_intermediate\blink\EventNames.h;$(OutDir)obj\global_intermediate\blink\EventTypeNames.cpp;$(OutDir)obj\global_intermediate\blink\MathMLNames.h;$(OutDir)obj\global_intermediate\blink\V8SVGElementWrapperFactory.cpp;$(OutDir)obj\global_intermediate\blink\Event.cpp;$(OutDir)obj\global_intermediate\blink\XMLNames.cpp;$(OutDir)obj\global_intermediate\blink\CSSPropertyNames.h;$(OutDir)obj\global_intermediate\blink\EventNames.cpp;$(OutDir)obj\global_intermediate\blink\SVGElementFactory.cpp;$(OutDir)obj\global_intermediate\blink\SVGNames.h;$(OutDir)obj\global_intermediate\blink\HTMLMetaElement.cpp;$(OutDir)obj\global_intermediate\blink\XLinkNames.cpp;$(OutDir)obj\global_intermediate\blink\XMLNames.h;$(OutDir)obj\global_intermediate\blink\SVGElementFactory.h;$(OutDir)obj\global_intermediate\blink\EventTargetNames.h;$(OutDir)obj\global_intermediate\blink\XMLNSNames.cpp;$(OutDir)obj\global_intermediate\blink\StyleBuilderFunctions.h;$(OutDir)obj\global_intermediate\blink\FetchInitiatorTypeNames.cpp;$(OutDir)obj\global_intermediate\blink\CSSParser.cpp;$(OutDir)obj\global_intermediate\blink\CSSValueKeywords.cpp;$(OutDir)obj\global_intermediate\blink\XLinkNames.h;$(OutDir)obj\global_intermediate\blink\V8HTMLElementWrapperFactory.h;$(OutDir)obj\global_intermediate\blink\CSSValueKeywords.h;$(OutDir)obj\global_intermediate\blink\FetchInitiatorTypeNames.h;$(OutDir)obj\global_intermediate\blink\StylePropertyShorthand.h;$(OutDir)obj\global_intermediate\blink\EventHeaders.h;$(OutDir)obj\global_intermediate\blink\EventTargetInterfaces.h;$(OutDir)obj\global_intermediate\blink\V8SVGElementWrapperFactory.h</Outputs>
+      <AdditionalInputs>svg\xlinkattrs.in;css\CSSProperties.in;..\..\..\..\third_party\markupsafe\__init__.py;..\build\scripts\templates\ElementFactory.cpp.tmpl;html\HTMLTagNames.in;..\build\scripts\templates\MakeNames.h.tmpl;css\SVGCSSPropertyNames.in;..\build\scripts\templates\ElementFactory.h.tmpl;..\build\scripts\license.py;..\build\scripts\in_file.py;..\build\scripts\make_token_matcher.py;..\core\html\HTMLMetaElement-in.cpp;..\build\scripts\templates\MakeQualifiedNames.h.tmpl;css\CSSPropertyNames.in;events\EventTypeNames.in;..\build\scripts\templates\StylePropertyShorthand.h.tmpl;..\build\scripts\name_utilities.py;..\build\scripts\templates\ElementWrapperFactory.cpp.tmpl;svg\SVGTagNames.in;..\build\scripts\templates\macros.tmpl;..\build\scripts\make_names.py;..\build\scripts\templates\MakeNames.cpp.tmpl;..\build\scripts\make_element_factory.py;..\build\scripts\name_macros.py;..\build\scripts\template_expander.py;..\build\scripts\templates\StylePropertyShorthand.cpp.tmpl;..\build\scripts\hasher.py;svg\SVGAttributeNames.in;css\CSSValueKeywords.in;..\build\scripts\templates\ElementWrapperFactory.h.tmpl;..\build\scripts\templates\MakeQualifiedNames.cpp.tmpl;css\CSSShorthands.in;xml\xmlattrs.in;$(OutDir)obj\global_intermediate\blink\EventInterfaces.in;events\EventTargetFactory.in;html\parser\MathMLTagNames.in;..\core\css\CSSParser-in.cpp;..\build\scripts\make_qualified_names.py;..\build\scripts\make_style_builder.py;events\EventAliases.in;..\build\scripts\make_style_shorthands.py;..\build\scripts\make_css_value_keywords.py;..\build\scripts\make_event_factory.py;xml\xmlnsattrs.in;css\SVGCSSValueKeywords.in;html\parser\MathMLAttributeNames.in;..\build\scripts\templates\StyleBuilderFunctions.cpp.tmpl;..\build\scripts\templates\StyleBuilderFunctions.h.tmpl;..\build\scripts\templates\StyleBuilder.cpp.tmpl;..\build\scripts\make_css_property_names.py;fetch\FetchInitiatorTypeNames.in;html\HTMLAttributeNames.in;..\build\scripts\in_generator.py</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="xml\XMLViewer.css">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\build\scripts\xxd.py&quot; &quot;XMLViewer_css&quot; &quot;xml\XMLViewer.css&quot; &quot;$(OutDir)obj\global_intermediate\blink\XMLViewerCSS.h&quot;</Command>
+      <Message>generateXMLViewerCSS</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\XMLViewerCSS.h</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="xml\XMLViewer.js">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\build\scripts\xxd.py&quot; &quot;XMLViewer_js&quot; &quot;xml\XMLViewer.js&quot; &quot;$(OutDir)obj\global_intermediate\blink\XMLViewerJS.h&quot;</Command>
+      <Message>generateXMLViewerJS</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\XMLViewerJS.h</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="html\parser\create-html-entity-table">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;html/parser/create-html-entity-table\&quot; \&quot;-o\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink/HTMLEntityTable.cpp\&quot; \&quot;html/parser/HTMLEntityNames.in\&quot;&quot;</Command>
+      <Message>HTMLEntityTable</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\HTMLEntityTable.cpp</Outputs>
+      <AdditionalInputs>html\parser\HTMLEntityNames.in</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="generate_test_support_idls.vcxproj">
+      <Project>{494EBC8B-D135-E4F7-7C02-A948F653F7E0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="make_core_derived_sources.targets"/>
+  </ImportGroup>
+</Project>

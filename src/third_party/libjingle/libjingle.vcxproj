@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{24588A69-81B3-81CF-7F52-7D6ADAB54835}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libjingle</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4005;4267;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;overrides;source;..\..\testing\gtest\include;..\..\third_party;..\..\third_party\libyuv\include;..\..\third_party\usrsctp;..\..\third_party\webrtc;..\third_party\platformsdk_win7\files\Include;..\..\third_party\wtl\include;..\..;..\expat\files\lib;..\..\net\third_party\nss\ssl;..\nss\nspr\pr\include;..\nss\nspr\lib\ds;..\nss\nspr\lib\libc\include;..\nss\nss\lib\base;..\nss\nss\lib\certdb;..\nss\nss\lib\certhigh;..\nss\nss\lib\cryptohi;..\nss\nss\lib\dev;..\nss\nss\lib\freebl;..\nss\nss\lib\freebl\ecl;..\nss\nss\lib\nss;..\nss\nss\lib\pk11wrap;..\nss\nss\lib\pkcs7;..\nss\nss\lib\pki;..\nss\nss\lib\smime;..\nss\nss\lib\softoken;..\nss\nss\lib\util;..\jsoncpp\overrides\include;..\jsoncpp\source\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>EXPAT_RELATIVE_PATH;FEATURE_ENABLE_SSL;GTEST_RELATIVE_PATH;HAVE_SRTP;HAVE_WEBRTC_VIDEO;HAVE_WEBRTC_VOICE;JSONCPP_RELATIVE_PATH;LOGGING_INSIDE_LIBJINGLE;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;SRTP_RELATIVE_PATH;USE_WEBRTC_DEV_BRANCH;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;LIBPEERCONNECTION_LIB=1;SSL_USE_NSS;HAVE_NSS_SSL_H;SSL_USE_NSS_RNG;_USE_32BIT_TIME_T;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;XML_STATIC;NSS_PLATFORM_CLIENT_AUTH;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;FEATURE_ENABLE_VOICEMAIL;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="libjingle.gyp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\talk\xmllite\xmlbuilder.h"/>
+    <ClInclude Include="source\talk\xmllite\xmlconstants.h"/>
+    <ClInclude Include="source\talk\xmllite\xmlprinter.h"/>
+    <ClInclude Include="source\talk\xmllite\xmlnsstack.h"/>
+    <ClInclude Include="source\talk\xmllite\xmlelement.h"/>
+    <ClInclude Include="source\talk\xmllite\qname.h"/>
+    <ClInclude Include="source\talk\xmllite\xmlparser.h"/>
+    <ClInclude Include="source\talk\xmpp\asyncsocket.h"/>
+    <ClInclude Include="source\talk\xmpp\constants.h"/>
+    <ClInclude Include="source\talk\xmpp\saslcookiemechanism.h"/>
+    <ClInclude Include="source\talk\xmpp\jid.h"/>
+    <ClInclude Include="source\talk\xmpp\saslhandler.h"/>
+    <ClInclude Include="source\talk\xmpp\xmpplogintask.h"/>
+    <ClInclude Include="source\talk\xmpp\xmppengineimpl.h"/>
+    <ClInclude Include="source\talk\xmpp\saslmechanism.h"/>
+    <ClInclude Include="source\talk\xmpp\prexmppauth.h"/>
+    <ClInclude Include="source\talk\xmpp\xmppclientsettings.h"/>
+    <ClInclude Include="source\talk\xmpp\plainsaslhandler.h"/>
+    <ClInclude Include="source\talk\xmpp\xmppclient.h"/>
+    <ClInclude Include="source\talk\xmpp\xmpptask.h"/>
+    <ClInclude Include="source\talk\xmpp\xmppstanzaparser.h"/>
+    <ClInclude Include="source\talk\xmpp\saslplainmechanism.h"/>
+    <ClInclude Include="source\talk\xmpp\xmppengine.h"/>
+    <ClInclude Include="source\talk\base\basicdefs.h"/>
+    <ClInclude Include="source\talk\base\ratetracker.h"/>
+    <ClInclude Include="source\talk\base\cryptstring.h"/>
+    <ClInclude Include="source\talk\base\socketadapters.h"/>
+    <ClInclude Include="source\talk\base\messagequeue.h"/>
+    <ClInclude Include="source\talk\base\byteorder.h"/>
+    <ClInclude Include="source\talk\base\sec_buffer.h"/>
+    <ClInclude Include="source\talk\base\stringutils.h"/>
+    <ClInclude Include="source\talk\base\physicalsocketserver.h"/>
+    <ClInclude Include="source\talk\base\timeutils.h"/>
+    <ClInclude Include="source\talk\base\sigslot.h"/>
+    <ClInclude Include="source\talk\base\taskparent.h"/>
+    <ClInclude Include="source\talk\base\httpclient.h"/>
+    <ClInclude Include="source\talk\base\winping.h"/>
+    <ClInclude Include="source\talk\base\md5.h"/>
+    <ClInclude Include="source\talk\base\worker.h"/>
+    <ClInclude Include="source\talk\base\httprequest.h"/>
+    <ClInclude Include="source\talk\base\nssstreamadapter.h"/>
+    <ClInclude Include="source\talk\base\asyncsocket.h"/>
+    <ClInclude Include="source\talk\base\sslsocketfactory.h"/>
+    <ClInclude Include="source\talk\base\socketaddress.h"/>
+    <ClInclude Include="source\talk\base\socketstream.h"/>
+    <ClInclude Include="source\talk\base\flags.h"/>
+    <ClInclude Include="source\talk\base\base64.h"/>
+    <ClInclude Include="source\talk\base\sha1digest.h"/>
+    <ClInclude Include="source\talk\base\nssidentity.h"/>
+    <ClInclude Include="source\talk\base\criticalsection.h"/>
+    <ClInclude Include="source\talk\base\socket.h"/>
+    <ClInclude Include="source\talk\base\signalthread.h"/>
+    <ClInclude Include="source\talk\base\sslidentity.h"/>
+    <ClInclude Include="source\talk\base\dscp.h"/>
+    <ClInclude Include="source\talk\base\taskrunner.h"/>
+    <ClInclude Include="source\talk\base\ipaddress.h"/>
+    <ClInclude Include="source\talk\base\diskcache.h"/>
+    <ClInclude Include="source\talk\base\ratelimiter.h"/>
+    <ClInclude Include="source\talk\base\scoped_ptr.h"/>
+    <ClInclude Include="source\talk\base\task.h"/>
+    <ClInclude Include="source\talk\base\schanneladapter.h"/>
+    <ClInclude Include="source\talk\base\sslstreamadapterhelper.h"/>
+    <ClInclude Include="source\talk\base\json.h"/>
+    <ClInclude Include="source\talk\base\httpcommon.h"/>
+    <ClInclude Include="source\talk\base\autodetectproxy.h"/>
+    <ClInclude Include="source\talk\base\proxydetect.h"/>
+    <ClInclude Include="source\talk\base\asynctcpsocket.h"/>
+    <ClInclude Include="source\talk\base\timing.h"/>
+    <ClInclude Include="source\talk\base\messagedigest.h"/>
+    <ClInclude Include="source\talk\base\nethelpers.h"/>
+    <ClInclude Include="source\talk\base\win32window.h"/>
+    <ClInclude Include="source\talk\base\systeminfo.h"/>
+    <ClInclude Include="source\talk\base\move.h"/>
+    <ClInclude Include="source\talk\base\proxyinfo.h"/>
+    <ClInclude Include="source\talk\base\asyncudpsocket.h"/>
+    <ClInclude Include="source\talk\base\asyncpacketsocket.h"/>
+    <ClInclude Include="source\talk\base\crc32.h"/>
+    <ClInclude Include="source\talk\base\template_util.h"/>
+    <ClInclude Include="source\talk\base\compile_assert.h"/>
+    <ClInclude Include="source\talk\base\checks.h"/>
+    <ClInclude Include="source\talk\base\httpbase.h"/>
+    <ClInclude Include="source\talk\base\thread.h"/>
+    <ClInclude Include="source\talk\base\socketaddresspair.h"/>
+    <ClInclude Include="source\talk\base\common.h"/>
+    <ClInclude Include="source\talk\base\bytebuffer.h"/>
+    <ClInclude Include="source\talk\base\linked_ptr.h"/>
+    <ClInclude Include="source\talk\base\sha1.h"/>
+    <ClInclude Include="source\talk\base\httpcommon-inl.h"/>
+    <ClInclude Include="source\talk\base\urlencode.h"/>
+    <ClInclude Include="source\talk\base\socketfactory.h"/>
+    <ClInclude Include="source\talk\base\ssladapter.h"/>
+    <ClInclude Include="source\talk\base\stringencode.h"/>
+    <ClInclude Include="source\talk\base\win32.h"/>
+    <ClInclude Include="source\talk\base\socketpool.h"/>
+    <ClInclude Include="source\talk\base\pathutils.h"/>
+    <ClInclude Include="source\talk\base\winfirewall.h"/>
+    <ClInclude Include="source\talk\base\socketserver.h"/>
+    <ClInclude Include="source\talk\base\asynchttprequest.h"/>
+    <ClInclude Include="source\talk\base\asyncfile.h"/>
+    <ClInclude Include="source\talk\base\network.h"/>
+    <ClInclude Include="source\talk\base\event.h"/>
+    <ClInclude Include="source\talk\base\win32filesystem.h"/>
+    <ClInclude Include="source\talk\base\helpers.h"/>
+    <ClInclude Include="source\talk\base\nullsocketserver.h"/>
+    <ClInclude Include="source\talk\base\stream.h"/>
+    <ClInclude Include="source\talk\base\md5digest.h"/>
+    <ClInclude Include="source\talk\base\messagehandler.h"/>
+    <ClInclude Include="source\talk\base\sigslotrepeater.h"/>
+    <ClInclude Include="source\talk\base\firewallsocketserver.h"/>
+    <ClInclude Include="source\talk\base\sslstreamadapter.h"/>
+    <ClInclude Include="source\talk\base\cpumonitor.h"/>
+    <ClInclude Include="source\talk\base\fileutils.h"/>
+    <ClInclude Include="source\talk\p2p\base\sessionmanager.h"/>
+    <ClInclude Include="source\talk\p2p\base\transportchannelproxy.h"/>
+    <ClInclude Include="source\talk\p2p\base\turnport.h"/>
+    <ClInclude Include="source\talk\p2p\base\portproxy.h"/>
+    <ClInclude Include="source\talk\p2p\base\transportdescription.h"/>
+    <ClInclude Include="source\talk\p2p\base\tcpport.h"/>
+    <ClInclude Include="source\talk\p2p\base\sessionid.h"/>
+    <ClInclude Include="source\talk\p2p\base\sessionclient.h"/>
+    <ClInclude Include="source\talk\p2p\base\transportchannelimpl.h"/>
+    <ClInclude Include="source\talk\p2p\base\session.h"/>
+    <ClInclude Include="source\talk\p2p\base\transport.h"/>
+    <ClInclude Include="source\talk\p2p\base\candidate.h"/>
+    <ClInclude Include="source\talk\p2p\base\basicpacketsocketfactory.h"/>
+    <ClInclude Include="source\talk\p2p\base\sessiondescription.h"/>
+    <ClInclude Include="source\talk\p2p\base\common.h"/>
+    <ClInclude Include="source\talk\p2p\base\portallocatorsessionproxy.h"/>
+    <ClInclude Include="source\talk\p2p\base\pseudotcp.h"/>
+    <ClInclude Include="source\talk\p2p\base\port.h"/>
+    <ClInclude Include="source\talk\p2p\base\rawtransportchannel.h"/>
+    <ClInclude Include="source\talk\p2p\base\p2ptransport.h"/>
+    <ClInclude Include="source\talk\p2p\base\sessionmessages.h"/>
+    <ClInclude Include="source\talk\p2p\base\transportchannel.h"/>
+    <ClInclude Include="source\talk\p2p\base\stunport.h"/>
+    <ClInclude Include="source\talk\p2p\base\portallocator.h"/>
+    <ClInclude Include="source\talk\p2p\base\stunrequest.h"/>
+    <ClInclude Include="source\talk\p2p\base\parsing.h"/>
+    <ClInclude Include="source\talk\p2p\base\relayport.h"/>
+    <ClInclude Include="source\talk\p2p\base\transportdescriptionfactory.h"/>
+    <ClInclude Include="source\talk\p2p\base\rawtransport.h"/>
+    <ClInclude Include="source\talk\p2p\base\dtlstransportchannel.h"/>
+    <ClInclude Include="source\talk\p2p\base\dtlstransport.h"/>
+    <ClInclude Include="source\talk\p2p\base\stun.h"/>
+    <ClInclude Include="source\talk\p2p\base\p2ptransportchannel.h"/>
+    <ClInclude Include="source\talk\p2p\base\asyncstuntcpsocket.h"/>
+    <ClInclude Include="source\talk\p2p\client\httpportallocator.h"/>
+    <ClInclude Include="source\talk\p2p\client\basicportallocator.h"/>
+    <ClInclude Include="source\talk\p2p\client\sessionsendtask.h"/>
+    <ClInclude Include="source\talk\p2p\client\sessionmanagertask.h"/>
+    <ClInclude Include="source\talk\p2p\client\socketmonitor.h"/>
+    <ClInclude Include="overrides\talk\base\logging.h"/>
+    <ClInclude Include="overrides\talk\base\constructormagic.h"/>
+    <ClInclude Include="overrides\talk\base\basictypes.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\talk\xmllite\xmlconstants.cc"/>
+    <ClCompile Include="source\talk\xmllite\xmlelement.cc"/>
+    <ClCompile Include="source\talk\xmllite\xmlprinter.cc"/>
+    <ClCompile Include="source\talk\xmllite\qname.cc"/>
+    <ClCompile Include="source\talk\xmllite\xmlbuilder.cc"/>
+    <ClCompile Include="source\talk\xmllite\xmlnsstack.cc"/>
+    <ClCompile Include="source\talk\xmllite\xmlparser.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmpptask.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmppengineimpl.cc"/>
+    <ClCompile Include="source\talk\xmpp\constants.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmpplogintask.cc"/>
+    <ClCompile Include="source\talk\xmpp\jid.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmppengineimpl_iq.cc"/>
+    <ClCompile Include="source\talk\xmpp\saslmechanism.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmppclient.cc"/>
+    <ClCompile Include="source\talk\xmpp\xmppstanzaparser.cc"/>
+    <ClCompile Include="source\talk\base\taskparent.cc"/>
+    <ClCompile Include="source\talk\base\ipaddress.cc"/>
+    <ClCompile Include="source\talk\base\ssladapter.cc"/>
+    <ClCompile Include="source\talk\base\crc32.cc"/>
+    <ClCompile Include="source\talk\base\stringutils.cc"/>
+    <ClCompile Include="source\talk\base\proxyinfo.cc"/>
+    <ClCompile Include="source\talk\base\asyncfile.cc"/>
+    <ClCompile Include="source\talk\base\messagedigest.cc"/>
+    <ClCompile Include="source\talk\base\schanneladapter.cc"/>
+    <ClCompile Include="source\talk\base\autodetectproxy.cc"/>
+    <ClCompile Include="source\talk\base\sslidentity.cc"/>
+    <ClCompile Include="source\talk\base\bytebuffer.cc"/>
+    <ClCompile Include="source\talk\base\asyncudpsocket.cc"/>
+    <ClCompile Include="source\talk\base\systeminfo.cc"/>
+    <ClCompile Include="source\talk\base\socketpool.cc"/>
+    <ClCompile Include="source\talk\base\sslstreamadapterhelper.cc"/>
+    <ClCompile Include="source\talk\base\network.cc"/>
+    <ClCompile Include="source\talk\base\urlencode.cc"/>
+    <ClCompile Include="source\talk\base\fileutils.cc"/>
+    <ClCompile Include="source\talk\base\helpers.cc"/>
+    <ClCompile Include="source\talk\base\httpcommon.cc"/>
+    <ClCompile Include="source\talk\base\firewallsocketserver.cc"/>
+    <ClCompile Include="source\talk\base\win32.cc"/>
+    <ClCompile Include="source\talk\base\socketstream.cc"/>
+    <ClCompile Include="source\talk\base\win32window.cc"/>
+    <ClCompile Include="source\talk\base\md5.cc"/>
+    <ClCompile Include="source\talk\base\common.cc"/>
+    <ClCompile Include="source\talk\base\stringencode.cc"/>
+    <ClCompile Include="source\talk\base\checks.cc"/>
+    <ClCompile Include="source\talk\base\ratetracker.cc"/>
+    <ClCompile Include="source\talk\base\diskcache.cc"/>
+    <ClCompile Include="source\talk\base\httprequest.cc"/>
+    <ClCompile Include="source\talk\base\nssstreamadapter.cc"/>
+    <ClCompile Include="source\talk\base\nethelpers.cc"/>
+    <ClCompile Include="source\talk\base\asynctcpsocket.cc"/>
+    <ClCompile Include="source\talk\base\sha1.cc"/>
+    <ClCompile Include="source\talk\base\asyncsocket.cc"/>
+    <ClCompile Include="source\talk\base\asynchttprequest.cc"/>
+    <ClCompile Include="source\talk\base\socketaddress.cc"/>
+    <ClCompile Include="source\talk\base\pathutils.cc"/>
+    <ClCompile Include="source\talk\base\timing.cc"/>
+    <ClCompile Include="source\talk\base\sslsocketfactory.cc"/>
+    <ClCompile Include="source\talk\base\win32filesystem.cc"/>
+    <ClCompile Include="source\talk\base\physicalsocketserver.cc"/>
+    <ClCompile Include="source\talk\base\httpclient.cc"/>
+    <ClCompile Include="source\talk\base\sslstreamadapter.cc"/>
+    <ClCompile Include="source\talk\base\timeutils.cc"/>
+    <ClCompile Include="source\talk\base\stream.cc"/>
+    <ClCompile Include="source\talk\base\thread.cc"/>
+    <ClCompile Include="source\talk\base\proxydetect.cc"/>
+    <ClCompile Include="source\talk\base\signalthread.cc"/>
+    <ClCompile Include="source\talk\base\winping.cc"/>
+    <ClCompile Include="source\talk\base\event.cc"/>
+    <ClCompile Include="source\talk\base\json.cc"/>
+    <ClCompile Include="source\talk\base\task.cc"/>
+    <ClCompile Include="source\talk\base\win32securityerrors.cc"/>
+    <ClCompile Include="source\talk\base\worker.cc"/>
+    <ClCompile Include="source\talk\base\socketaddresspair.cc"/>
+    <ClCompile Include="source\talk\base\socketadapters.cc"/>
+    <ClCompile Include="source\talk\base\messagequeue.cc"/>
+    <ClCompile Include="source\talk\base\nssidentity.cc"/>
+    <ClCompile Include="source\talk\base\httpbase.cc"/>
+    <ClCompile Include="source\talk\base\winfirewall.cc"/>
+    <ClCompile Include="source\talk\base\flags.cc"/>
+    <ClCompile Include="source\talk\base\ratelimiter.cc"/>
+    <ClCompile Include="source\talk\base\taskrunner.cc"/>
+    <ClCompile Include="source\talk\base\messagehandler.cc"/>
+    <ClCompile Include="source\talk\base\cpumonitor.cc"/>
+    <ClCompile Include="source\talk\base\base64.cc"/>
+    <ClCompile Include="source\talk\p2p\base\sessionmessages.cc"/>
+    <ClCompile Include="source\talk\p2p\base\portallocator.cc"/>
+    <ClCompile Include="source\talk\p2p\base\p2ptransport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\p2ptransportchannel.cc"/>
+    <ClCompile Include="source\talk\p2p\base\transportchannel.cc"/>
+    <ClCompile Include="source\talk\p2p\base\stunport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\portallocatorsessionproxy.cc"/>
+    <ClCompile Include="source\talk\p2p\base\port.cc"/>
+    <ClCompile Include="source\talk\p2p\base\relayport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\sessiondescription.cc"/>
+    <ClCompile Include="source\talk\p2p\base\asyncstuntcpsocket.cc"/>
+    <ClCompile Include="source\talk\p2p\base\sessionmanager.cc"/>
+    <ClCompile Include="source\talk\p2p\base\portproxy.cc"/>
+    <ClCompile Include="source\talk\p2p\base\transportdescriptionfactory.cc"/>
+    <ClCompile Include="source\talk\p2p\base\dtlstransportchannel.cc"/>
+    <ClCompile Include="source\talk\p2p\base\stun.cc"/>
+    <ClCompile Include="source\talk\p2p\base\transportchannelproxy.cc"/>
+    <ClCompile Include="source\talk\p2p\base\parsing.cc"/>
+    <ClCompile Include="source\talk\p2p\base\tcpport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\session.cc"/>
+    <ClCompile Include="source\talk\p2p\base\basicpacketsocketfactory.cc"/>
+    <ClCompile Include="source\talk\p2p\base\rawtransportchannel.cc"/>
+    <ClCompile Include="source\talk\p2p\base\turnport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\pseudotcp.cc"/>
+    <ClCompile Include="source\talk\p2p\base\stunrequest.cc"/>
+    <ClCompile Include="source\talk\p2p\base\transportdescription.cc"/>
+    <ClCompile Include="source\talk\p2p\base\rawtransport.cc"/>
+    <ClCompile Include="source\talk\p2p\base\transport.cc"/>
+    <ClCompile Include="source\talk\p2p\client\basicportallocator.cc"/>
+    <ClCompile Include="source\talk\p2p\client\socketmonitor.cc"/>
+    <ClCompile Include="source\talk\p2p\client\httpportallocator.cc"/>
+    <ClCompile Include="overrides\talk\base\logging.cc"/>
+    <ClCompile Include="overrides\talk\base\win32socketinit.cc"/>
+    <ClCompile Include="..\..\build\precompile.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\base\base.vcxproj">
+      <Project>{2E8A02CC-5E8E-1BCB-7C82-BCBE781F50B6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\net\net.vcxproj">
+      <Project>{3FE45A95-FE94-1D27-B82A-CD3BA2ED31F7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\net\third_party\nss\libssl.vcxproj">
+      <Project>{577466D9-1B88-4CDE-9269-EA4EACCD23E9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\nss\nspr.vcxproj">
+      <Project>{81C68B05-C196-94F4-7009-F9233F2AF4B9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\nss\nss.vcxproj">
+      <Project>{AECE38E1-1419-E5DC-5C15-BC43A20A36FC}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

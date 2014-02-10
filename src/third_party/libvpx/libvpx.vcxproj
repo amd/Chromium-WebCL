@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5F80539B-80AF-3D25-D40C-C05FE4EE48B7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libvpx</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="libvpx.props"/>
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../..;$(OutDir)obj/global_intermediate;..\..\third_party\wtl\include;source\config\win\ia32;source\config;source\libvpx;source\libvpx\vp8\common;source\libvpx\vp8\decoder;source\libvpx\vp8\encoder;$(OutDir)obj\global_intermediate\third_party\libvpx;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="libvpx.gyp"/>
+    <None Include="$(OutDir)\yasm.exe">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\idctllm_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\sad_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\idctllm_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\sad_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\postproc_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\loopfilter_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\iwalsh_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\iwalsh_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_loopfilter_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\sad_sse4.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\variance_impl_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\quantize_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\variance_impl_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\x86inc.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_subpixel_8t_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\sad_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\subpixel_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\emms.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_subpixel_8t_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\subtract_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_copy_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\x86_abi_support.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\dct_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\variance_impl_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\quantize_sse4.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\subtract_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\sad_sse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\subpixel_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\subpixel_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\loopfilter_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\dequantize_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_intrapred_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\recon_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\vp9_intrapred_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\fwalsh_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\dct_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\encodeopt.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\quantize_ssse3.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\recon_mmx.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\mfqe_sse2.obj"/>
+    <None Include="$(OutDir)obj\global_intermediate\third_party\libvpx\postproc_sse2.obj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\libvpx\vpx_ports\mem.h"/>
+    <ClInclude Include="source\libvpx\vpx_ports\emmintrin_compat.h"/>
+    <ClInclude Include="source\libvpx\vpx_ports\x86.h"/>
+    <ClInclude Include="source\libvpx\vpx_ports\vpx_once.h"/>
+    <ClInclude Include="source\libvpx\vpx_ports\asm_offsets.h"/>
+    <ClInclude Include="source\libvpx\vpx_ports\vpx_timer.h"/>
+    <ClInclude Include="source\libvpx\vp9\vp9_iface_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_entropymv.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_entropy.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_scan.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_quant_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_textblit.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_tile_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_sadmxn.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_treecoder.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_common_data.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_pred_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_findnearmv.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_scale.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_extend.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_blockd.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_mvref_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_alloccommon.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_idct.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_loopfilter.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_convolve.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_pragmas.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_filter.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_ppflags.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_entropymode.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_default_coef_probs.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_mv.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_onyx.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_enums.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_onyxc_int.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_reconinter.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_seg_common.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_reconintra.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\vp9_systemdependent.h"/>
+    <ClInclude Include="source\libvpx\vp9\common\x86\vp9_postproc_x86.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_thread.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_decodemv.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_treereader.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_dsubexp.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_dboolhuff.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_onyxd.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_onyxd_int.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_decodframe.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_read_bit_buffer.h"/>
+    <ClInclude Include="source\libvpx\vp9\decoder\vp9_detokenize.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\decoderthreading.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\onyxd_int.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\decodemv.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\dboolhuff.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\treereader.h"/>
+    <ClInclude Include="source\libvpx\vp8\decoder\detokenize.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\onyxc_int.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\entropymode.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\loopfilter.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\header.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\entropy.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\findnearmv.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\mv.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\modecont.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\default_coef_probs.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\variance.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\blockd.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\setupintrarecon.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\coefupdateprobs.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\extend.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\systemdependent.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\postproc.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\onyx.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\threading.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\ppflags.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\common.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\invtrans.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\alloccommon.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\treecoder.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\swapyv12buffer.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\onyxd.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\pragmas.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\reconinter.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\quant_common.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\reconintra4x4.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\entropymv.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\vp8_entropymodedata.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\filter.h"/>
+    <ClInclude Include="source\libvpx\vp8\common\x86\filter_x86.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\dct_value_tokens.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\quantize.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\mcomp.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\defaultcoefcounts.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\encodemv.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\modecosts.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\boolhuff.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\pickinter.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\onyx_int.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\firstpass.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\psnr.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\segmentation.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\denoising.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\encodeintra.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\encodemb.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\ratectrl.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\dct_value_cost.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\tokenize.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\encodeframe.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\mr_dissim.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\bitstream.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\lookahead.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\rdopt.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\block.h"/>
+    <ClInclude Include="source\libvpx\vp8\encoder\treewriter.h"/>
+    <ClInclude Include="source\libvpx\vpx\vp8.h"/>
+    <ClInclude Include="source\libvpx\vpx\vpx_encoder.h"/>
+    <ClInclude Include="source\libvpx\vpx\vp8dx.h"/>
+    <ClInclude Include="source\libvpx\vpx\vpx_codec.h"/>
+    <ClInclude Include="source\libvpx\vpx\vpx_decoder.h"/>
+    <ClInclude Include="source\libvpx\vpx\vpx_image.h"/>
+    <ClInclude Include="source\libvpx\vpx\vp8cx.h"/>
+    <ClInclude Include="source\libvpx\vpx\vpx_integer.h"/>
+    <ClInclude Include="source\libvpx\vpx\internal\vpx_codec_internal.h"/>
+    <ClInclude Include="source\libvpx\vpx_mem\vpx_mem.h"/>
+    <ClInclude Include="source\libvpx\vpx_mem\include\vpx_mem_intrnl.h"/>
+    <ClInclude Include="source\libvpx\vpx_scale\vpx_scale.h"/>
+    <ClInclude Include="source\libvpx\vpx_scale\yv12config.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\libvpx\vpx_ports\x86_cpuid.c"/>
+    <ClCompile Include="source\libvpx\vp9\vp9_dx_iface.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_entropymv.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_entropy.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_scan.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_quant_common.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_tile_common.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_common_data.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_pred_common.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_scale.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_findnearmv.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_extend.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_mvref_common.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_debugmodes.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_alloccommon.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_idct.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_convolve.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_loopfilter.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_loopfilter_filters.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_filter.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_entropymode.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_rtcd.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_treecoder.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_reconinter.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_seg_common.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\vp9_reconintra.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\generic\vp9_systemdependent.c"/>
+    <ClCompile Include="source\libvpx\vp9\common\x86\vp9_asm_stubs.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_thread.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_onyxd_if.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_decodemv.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_dsubexp.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_dboolhuff.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_decodframe.c"/>
+    <ClCompile Include="source\libvpx\vp9\decoder\vp9_detokenize.c"/>
+    <ClCompile Include="source\libvpx\vp8\vp8_dx_iface.c"/>
+    <ClCompile Include="source\libvpx\vp8\vp8_cx_iface.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\onyxd_if.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\decodemv.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\dboolhuff.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\decodframe.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\threading.c"/>
+    <ClCompile Include="source\libvpx\vp8\decoder\detokenize.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\treecoder.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\idctllm.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\rtcd.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\entropymode.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\sad_c.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\loopfilter_filters.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\findnearmv.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\entropy.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\swapyv12buffer.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\modecont.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\setupintrarecon.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\blockd.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\loopfilter.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\extend.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\postproc.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\dequantize.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\mfqe.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\reconintra.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\alloccommon.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\reconinter.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\mbpitch.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\quant_common.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\idct_blk.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\reconintra4x4.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\entropymv.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\variance_c.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\debugmodes.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\filter.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\generic\systemdependent.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\x86\postproc_x86.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\x86\filter_x86.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\x86\loopfilter_x86.c"/>
+    <ClCompile Include="source\libvpx\vp8\common\x86\vp8_asm_stubs.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\quantize.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\mcomp.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\encodemv.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\encodeintra.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\boolhuff.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\picklpf.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\dct.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\pickinter.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\modecosts.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\psnr.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\segmentation.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\onyx_if.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\denoising.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\encodemb.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\ethreading.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\ratectrl.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\treewriter.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\tokenize.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\encodeframe.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\mr_dissim.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\bitstream.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\lookahead.c"/>
+    <ClCompile Include="source\libvpx\vp8\encoder\rdopt.c"/>
+    <ClCompile Include="source\libvpx\vpx\src\vpx_encoder.c"/>
+    <ClCompile Include="source\libvpx\vpx\src\vpx_image.c"/>
+    <ClCompile Include="source\libvpx\vpx\src\vpx_codec.c"/>
+    <ClCompile Include="source\libvpx\vpx\src\vpx_decoder.c"/>
+    <ClCompile Include="source\libvpx\vpx_mem\vpx_mem.c"/>
+    <ClCompile Include="source\libvpx\vpx_scale\vpx_scale_rtcd.c"/>
+    <ClCompile Include="source\libvpx\vpx_scale\generic\gen_scalers.c"/>
+    <ClCompile Include="source\libvpx\vpx_scale\generic\vpx_scale.c"/>
+    <ClCompile Include="source\libvpx\vpx_scale\generic\yv12extend.c"/>
+    <ClCompile Include="source\libvpx\vpx_scale\generic\yv12config.c"/>
+  </ItemGroup>
+  <ItemGroup>
+    <assemble Include="source\libvpx\third_party\x86inc\x86inc.asm"/>
+    <assemble Include="source\libvpx\vpx_ports\emms.asm"/>
+    <assemble Include="source\libvpx\vpx_ports\x86_abi_support.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_intrapred_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_loopfilter_mmx.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_intrapred_sse2.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_subpixel_8t_sse2.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_copy_sse2.asm"/>
+    <assemble Include="source\libvpx\vp9\common\x86\vp9_subpixel_8t_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\loopfilter_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\sad_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\variance_impl_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\postproc_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\variance_impl_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\loopfilter_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\sad_sse4.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\iwalsh_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\sad_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\postproc_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\subpixel_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\variance_impl_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\subpixel_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\subpixel_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\sad_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\recon_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\iwalsh_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\sad_sse3.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\mfqe_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\idctllm_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\idctllm_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\recon_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\common\x86\dequantize_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\quantize_sse4.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\quantize_ssse3.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\quantize_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\encodeopt.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\dct_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\fwalsh_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\dct_sse2.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\subtract_mmx.asm"/>
+    <assemble Include="source\libvpx\vp8\encoder\x86\subtract_sse2.asm"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="gen_asm_offsets_vp8.vcxproj">
+      <Project>{38E6C70E-28A4-2A55-F093-01BD8A06596B}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\yasm\yasm.vcxproj">
+      <Project>{7A2C36D0-0AF7-8E9B-00C0-9416F41DCD90}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="libvpx.targets"/>
+  </ImportGroup>
+</Project>

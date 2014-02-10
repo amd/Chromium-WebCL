@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D968A3BC-32AF-1861-8687-14A007F5E995}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ash_strings</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ash_strings.gyp"/>
+    <None Include="ash_strings.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_sw.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_uk.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_gu.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_tr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_da.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_no.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_pt-BR.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_lt.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_vi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ml.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_fil.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_fi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_nl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_el.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_it.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_sl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_hu.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_en-GB.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ro.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_hi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_kn.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_cs.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ta.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_bg.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_es-419.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_id.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_te.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_bn.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_hr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_fr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ko.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ja.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ms.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ca.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_iw.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_sr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_de.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_am.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_et.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_mr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ar.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_ru.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_zh-CN.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_es.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_lv.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_pl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_sv.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_fa.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_zh-TW.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_sk.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_th.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="strings\ash_strings_pt-PT.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit_info.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\test_suite_all.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_rtl.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\scons.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts_unittests.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\exception.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\constants.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\BogoFP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\FP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\variant.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\mapping.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\empty.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_postprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\unit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\diff_structures.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\count.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_preprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\resize.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\newgrd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\test.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\menu_from_parts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\skeleton_gatherer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\json_loader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\regexp.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\repack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\template_formatter.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writer_configuration.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\mock_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_helper.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\tools\gritsettings\resource_ids">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;ash_strings.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\ash_strings&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot;</Command>
+      <Message>Generating resources from ash_strings.grd</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\ash_strings\ash_strings_sr.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_bn.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_es-419.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ca.pak;$(OutDir)obj\global_intermediate\ash_strings\grit\ash_strings.h;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_hu.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_sl.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_uk.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_fake-bidi.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_am.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_nl.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_el.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_lv.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_fr.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_sv.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ta.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_cs.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_hi.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_hr.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_th.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_tr.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_lt.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_fi.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_da.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ja.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_it.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_te.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_es.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_vi.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ml.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_sw.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_fil.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_de.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_nb.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_zh-TW.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_gu.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_mr.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_id.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_pt-BR.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_sk.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_fa.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_pl.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_et.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_en-GB.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ru.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_pt-PT.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ro.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ar.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ms.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_ko.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_kn.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_bg.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_en-US.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_zh-CN.pak;$(OutDir)obj\global_intermediate\ash_strings\ash_strings_he.pak</Outputs>
+      <AdditionalInputs>..\tools\grit\grit\format\policy_templates\PRESUBMIT.py;..\tools\grit\grit\format\html_inline_unittest.py;..\tools\grit\grit\tool\resize.py;strings\ash_strings_id.xtb;..\tools\grit\grit\lazy_re_unittest.py;..\tools\grit\grit\__init__.py;strings\ash_strings_cs.xtb;..\tools\grit\grit\exception.py;strings\ash_strings_am.xtb;strings\ash_strings_lt.xtb;strings\ash_strings_ar.xtb;strings\ash_strings_bn.xtb;..\tools\grit\grit\format\js_map_format_unittest.py;..\tools\grit\grit\pseudo_rtl.py;strings\ash_strings_mr.xtb;strings\ash_strings_nl.xtb;..\tools\grit\grit\shortcuts.py;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py;strings\ash_strings_ru.xtb;..\tools\grit\grit\clique_unittest.py;strings\ash_strings_sr.xtb;strings\ash_strings_hi.xtb;..\tools\grit\grit\format\resource_map_unittest.py;..\tools\grit\grit\format\chrome_messages_json_unittest.py;strings\ash_strings_de.xtb;..\tools\grit\grit\gather\rc_unittest.py;..\tools\grit\grit\tool\test.py;..\tools\grit\grit\node\misc_unittest.py;..\tools\grit\grit\format\policy_templates\writers\json_writer.py;..\tools\grit\grit_info.py;..\tools\grit\grit\clique.py;..\tools\grit\grit\tool\preprocess_interface.py;..\tools\grit\grit\pseudo.py;..\tools\grit\grit\gather\igoogle_strings_unittest.py;strings\ash_strings_ta.xtb;..\tools\grit\grit\format\rc_header_unittest.py;..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py;..\tools\grit\grit\format\js_map_format.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer.py;..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py;..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py;strings\ash_strings_fil.xtb;..\tools\grit\grit\extern\BogoFP.py;..\tools\grit\grit\format\data_pack.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py;..\tools\grit\grit\tclib_unittest.py;..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py;strings\ash_strings_es.xtb;..\tools\grit\grit\format\policy_templates\template_formatter.py;strings\ash_strings_fa.xtb;strings\ash_strings_ko.xtb;..\tools\grit\grit\gather\json_loader.py;..\tools\grit\grit\tool\menu_from_parts.py;strings\ash_strings_th.xtb;..\tools\grit\grit\gather\muppet_strings.py;..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py;strings\ash_strings_iw.xtb;strings\ash_strings_gu.xtb;strings\ash_strings_da.xtb;strings\ash_strings_sk.xtb;..\tools\grit\grit\gather\tr_html_unittest.py;..\tools\grit\grit\node\include.py;..\tools\grit\grit\node\message_unittest.py;..\tools\grit\grit\gather\rc.py;..\tools\grit\grit\tool\rc2grd.py;..\tools\grit\grit\node\structure_unittest.py;..\tools\grit\grit\format\policy_templates\__init__.py;..\tools\grit\grit\tool\buildinfo.py;..\tools\grit\grit\gather\skeleton_gatherer.py;..\tools\grit\grit\shortcuts_unittests.py;strings\ash_strings_fi.xtb;..\tools\grit\grit\format\data_pack_unittest.py;..\tools\grit\grit\gather\interface.py;..\tools\grit\grit\tool\toolbar_postprocess.py;..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py;..\tools\grit\grit\node\custom\filename_unittest.py;..\tools\grit\grit\format\policy_templates\writers\plist_helper.py;..\tools\grit\grit\node\misc.py;..\tools\grit\grit\format\policy_templates\writers\plist_writer.py;strings\ash_strings_hr.xtb;..\tools\grit\grit\tool\transl2tc.py;..\tools\grit\grit\extern\__init__.py;..\tools\grit\grit\node\message.py;..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py;..\tools\grit\grit\gather\txt.py;strings\ash_strings_zh-TW.xtb;..\tools\grit\grit\tool\android2grd.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer.py;..\tools\grit\grit\format\html_inline.py;..\tools\grit\grit\extern\FP.py;..\tools\grit\grit\tool\diff_structures.py;strings\ash_strings_sv.xtb;..\tools\grit\grit\gather\admin_template.py;..\tools\grit\grit\grit_runner.py;strings\ash_strings_no.xtb;..\tools\grit\grit\format\c_format.py;..\tools\grit\grit\gather\txt_unittest.py;strings\ash_strings_tr.xtb;..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py;..\tools\grit\grit\format\android_xml_unittest.py;strings\ash_strings_fr.xtb;..\tools\grit\grit\tool\newgrd.py;strings\ash_strings_zh-CN.xtb;..\tools\grit\grit\node\custom\filename.py;..\tools\grit\grit\format\resource_map.py;..\tools\grit\grit\format\policy_templates\writers\__init__.py;..\tools\grit\grit\tool\unit.py;strings\ash_strings_uk.xtb;..\tools\grit\grit\util.py;..\tools\grit\grit\format\policy_templates\writers\template_writer.py;..\tools\grit\grit\format\policy_templates\writers\mock_writer.py;..\tools\grit\grit\tool\count.py;..\tools\grit\grit\tool\android2grd_unittest.py;..\tools\grit\grit\lazy_re.py;..\tools\grit\grit\format\rc.py;..\tools\grit\grit\node\structure.py;..\tools\grit\grit\node\io_unittest.py;..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py;..\tools\grit\grit\grd_reader.py;..\tools\grit\PRESUBMIT.py;..\tools\grit\grit\test_suite_all.py;..\tools\grit\grit\xtb_reader.py;strings\ash_strings_vi.xtb;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py;strings\ash_strings_sl.xtb;..\tools\grit\grit\util_unittest.py;..\tools\grit\grit\format\policy_templates\policy_template_generator.py;..\tools\grit\grit\tool\xmb_unittest.py;..\tools\grit\grit.py;..\tools\grit\grit\tool\toolbar_preprocess.py;..\tools\grit\grit\format\policy_templates\writers\doc_writer.py;..\tools\grit\grit\grd_reader_unittest.py;..\tools\grit\grit\format\policy_templates\writers\admx_writer.py;strings\ash_strings_el.xtb;..\tools\grit\grit\tool\postprocess_interface.py;strings\ash_strings_hu.xtb;strings\ash_strings_es-419.xtb;..\tools\grit\grit\format\repack.py;strings\ash_strings_en-GB.xtb;..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py;..\tools\grit\grit\tool\__init__.py;..\tools\grit\grit\gather\tr_html.py;..\tools\grit\grit\extern\tclib.py;..\tools\grit\grit\format\android_xml.py;strings\ash_strings_ml.xtb;..\tools\grit\grit\tool\xmb.py;..\tools\grit\grit\format\__init__.py;..\tools\grit\grit\grit_runner_unittest.py;..\tools\grit\grit\format\chrome_messages_json.py;strings\ash_strings_ja.xtb;..\tools\grit\grit\node\include_unittest.py;..\tools\grit\grit\tool\transl2tc_unittest.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py;..\tools\grit\grit\format\policy_templates\writers\adml_writer.py;..\tools\grit\grit\gather\igoogle_strings.py;..\tools\grit\grit\xtb_reader_unittest.py;strings\ash_strings_lv.xtb;..\tools\grit\grit\gather\policy_json_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image.py;strings\ash_strings_pl.xtb;..\tools\grit\grit\tool\postprocess_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image_unittest.py;..\tools\grit\grit\format\c_format_unittest.py;..\tools\grit\grit\scons.py;strings\ash_strings_et.xtb;..\tools\grit\grit\gather\muppet_strings_unittest.py;..\tools\grit\grit\constants.py;..\tools\grit\grit\node\variant.py;..\tools\grit\grit\gather\admin_template_unittest.py;..\tools\grit\grit\gather\chrome_html.py;..\tools\grit\grit\node\mapping.py;..\tools\grit\grit\gather\__init__.py;strings\ash_strings_ro.xtb;strings\ash_strings_pt-PT.xtb;strings\ash_strings_pt-BR.xtb;strings\ash_strings_sw.xtb;..\tools\grit\grit\node\empty.py;..\tools\grit\grit\tclib.py;strings\ash_strings_it.xtb;..\tools\grit\grit\node\__init__.py;..\tools\grit\grit\node\base_unittest.py;..\tools\grit\grit\gather\policy_json.py;..\tools\grit\grit\tool\rc2grd_unittest.py;..\tools\grit\grit\node\custom\__init__.py;..\tools\grit\grit\tool\buildinfo_unittest.py;..\tools\grit\grit\tool\interface.py;..\tools\grit\grit\gather\regexp.py;..\tools\grit\grit\tool\preprocess_unittest.py;strings\ash_strings_ca.xtb;..\tools\grit\grit\format\rc_unittest.py;..\tools\grit\grit\tool\build_unittest.py;..\tools\grit\grit\node\base.py;..\tools\grit\grit\node\io.py;ash_strings.grd;strings\ash_strings_bg.xtb;..\tools\grit\grit\gather\chrome_html_unittest.py;..\tools\grit\grit\pseudo_unittest.py;..\tools\grit\grit\tool\build.py;..\tools\grit\grit\format\rc_header.py;..\tools\grit\grit\format\policy_templates\writer_configuration.py;strings\ash_strings_te.xtb;strings\ash_strings_kn.xtb;strings\ash_strings_ms.xtb</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

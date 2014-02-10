@@ -1,0 +1,1421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F3E068FC-E2C4-EFAB-3335-1342E360AB13}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ppapi_nacl_tests</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ppapi_untrusted.gyp"/>
+    <None Include="glibc-x86-64.ppapi_nacl_tests.source_list.gypcmd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="newlib-x86-64.ppapi_nacl_tests.source_list.gypcmd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="glibc-x86-32.ppapi_nacl_tests.source_list.gypcmd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="pnacl_newlib.ppapi_nacl_tests.source_list.gypcmd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="newlib-x86-32.ppapi_nacl_tests.source_list.gypcmd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_glibc\lib64\libppapi_cpp.so">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_glibc\lib64\libppapi.so">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_glibc\lib32\libppapi_cpp.so">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_glibc\lib32\libppapi.so">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_pnacl_newlib\lib\libppapi_cpp.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_pnacl_newlib\lib\libppapi.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_newlib\lib64\libppapi.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_newlib\lib64\libppapi_cpp.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_newlib\lib32\libppapi_cpp.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\tc_newlib\lib32\libppapi.a">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\sdk\toolchain\win_pnacl\stamp.prep">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\sdk\toolchain\win_x86_newlib\stamp.prep">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\sdk\toolchain\win_x86_glibc\stamp.prep">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\ppapi_nacl_tests_glibc_x32.nexe">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\ppapi_nacl_tests_pnacl_newlib_x64.nexe">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tests\test_output_protection_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_video_destination.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_core.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_video_source.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_case.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_empty.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_tcp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_file_ref.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_mouse_lock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_paint_aggregator.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\arch_dependent_sizes_32.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_memory.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_audio.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\arch_dependent_sizes_64.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\pp_thread.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\testing_instance.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_var_resource.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_file_io.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_graphics_2d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\all_cpp_includes.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_host_resolver_private_disallowed.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_view.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_tcp_server_socket_private_disallowed.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_truetype_font.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_cursor_control.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_mouse_cursor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_network_monitor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_post_message.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_host_resolver_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_tcp_socket_private_disallowed.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_net_address_private_untrusted.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_printing.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_tcp_server_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_network_proxy.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_graphics_3d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_udp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_var.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_tcp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_scrollbar.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_udp_socket_private_disallowed.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_websocket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_message_loop.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_fullscreen.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_file_system.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_trace_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_console.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_audio_config.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\all_c_includes.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_utils.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_ime_input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_net_address.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_url_request.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_image_data.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_url_loader.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_udp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="tests\test_host_resolver.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="lib\gl\gles2\gl2ext_ppapi.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_udp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp_mouse_lock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_url_request_info.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_fullscreen.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_file_system.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_module.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_websocket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_rect.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_var_array_buffer.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_macros.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_completion_callback.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_time.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_mouse_cursor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_file_io.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_graphics_3d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_opengles2.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp_input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_image_data.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_graphics_3d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_console.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_directory_entry.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_errors.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp_instance.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_network_list.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_url_loader.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_net_address.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_instance.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_instance.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_var_array.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp_graphics_3d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_messaging.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_bool.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_mouse_lock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_var_dictionary.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_array_output.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_tcp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_resource.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_file_ref.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_text_input_controller.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_var.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_gamepad.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp_messaging.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_audio.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_touch_point.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_point.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_size.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_url_response_info.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppp.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_var.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_network_proxy.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_graphics_2d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_network_monitor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_file_info.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_core.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\pp_stdint.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_audio_config.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\ppb_host_resolver.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\trusted\ppb_url_loader_trusted.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\trusted\ppb_browser_font_trusted.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\extensions\dev\ppb_ext_alarms_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\extensions\dev\ppb_ext_socket_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\extensions\dev\ppb_ext_events_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_ext_crx_file_system_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_x509_certificate_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_pdf.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\pp_private_font_charset.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_platform_verification_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\pp_file_handle.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_nacl_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_instance_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_file_io_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_host_resolver_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_output_protection_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_uma_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_tcp_server_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_content_decryptor_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_flash_menu.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_video_destination_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\pp_content_decryptor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_video_source_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppp_content_decryptor_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_flash.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_tcp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_proxy_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppp_instance_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_net_address_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_udp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\pp_video_frame_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_flash_clipboard.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_flash_font_file.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\private\ppb_flash_message_loop.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_truetype_font_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_testing_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_cursor_control_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\pp_cursor_type_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_resource_array_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\pp_print_settings_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_zoom_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_memory_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_scrollbar_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_widget_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_var_resource_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_char_set_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_widget_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_printing_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_opengles2ext_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_zoom_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_printing_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_graphics_2d_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\pp_video_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_selection_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_find_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_ime_input_event_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_text_input_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_var_deprecated.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_crypto_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_url_util_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_scrollbar_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_class_deprecated.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_video_decoder_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_view_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_file_chooser_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_buffer_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_device_ref_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_find_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_trace_event_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppp_text_input_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_font_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\deprecated_bool.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="c\dev\ppb_video_decoder_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\tcp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\core.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\var_array.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\graphics_2d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\file_ref.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\url_loader.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\module_impl.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\message_loop.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\pass_ref.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\image_data.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\instance.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\url_response_info.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\host_resolver.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\touch_point.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\graphics_3d.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\var_dictionary.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\graphics_3d_client.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\directory_entry.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\array_output.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\rect.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\net_address.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\resource.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\output_traits.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\file_io.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\instance_handle.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\file_system.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\network_list.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\fullscreen.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\var.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\completion_callback.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\udp_socket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\size.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\mouse_lock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\text_input_controller.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\module.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\network_monitor.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\input_event.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\websocket.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\point.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\audio.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\url_request_info.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\audio_config.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\view.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\network_proxy.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\var_array_buffer.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\logging.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\ext_output_traits.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\from_var_converter.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\to_var_converter.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\dict_field.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\event_base.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\optional.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\dev\alarms_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\extensions\dev\socket_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\output_protection_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\var_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\video_frame_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\tcp_server_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\instance_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\flash_font_file.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\host_resolver_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\flash_fullscreen.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\udp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\pass_file_handle.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\content_decryptor_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\video_destination_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\tcp_socket_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\video_source_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\file_io_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\net_address_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\private\x509_certificate_private.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\var_resource_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\device_ref_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\selection_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\scriptable_object_deprecated.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\text_input_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\file_chooser_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\font_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\widget_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\printing_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\video_decoder_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\truetype_font_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\widget_client_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\view_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\ime_input_event_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\resource_array_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\graphics_2d_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\memory_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\zoom_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\buffer_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\scrollbar_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\url_util_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="cpp\dev\find_dev.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\completion_callback_factory.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\completion_callback_factory_thread_traits.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\threading\lock.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\threading\simple_thread.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\websocket\websocket_api.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\graphics\paint_aggregator.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="utility\graphics\paint_manager.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="tests\test_core.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_mouse_lock.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_file_io.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_video_source.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_tcp_socket_private_disallowed.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_var_resource.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_scrollbar.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_host_resolver.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_memory.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_view.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_graphics_3d.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_printing.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_tcp_socket_private.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_file_system.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_console.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_host_resolver_private_disallowed.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_audio.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_net_address.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_utils.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_udp_socket_private_disallowed.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_c_includes.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_paint_aggregator.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\testing_instance.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_output_protection_private.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_tcp_server_socket_private_disallowed.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_struct_sizes.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_graphics_2d.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_audio_config.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_network_proxy.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_post_message.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_network_monitor.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_case.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_tcp_server_socket_private.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_websocket.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_mouse_cursor.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_video_destination.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_empty.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_net_address_private_untrusted.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_host_resolver_private.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_trace_event.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_ime_input_event.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_udp_socket_private.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_tcp_socket.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_image_data.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_input_event.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_url_request.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_fullscreen.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_truetype_font.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_url_loader.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_message_loop.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_file_ref.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_var.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_cursor_control.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_udp_socket.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\test_cpp_includes.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\gl\gles2\gl2ext_ppapi.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="lib\gl\gles2\gles2.c">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\native_client\build\build_nexe.py">
+      <FileType>Document</FileType>
+      <Command>call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--strip-all&quot; &quot;--arch&quot; &quot;pnacl&quot; &quot;--build&quot; &quot;newlib_pexe&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_newlib.pexe&quot; &quot;--objdir&quot; &quot;$(IntDir)pnacl_newlib\ppapi_nacl_tests&quot; &quot;--include-dirs=$(OutDir)obj/global_intermediate/tc_pnacl_newlib/include .. lib/gl/include ../third_party/wtl/include&quot; &quot;--compile_flags=-O2 -Wall -fdiagnostics-show-option -Werror -DGL_GLEXT_PROTOTYPES  -Wno-unused-function -Wno-char-subscripts -Wno-c++11-extensions -Wno-unnamed-type-template-args -Wno-extra-semi -Wno-unused-private-field -Wno-char-subscripts -Wno-unused-function &quot; &quot;--defines=__linux__ &quot;__STDC_LIMIT_MACROS=1&quot; &quot;__STDC_FORMAT_MACROS=1&quot; &quot;_GNU_SOURCE=1&quot; &quot;_BSD_SOURCE=1&quot; &quot;_POSIX_C_SOURCE=199506&quot; &quot;_XOPEN_SOURCE=600&quot; &quot;DYNAMIC_ANNOTATIONS_ENABLED=1&quot; &quot;DYNAMIC_ANNOTATIONS_PREFIX=NACL_&quot; &quot;NACL_BUILD_ARCH=x86&quot; GL_GLEXT_PROTOTYPES ANGLE_DX11 &quot;_WIN32_WINNT=0x0602&quot; &quot;WINVER=0x0602&quot; WIN32 _WINDOWS NOMINMAX &quot;PSAPI_VERSION=1&quot; _CRT_RAND_S CERT_CHAIN_PARA_HAS_EXTRA_FIELDS WIN32_LEAN_AND_MEAN _ATL_NO_OPENGL _SECURE_ATL CHROMIUM_BUILD COMPONENT_BUILD &quot;TOOLKIT_VIEWS=1&quot; &quot;USE_AURA=1&quot; &quot;USE_ASH=1&quot; &quot;USE_DEFAULT_RENDER_THEME=1&quot; &quot;USE_LIBJPEG_TURBO=1&quot; ENABLE_ONE_CLICK_SIGNIN &quot;ENABLE_REMOTING=1&quot; &quot;ENABLE_WEBRTC=1&quot; ENABLE_PEPPER_CDMS ENABLE_CONFIGURATION_POLICY ENABLE_INPUT_SPEECH ENABLE_NOTIFICATIONS NO_TCMALLOC &quot;ENABLE_EGLIMAGE=1&quot; __STD_C _CRT_SECURE_NO_DEPRECATE _SCL_SECURE_NO_DEPRECATE &quot;NTDDI_VERSION=0x06020000&quot; &quot;ENABLE_TASK_MANAGER=1&quot; &quot;ENABLE_EXTENSIONS=1&quot; &quot;ENABLE_PLUGIN_INSTALLATION=1&quot; &quot;ENABLE_PLUGINS=1&quot; &quot;ENABLE_SESSION_SERVICE=1&quot; &quot;ENABLE_THEMES=1&quot; &quot;ENABLE_AUTOFILL_DIALOG=1&quot; &quot;ENABLE_BACKGROUND=1&quot; &quot;ENABLE_AUTOMATION=1&quot; &quot;ENABLE_GOOGLE_NOW=1&quot; &quot;CLD_VERSION=2&quot; &quot;ENABLE_FULL_PRINTING=1&quot; &quot;ENABLE_PRINTING=1&quot; &quot;ENABLE_SPELLCHECK=1&quot; &quot;ENABLE_CAPTIVE_PORTAL_DETECTION=1&quot; &quot;ENABLE_APP_LIST=1&quot; &quot;ENABLE_SETTINGS_APP=1&quot; &quot;ENABLE_MANAGED_USERS=1&quot; &quot;ENABLE_MDNS=1&quot; _CRT_NONSTDC_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE&quot; &quot;--link_flags=-B$(OutDir)obj/global_intermediate/tc_pnacl_newlib/lib -lppapi_cpp -lppapi -pthread &quot; &quot;--source-list=pnacl_newlib.ppapi_nacl_tests.source_list.gypcmd&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--strip-all&quot; &quot;--arch&quot; &quot;x86-64&quot; &quot;--build&quot; &quot;newlib_nexe&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_newlib_x64.nexe&quot; &quot;--objdir&quot; &quot;$(IntDir)newlib-x86-64\ppapi_nacl_tests&quot; &quot;--include-dirs=$(OutDir)obj/global_intermediate/tc_newlib/include .. lib/gl/include ../third_party/wtl/include&quot; &quot;--compile_flags=-m64 -fomit-frame-pointer -fasynchronous-unwind-tables  -O2 -Wall -fdiagnostics-show-option -Werror -DGL_GLEXT_PROTOTYPES &quot; &quot;--defines=__linux__ &quot;__STDC_LIMIT_MACROS=1&quot; &quot;__STDC_FORMAT_MACROS=1&quot; &quot;_GNU_SOURCE=1&quot; &quot;_BSD_SOURCE=1&quot; &quot;_POSIX_C_SOURCE=199506&quot; &quot;_XOPEN_SOURCE=600&quot; &quot;DYNAMIC_ANNOTATIONS_ENABLED=1&quot; &quot;DYNAMIC_ANNOTATIONS_PREFIX=NACL_&quot; &quot;NACL_BUILD_ARCH=x86&quot; GL_GLEXT_PROTOTYPES ANGLE_DX11 &quot;_WIN32_WINNT=0x0602&quot; &quot;WINVER=0x0602&quot; WIN32 _WINDOWS NOMINMAX &quot;PSAPI_VERSION=1&quot; _CRT_RAND_S CERT_CHAIN_PARA_HAS_EXTRA_FIELDS WIN32_LEAN_AND_MEAN _ATL_NO_OPENGL _SECURE_ATL CHROMIUM_BUILD COMPONENT_BUILD &quot;TOOLKIT_VIEWS=1&quot; &quot;USE_AURA=1&quot; &quot;USE_ASH=1&quot; &quot;USE_DEFAULT_RENDER_THEME=1&quot; &quot;USE_LIBJPEG_TURBO=1&quot; ENABLE_ONE_CLICK_SIGNIN &quot;ENABLE_REMOTING=1&quot; &quot;ENABLE_WEBRTC=1&quot; ENABLE_PEPPER_CDMS ENABLE_CONFIGURATION_POLICY ENABLE_INPUT_SPEECH ENABLE_NOTIFICATIONS NO_TCMALLOC &quot;ENABLE_EGLIMAGE=1&quot; __STD_C _CRT_SECURE_NO_DEPRECATE _SCL_SECURE_NO_DEPRECATE &quot;NTDDI_VERSION=0x06020000&quot; &quot;ENABLE_TASK_MANAGER=1&quot; &quot;ENABLE_EXTENSIONS=1&quot; &quot;ENABLE_PLUGIN_INSTALLATION=1&quot; &quot;ENABLE_PLUGINS=1&quot; &quot;ENABLE_SESSION_SERVICE=1&quot; &quot;ENABLE_THEMES=1&quot; &quot;ENABLE_AUTOFILL_DIALOG=1&quot; &quot;ENABLE_BACKGROUND=1&quot; &quot;ENABLE_AUTOMATION=1&quot; &quot;ENABLE_GOOGLE_NOW=1&quot; &quot;CLD_VERSION=2&quot; &quot;ENABLE_FULL_PRINTING=1&quot; &quot;ENABLE_PRINTING=1&quot; &quot;ENABLE_SPELLCHECK=1&quot; &quot;ENABLE_CAPTIVE_PORTAL_DETECTION=1&quot; &quot;ENABLE_APP_LIST=1&quot; &quot;ENABLE_SETTINGS_APP=1&quot; &quot;ENABLE_MANAGED_USERS=1&quot; &quot;ENABLE_MDNS=1&quot; _CRT_NONSTDC_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE&quot; &quot;--link_flags=-B$(OutDir)obj/global_intermediate/tc_newlib/lib64 -lppapi_cpp -lppapi -pthread &quot; &quot;--source-list=newlib-x86-64.ppapi_nacl_tests.source_list.gypcmd&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--strip-all&quot; &quot;--arch&quot; &quot;x86-32&quot; &quot;--build&quot; &quot;newlib_nexe&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_newlib_x32.nexe&quot; &quot;--objdir&quot; &quot;$(IntDir)newlib-x86-32\ppapi_nacl_tests&quot; &quot;--include-dirs=$(OutDir)obj/global_intermediate/tc_newlib/include .. lib/gl/include ../third_party/wtl/include&quot; &quot;--compile_flags=-m32 -fomit-frame-pointer -fasynchronous-unwind-tables  -O2 -Wall -fdiagnostics-show-option -Werror -DGL_GLEXT_PROTOTYPES &quot; &quot;--defines=__linux__ &quot;__STDC_LIMIT_MACROS=1&quot; &quot;__STDC_FORMAT_MACROS=1&quot; &quot;_GNU_SOURCE=1&quot; &quot;_BSD_SOURCE=1&quot; &quot;_POSIX_C_SOURCE=199506&quot; &quot;_XOPEN_SOURCE=600&quot; &quot;DYNAMIC_ANNOTATIONS_ENABLED=1&quot; &quot;DYNAMIC_ANNOTATIONS_PREFIX=NACL_&quot; &quot;NACL_BUILD_ARCH=x86&quot; GL_GLEXT_PROTOTYPES ANGLE_DX11 &quot;_WIN32_WINNT=0x0602&quot; &quot;WINVER=0x0602&quot; WIN32 _WINDOWS NOMINMAX &quot;PSAPI_VERSION=1&quot; _CRT_RAND_S CERT_CHAIN_PARA_HAS_EXTRA_FIELDS WIN32_LEAN_AND_MEAN _ATL_NO_OPENGL _SECURE_ATL CHROMIUM_BUILD COMPONENT_BUILD &quot;TOOLKIT_VIEWS=1&quot; &quot;USE_AURA=1&quot; &quot;USE_ASH=1&quot; &quot;USE_DEFAULT_RENDER_THEME=1&quot; &quot;USE_LIBJPEG_TURBO=1&quot; ENABLE_ONE_CLICK_SIGNIN &quot;ENABLE_REMOTING=1&quot; &quot;ENABLE_WEBRTC=1&quot; ENABLE_PEPPER_CDMS ENABLE_CONFIGURATION_POLICY ENABLE_INPUT_SPEECH ENABLE_NOTIFICATIONS NO_TCMALLOC &quot;ENABLE_EGLIMAGE=1&quot; __STD_C _CRT_SECURE_NO_DEPRECATE _SCL_SECURE_NO_DEPRECATE &quot;NTDDI_VERSION=0x06020000&quot; &quot;ENABLE_TASK_MANAGER=1&quot; &quot;ENABLE_EXTENSIONS=1&quot; &quot;ENABLE_PLUGIN_INSTALLATION=1&quot; &quot;ENABLE_PLUGINS=1&quot; &quot;ENABLE_SESSION_SERVICE=1&quot; &quot;ENABLE_THEMES=1&quot; &quot;ENABLE_AUTOFILL_DIALOG=1&quot; &quot;ENABLE_BACKGROUND=1&quot; &quot;ENABLE_AUTOMATION=1&quot; &quot;ENABLE_GOOGLE_NOW=1&quot; &quot;CLD_VERSION=2&quot; &quot;ENABLE_FULL_PRINTING=1&quot; &quot;ENABLE_PRINTING=1&quot; &quot;ENABLE_SPELLCHECK=1&quot; &quot;ENABLE_CAPTIVE_PORTAL_DETECTION=1&quot; &quot;ENABLE_APP_LIST=1&quot; &quot;ENABLE_SETTINGS_APP=1&quot; &quot;ENABLE_MANAGED_USERS=1&quot; &quot;ENABLE_MDNS=1&quot; _CRT_NONSTDC_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE&quot; &quot;--link_flags=-m32 -B$(OutDir)obj/global_intermediate/tc_newlib/lib32 -lppapi_cpp -lppapi -pthread &quot; &quot;--source-list=newlib-x86-32.ppapi_nacl_tests.source_list.gypcmd&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--strip-all&quot; &quot;--arch&quot; &quot;x86-64&quot; &quot;--build&quot; &quot;glibc_nexe&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_glibc_x64.nexe&quot; &quot;--objdir&quot; &quot;$(IntDir)glibc-x86-64\ppapi_nacl_tests&quot; &quot;--include-dirs=$(OutDir)obj/global_intermediate/tc_glibc/include .. lib/gl/include ../third_party/wtl/include&quot; &quot;--compile_flags=-m64 -fomit-frame-pointer -fasynchronous-unwind-tables  -O2 -Wall -fdiagnostics-show-option -Werror -DGL_GLEXT_PROTOTYPES &quot; &quot;--defines=__linux__ &quot;__STDC_LIMIT_MACROS=1&quot; &quot;__STDC_FORMAT_MACROS=1&quot; &quot;_GNU_SOURCE=1&quot; &quot;_BSD_SOURCE=1&quot; &quot;_POSIX_C_SOURCE=199506&quot; &quot;_XOPEN_SOURCE=600&quot; &quot;DYNAMIC_ANNOTATIONS_ENABLED=1&quot; &quot;DYNAMIC_ANNOTATIONS_PREFIX=NACL_&quot; &quot;NACL_BUILD_ARCH=x86&quot; GL_GLEXT_PROTOTYPES ANGLE_DX11 &quot;_WIN32_WINNT=0x0602&quot; &quot;WINVER=0x0602&quot; WIN32 _WINDOWS NOMINMAX &quot;PSAPI_VERSION=1&quot; _CRT_RAND_S CERT_CHAIN_PARA_HAS_EXTRA_FIELDS WIN32_LEAN_AND_MEAN _ATL_NO_OPENGL _SECURE_ATL CHROMIUM_BUILD COMPONENT_BUILD &quot;TOOLKIT_VIEWS=1&quot; &quot;USE_AURA=1&quot; &quot;USE_ASH=1&quot; &quot;USE_DEFAULT_RENDER_THEME=1&quot; &quot;USE_LIBJPEG_TURBO=1&quot; ENABLE_ONE_CLICK_SIGNIN &quot;ENABLE_REMOTING=1&quot; &quot;ENABLE_WEBRTC=1&quot; ENABLE_PEPPER_CDMS ENABLE_CONFIGURATION_POLICY ENABLE_INPUT_SPEECH ENABLE_NOTIFICATIONS NO_TCMALLOC &quot;ENABLE_EGLIMAGE=1&quot; __STD_C _CRT_SECURE_NO_DEPRECATE _SCL_SECURE_NO_DEPRECATE &quot;NTDDI_VERSION=0x06020000&quot; &quot;ENABLE_TASK_MANAGER=1&quot; &quot;ENABLE_EXTENSIONS=1&quot; &quot;ENABLE_PLUGIN_INSTALLATION=1&quot; &quot;ENABLE_PLUGINS=1&quot; &quot;ENABLE_SESSION_SERVICE=1&quot; &quot;ENABLE_THEMES=1&quot; &quot;ENABLE_AUTOFILL_DIALOG=1&quot; &quot;ENABLE_BACKGROUND=1&quot; &quot;ENABLE_AUTOMATION=1&quot; &quot;ENABLE_GOOGLE_NOW=1&quot; &quot;CLD_VERSION=2&quot; &quot;ENABLE_FULL_PRINTING=1&quot; &quot;ENABLE_PRINTING=1&quot; &quot;ENABLE_SPELLCHECK=1&quot; &quot;ENABLE_CAPTIVE_PORTAL_DETECTION=1&quot; &quot;ENABLE_APP_LIST=1&quot; &quot;ENABLE_SETTINGS_APP=1&quot; &quot;ENABLE_MANAGED_USERS=1&quot; &quot;ENABLE_MDNS=1&quot; _CRT_NONSTDC_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE&quot; &quot;--link_flags=-B$(OutDir)obj/global_intermediate/tc_glibc/lib64 -lppapi_cpp -lppapi -pthread &quot; &quot;--source-list=glibc-x86-64.ppapi_nacl_tests.source_list.gypcmd&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--strip-all&quot; &quot;--arch&quot; &quot;x86-32&quot; &quot;--build&quot; &quot;glibc_nexe&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_glibc_x32.nexe&quot; &quot;--objdir&quot; &quot;$(IntDir)glibc-x86-32\ppapi_nacl_tests&quot; &quot;--include-dirs=$(OutDir)obj/global_intermediate/tc_glibc/include .. lib/gl/include ../third_party/wtl/include&quot; &quot;--compile_flags=-m32 -fomit-frame-pointer -fasynchronous-unwind-tables  -O2 -Wall -fdiagnostics-show-option -Werror -DGL_GLEXT_PROTOTYPES &quot; &quot;--defines=__linux__ &quot;__STDC_LIMIT_MACROS=1&quot; &quot;__STDC_FORMAT_MACROS=1&quot; &quot;_GNU_SOURCE=1&quot; &quot;_BSD_SOURCE=1&quot; &quot;_POSIX_C_SOURCE=199506&quot; &quot;_XOPEN_SOURCE=600&quot; &quot;DYNAMIC_ANNOTATIONS_ENABLED=1&quot; &quot;DYNAMIC_ANNOTATIONS_PREFIX=NACL_&quot; &quot;NACL_BUILD_ARCH=x86&quot; GL_GLEXT_PROTOTYPES ANGLE_DX11 &quot;_WIN32_WINNT=0x0602&quot; &quot;WINVER=0x0602&quot; WIN32 _WINDOWS NOMINMAX &quot;PSAPI_VERSION=1&quot; _CRT_RAND_S CERT_CHAIN_PARA_HAS_EXTRA_FIELDS WIN32_LEAN_AND_MEAN _ATL_NO_OPENGL _SECURE_ATL CHROMIUM_BUILD COMPONENT_BUILD &quot;TOOLKIT_VIEWS=1&quot; &quot;USE_AURA=1&quot; &quot;USE_ASH=1&quot; &quot;USE_DEFAULT_RENDER_THEME=1&quot; &quot;USE_LIBJPEG_TURBO=1&quot; ENABLE_ONE_CLICK_SIGNIN &quot;ENABLE_REMOTING=1&quot; &quot;ENABLE_WEBRTC=1&quot; ENABLE_PEPPER_CDMS ENABLE_CONFIGURATION_POLICY ENABLE_INPUT_SPEECH ENABLE_NOTIFICATIONS NO_TCMALLOC &quot;ENABLE_EGLIMAGE=1&quot; __STD_C _CRT_SECURE_NO_DEPRECATE _SCL_SECURE_NO_DEPRECATE &quot;NTDDI_VERSION=0x06020000&quot; &quot;ENABLE_TASK_MANAGER=1&quot; &quot;ENABLE_EXTENSIONS=1&quot; &quot;ENABLE_PLUGIN_INSTALLATION=1&quot; &quot;ENABLE_PLUGINS=1&quot; &quot;ENABLE_SESSION_SERVICE=1&quot; &quot;ENABLE_THEMES=1&quot; &quot;ENABLE_AUTOFILL_DIALOG=1&quot; &quot;ENABLE_BACKGROUND=1&quot; &quot;ENABLE_AUTOMATION=1&quot; &quot;ENABLE_GOOGLE_NOW=1&quot; &quot;CLD_VERSION=2&quot; &quot;ENABLE_FULL_PRINTING=1&quot; &quot;ENABLE_PRINTING=1&quot; &quot;ENABLE_SPELLCHECK=1&quot; &quot;ENABLE_CAPTIVE_PORTAL_DETECTION=1&quot; &quot;ENABLE_APP_LIST=1&quot; &quot;ENABLE_SETTINGS_APP=1&quot; &quot;ENABLE_MANAGED_USERS=1&quot; &quot;ENABLE_MDNS=1&quot; _CRT_NONSTDC_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE&quot; &quot;--link_flags=-m32 -B$(OutDir)obj/global_intermediate/tc_glibc/lib32 -lppapi_cpp -lppapi -pthread &quot; &quot;--source-list=glibc-x86-32.ppapi_nacl_tests.source_list.gypcmd&quot;</Command>
+      <Message>build newlib pexe, and also build newlib x86-64 nexe, and also build newlib x86-32 nexe, and also build glibc x86-64 nexe, and also build glibc x86-32 nexe</Message>
+      <Outputs>$(OutDir)\ppapi_nacl_tests_newlib.pexe;$(OutDir)\ppapi_nacl_tests_glibc_x64.nexe;$(OutDir)\ppapi_nacl_tests_newlib_x64.nexe;$(OutDir)\ppapi_nacl_tests_newlib_x32.nexe;$(OutDir)\ppapi_nacl_tests_glibc_x32.nexe</Outputs>
+      <AdditionalInputs>c\dev\deprecated_bool.h;c\ppb_graphics_2d.h;c\pp_array_output.h;tests\test_host_resolver.h;c\dev\ppb_testing_dev.h;$(OutDir)obj\global_intermediate\tc_pnacl_newlib\lib\libppapi_cpp.a;cpp\array_output.h;$(OutDir)obj\global_intermediate\sdk\toolchain\win_pnacl\stamp.prep;c\ppb_mouse_lock.h;c\pp_touch_point.h;cpp\dev\resource_array_dev.h;cpp\net_address.h;c\pp_var.h;utility\websocket\websocket_api.h;tests\test_mouse_cursor.cc;cpp\private\video_destination_private.h;glibc-x86-64.ppapi_nacl_tests.source_list.gypcmd;c\private\ppp_content_decryptor_private.h;cpp\url_loader.h;cpp\dev\view_dev.h;cpp\touch_point.h;c\ppb_net_address.h;cpp\private\content_decryptor_private.h;utility\completion_callback_factory.h;cpp\module_impl.h;c\pp_completion_callback.h;tests\test_memory.h;c\trusted\ppb_browser_font_trusted.h;tests\test_tcp_socket_private_disallowed.h;c\private\ppb_uma_private.h;c\dev\ppb_font_dev.h;cpp\directory_entry.h;c\dev\ppb_view_dev.h;c\ppb_audio_config.h;c\ppb_opengles2.h;c\dev\ppb_opengles2ext_dev.h;c\pp_input_event.h;c\ppb_host_resolver.h;c\dev\ppb_char_set_dev.h;cpp\dev\device_ref_dev.h;tests\test_udp_socket.cc;tests\test_paint_aggregator.cc;c\private\ppb_host_resolver_private.h;cpp\dev\var_resource_dev.h;tests\test_graphics_2d.cc;lib\gl\gles2\gles2.c;tests\test_input_event.cc;tests\test_host_resolver_private_disallowed.cc;cpp\resource.h;cpp\dev\widget_dev.h;c\trusted\ppb_url_loader_trusted.h;c\ppp_mouse_lock.h;c\private\ppp_instance_private.h;cpp\image_data.h;tests\test_message_loop.h;tests\test_ime_input_event.h;tests\test_view.h;utility\threading\simple_thread.h;c\dev\ppb_url_util_dev.h;cpp\dev\memory_dev.h;c\pp_rect.h;c\dev\ppp_find_dev.h;cpp\dev\scrollbar_dev.h;c\private\pp_private_font_charset.h;tests\test_printing.cc;tests\test_message_loop.cc;c\private\ppb_tcp_server_socket_private.h;cpp\dev\buffer_dev.h;tests\test_host_resolver_private_disallowed.h;tests\test_var.cc;tests\test_printing.h;tests\test_tcp_socket_private_disallowed.cc;c\private\ppb_video_destination_private.h;tests\test_utils.h;c\ppp_instance.h;cpp\dev\find_dev.h;cpp\dev\selection_dev.h;cpp\url_request_info.h;c\pp_macros.h;tests\test_truetype_font.cc;tests\test_video_source.cc;cpp\private\instance_private.h;c\private\ppb_proxy_private.h;tests\test_fullscreen.cc;tests\test_audio_config.cc;tests\test_cpp_includes.cc;c\dev\ppb_trace_event_dev.h;cpp\dev\scriptable_object_deprecated.h;c\ppb_fullscreen.h;c\dev\ppb_find_dev.h;cpp\output_traits.h;c\dev\ppb_crypto_dev.h;c\ppb_network_monitor.h;c\ppb_var_array.h;c\pp_bool.h;tests\test_utils.cc;tests\test_ime_input_event.cc;cpp\extensions\to_var_converter.h;tests\test_file_system.h;cpp\private\video_source_private.h;tests\test_video_destination.cc;c\ppb_udp_socket.h;cpp\file_ref.h;c\private\ppb_flash.h;tests\test_file_io.h;c\pp_instance.h;cpp\extensions\dict_field.h;c\private\ppb_flash_menu.h;tests\arch_dependent_sizes_32.h;c\ppb_file_ref.h;c\private\ppb_tcp_socket_private.h;c\dev\ppp_printing_dev.h;tests\test_tcp_server_socket_private_disallowed.cc;c\ppp_graphics_3d.h;cpp\private\host_resolver_private.h;c\dev\ppb_var_deprecated.h;utility\graphics\paint_manager.h;$(OutDir)obj\global_intermediate\tc_glibc\lib32\libppapi.so;tests\test_graphics_2d.h;c\ppb_url_request_info.h;c\extensions\dev\ppb_ext_alarms_dev.h;tests\test_network_monitor.h;c\pp_stdint.h;c\pp_file_info.h;tests\arch_dependent_sizes_64.h;cpp\tcp_socket.h;c\private\ppb_udp_socket_private.h;c\dev\ppp_widget_dev.h;cpp\dev\graphics_2d_dev.h;tests\test_graphics_3d.cc;cpp\network_list.h;tests\test_host_resolver_private.h;cpp\extensions\dev\alarms_dev.h;cpp\private\tcp_server_socket_private.h;c\ppb_console.h;tests\test_audio_config.h;cpp\logging.h;c\ppb_var.h;tests\test_tcp_socket.cc;tests\test_var.h;tests\test_udp_socket_private.cc;tests\test_cursor_control.cc;tests\all_cpp_includes.h;c\ppb_text_input_controller.h;tests\test_network_proxy.h;tests\test_empty.h;cpp\var_array_buffer.h;cpp\var.h;c\dev\ppb_var_resource_dev.h;cpp\dev\zoom_dev.h;tests\test_input_event.h;tests\test_net_address.cc;tests\test_tcp_socket_private.h;c\ppb_image_data.h;tests\test_websocket.cc;utility\graphics\paint_aggregator.h;c\private\ppb_ext_crx_file_system_private.h;c\dev\ppp_video_decoder_dev.h;tests\test_url_loader.h;cpp\private\var_private.h;c\dev\ppb_cursor_control_dev.h;c\private\ppb_flash_font_file.h;cpp\extensions\optional.h;tests\test_video_destination.h;c\ppb_tcp_socket.h;$(OutDir)obj\global_intermediate\tc_newlib\lib32\libppapi_cpp.a;tests\test_url_request.h;c\pp_point.h;c\ppp_input_event.h;c\extensions\dev\ppb_ext_socket_dev.h;c\dev\pp_cursor_type_dev.h;tests\test_tcp_server_socket_private.cc;tests\test_trace_event.cc;c\pp_graphics_3d.h;tests\test_empty.cc;cpp\private\video_frame_private.h;c\dev\pp_video_dev.h;tests\test_audio.h;cpp\dev\ime_input_event_dev.h;utility\threading\lock.h;cpp\network_proxy.h;c\ppb.h;c\private\ppb_net_address_private.h;c\dev\ppb_zoom_dev.h;c\private\ppb_file_io_private.h;cpp\dev\video_decoder_dev.h;c\ppb_audio.h;cpp\dev\truetype_font_dev.h;tests\test_console.cc;cpp\size.h;c\pp_directory_entry.h;$(OutDir)obj\global_intermediate\tc_newlib\lib64\libppapi.a;tests\test_mouse_cursor.h;tests\test_output_protection_private.h;cpp\core.h;tests\test_post_message.h;tests\test_udp_socket_private_disallowed.h;tests\test_c_includes.c;tests\test_mouse_lock.cc;c\ppb_url_loader.h;tests\test_mouse_lock.h;c\ppb_mouse_cursor.h;cpp\file_io.h;cpp\audio.h;c\dev\ppb_truetype_font_dev.h;cpp\message_loop.h;c\ppb_messaging.h;c\dev\ppp_scrollbar_dev.h;cpp\rect.h;c\dev\ppb_scrollbar_dev.h;cpp\dev\font_dev.h;c\private\pp_video_frame_private.h;$(OutDir)obj\global_intermediate\tc_pnacl_newlib\lib\libppapi.a;c\ppp_messaging.h;tests\test_case.cc;c\private\ppb_platform_verification_private.h;cpp\url_response_info.h;cpp\graphics_3d.h;cpp\network_monitor.h;$(OutDir)obj\global_intermediate\tc_glibc\lib32\libppapi_cpp.so;tests\test_scrollbar.h;tests\test_paint_aggregator.h;tests\test_image_data.cc;c\private\pp_file_handle.h;c\ppb_instance.h;cpp\extensions\from_var_converter.h;tests\test_tcp_server_socket_private.h;tests\test_output_protection_private.cc;c\private\pp_content_decryptor.h;tests\test_image_data.h;cpp\extensions\ext_output_traits.h;c\ppb_websocket.h;cpp\completion_callback.h;cpp\dev\file_chooser_dev.h;c\extensions\dev\ppb_ext_events_dev.h;cpp\dev\url_util_dev.h;c\private\ppb_x509_certificate_private.h;cpp\pass_ref.h;c\ppb_var_dictionary.h;tests\test_websocket.h;newlib-x86-64.ppapi_nacl_tests.source_list.gypcmd;tests\test_post_message.cc;pnacl_newlib.ppapi_nacl_tests.source_list.gypcmd;c\private\ppb_pdf.h;tests\test_host_resolver.cc;cpp\extensions\dev\socket_dev.h;tests\test_udp_socket_private.h;tests\test_tcp_server_socket_private_disallowed.h;cpp\dev\widget_client_dev.h;cpp\private\udp_socket_private.h;cpp\input_event.h;tests\test_graphics_3d.h;c\ppb_url_response_info.h;tests\test_video_source.h;cpp\instance_handle.h;c\ppb_graphics_3d.h;c\private\ppb_content_decryptor_private.h;c\ppb_gamepad.h;c\dev\pp_print_settings_dev.h;tests\test_file_ref.cc;tests\pp_thread.h;tests\test_udp_socket_private_disallowed.cc;cpp\var_array.h;cpp\instance.h;cpp\private\x509_certificate_private.h;c\pp_time.h;tests\test_network_monitor.cc;c\pp_resource.h;c\dev\ppp_selection_dev.h;tests\test_url_request.cc;c\dev\ppp_class_deprecated.h;cpp\file_system.h;$(OutDir)obj\global_intermediate\tc_newlib\lib32\libppapi.a;tests\test_file_ref.h;tests\test_udp_socket.h;c\ppb_core.h;c\ppp.h;tests\test_audio.cc;c\private\ppb_video_source_private.h;c\private\ppb_flash_message_loop.h;c\private\ppb_flash_clipboard.h;cpp\point.h;c\dev\ppb_text_input_dev.h;tests\test_cursor_control.h;utility\completion_callback_factory_thread_traits.h;c\dev\ppb_ime_input_event_dev.h;cpp\module.h;tests\test_trace_event.h;cpp\udp_socket.h;glibc-x86-32.ppapi_nacl_tests.source_list.gypcmd;c\ppb_file_io.h;c\dev\ppb_file_chooser_dev.h;cpp\private\net_address_private.h;c\pp_size.h;tests\test_struct_sizes.c;cpp\dev\text_input_dev.h;c\pp_module.h;tests\test_var_resource.cc;c\dev\ppb_video_decoder_dev.h;tests\test_tcp_socket_private.cc;c\ppb_network_proxy.h;cpp\private\output_protection_private.h;c\pp_errors.h;cpp\view.h;$(OutDir)obj\global_intermediate\sdk\toolchain\win_x86_newlib\stamp.prep;cpp\audio_config.h;cpp\host_resolver.h;cpp\private\file_io_private.h;cpp\private\pass_file_handle.h;tests\testing_instance.cc;cpp\private\flash_font_file.h;tests\test_console.h;tests\test_net_address_private_untrusted.cc;cpp\text_input_controller.h;tests\test_file_system.cc;tests\test_net_address_private_untrusted.h;cpp\mouse_lock.h;tests\test_view.cc;cpp\private\flash_fullscreen.h;$(OutDir)obj\global_intermediate\tc_glibc\lib64\libppapi.so;c\dev\ppp_zoom_dev.h;tests\test_memory.cc;cpp\private\tcp_socket_private.h;tests\test_core.cc;newlib-x86-32.ppapi_nacl_tests.source_list.gypcmd;tests\test_var_resource.h;tests\test_core.h;c\ppb_file_system.h;tests\all_c_includes.h;c\private\ppb_nacl_private.h;c\private\ppb_instance_private.h;$(OutDir)obj\global_intermediate\tc_glibc\lib64\libppapi_cpp.so;tests\test_case.h;cpp\fullscreen.h;c\dev\ppb_resource_array_dev.h;$(OutDir)obj\global_intermediate\sdk\toolchain\win_x86_glibc\stamp.prep;tests\test_host_resolver_private.cc;c\dev\ppb_buffer_dev.h;tests\test_network_proxy.cc;tests\test_scrollbar.cc;c\dev\ppp_text_input_dev.h;cpp\var_dictionary.h;c\ppb_input_event.h;c\private\ppb_output_protection_private.h;cpp\graphics_3d_client.h;c\dev\ppb_printing_dev.h;tests\test_truetype_font.h;$(OutDir)obj\global_intermediate\tc_newlib\lib64\libppapi_cpp.a;cpp\dev\printing_dev.h;lib\gl\gles2\gl2ext_ppapi.h;c\dev\ppb_widget_dev.h;lib\gl\gles2\gl2ext_ppapi.c;c\dev\ppb_device_ref_dev.h;tests\testing_instance.h;c\ppb_network_list.h;tests\test_net_address.h;cpp\extensions\event_base.h;c\ppb_var_array_buffer.h;cpp\websocket.h;tests\test_file_io.cc;cpp\graphics_2d.h;c\dev\ppb_memory_dev.h;tests\test_tcp_socket.h;tests\test_url_loader.cc;tests\test_fullscreen.h;c\dev\ppb_graphics_2d_dev.h</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="$(OutDir)\ppapi_nacl_tests_newlib.pexe">
+      <FileType>Document</FileType>
+      <Command>call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--arch&quot; &quot;x86-32&quot; &quot;--build&quot; &quot;newlib_translate&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_pnacl_newlib_x32.nexe&quot; &quot;--link_flags=-O0  -Wl,-L$(OutDir)obj/global_intermediate/tc_pnacl_translate/lib-x86-32&quot; &quot;$(OutDir)ppapi_nacl_tests_newlib.pexe&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call call ..\native_client\tools\win_py.cmd &quot;..\native_client\build\build_nexe.py&quot; &quot;-t&quot; &quot;$(OutDir)obj\global_intermediate\sdk\toolchain&quot; &quot;--arch&quot; &quot;x86-64&quot; &quot;--build&quot; &quot;newlib_translate&quot; &quot;--root&quot; &quot;..&quot; &quot;--name&quot; &quot;$(OutDir)ppapi_nacl_tests_pnacl_newlib_x64.nexe&quot; &quot;--link_flags=-O0  -Wl,-L$(OutDir)obj/global_intermediate/tc_pnacl_translate/lib-x86-64&quot; &quot;$(OutDir)ppapi_nacl_tests_newlib.pexe&quot;</Command>
+      <Message>translate newlib pexe to x86-32 nexe, and also translate newlib pexe to x86-64 nexe</Message>
+      <Outputs>$(OutDir)\ppapi_nacl_tests_pnacl_newlib_x64.nexe;$(OutDir)\ppapi_nacl_tests_pnacl_newlib_x32.nexe</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="$(OutDir)\ppapi_nacl_tests_glibc_x64.nexe">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../native_client_sdk/src/tools/create_nmf.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_glibc_x64.nexe\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_glibc_x32.nexe\&quot; \&quot;--objdump=../native_client/toolchain/win_x86/bin/x86_64-nacl-objdump\&quot; \&quot;--library-path=../native_client/toolchain/win_x86/x86_64-nacl/lib\&quot; \&quot;--library-path=../native_client/toolchain/win_x86/x86_64-nacl/lib32\&quot; \&quot;--library-path=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/tc_glibc/lib32\&quot; \&quot;--library-path=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/tc_glibc/lib64\&quot; \&quot;--output=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_glibc.nmf\&quot; \&quot;--stage-dependencies=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`\&quot;&quot;</Command>
+      <Message>Generate GLIBC NMF and copy libs</Message>
+      <Outputs>$(OutDir)\ppapi_nacl_tests_glibc.nmf</Outputs>
+      <AdditionalInputs>$(OutDir)\ppapi_nacl_tests_glibc_x32.nexe</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="$(OutDir)\ppapi_nacl_tests_pnacl_newlib_x32.nexe">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../native_client_sdk/src/tools/create_nmf.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_pnacl_newlib_x32.nexe\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_pnacl_newlib_x64.nexe\&quot; \&quot;--output=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/ppapi_nacl_tests_pnacl.nmf\&quot;&quot;</Command>
+      <Message>Generate PNACL NEWLIB NMF</Message>
+      <Outputs>$(OutDir)\ppapi_nacl_tests_pnacl.nmf</Outputs>
+      <AdditionalInputs>$(OutDir)\ppapi_nacl_tests_pnacl_newlib_x64.nexe</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\native_client\src\untrusted\nacl\nacl_lib.vcxproj">
+      <Project>{0284E253-CB3F-BD79-15FF-85EBA65D541A}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="ppapi_cpp_lib.vcxproj">
+      <Project>{E9D4652E-099E-33CB-0F99-FB136BC1860B}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="native_client\ppapi_lib.vcxproj">
+      <Project>{17F8E779-0D57-A615-4B0B-535ABDFAE9F9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="native_client\src\untrusted\pnacl_irt_shim\pnacl_irt_shim.vcxproj">
+      <Project>{874966A9-F6D7-16AC-1A5A-F2CAFD7ABFD1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

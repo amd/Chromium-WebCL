@@ -1,0 +1,1333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4393A562-0FD9-A628-E13C-41BDA4786EBC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>browser_extensions</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)lib\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;mf.dll;mfplat.dll;mfreadwrite.dll;Bthprops.cpl;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;mf.dll;mfplat.dll;mfreadwrite.dll;Bthprops.cpl;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;mf.dll;mfplat.dll;mfreadwrite.dll;Bthprops.cpl;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4267;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+      <OutputFile>$(OutDir)lib\$(ProjectName)$(TargetExt)</OutputFile>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;mf.dll;mfplat.dll;mfreadwrite.dll;Bthprops.cpl;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;..;$(IntDir);..\third_party\khronos;..\gpu;$(OutDir)obj\global_intermediate\protoc_out;..\third_party\protobuf\vsprojects;..\third_party\protobuf\src;$(OutDir)obj\global_intermediate\chrome;$(OutDir)obj\global_intermediate;..\third_party\nss\nspr\pr\include;..\third_party\nss\nspr\lib\ds;..\third_party\nss\nspr\lib\libc\include;..\third_party\nss\nss\lib\base;..\third_party\nss\nss\lib\certdb;..\third_party\nss\nss\lib\certhigh;..\third_party\nss\nss\lib\cryptohi;..\third_party\nss\nss\lib\dev;..\third_party\nss\nss\lib\freebl;..\third_party\nss\nss\lib\freebl\ecl;..\third_party\nss\nss\lib\nss;..\third_party\nss\nss\lib\pk11wrap;..\third_party\nss\nss\lib\pkcs7;..\third_party\nss\nss\lib\pki;..\third_party\nss\nss\lib\smime;..\third_party\nss\nss\lib\softoken;..\third_party\nss\nss\lib\util;..\third_party\skia\src\core;..\third_party\skia\include\core;..\third_party\skia\include\effects;..\third_party\skia\include\pdf;..\third_party\skia\include\gpu;..\third_party\skia\include\lazy;..\third_party\skia\include\pathops;..\third_party\skia\include\pipe;..\third_party\skia\include\ports;..\third_party\skia\include\utils;..\skia\ext;..\skia\config;..\third_party\libjingle\overrides;..\third_party\libjingle\source;..\testing\gtest\include;..\third_party;..\third_party\webrtc;..\third_party\third_party\platformsdk_win7\files\Include;..\third_party\expat\files\lib;..\third_party\jsoncpp\overrides\include;..\third_party\jsoncpp\source\include;..\third_party\cacheinvalidation\overrides;..\third_party\cacheinvalidation\src;..\third_party\icu\source\i18n;..\third_party\icu\source\common;..\third_party\leveldatabase\src\include;..\third_party\leveldatabase\src;..\third_party\leveldatabase;..\third_party\libusb\src\libusb;..\third_party\re2;$(OutDir)obj\global_intermediate\ui\app_locale_settings;$(OutDir)obj\global_intermediate\ui\ui_strings;$(OutDir)obj\global_intermediate\ui\ui_resources;$(OutDir)obj\global_intermediate\webkit;$(OutDir)obj\global_intermediate\ui\keyboard;$(OutDir)obj\global_intermediate\policy;..\third_party\WebKit;..\third_party\npapi;..\third_party\npapi\bindings;..\v8\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;FULL_SAFE_BROWSING;LIBPEERCONNECTION_LIB=1;PROTOBUF_USE_DLLS;GOOGLE_PROTOBUF_NO_RTTI;GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER;NO_NSPR_10_SUPPORT;NSS_ENABLE_ECC;NSS_STATIC;NSS_USE_STATIC_LIBS;USE_UTIL_DIRECTLY;SKIA_DLL;SK_ENABLE_INST_COUNT=0;SK_SUPPORT_GPU=1;GR_GL_CUSTOM_SETUP_HEADER=&quot;GrGLConfig_chrome.h&quot;;SK_ENABLE_LEGACY_API_ALIASING=1;SK_ATTR_DEPRECATED=SK_NOTHING_ARG1;SK_SUPPORT_LEGACY_COLORTYPE=1;SK_DEFERRED_CANVAS_USES_FACTORIES=1;FEATURE_ENABLE_SSL;FEATURE_ENABLE_VOICEMAIL;EXPAT_RELATIVE_PATH;GTEST_RELATIVE_PATH;JSONCPP_RELATIVE_PATH;NO_MAIN_THREAD_WRAPPING;NO_SOUND_SYSTEM;_CRT_SECURE_NO_WARNINGS;XML_STATIC;U_USING_ICU_NAMESPACE=0;WEBRTC_CHROMIUM_BUILD;WEBRTC_WIN;V8_SHARED;USING_V8_SHARED;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="chrome.gyp"/>
+    <None Include="browser\extensions\extension_host_mac.mm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="browser\apps\shortcut_manager.h"/>
+    <ClInclude Include="browser\apps\chrome_apps_client.h"/>
+    <ClInclude Include="browser\apps\shortcut_manager_factory.h"/>
+    <ClInclude Include="browser\apps\app_launch_for_metro_restart_win.h"/>
+    <ClInclude Include="browser\apps\app_url_redirector.h"/>
+    <ClInclude Include="browser\extensions\extension_warning_badge_service.h"/>
+    <ClInclude Include="browser\extensions\extension_context_menu_model.h"/>
+    <ClInclude Include="browser\extensions\extension_function_dispatcher.h"/>
+    <ClInclude Include="browser\extensions\extension_icon_manager.h"/>
+    <ClInclude Include="browser\extensions\extension_toolbar_model.h"/>
+    <ClInclude Include="browser\extensions\extension_keybinding_registry.h"/>
+    <ClInclude Include="browser\extensions\extension_prefs_factory.h"/>
+    <ClInclude Include="browser\extensions\extension_installer.h"/>
+    <ClInclude Include="browser\extensions\extension_scoped_prefs.h"/>
+    <ClInclude Include="browser\extensions\browser_extension_window_controller.h"/>
+    <ClInclude Include="browser\extensions\extension_prefs.h"/>
+    <ClInclude Include="browser\extensions\extension_action.h"/>
+    <ClInclude Include="browser\extensions\webstore_install_helper.h"/>
+    <ClInclude Include="browser\extensions\external_provider_interface.h"/>
+    <ClInclude Include="browser\extensions\external_pref_loader.h"/>
+    <ClInclude Include="browser\extensions\image_loader_factory.h"/>
+    <ClInclude Include="browser\extensions\user_script_master.h"/>
+    <ClInclude Include="browser\extensions\extension_web_ui_override_registrar.h"/>
+    <ClInclude Include="browser\extensions\extension_icon_image.h"/>
+    <ClInclude Include="browser\extensions\extension_sync_bundle.h"/>
+    <ClInclude Include="browser\extensions\extension_web_ui.h"/>
+    <ClInclude Include="browser\extensions\process_map.h"/>
+    <ClInclude Include="browser\extensions\bundle_installer.h"/>
+    <ClInclude Include="browser\extensions\extension_install_ui.h"/>
+    <ClInclude Include="browser\extensions\webstore_data_fetcher.h"/>
+    <ClInclude Include="browser\extensions\page_action_controller.h"/>
+    <ClInclude Include="browser\extensions\default_apps.h"/>
+    <ClInclude Include="browser\extensions\startup_helper.h"/>
+    <ClInclude Include="browser\extensions\webstore_data_fetcher_delegate.h"/>
+    <ClInclude Include="browser\extensions\extension_warning_service.h"/>
+    <ClInclude Include="browser\extensions\external_component_loader.h"/>
+    <ClInclude Include="browser\extensions\context_menu_matcher.h"/>
+    <ClInclude Include="browser\extensions\image_loader.h"/>
+    <ClInclude Include="browser\extensions\component_loader.h"/>
+    <ClInclude Include="browser\extensions\plugin_manager.h"/>
+    <ClInclude Include="browser\extensions\devtools_util.h"/>
+    <ClInclude Include="browser\extensions\webstore_standalone_installer.h"/>
+    <ClInclude Include="browser\extensions\extension_renderer_state.h"/>
+    <ClInclude Include="browser\extensions\extension_creator.h"/>
+    <ClInclude Include="browser\extensions\extension_sync_service_factory.h"/>
+    <ClInclude Include="browser\extensions\external_provider_impl.h"/>
+    <ClInclude Include="browser\extensions\crx_installer_error.h"/>
+    <ClInclude Include="browser\extensions\extension_function_util.h"/>
+    <ClInclude Include="browser\extensions\extension_function_registry.h"/>
+    <ClInclude Include="browser\extensions\extension_web_contents_observer.h"/>
+    <ClInclude Include="browser\extensions\install_tracker_factory.h"/>
+    <ClInclude Include="browser\extensions\extension_uninstall_dialog.h"/>
+    <ClInclude Include="browser\extensions\extension_process_manager.h"/>
+    <ClInclude Include="browser\extensions\management_policy.h"/>
+    <ClInclude Include="browser\extensions\convert_user_script.h"/>
+    <ClInclude Include="browser\extensions\extension_error_ui_default.h"/>
+    <ClInclude Include="browser\extensions\global_shortcut_listener.h"/>
+    <ClInclude Include="browser\extensions\extension_error_reporter.h"/>
+    <ClInclude Include="browser\extensions\pending_enables.h"/>
+    <ClInclude Include="browser\extensions\external_install_ui.h"/>
+    <ClInclude Include="browser\extensions\extension_util.h"/>
+    <ClInclude Include="browser\extensions\webstore_inline_installer_factory.h"/>
+    <ClInclude Include="browser\extensions\extension_action_icon_factory.h"/>
+    <ClInclude Include="browser\extensions\window_controller_list_observer.h"/>
+    <ClInclude Include="browser\extensions\extension_resource_protocols.h"/>
+    <ClInclude Include="browser\extensions\extension_webkit_preferences.h"/>
+    <ClInclude Include="browser\extensions\external_loader.h"/>
+    <ClInclude Include="browser\extensions\app_icon_loader.h"/>
+    <ClInclude Include="browser\extensions\script_bubble_controller.h"/>
+    <ClInclude Include="browser\extensions\webstore_startup_installer.h"/>
+    <ClInclude Include="browser\extensions\extension_pref_value_map_factory.h"/>
+    <ClInclude Include="browser\extensions\install_tracker.h"/>
+    <ClInclude Include="browser\extensions\browser_action_test_util.h"/>
+    <ClInclude Include="browser\extensions\tab_helper.h"/>
+    <ClInclude Include="browser\extensions\app_icon_loader_impl.h"/>
+    <ClInclude Include="browser\extensions\requirements_checker.h"/>
+    <ClInclude Include="browser\extensions\chrome_extension_function.h"/>
+    <ClInclude Include="browser\extensions\window_controller_list.h"/>
+    <ClInclude Include="browser\extensions\suggest_permission_util.h"/>
+    <ClInclude Include="browser\extensions\pack_extension_job.h"/>
+    <ClInclude Include="browser\extensions\window_controller.h"/>
+    <ClInclude Include="browser\extensions\extension_tab_util.h"/>
+    <ClInclude Include="browser\extensions\update_observer.h"/>
+    <ClInclude Include="browser\extensions\chrome_extensions_browser_client.h"/>
+    <ClInclude Include="browser\extensions\event_listener_map.h"/>
+    <ClInclude Include="browser\extensions\extensions_quota_service.h"/>
+    <ClInclude Include="browser\extensions\app_sync_bundle.h"/>
+    <ClInclude Include="browser\extensions\installed_loader.h"/>
+    <ClInclude Include="browser\extensions\extension_protocols.h"/>
+    <ClInclude Include="browser\extensions\navigation_observer.h"/>
+    <ClInclude Include="browser\extensions\webstore_inline_installer.h"/>
+    <ClInclude Include="browser\extensions\convert_web_app.h"/>
+    <ClInclude Include="browser\extensions\extension_install_prompt.h"/>
+    <ClInclude Include="browser\extensions\extension_sorting.h"/>
+    <ClInclude Include="browser\extensions\admin_policy.h"/>
+    <ClInclude Include="browser\extensions\global_shortcut_listener_win.h"/>
+    <ClInclude Include="browser\extensions\policy_handlers.h"/>
+    <ClInclude Include="browser\extensions\blacklist.h"/>
+    <ClInclude Include="browser\extensions\standard_management_policy_provider.h"/>
+    <ClInclude Include="browser\extensions\extension_system.h"/>
+    <ClInclude Include="browser\extensions\extension_warning_set.h"/>
+    <ClInclude Include="browser\extensions\webstore_installer.h"/>
+    <ClInclude Include="browser\extensions\event_names.h"/>
+    <ClInclude Include="browser\extensions\extension_pref_value_map.h"/>
+    <ClInclude Include="browser\extensions\extension_special_storage_policy.h"/>
+    <ClInclude Include="browser\extensions\event_router.h"/>
+    <ClInclude Include="browser\extensions\external_policy_loader.h"/>
+    <ClInclude Include="browser\extensions\browser_permissions_policy_delegate.h"/>
+    <ClInclude Include="browser\extensions\user_script_listener.h"/>
+    <ClInclude Include="browser\extensions\extension_infobar_delegate.h"/>
+    <ClInclude Include="browser\extensions\extension_function.h"/>
+    <ClInclude Include="browser\extensions\extension_info_map.h"/>
+    <ClInclude Include="browser\extensions\extension_action_manager.h"/>
+    <ClInclude Include="browser\extensions\external_registry_loader_win.h"/>
+    <ClInclude Include="browser\extensions\extension_sync_data.h"/>
+    <ClInclude Include="browser\extensions\menu_manager.h"/>
+    <ClInclude Include="browser\extensions\event_router_forwarder.h"/>
+    <ClInclude Include="browser\extensions\script_badge_controller.h"/>
+    <ClInclude Include="browser\extensions\webstore_ephemeral_installer.h"/>
+    <ClInclude Include="browser\extensions\theme_installed_infobar_delegate.h"/>
+    <ClInclude Include="browser\extensions\permissions_updater.h"/>
+    <ClInclude Include="browser\extensions\extension_system_factory.h"/>
+    <ClInclude Include="browser\extensions\install_observer.h"/>
+    <ClInclude Include="browser\extensions\active_tab_permission_granter.h"/>
+    <ClInclude Include="browser\extensions\pending_extension_info.h"/>
+    <ClInclude Include="browser\extensions\pending_extension_manager.h"/>
+    <ClInclude Include="browser\extensions\unpacked_installer.h"/>
+    <ClInclude Include="browser\extensions\sandboxed_unpacker.h"/>
+    <ClInclude Include="browser\extensions\extension_sync_service.h"/>
+    <ClInclude Include="browser\extensions\state_store.h"/>
+    <ClInclude Include="browser\extensions\extension_disabled_ui.h"/>
+    <ClInclude Include="browser\extensions\sync_bundle.h"/>
+    <ClInclude Include="browser\extensions\extension_error_ui.h"/>
+    <ClInclude Include="browser\extensions\data_deleter.h"/>
+    <ClInclude Include="browser\extensions\extension_pref_store.h"/>
+    <ClInclude Include="browser\extensions\app_sync_data.h"/>
+    <ClInclude Include="browser\extensions\extension_service.h"/>
+    <ClInclude Include="browser\extensions\crx_installer.h"/>
+    <ClInclude Include="browser\extensions\extension_host.h"/>
+    <ClInclude Include="browser\extensions\location_bar_controller.h"/>
+    <ClInclude Include="browser\extensions\extension_commands_global_registry.h"/>
+    <ClInclude Include="browser\extensions\script_executor.h"/>
+    <ClInclude Include="browser\extensions\extension_creator_filter.h"/>
+    <ClInclude Include="browser\extensions\extension_host_mac.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="browser\extensions\global_shortcut_listener_ozone.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="browser\extensions\global_shortcut_listener_x11.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="browser\extensions\global_shortcut_listener_chromeos.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="browser\extensions\global_shortcut_listener_mac.h">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="browser\extensions\activity_log\activity_log.h"/>
+    <ClInclude Include="browser\extensions\activity_log\activity_database.h"/>
+    <ClInclude Include="browser\extensions\activity_log\fullstream_ui_policy.h"/>
+    <ClInclude Include="browser\extensions\activity_log\uma_policy.h"/>
+    <ClInclude Include="browser\extensions\activity_log\activity_actions.h"/>
+    <ClInclude Include="browser\extensions\activity_log\activity_action_constants.h"/>
+    <ClInclude Include="browser\extensions\activity_log\database_string_table.h"/>
+    <ClInclude Include="browser\extensions\activity_log\web_request_constants.h"/>
+    <ClInclude Include="browser\extensions\activity_log\activity_log_policy.h"/>
+    <ClInclude Include="browser\extensions\activity_log\counting_policy.h"/>
+    <ClInclude Include="browser\extensions\api\api_resource.h"/>
+    <ClInclude Include="browser\extensions\api\api_resource_manager.h"/>
+    <ClInclude Include="browser\extensions\api\execute_code_function.h"/>
+    <ClInclude Include="browser\extensions\api\profile_keyed_api_factory.h"/>
+    <ClInclude Include="browser\extensions\api\api_function.h"/>
+    <ClInclude Include="browser\extensions\api\music_manager_private\music_manager_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\music_manager_private\device_id.h"/>
+    <ClInclude Include="browser\extensions\api\bookmark_manager_private\bookmark_manager_private_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\bookmark_manager_private\bookmark_manager_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_storage\system_storage_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_storage\storage_info_provider.h"/>
+    <ClInclude Include="browser\extensions\api\spellcheck\spellcheck_api.h"/>
+    <ClInclude Include="browser\extensions\api\autotest_private\autotest_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\autotest_private\autotest_private_api_factory.h"/>
+    <ClInclude Include="browser\extensions\api\page_capture\page_capture_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_info\system_info_provider.h"/>
+    <ClInclude Include="browser\extensions\api\system_info\system_info_api.h"/>
+    <ClInclude Include="browser\extensions\api\media_galleries_private\gallery_watch_manager.h"/>
+    <ClInclude Include="browser\extensions\api\media_galleries_private\gallery_watch_state_tracker.h"/>
+    <ClInclude Include="browser\extensions\api\media_galleries_private\media_galleries_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\media_galleries_private\media_galleries_private_event_router.h"/>
+    <ClInclude Include="browser\extensions\api\location\location_api.h"/>
+    <ClInclude Include="browser\extensions\api\location\location_manager.h"/>
+    <ClInclude Include="browser\extensions\api\settings_overrides\settings_overrides_api.h"/>
+    <ClInclude Include="browser\extensions\api\input\input.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\write_from_url_operation.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\operation.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\operation_manager.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\error_messages.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\image_writer_utils.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\removable_storage_provider.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\image_writer_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\image_writer_private\write_from_file_operation.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\request_stage.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\webrequest_condition.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\webrequest_constants.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\webrequest_rules_registry.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\webrequest_condition_attribute.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_webrequest\webrequest_action.h"/>
+    <ClInclude Include="browser\extensions\api\signed_in_devices\id_mapping_helper.h"/>
+    <ClInclude Include="browser\extensions\api\signed_in_devices\signed_in_devices_api.h"/>
+    <ClInclude Include="browser\extensions\api\signed_in_devices\signed_in_devices_manager.h"/>
+    <ClInclude Include="browser\extensions\api\tab_capture\tab_capture_registry.h"/>
+    <ClInclude Include="browser\extensions\api\tab_capture\tab_capture_api.h"/>
+    <ClInclude Include="browser\extensions\api\web_navigation\web_navigation_api.h"/>
+    <ClInclude Include="browser\extensions\api\web_navigation\frame_navigation_state.h"/>
+    <ClInclude Include="browser\extensions\api\web_navigation\web_navigation_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\web_navigation\web_navigation_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\preference\preference_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\preference\preference_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\preference\chrome_direct_setting_api.h"/>
+    <ClInclude Include="browser\extensions\api\preference\chrome_direct_setting.h"/>
+    <ClInclude Include="browser\extensions\api\preference\preference_api.h"/>
+    <ClInclude Include="browser\extensions\api\file_system\file_system_api.h"/>
+    <ClInclude Include="browser\extensions\api\braille_display_private\brlapi_connection.h"/>
+    <ClInclude Include="browser\extensions\api\braille_display_private\stub_braille_controller.h"/>
+    <ClInclude Include="browser\extensions\api\braille_display_private\braille_display_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\braille_display_private\braille_controller.h"/>
+    <ClInclude Include="browser\extensions\api\braille_display_private\braille_controller_brlapi.h"/>
+    <ClInclude Include="browser\extensions\api\processes\processes_api.h"/>
+    <ClInclude Include="browser\extensions\api\processes\processes_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\system_cpu\system_cpu_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_cpu\cpu_info_provider.h"/>
+    <ClInclude Include="browser\extensions\api\omnibox\omnibox_api.h"/>
+    <ClInclude Include="browser\extensions\api\usb\usb_device_resource.h"/>
+    <ClInclude Include="browser\extensions\api\usb\usb_api.h"/>
+    <ClInclude Include="browser\extensions\api\permissions\permissions_api.h"/>
+    <ClInclude Include="browser\extensions\api\permissions\permissions_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\webrtc_logging_private\webrtc_logging_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\cookies\cookies_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\cookies\cookies_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\cookies\cookies_api.h"/>
+    <ClInclude Include="browser\extensions\api\app_runtime\app_runtime_api.h"/>
+    <ClInclude Include="browser\extensions\api\module\module.h"/>
+    <ClInclude Include="browser\extensions\api\bluetooth\bluetooth_event_router.h"/>
+    <ClInclude Include="browser\extensions\api\bluetooth\bluetooth_api.h"/>
+    <ClInclude Include="browser\extensions\api\bluetooth\bluetooth_api_utils.h"/>
+    <ClInclude Include="browser\extensions\api\bluetooth\bluetooth_extension_function.h"/>
+    <ClInclude Include="browser\extensions\api\bluetooth\bluetooth_api_factory.h"/>
+    <ClInclude Include="browser\extensions\api\content_settings\content_settings_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\content_settings\content_settings_store.h"/>
+    <ClInclude Include="browser\extensions\api\content_settings\content_settings_api.h"/>
+    <ClInclude Include="browser\extensions\api\content_settings\content_settings_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\dial\dial_registry.h"/>
+    <ClInclude Include="browser\extensions\api\dial\dial_api_factory.h"/>
+    <ClInclude Include="browser\extensions\api\dial\dial_api.h"/>
+    <ClInclude Include="browser\extensions\api\dial\dial_service.h"/>
+    <ClInclude Include="browser\extensions\api\dial\dial_device_data.h"/>
+    <ClInclude Include="browser\extensions\api\top_sites\top_sites_api.h"/>
+    <ClInclude Include="browser\extensions\api\metrics_private\metrics_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\discovery\suggested_links_registry_factory.h"/>
+    <ClInclude Include="browser\extensions\api\discovery\suggested_link.h"/>
+    <ClInclude Include="browser\extensions\api\discovery\discovery_api.h"/>
+    <ClInclude Include="browser\extensions\api\discovery\suggested_links_registry.h"/>
+    <ClInclude Include="browser\extensions\api\file_handlers\app_file_handler_util.h"/>
+    <ClInclude Include="browser\extensions\api\power\power_api.h"/>
+    <ClInclude Include="browser\extensions\api\power\power_api_manager.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_tcp_server\sockets_tcp_server_api.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_tcp_server\tcp_server_socket_event_dispatcher.h"/>
+    <ClInclude Include="browser\extensions\api\proxy\proxy_api.h"/>
+    <ClInclude Include="browser\extensions\api\proxy\proxy_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\proxy\proxy_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\principals_private\principals_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_indicator\system_indicator_manager.h"/>
+    <ClInclude Include="browser\extensions\api\system_indicator\system_indicator_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_indicator\system_indicator_manager_factory.h"/>
+    <ClInclude Include="browser\extensions\api\commands\command_service.h"/>
+    <ClInclude Include="browser\extensions\api\commands\commands.h"/>
+    <ClInclude Include="browser\extensions\api\activity_log_private\activity_log_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\socket\socket_api.h"/>
+    <ClInclude Include="browser\extensions\api\socket\udp_socket.h"/>
+    <ClInclude Include="browser\extensions\api\socket\tcp_socket.h"/>
+    <ClInclude Include="browser\extensions\api\socket\socket.h"/>
+    <ClInclude Include="browser\extensions\api\system_private\system_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\feedback_private\feedback_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\feedback_private\blob_reader.h"/>
+    <ClInclude Include="browser\extensions\api\feedback_private\feedback_service.h"/>
+    <ClInclude Include="browser\extensions\api\cast_channel\cast_auth_util.h"/>
+    <ClInclude Include="browser\extensions\api\cast_channel\cast_socket.h"/>
+    <ClInclude Include="browser\extensions\api\cast_channel\cast_channel_api.h"/>
+    <ClInclude Include="browser\extensions\api\cast_channel\cast_message_util.h"/>
+    <ClInclude Include="browser\extensions\api\command_line_private\command_line_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\native_message_port.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\extension_message_port.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\incognito_connectability.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\message_service.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\message_property_provider.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\native_messaging_host_manifest.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\native_message_process_host.h"/>
+    <ClInclude Include="browser\extensions\api\messaging\native_process_launcher.h"/>
+    <ClInclude Include="browser\extensions\api\webview\webview_api.h"/>
+    <ClInclude Include="browser\extensions\api\runtime\runtime_api.h"/>
+    <ClInclude Include="browser\extensions\api\debugger\debugger_api.h"/>
+    <ClInclude Include="browser\extensions\api\debugger\debugger_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\downloads_internal\downloads_internal_api.h"/>
+    <ClInclude Include="browser\extensions\api\cloud_print_private\cloud_print_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\bookmarks\bookmarks_api.h"/>
+    <ClInclude Include="browser\extensions\api\bookmarks\bookmark_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\bookmarks\bookmark_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\mdns\dns_sd_delegate.h"/>
+    <ClInclude Include="browser\extensions\api\mdns\dns_sd_device_lister.h"/>
+    <ClInclude Include="browser\extensions\api\mdns\dns_sd_registry.h"/>
+    <ClInclude Include="browser\extensions\api\mdns\mdns_api.h"/>
+    <ClInclude Include="browser\extensions\api\management\management_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\management\management_api.h"/>
+    <ClInclude Include="browser\extensions\api\streams_private\streams_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\context_menus\context_menus_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_memory\system_memory_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_memory\memory_info_provider.h"/>
+    <ClInclude Include="browser\extensions\api\dns\host_resolver_wrapper.h"/>
+    <ClInclude Include="browser\extensions\api\dns\dns_api.h"/>
+    <ClInclude Include="browser\extensions\api\app_current_window_internal\app_current_window_internal_api.h"/>
+    <ClInclude Include="browser\extensions\api\push_messaging\push_messaging_api.h"/>
+    <ClInclude Include="browser\extensions\api\push_messaging\obfuscated_gaia_id_fetcher.h"/>
+    <ClInclude Include="browser\extensions\api\push_messaging\push_messaging_invalidation_handler.h"/>
+    <ClInclude Include="browser\extensions\api\push_messaging\push_messaging_invalidation_mapper.h"/>
+    <ClInclude Include="browser\extensions\api\push_messaging\push_messaging_invalidation_handler_delegate.h"/>
+    <ClInclude Include="browser\extensions\api\sessions\sessions_api.h"/>
+    <ClInclude Include="browser\extensions\api\sessions\session_id.h"/>
+    <ClInclude Include="browser\extensions\api\networking_private\networking_private_event_router.h"/>
+    <ClInclude Include="browser\extensions\api\networking_private\networking_private_crypto.h"/>
+    <ClInclude Include="browser\extensions\api\networking_private\networking_private_event_router_factory.h"/>
+    <ClInclude Include="browser\extensions\api\networking_private\networking_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_display\system_display_api.h"/>
+    <ClInclude Include="browser\extensions\api\system_display\display_info_provider.h"/>
+    <ClInclude Include="browser\extensions\api\notifications\notifications_api.h"/>
+    <ClInclude Include="browser\extensions\api\i18n\i18n_api.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_tcp\tcp_socket_event_dispatcher.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_tcp\sockets_tcp_api.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\web_request_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\form_data_parser.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\web_request_api.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\web_request_permissions.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\web_request_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\upload_data_presenter.h"/>
+    <ClInclude Include="browser\extensions\api\web_request\web_request_time_tracker.h"/>
+    <ClInclude Include="browser\extensions\api\browsing_data\browsing_data_api.h"/>
+    <ClInclude Include="browser\extensions\api\media_galleries\media_galleries_api.h"/>
+    <ClInclude Include="browser\extensions\api\idle\idle_manager_factory.h"/>
+    <ClInclude Include="browser\extensions\api\idle\idle_manager.h"/>
+    <ClInclude Include="browser\extensions\api\idle\idle_api.h"/>
+    <ClInclude Include="browser\extensions\api\idle\idle_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\idltest\idltest_api.h"/>
+    <ClInclude Include="browser\extensions\api\history\history_api.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\windows_event_router.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\tabs_constants.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\tabs_windows_api.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\tabs_event_router.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\tabs_api.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\ash_panel_contents.h"/>
+    <ClInclude Include="browser\extensions\api\tabs\windows_util.h"/>
+    <ClInclude Include="browser\extensions\api\sync_file_system\extension_sync_event_observer.h"/>
+    <ClInclude Include="browser\extensions\api\sync_file_system\sync_file_system_api.h"/>
+    <ClInclude Include="browser\extensions\api\sync_file_system\sync_file_system_api_helpers.h"/>
+    <ClInclude Include="browser\extensions\api\sync_file_system\extension_sync_event_observer_factory.h"/>
+    <ClInclude Include="browser\extensions\api\webstore_private\webstore_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\desktop_capture\desktop_capture_api.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_udp\udp_socket_event_dispatcher.h"/>
+    <ClInclude Include="browser\extensions\api\sockets_udp\sockets_udp_api.h"/>
+    <ClInclude Include="browser\extensions\api\serial\serial_connection.h"/>
+    <ClInclude Include="browser\extensions\api\serial\serial_port_enumerator.h"/>
+    <ClInclude Include="browser\extensions\api\serial\serial_api.h"/>
+    <ClInclude Include="browser\extensions\api\extension_action\extension_page_actions_api_constants.h"/>
+    <ClInclude Include="browser\extensions\api\extension_action\extension_action_api.h"/>
+    <ClInclude Include="browser\extensions\api\storage\weak_unlimited_settings_storage.h"/>
+    <ClInclude Include="browser\extensions\api\storage\value_store_cache.h"/>
+    <ClInclude Include="browser\extensions\api\storage\syncable_settings_storage.h"/>
+    <ClInclude Include="browser\extensions\api\storage\sync_or_local_value_store_cache.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_sync_processor.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_sync_util.h"/>
+    <ClInclude Include="browser\extensions\api\storage\leveldb_settings_storage_factory.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_storage_quota_enforcer.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_backend.h"/>
+    <ClInclude Include="browser\extensions\api\storage\storage_api.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_observer.h"/>
+    <ClInclude Include="browser\extensions\api\storage\setting_sync_data.h"/>
+    <ClInclude Include="browser\extensions\api\storage\managed_value_store_cache.h"/>
+    <ClInclude Include="browser\extensions\api\storage\policy_value_store.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_storage_factory.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_namespace.h"/>
+    <ClInclude Include="browser\extensions\api\storage\settings_frontend.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_content\content_constants.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_content\content_rules_registry.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_content\content_action.h"/>
+    <ClInclude Include="browser\extensions\api\declarative_content\content_condition.h"/>
+    <ClInclude Include="browser\extensions\api\identity_private\identity_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\test\test_api.h"/>
+    <ClInclude Include="browser\extensions\api\font_settings\font_settings_api.h"/>
+    <ClInclude Include="browser\extensions\api\downloads\downloads_api.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\declarative_api.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\rules_cache_delegate.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\rules_registry.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\deduping_factory.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\rules_registry_service.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\test_rules_registry.h"/>
+    <ClInclude Include="browser\extensions\api\declarative\declarative_rule.h"/>
+    <ClInclude Include="browser\extensions\api\identity\experimental_identity_api.h"/>
+    <ClInclude Include="browser\extensions\api\identity\experimental_web_auth_flow.h"/>
+    <ClInclude Include="browser\extensions\api\identity\identity_signin_flow.h"/>
+    <ClInclude Include="browser\extensions\api\identity\identity_api.h"/>
+    <ClInclude Include="browser\extensions\api\identity\identity_mint_queue.h"/>
+    <ClInclude Include="browser\extensions\api\identity\gaia_web_auth_flow.h"/>
+    <ClInclude Include="browser\extensions\api\identity\web_auth_flow.h"/>
+    <ClInclude Include="browser\extensions\api\identity\account_tracker.h"/>
+    <ClInclude Include="browser\extensions\api\developer_private\developer_private_api.h"/>
+    <ClInclude Include="browser\extensions\api\developer_private\entry_picker.h"/>
+    <ClInclude Include="browser\extensions\api\developer_private\developer_private_api_factory.h"/>
+    <ClInclude Include="browser\extensions\api\alarms\alarms_api.h"/>
+    <ClInclude Include="browser\extensions\api\alarms\alarm_manager.h"/>
+    <ClInclude Include="browser\extensions\api\app_window\app_window_api.h"/>
+    <ClInclude Include="browser\extensions\api\audio\audio_service.h"/>
+    <ClInclude Include="browser\extensions\api\audio\audio_api.h"/>
+    <ClInclude Include="browser\extensions\api\webrtc_audio_private\webrtc_audio_private_api.h"/>
+    <ClInclude Include="browser\extensions\updater\request_queue.h"/>
+    <ClInclude Include="browser\extensions\updater\safe_manifest_parser.h"/>
+    <ClInclude Include="browser\extensions\updater\extension_updater.h"/>
+    <ClInclude Include="browser\extensions\updater\manifest_fetch_data.h"/>
+    <ClInclude Include="browser\extensions\updater\extension_downloader_delegate.h"/>
+    <ClInclude Include="browser\extensions\updater\request_queue_impl.h"/>
+    <ClInclude Include="browser\extensions\updater\extension_downloader.h"/>
+    <ClInclude Include="browser\extensions\error_console\error_console.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\build\precompile.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="browser\apps\shortcut_manager.cc"/>
+    <ClCompile Include="browser\apps\shortcut_manager_factory.cc"/>
+    <ClCompile Include="browser\apps\app_launch_for_metro_restart_win.cc"/>
+    <ClCompile Include="browser\apps\chrome_apps_client.cc"/>
+    <ClCompile Include="browser\apps\app_url_redirector.cc"/>
+    <ClCompile Include="browser\extensions\webstore_install_helper.cc"/>
+    <ClCompile Include="browser\extensions\webstore_ephemeral_installer.cc"/>
+    <ClCompile Include="browser\extensions\extension_prefs_factory.cc"/>
+    <ClCompile Include="browser\extensions\bundle_installer.cc"/>
+    <ClCompile Include="browser\extensions\extension_toolbar_model.cc"/>
+    <ClCompile Include="browser\extensions\webstore_inline_installer.cc"/>
+    <ClCompile Include="browser\extensions\install_tracker.cc"/>
+    <ClCompile Include="browser\extensions\external_pref_loader.cc"/>
+    <ClCompile Include="browser\extensions\extension_system.cc"/>
+    <ClCompile Include="browser\extensions\browser_permissions_policy_delegate.cc"/>
+    <ClCompile Include="browser\extensions\external_registry_loader_win.cc"/>
+    <ClCompile Include="browser\extensions\extension_function_dispatcher.cc"/>
+    <ClCompile Include="browser\extensions\browser_extension_window_controller.cc"/>
+    <ClCompile Include="browser\extensions\policy_handlers.cc"/>
+    <ClCompile Include="browser\extensions\extension_function_util.cc"/>
+    <ClCompile Include="browser\extensions\event_names.cc"/>
+    <ClCompile Include="browser\extensions\suggest_permission_util.cc"/>
+    <ClCompile Include="browser\extensions\convert_user_script.cc"/>
+    <ClCompile Include="browser\extensions\extension_special_storage_policy.cc"/>
+    <ClCompile Include="browser\extensions\app_sync_bundle.cc"/>
+    <ClCompile Include="browser\extensions\user_script_master.cc"/>
+    <ClCompile Include="browser\extensions\component_loader.cc"/>
+    <ClCompile Include="browser\extensions\extension_host.cc"/>
+    <ClCompile Include="browser\extensions\tab_helper.cc"/>
+    <ClCompile Include="browser\extensions\extension_warning_service.cc"/>
+    <ClCompile Include="browser\extensions\extension_pref_store.cc"/>
+    <ClCompile Include="browser\extensions\extension_context_menu_model.cc"/>
+    <ClCompile Include="browser\extensions\theme_installed_infobar_delegate.cc"/>
+    <ClCompile Include="browser\extensions\extension_icon_manager.cc"/>
+    <ClCompile Include="browser\extensions\extension_service.cc"/>
+    <ClCompile Include="browser\extensions\extension_pref_value_map.cc"/>
+    <ClCompile Include="browser\extensions\extension_info_map.cc"/>
+    <ClCompile Include="browser\extensions\webstore_data_fetcher.cc"/>
+    <ClCompile Include="browser\extensions\chrome_extension_function.cc"/>
+    <ClCompile Include="browser\extensions\image_loader.cc"/>
+    <ClCompile Include="browser\extensions\chrome_extensions_browser_client.cc"/>
+    <ClCompile Include="browser\extensions\permissions_updater.cc"/>
+    <ClCompile Include="browser\extensions\window_controller.cc"/>
+    <ClCompile Include="browser\extensions\extension_web_ui.cc"/>
+    <ClCompile Include="browser\extensions\user_script_listener.cc"/>
+    <ClCompile Include="browser\extensions\extension_function_registry.cc"/>
+    <ClCompile Include="browser\extensions\convert_web_app.cc"/>
+    <ClCompile Include="browser\extensions\standard_management_policy_provider.cc"/>
+    <ClCompile Include="browser\extensions\active_tab_permission_granter.cc"/>
+    <ClCompile Include="browser\extensions\startup_helper.cc"/>
+    <ClCompile Include="browser\extensions\admin_policy.cc"/>
+    <ClCompile Include="browser\extensions\extension_protocols.cc"/>
+    <ClCompile Include="browser\extensions\external_policy_loader.cc"/>
+    <ClCompile Include="browser\extensions\default_apps.cc"/>
+    <ClCompile Include="browser\extensions\extension_process_manager.cc"/>
+    <ClCompile Include="browser\extensions\state_store.cc"/>
+    <ClCompile Include="browser\extensions\extension_install_ui.cc"/>
+    <ClCompile Include="browser\extensions\external_loader.cc"/>
+    <ClCompile Include="browser\extensions\webstore_startup_installer.cc"/>
+    <ClCompile Include="browser\extensions\extension_keybinding_registry.cc"/>
+    <ClCompile Include="browser\extensions\extension_warning_set.cc"/>
+    <ClCompile Include="browser\extensions\extension_sync_data.cc"/>
+    <ClCompile Include="browser\extensions\menu_manager.cc"/>
+    <ClCompile Include="browser\extensions\pending_enables.cc"/>
+    <ClCompile Include="browser\extensions\window_controller_list.cc"/>
+    <ClCompile Include="browser\extensions\extension_util.cc"/>
+    <ClCompile Include="browser\extensions\event_listener_map.cc"/>
+    <ClCompile Include="browser\extensions\context_menu_matcher.cc"/>
+    <ClCompile Include="browser\extensions\pack_extension_job.cc"/>
+    <ClCompile Include="browser\extensions\extension_resource_protocols.cc"/>
+    <ClCompile Include="browser\extensions\install_tracker_factory.cc"/>
+    <ClCompile Include="browser\extensions\extension_uninstall_dialog.cc"/>
+    <ClCompile Include="browser\extensions\page_action_controller.cc"/>
+    <ClCompile Include="browser\extensions\extension_sync_service_factory.cc"/>
+    <ClCompile Include="browser\extensions\extension_error_ui_default.cc"/>
+    <ClCompile Include="browser\extensions\extension_commands_global_registry.cc"/>
+    <ClCompile Include="browser\extensions\app_icon_loader_impl.cc"/>
+    <ClCompile Include="browser\extensions\event_router_forwarder.cc"/>
+    <ClCompile Include="browser\extensions\app_sync_data.cc"/>
+    <ClCompile Include="browser\extensions\webstore_inline_installer_factory.cc"/>
+    <ClCompile Include="browser\extensions\webstore_installer.cc"/>
+    <ClCompile Include="browser\extensions\extension_error_reporter.cc"/>
+    <ClCompile Include="browser\extensions\script_badge_controller.cc"/>
+    <ClCompile Include="browser\extensions\image_loader_factory.cc"/>
+    <ClCompile Include="browser\extensions\devtools_util.cc"/>
+    <ClCompile Include="browser\extensions\extension_warning_badge_service.cc"/>
+    <ClCompile Include="browser\extensions\extension_system_factory.cc"/>
+    <ClCompile Include="browser\extensions\extension_action.cc"/>
+    <ClCompile Include="browser\extensions\extension_prefs.cc"/>
+    <ClCompile Include="browser\extensions\pending_extension_info.cc"/>
+    <ClCompile Include="browser\extensions\extension_creator_filter.cc"/>
+    <ClCompile Include="browser\extensions\webstore_standalone_installer.cc"/>
+    <ClCompile Include="browser\extensions\extensions_quota_service.cc"/>
+    <ClCompile Include="browser\extensions\installed_loader.cc"/>
+    <ClCompile Include="browser\extensions\global_shortcut_listener_win.cc"/>
+    <ClCompile Include="browser\extensions\navigation_observer.cc"/>
+    <ClCompile Include="browser\extensions\extension_sync_bundle.cc"/>
+    <ClCompile Include="browser\extensions\global_shortcut_listener.cc"/>
+    <ClCompile Include="browser\extensions\extension_creator.cc"/>
+    <ClCompile Include="browser\extensions\extension_action_icon_factory.cc"/>
+    <ClCompile Include="browser\extensions\extension_web_contents_observer.cc"/>
+    <ClCompile Include="browser\extensions\extension_action_manager.cc"/>
+    <ClCompile Include="browser\extensions\pending_extension_manager.cc"/>
+    <ClCompile Include="browser\extensions\blacklist.cc"/>
+    <ClCompile Include="browser\extensions\external_component_loader.cc"/>
+    <ClCompile Include="browser\extensions\requirements_checker.cc"/>
+    <ClCompile Include="browser\extensions\extension_icon_image.cc"/>
+    <ClCompile Include="browser\extensions\event_router.cc"/>
+    <ClCompile Include="browser\extensions\extension_installer.cc"/>
+    <ClCompile Include="browser\extensions\script_bubble_controller.cc"/>
+    <ClCompile Include="browser\extensions\extension_renderer_state.cc"/>
+    <ClCompile Include="browser\extensions\extension_sorting.cc"/>
+    <ClCompile Include="browser\extensions\extension_infobar_delegate.cc"/>
+    <ClCompile Include="browser\extensions\sandboxed_unpacker.cc"/>
+    <ClCompile Include="browser\extensions\external_provider_impl.cc"/>
+    <ClCompile Include="browser\extensions\crx_installer.cc"/>
+    <ClCompile Include="browser\extensions\extension_pref_value_map_factory.cc"/>
+    <ClCompile Include="browser\extensions\extension_web_ui_override_registrar.cc"/>
+    <ClCompile Include="browser\extensions\extension_sync_service.cc"/>
+    <ClCompile Include="browser\extensions\process_map.cc"/>
+    <ClCompile Include="browser\extensions\data_deleter.cc"/>
+    <ClCompile Include="browser\extensions\extension_disabled_ui.cc"/>
+    <ClCompile Include="browser\extensions\extension_webkit_preferences.cc"/>
+    <ClCompile Include="browser\extensions\extension_error_ui.cc"/>
+    <ClCompile Include="browser\extensions\plugin_manager.cc"/>
+    <ClCompile Include="browser\extensions\extension_function.cc"/>
+    <ClCompile Include="browser\extensions\management_policy.cc"/>
+    <ClCompile Include="browser\extensions\external_install_ui.cc"/>
+    <ClCompile Include="browser\extensions\unpacked_installer.cc"/>
+    <ClCompile Include="browser\extensions\script_executor.cc"/>
+    <ClCompile Include="browser\extensions\extension_tab_util.cc"/>
+    <ClCompile Include="browser\extensions\extension_install_prompt.cc"/>
+    <ClCompile Include="browser\extensions\global_shortcut_listener_mac.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\global_shortcut_listener_x11.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\global_shortcut_listener_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\global_shortcut_listener_ozone.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\activity_log\activity_log.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\activity_action_constants.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\activity_database.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\activity_log_policy.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\uma_policy.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\database_string_table.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\counting_policy.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\fullstream_ui_policy.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\web_request_constants.cc"/>
+    <ClCompile Include="browser\extensions\activity_log\activity_actions.cc"/>
+    <ClCompile Include="browser\extensions\api\api_resource.cc"/>
+    <ClCompile Include="browser\extensions\api\api_function.cc"/>
+    <ClCompile Include="browser\extensions\api\execute_code_function.cc"/>
+    <ClCompile Include="browser\extensions\api\music_manager_private\device_id.cc"/>
+    <ClCompile Include="browser\extensions\api\music_manager_private\music_manager_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\music_manager_private\device_id_win.cc"/>
+    <ClCompile Include="browser\extensions\api\music_manager_private\device_id_linux.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\music_manager_private\device_id_mac.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\music_manager_private\device_id_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\bookmark_manager_private\bookmark_manager_private_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\bookmark_manager_private\bookmark_manager_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_storage\storage_info_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\system_storage\system_storage_api.cc"/>
+    <ClCompile Include="browser\extensions\api\spellcheck\spellcheck_api.cc"/>
+    <ClCompile Include="browser\extensions\api\autotest_private\autotest_private_api_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\autotest_private\autotest_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\page_capture\page_capture_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_info\system_info_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\system_info\system_info_api.cc"/>
+    <ClCompile Include="browser\extensions\api\media_galleries_private\media_galleries_private_event_router.cc"/>
+    <ClCompile Include="browser\extensions\api\media_galleries_private\gallery_watch_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\media_galleries_private\gallery_watch_state_tracker.cc"/>
+    <ClCompile Include="browser\extensions\api\media_galleries_private\media_galleries_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\location\location_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\location\location_api.cc"/>
+    <ClCompile Include="browser\extensions\api\settings_overrides\settings_overrides_api.cc"/>
+    <ClCompile Include="browser\extensions\api\input\input.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\write_from_file_operation.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\write_from_url_operation.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation_win.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\image_writer_utils.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\error_messages.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\image_writer_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\removable_storage_provider_win.cc"/>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation_linux.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation_mac.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\image_writer_private\removable_storage_provider_mac.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\image_writer_private\removable_storage_provider_linux.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\image_writer_private\operation_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\webrequest_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\request_stage.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\webrequest_condition_attribute.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\webrequest_action.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\webrequest_rules_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_webrequest\webrequest_condition.cc"/>
+    <ClCompile Include="browser\extensions\api\signed_in_devices\signed_in_devices_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\signed_in_devices\signed_in_devices_api.cc"/>
+    <ClCompile Include="browser\extensions\api\signed_in_devices\id_mapping_helper.cc"/>
+    <ClCompile Include="browser\extensions\api\tab_capture\tab_capture_api.cc"/>
+    <ClCompile Include="browser\extensions\api\tab_capture\tab_capture_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\web_navigation\frame_navigation_state.cc"/>
+    <ClCompile Include="browser\extensions\api\web_navigation\web_navigation_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\web_navigation\web_navigation_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\web_navigation\web_navigation_api.cc"/>
+    <ClCompile Include="browser\extensions\api\preference\preference_api.cc"/>
+    <ClCompile Include="browser\extensions\api\preference\preference_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\preference\chrome_direct_setting.cc"/>
+    <ClCompile Include="browser\extensions\api\preference\preference_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\preference\chrome_direct_setting_api.cc"/>
+    <ClCompile Include="browser\extensions\api\file_system\file_system_api.cc"/>
+    <ClCompile Include="browser\extensions\api\braille_display_private\braille_controller_stub.cc"/>
+    <ClCompile Include="browser\extensions\api\braille_display_private\braille_display_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\braille_display_private\stub_braille_controller.cc"/>
+    <ClCompile Include="browser\extensions\api\braille_display_private\braille_controller_brlapi.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\braille_display_private\brlapi_connection.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\processes\processes_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\processes\processes_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_cpu\system_cpu_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_cpu\cpu_info_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\omnibox\omnibox_api.cc"/>
+    <ClCompile Include="browser\extensions\api\usb\usb_api.cc"/>
+    <ClCompile Include="browser\extensions\api\usb\usb_device_resource.cc"/>
+    <ClCompile Include="browser\extensions\api\permissions\permissions_api.cc"/>
+    <ClCompile Include="browser\extensions\api\permissions\permissions_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\webrtc_logging_private\webrtc_logging_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\cookies\cookies_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\cookies\cookies_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\cookies\cookies_api.cc"/>
+    <ClCompile Include="browser\extensions\api\app_runtime\app_runtime_api.cc"/>
+    <ClCompile Include="browser\extensions\api\module\module.cc"/>
+    <ClCompile Include="browser\extensions\api\bluetooth\bluetooth_extension_function.cc"/>
+    <ClCompile Include="browser\extensions\api\bluetooth\bluetooth_api.cc"/>
+    <ClCompile Include="browser\extensions\api\bluetooth\bluetooth_api_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\bluetooth\bluetooth_api_utils.cc"/>
+    <ClCompile Include="browser\extensions\api\bluetooth\bluetooth_event_router.cc"/>
+    <ClCompile Include="browser\extensions\api\content_settings\content_settings_api.cc"/>
+    <ClCompile Include="browser\extensions\api\content_settings\content_settings_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\content_settings\content_settings_store.cc"/>
+    <ClCompile Include="browser\extensions\api\content_settings\content_settings_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\dial\dial_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\dial\dial_service.cc"/>
+    <ClCompile Include="browser\extensions\api\dial\dial_api_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\dial\dial_device_data.cc"/>
+    <ClCompile Include="browser\extensions\api\dial\dial_api.cc"/>
+    <ClCompile Include="browser\extensions\api\top_sites\top_sites_api.cc"/>
+    <ClCompile Include="browser\extensions\api\metrics_private\metrics_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\discovery\suggested_links_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\discovery\discovery_api.cc"/>
+    <ClCompile Include="browser\extensions\api\discovery\suggested_link.cc"/>
+    <ClCompile Include="browser\extensions\api\discovery\suggested_links_registry_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\file_handlers\app_file_handler_util.cc"/>
+    <ClCompile Include="browser\extensions\api\power\power_api.cc"/>
+    <ClCompile Include="browser\extensions\api\power\power_api_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_tcp_server\sockets_tcp_server_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_tcp_server\tcp_server_socket_event_dispatcher.cc"/>
+    <ClCompile Include="browser\extensions\api\proxy\proxy_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\proxy\proxy_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\proxy\proxy_api.cc"/>
+    <ClCompile Include="browser\extensions\api\principals_private\principals_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_indicator\system_indicator_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\system_indicator\system_indicator_manager_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\commands\commands.cc"/>
+    <ClCompile Include="browser\extensions\api\commands\command_service.cc"/>
+    <ClCompile Include="browser\extensions\api\activity_log_private\activity_log_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\socket\socket.cc"/>
+    <ClCompile Include="browser\extensions\api\socket\socket_api.cc"/>
+    <ClCompile Include="browser\extensions\api\socket\udp_socket.cc"/>
+    <ClCompile Include="browser\extensions\api\socket\tcp_socket.cc"/>
+    <ClCompile Include="browser\extensions\api\system_private\system_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\feedback_private\feedback_service.cc"/>
+    <ClCompile Include="browser\extensions\api\feedback_private\feedback_service_nonchromeos.cc"/>
+    <ClCompile Include="browser\extensions\api\feedback_private\blob_reader.cc"/>
+    <ClCompile Include="browser\extensions\api\feedback_private\feedback_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\feedback_private\feedback_service_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\cast_channel\cast_message_util.cc"/>
+    <ClCompile Include="browser\extensions\api\cast_channel\cast_auth_util_nss.cc"/>
+    <ClCompile Include="browser\extensions\api\cast_channel\cast_channel_api.cc"/>
+    <ClCompile Include="browser\extensions\api\cast_channel\cast_socket.cc"/>
+    <ClCompile Include="browser\extensions\api\cast_channel\cast_auth_util_openssl.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\command_line_private\command_line_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_message_process_host.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_message_port.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_process_launcher_win.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_messaging_host_manifest.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\message_property_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\incognito_connectability.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\message_service.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\extension_message_port.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_process_launcher.cc"/>
+    <ClCompile Include="browser\extensions\api\messaging\native_process_launcher_posix.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\webview\webview_api.cc"/>
+    <ClCompile Include="browser\extensions\api\runtime\runtime_api.cc"/>
+    <ClCompile Include="browser\extensions\api\debugger\debugger_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\debugger\debugger_api.cc"/>
+    <ClCompile Include="browser\extensions\api\downloads_internal\downloads_internal_api.cc"/>
+    <ClCompile Include="browser\extensions\api\cloud_print_private\cloud_print_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\bookmarks\bookmarks_api.cc"/>
+    <ClCompile Include="browser\extensions\api\bookmarks\bookmark_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\bookmarks\bookmark_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\mdns\mdns_api.cc"/>
+    <ClCompile Include="browser\extensions\api\mdns\dns_sd_delegate.cc"/>
+    <ClCompile Include="browser\extensions\api\mdns\dns_sd_device_lister.cc"/>
+    <ClCompile Include="browser\extensions\api\mdns\dns_sd_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\management\management_api.cc"/>
+    <ClCompile Include="browser\extensions\api\management\management_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\streams_private\streams_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\context_menus\context_menus_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_memory\memory_info_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\system_memory\system_memory_api.cc"/>
+    <ClCompile Include="browser\extensions\api\dns\dns_api.cc"/>
+    <ClCompile Include="browser\extensions\api\dns\host_resolver_wrapper.cc"/>
+    <ClCompile Include="browser\extensions\api\app_current_window_internal\app_current_window_internal_api.cc"/>
+    <ClCompile Include="browser\extensions\api\push_messaging\obfuscated_gaia_id_fetcher.cc"/>
+    <ClCompile Include="browser\extensions\api\push_messaging\push_messaging_api.cc"/>
+    <ClCompile Include="browser\extensions\api\push_messaging\push_messaging_invalidation_handler.cc"/>
+    <ClCompile Include="browser\extensions\api\sessions\session_id.cc"/>
+    <ClCompile Include="browser\extensions\api\sessions\sessions_api.cc"/>
+    <ClCompile Include="browser\extensions\api\networking_private\networking_private_api_nonchromeos.cc"/>
+    <ClCompile Include="browser\extensions\api\networking_private\networking_private_event_router_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\networking_private\networking_private_crypto.cc"/>
+    <ClCompile Include="browser\extensions\api\networking_private\networking_private_event_router_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\networking_private\networking_private_api_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider_win.cc"/>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider.cc"/>
+    <ClCompile Include="browser\extensions\api\system_display\system_display_api.cc"/>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider_aura.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider_mac.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\system_display\display_info_provider_gtk.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\notifications\notifications_api.cc"/>
+    <ClCompile Include="browser\extensions\api\i18n\i18n_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_tcp\sockets_tcp_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_tcp\tcp_socket_event_dispatcher.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\web_request_permissions.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\web_request_api.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\web_request_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\web_request_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\form_data_parser.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\web_request_time_tracker.cc"/>
+    <ClCompile Include="browser\extensions\api\web_request\upload_data_presenter.cc"/>
+    <ClCompile Include="browser\extensions\api\browsing_data\browsing_data_api.cc"/>
+    <ClCompile Include="browser\extensions\api\media_galleries\media_galleries_api.cc"/>
+    <ClCompile Include="browser\extensions\api\idle\idle_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\idle\idle_manager_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\idle\idle_api.cc"/>
+    <ClCompile Include="browser\extensions\api\idle\idle_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\idltest\idltest_api.cc"/>
+    <ClCompile Include="browser\extensions\api\history\history_api.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\windows_util.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\tabs_api.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\tabs_event_router.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\windows_event_router.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\tabs_windows_api.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\ash_panel_contents.cc"/>
+    <ClCompile Include="browser\extensions\api\tabs\tabs_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\sync_file_system\extension_sync_event_observer_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\sync_file_system\extension_sync_event_observer.cc"/>
+    <ClCompile Include="browser\extensions\api\sync_file_system\sync_file_system_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sync_file_system\sync_file_system_api_helpers.cc"/>
+    <ClCompile Include="browser\extensions\api\webstore_private\webstore_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\desktop_capture\desktop_capture_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_udp\sockets_udp_api.cc"/>
+    <ClCompile Include="browser\extensions\api\sockets_udp\udp_socket_event_dispatcher.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_port_enumerator_win.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_api.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_port_enumerator.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_connection_win.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_connection.cc"/>
+    <ClCompile Include="browser\extensions\api\serial\serial_port_enumerator_posix.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\serial\serial_connection_posix.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\extension_action\extension_action_api.cc"/>
+    <ClCompile Include="browser\extensions\api\extension_action\extension_page_actions_api_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\value_store_cache.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_storage_quota_enforcer.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\syncable_settings_storage.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\managed_value_store_cache.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_sync_processor.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_namespace.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_frontend.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\sync_or_local_value_store_cache.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\leveldb_settings_storage_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_sync_util.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\setting_sync_data.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\settings_backend.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\storage_api.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\policy_value_store.cc"/>
+    <ClCompile Include="browser\extensions\api\storage\weak_unlimited_settings_storage.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_content\content_rules_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_content\content_action.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_content\content_condition.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative_content\content_constants.cc"/>
+    <ClCompile Include="browser\extensions\api\identity_private\identity_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\test\test_api.cc"/>
+    <ClCompile Include="browser\extensions\api\font_settings\font_settings_api.cc"/>
+    <ClCompile Include="browser\extensions\api\downloads\downloads_api.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative\rules_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative\test_rules_registry.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative\declarative_api.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative\rules_cache_delegate.cc"/>
+    <ClCompile Include="browser\extensions\api\declarative\rules_registry_service.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\experimental_identity_api.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\identity_api.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\experimental_web_auth_flow.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\web_auth_flow.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\account_tracker.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\gaia_web_auth_flow.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\identity_signin_flow.cc"/>
+    <ClCompile Include="browser\extensions\api\identity\identity_mint_queue.cc"/>
+    <ClCompile Include="browser\extensions\api\developer_private\developer_private_api.cc"/>
+    <ClCompile Include="browser\extensions\api\developer_private\developer_private_api_factory.cc"/>
+    <ClCompile Include="browser\extensions\api\developer_private\entry_picker.cc"/>
+    <ClCompile Include="browser\extensions\api\alarms\alarm_manager.cc"/>
+    <ClCompile Include="browser\extensions\api\alarms\alarms_api.cc"/>
+    <ClCompile Include="browser\extensions\api\app_window\app_window_api.cc"/>
+    <ClCompile Include="browser\extensions\api\audio\audio_api.cc"/>
+    <ClCompile Include="browser\extensions\api\audio\audio_service.cc"/>
+    <ClCompile Include="browser\extensions\api\audio\audio_service_chromeos.cc">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="browser\extensions\api\webrtc_audio_private\webrtc_audio_private_api.cc"/>
+    <ClCompile Include="browser\extensions\updater\manifest_fetch_data.cc"/>
+    <ClCompile Include="browser\extensions\updater\extension_downloader_delegate.cc"/>
+    <ClCompile Include="browser\extensions\updater\safe_manifest_parser.cc"/>
+    <ClCompile Include="browser\extensions\updater\extension_downloader.cc"/>
+    <ClCompile Include="browser\extensions\updater\extension_updater.cc"/>
+    <ClCompile Include="browser\extensions\error_console\error_console.cc"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="cast_channel_proto.vcxproj">
+      <Project>{FE51F62B-6DF7-63F6-08CE-94D4C84F5DB0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="chrome_extra_resources.vcxproj">
+      <Project>{E01AFD8F-FA67-372A-5BA0-7746BB20CD6D}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="chrome_resources.vcxproj">
+      <Project>{75220B82-0CBC-C755-578A-C19B5476E770}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="chrome_strings.vcxproj">
+      <Project>{FA4C3BE1-B34B-D26C-8DEE-251984EE5A94}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="platform_locale_settings.vcxproj">
+      <Project>{2BDA599D-784D-4B99-27F4-686656894F78}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="theme_resources.vcxproj">
+      <Project>{B77646ED-4120-DC10-25CF-1FB82C9789BD}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="metrics_proto.vcxproj">
+      <Project>{1C8E429E-9C25-E106-62AD-C3CE88FFCF25}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="common\extensions\api\api.vcxproj">
+      <Project>{02C0ED6F-2310-0D03-ADC4-040749B592C1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="in_memory_url_index_cache_proto.vcxproj">
+      <Project>{C3D0A026-A35A-C4E9-CBFE-752339507533}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="sync_file_system_proto.vcxproj">
+      <Project>{8AAB60F0-D549-AB29-47EC-FB3DD13CAA6F}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\components\onc_component.vcxproj">
+      <Project>{79A64E82-AF18-7489-8F15-871469F34CF1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\content\content_browser.vcxproj">
+      <Project>{C06B155F-A93D-DEA8-15A2-5109FF91ECFD}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\crypto\crypto.vcxproj">
+      <Project>{7E20C3FF-E4F8-0794-AADC-C9D43C33929B}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\net\net.vcxproj">
+      <Project>{3FE45A95-FE94-1D27-B82A-CD3BA2ED31F7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\skia\skia.vcxproj">
+      <Project>{1675822D-E10E-2CF0-C356-D6CEA6C5DC47}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\sync\sync.vcxproj">
+      <Project>{317E773F-1EEE-F7E7-6222-5BB1D1074C57}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\third_party\icu\icui18n.vcxproj">
+      <Project>{734BBEFB-C97B-AD4F-708C-4475EBF75F8C}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\third_party\icu\icuuc.vcxproj">
+      <Project>{52CED90A-C1F5-3186-A0D7-AB99702DFDEA}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\base\strings\ui_strings.vcxproj">
+      <Project>{481528B4-2418-41C5-26F7-4FF1A3996C54}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\gfx\gfx.vcxproj">
+      <Project>{351100A8-62F9-8C2E-324E-E4876453FFF8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\ui.vcxproj">
+      <Project>{A24C551A-66A4-73F3-AD77-2A4F2D517E65}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\ui_resources.vcxproj">
+      <Project>{00648D0C-97D0-8176-C990-F7268F693F31}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\url\url_lib.vcxproj">
+      <Project>{47911B0A-BF1E-163B-3A53-A252433056CC}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\webkit\common\user_agent\user_agent.vcxproj">
+      <Project>{BCD54922-693E-ED4F-6266-2AE4BAC43D20}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\webkit\webkit_storage_browser.vcxproj">
+      <Project>{33761EA9-3A28-F449-7F39-B231634EA7E7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\webkit\webkit_storage_common.vcxproj">
+      <Project>{9B2E13E8-A529-9BFC-756D-4F320391C3EB}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\webkit\webkit_resources.vcxproj">
+      <Project>{CD898E4D-815E-3FAA-ED6F-D49BA5B32A96}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\keyboard\keyboard.vcxproj">
+      <Project>{F5ECD4B2-C9FA-0667-3F76-335BC25A0AF0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\ui\keyboard\keyboard_resources.vcxproj">
+      <Project>{EBDE0CCC-7220-EFE5-E451-68E7097A884C}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="app\policy\policy.vcxproj">
+      <Project>{9ECA21D2-A0E2-AAA4-9835-55168C82375F}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\third_party\iaccessible2\iaccessible2.vcxproj">
+      <Project>{A50F93DF-5C0B-1B3A-6BC5-1CFF0AE47DC2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\third_party\isimpledom\isimpledom.vcxproj">
+      <Project>{96AF6F48-9886-2874-6C4C-A8DE87C50259}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\webkit\glue\glue.vcxproj">
+      <Project>{2195A8A1-B569-D521-D3A4-C5F8A9D6221E}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

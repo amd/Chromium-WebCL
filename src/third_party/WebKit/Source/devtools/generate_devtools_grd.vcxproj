@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{995A6A93-5D38-898B-8121-7A9C09F6111B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>generate_devtools_grd</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\..\..\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\..\..\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\..\..\..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>../../../..;$(OutDir)obj/global_intermediate;..\..\..\..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="devtools.gyp"/>
+    <None Include="front_end\flameChart.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\sourcesView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\auditsPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\dataGrid.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\timelinePanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\overrides.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\splitView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\networkLogView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\networkPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\breadcrumbList.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\helpScreen.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\navigatorView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\sourcesPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\filteredItemSelectionDialog.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\elementsPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\resourceView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\buildSystemOnly.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\revisionHistory.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\filter.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\panelEnablerView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\indexedDBViews.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\sidebarPane.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\resourcesPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\inspectorCommon.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\cssNamedFlows.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\heapProfiler.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\layersPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\breakpointsList.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\spectrum.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\profilesPanel.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\canvasProfiler.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\screencastView.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\textPrompt.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\glossyHeaderSelectedPressed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\spinnerInactiveSelected.gif">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointConditional2_2x.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\trackHoriz.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\paneSettingsButtons.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\deleteIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\trackVert.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\graphLabelCalloutLeft.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\localStorage.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\programCounterBorder.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\settingsListRemove.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\statusbarResizerHorizontal.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\namedFlowOverflow.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\regionEmpty.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\radioDot.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillGreen.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\paneFilterButtons.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\glossyHeader.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointCounterBorder.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\checker.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\applicationCache.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\profileIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourceJSIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpoint2.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillGray.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillYellow.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbHoverHoriz.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\settingsListRemove_2x.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbHoriz.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourcePlainIconSmall.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchSmallGray.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\addIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\glossyHeaderSelected.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourcePlainIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillBlue.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbActiveHoriz.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\indexedDBIndex.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\indexedDB.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourceDocumentIconSmall.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\statusbarButtonGlyphs.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointConditionalBorder.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\paneAddButtons.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\forward.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillPurple.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\regionOverset.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\domain.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\spinner.gif">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\frame.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\indexedDBObjectStore.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\glossyHeaderPressed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchSmallBrightBlue.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourcesTimeGraphIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointBorder.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchSmallBlue.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbVert.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\paneRefreshButtons.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillOrange.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\spinnerActive.gif">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillGreen.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillGray.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\navigationControls.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchSmallWhite.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\navigationControls_2x.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\statusbarResizerVertical.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\database.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\cookie.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\popoverBackground.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbActiveVert.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\sessionStorage.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\spinnerActiveSelected.gif">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\databaseTable.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\regionFit.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\profileGroupIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointConditionalCounterBorder.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\fileSystem.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillBlue.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\popoverArrows.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourceCSSIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillOrange.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillYellow.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpointConditional2.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\toolbarItemSelected.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\back.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\resourceDocumentIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchNext.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillRed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\paneElementStateButtons.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\thumbHoverVert.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\spinnerInactive.gif">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelinePillRed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\timelineHollowPillPurple.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\breakpoint2_2x.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\searchPrev.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\graphLabelCalloutRight.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\profileSmallIcon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\Images\statusbarButtonGlyphs2x.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\cm\codemirror.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="front_end\cm\cmdevtools.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\ResourcesPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\SourcesPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\AuditsPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\ScriptFormatterWorker.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\NetworkPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\CodeMirrorTextEditor.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\inspector.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\ElementsPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\HeapSnapshotWorker.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\devtools.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\ProfilesPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\devtools_extension_api.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\TimelinePanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\inspector.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)\resources\inspector\LayersPanel.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="scripts\generate_devtools_grd.py">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;scripts/generate_devtools_grd.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/devtools.html\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/inspector.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/ElementsPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/ResourcesPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/NetworkPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/SourcesPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/TimelinePanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/ProfilesPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/AuditsPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/LayersPanel.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/CodeMirrorTextEditor.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/HeapSnapshotWorker.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/ScriptFormatterWorker.js\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/inspector.css\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/resources/inspector/devtools_extension_api.js\&quot; \&quot;front_end/auditsPanel.css\&quot; \&quot;front_end/breadcrumbList.css\&quot; \&quot;front_end/breakpointsList.css\&quot; \&quot;front_end/buildSystemOnly.js\&quot; \&quot;front_end/cm/cmdevtools.css\&quot; \&quot;front_end/cm/codemirror.css\&quot; \&quot;front_end/cssNamedFlows.css\&quot; \&quot;front_end/dataGrid.css\&quot; \&quot;front_end/elementsPanel.css\&quot; \&quot;front_end/filter.css\&quot; \&quot;front_end/filteredItemSelectionDialog.css\&quot; \&quot;front_end/flameChart.css\&quot; \&quot;front_end/heapProfiler.css\&quot; \&quot;front_end/helpScreen.css\&quot; \&quot;front_end/indexedDBViews.css\&quot; \&quot;front_end/inspectorCommon.css\&quot; \&quot;front_end/navigatorView.css\&quot; \&quot;front_end/networkLogView.css\&quot; \&quot;front_end/networkPanel.css\&quot; \&quot;front_end/overrides.css\&quot; \&quot;front_end/panelEnablerView.css\&quot; \&quot;front_end/profilesPanel.css\&quot; \&quot;front_end/resourceView.css\&quot; \&quot;front_end/resourcesPanel.css\&quot; \&quot;front_end/revisionHistory.css\&quot; \&quot;front_end/screencastView.css\&quot; \&quot;front_end/sidebarPane.css\&quot; \&quot;front_end/sourcesPanel.css\&quot; \&quot;front_end/sourcesView.css\&quot; \&quot;front_end/spectrum.css\&quot; \&quot;front_end/splitView.css\&quot; \&quot;front_end/textPrompt.css\&quot; \&quot;front_end/timelinePanel.css\&quot; \&quot;front_end/canvasProfiler.css\&quot; \&quot;front_end/layersPanel.css\&quot; \&quot;--images\&quot; \&quot;front_end/Images\&quot; \&quot;--output\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/devtools/devtools_resources.grd\&quot;&quot;</Command>
+      <Message>generate_devtools_grd</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\devtools\devtools_resources.grd</Outputs>
+      <AdditionalInputs>front_end\screencastView.css;front_end\Images\paneRefreshButtons.png;front_end\Images\glossyHeaderSelected.png;$(OutDir)\resources\inspector\ResourcesPanel.js;front_end\sourcesView.css;front_end\Images\namedFlowOverflow.png;front_end\Images\paneSettingsButtons.png;$(OutDir)\resources\inspector\CodeMirrorTextEditor.js;front_end\Images\statusbarResizerHorizontal.png;front_end\Images\frame.png;front_end\Images\deleteIcon.png;front_end\Images\navigationControls.png;$(OutDir)\resources\inspector\ElementsPanel.js;front_end\Images\resourceJSIcon.png;front_end\Images\sessionStorage.png;$(OutDir)\resources\inspector\ProfilesPanel.js;$(OutDir)\resources\inspector\AuditsPanel.js;front_end\Images\paneAddButtons.png;front_end\helpScreen.css;front_end\Images\popoverArrows.png;front_end\Images\regionEmpty.png;front_end\Images\breakpointBorder.png;front_end\Images\breakpointConditional2.png;front_end\Images\trackHoriz.png;$(OutDir)\resources\inspector\inspector.css;front_end\overrides.css;front_end\Images\breakpointConditional2_2x.png;front_end\dataGrid.css;front_end\Images\searchSmallBlue.png;front_end\Images\database.png;front_end\revisionHistory.css;front_end\layersPanel.css;$(OutDir)\resources\inspector\devtools.html;front_end\Images\timelineHollowPillPurple.png;front_end\Images\graphLabelCalloutLeft.png;front_end\Images\paneFilterButtons.png;front_end\Images\fileSystem.png;front_end\buildSystemOnly.js;front_end\Images\timelinePillOrange.png;$(OutDir)\resources\inspector\ScriptFormatterWorker.js;front_end\sidebarPane.css;front_end\Images\domain.png;front_end\Images\resourceCSSIcon.png;front_end\spectrum.css;front_end\Images\glossyHeader.png;front_end\Images\searchPrev.png;front_end\Images\paneElementStateButtons.png;front_end\cm\codemirror.css;front_end\Images\programCounterBorder.png;front_end\Images\popoverBackground.png;front_end\Images\thumbHoriz.png;front_end\Images\breakpointConditionalBorder.png;front_end\resourcesPanel.css;front_end\Images\timelinePillGray.png;front_end\breadcrumbList.css;front_end\textPrompt.css;front_end\Images\spinner.gif;front_end\Images\timelineHollowPillGray.png;front_end\Images\thumbVert.png;$(OutDir)\resources\inspector\HeapSnapshotWorker.js;front_end\Images\applicationCache.png;front_end\canvasProfiler.css;front_end\sourcesPanel.css;front_end\breakpointsList.css;front_end\auditsPanel.css;front_end\Images\glossyHeaderSelectedPressed.png;front_end\panelEnablerView.css;front_end\heapProfiler.css;front_end\cm\cmdevtools.css;front_end\Images\statusbarResizerVertical.png;front_end\Images\indexedDBIndex.png;$(OutDir)\resources\inspector\NetworkPanel.js;front_end\networkPanel.css;front_end\Images\thumbActiveVert.png;front_end\Images\spinnerInactive.gif;$(OutDir)\resources\inspector\devtools_extension_api.js;$(OutDir)\resources\inspector\LayersPanel.js;front_end\Images\cookie.png;front_end\Images\thumbHoverHoriz.png;front_end\Images\searchSmallWhite.png;front_end\Images\timelineHollowPillOrange.png;front_end\Images\thumbActiveHoriz.png;front_end\elementsPanel.css;front_end\Images\searchSmallGray.png;front_end\Images\navigationControls_2x.png;front_end\Images\back.png;front_end\Images\timelinePillBlue.png;$(OutDir)\resources\inspector\SourcesPanel.js;front_end\Images\timelinePillPurple.png;front_end\Images\forward.png;$(OutDir)\resources\inspector\TimelinePanel.js;front_end\Images\searchSmallBrightBlue.png;front_end\navigatorView.css;front_end\Images\resourcePlainIcon.png;front_end\cssNamedFlows.css;front_end\Images\breakpoint2.png;front_end\Images\timelineHollowPillGreen.png;front_end\Images\databaseTable.png;front_end\Images\timelinePillRed.png;front_end\Images\breakpoint2_2x.png;front_end\Images\indexedDBObjectStore.png;front_end\Images\resourcePlainIconSmall.png;front_end\Images\addIcon.png;front_end\splitView.css;front_end\Images\checker.png;front_end\Images\toolbarItemSelected.png;front_end\Images\searchNext.png;front_end\flameChart.css;front_end\Images\glossyHeaderPressed.png;front_end\Images\regionOverset.png;front_end\Images\resourceDocumentIconSmall.png;front_end\networkLogView.css;front_end\Images\radioDot.png;front_end\Images\statusbarButtonGlyphs.png;front_end\Images\profileGroupIcon.png;front_end\Images\graphLabelCalloutRight.png;front_end\Images\statusbarButtonGlyphs2x.png;front_end\Images\breakpointCounterBorder.png;front_end\Images\settingsListRemove_2x.png;front_end\Images\spinnerActiveSelected.gif;front_end\Images\localStorage.png;front_end\Images\settingsListRemove.png;front_end\Images\timelineHollowPillYellow.png;front_end\Images\profileIcon.png;front_end\resourceView.css;front_end\Images\trackVert.png;front_end\filteredItemSelectionDialog.css;front_end\Images\timelineHollowPillRed.png;front_end\Images\resourcesTimeGraphIcon.png;front_end\Images\thumbHoverVert.png;front_end\Images\breakpointConditionalCounterBorder.png;front_end\inspectorCommon.css;front_end\Images\timelinePillGreen.png;front_end\Images\regionFit.png;front_end\Images\resourceDocumentIcon.png;front_end\Images\profileSmallIcon.png;front_end\filter.css;front_end\Images\indexedDB.png;front_end\Images\spinnerInactiveSelected.gif;front_end\profilesPanel.css;front_end\Images\timelineHollowPillBlue.png;front_end\timelinePanel.css;front_end\indexedDBViews.css;$(OutDir)\resources\inspector\inspector.js;front_end\Images\spinnerActive.gif;front_end\Images\timelinePillYellow.png</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="devtools_html.vcxproj">
+      <Project>{9B6C9C2B-29DB-3DB8-8395-90C9D95CE2CF}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="devtools_extension_api.vcxproj">
+      <Project>{7C271A09-9EA9-68C5-42A7-548B5DE31F28}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_js.vcxproj">
+      <Project>{8A03F1EA-10B3-651E-9498-3B5094949A89}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_elements_js.vcxproj">
+      <Project>{D3F91376-5F7C-9614-429A-2D222339A59F}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_resources_js.vcxproj">
+      <Project>{754DED58-63A5-BB5E-D556-5D1081CF0E10}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_network_js.vcxproj">
+      <Project>{8FEEE6EA-D987-F71E-25A0-3FA9EBE2664D}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_scripts_js.vcxproj">
+      <Project>{CB080103-A497-C2C9-8597-70D8DA227385}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_timeline_js.vcxproj">
+      <Project>{080EE008-732C-D423-0BC6-1DA0C38D6D1F}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_profiles_js.vcxproj">
+      <Project>{2C2C836E-D256-01F9-D68A-4854B3EDE2A1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_audits_js.vcxproj">
+      <Project>{03ED899F-64FA-4322-F49A-9A0AAE02CFE9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_codemirror_js.vcxproj">
+      <Project>{5D200CA6-82CA-D2C3-C98D-3F616F8A39CD}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_layers_js.vcxproj">
+      <Project>{29DED31B-A032-7537-D7CD-D1A1C5A9F5C6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_heap_snapshot_worker_js.vcxproj">
+      <Project>{FB02E3BF-47FC-B19D-FF9B-0A72551D0961}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_script_formatter_worker_js.vcxproj">
+      <Project>{67B86379-248F-B8B8-B32B-7ECDC6AB91D8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="concatenated_devtools_css.vcxproj">
+      <Project>{106136E9-CB57-4B55-0D7F-D096AB5A8070}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

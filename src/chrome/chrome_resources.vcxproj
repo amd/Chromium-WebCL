@@ -1,0 +1,2395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{75220B82-0CBC-C755-578A-C19B5476E770}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>chrome_resources</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4800;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="chrome_resources.gyp"/>
+    <None Include="..\tools\grit\grit_info.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts_unittests.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\test_suite_all.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\constants.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\scons.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_rtl.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\exception.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\variant.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\mapping.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\empty.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\BogoFP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\FP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\resize.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\newgrd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_postprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\unit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\count.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_preprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\test.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\diff_structures.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\menu_from_parts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\json_loader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\regexp.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\skeleton_gatherer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\repack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writer_configuration.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\template_formatter.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\mock_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_helper.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\minus.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\phone_small.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\check.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\tablet_small.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\disabled_select.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\otr_icon_standalone.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\checkbox_black.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\checkbox_white.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\select.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\phishing_icon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\plus.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\star_small.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\laptop_small.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\2x\x-thin.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\images\2x\search.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\html\alert_overlay.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\html\trash.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\trash.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\widgets.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\expandable_bubble.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\menu_button.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\bubble.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\css\menu.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\event_tracker.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\load_time_data.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\assert.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\parse_html_subset.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\util.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\event_target.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\menu_button.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\context_menu_button.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\focus_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\touch_handler.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\position_util.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\expandable_bubble.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\bubble.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\card_slider.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\drag_wrapper.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\menu_item.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\context_menu_handler.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\webui\resources\js\cr\ui\menu.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_200_percent\close_2.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_200_percent\close_2_pressed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_200_percent\close_2_hover.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_100_percent\close_2.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_100_percent\close_2_hover.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\ui\resources\default_100_percent\close_2_pressed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\third_party\flot\jquery.flot.min.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\third_party\flot\jquery.min.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\extensions_section.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\flags_section.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\sadtab.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\common\error_network_offline.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\common\error_managed_mode_blocked_page.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_200_percent\common\error_network_generic.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\chromium\product_logo_name_48.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\flags_section.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\extensions_section.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\sadtab.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\about_conflicts.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\chromium\product_logo.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\common\error_network_generic.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\common\error_network_offline.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\theme\default_100_percent\common\error_managed_mode_blocked_page.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions_api_resources.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\common_resources.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\web_app_schema.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\tts.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\app.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\page_action.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\echo_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\declarative_content.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\browser_action.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\virtual_keyboard_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\commands.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\declarative_web_request.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\webstore_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\privacy.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\page_actions.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\file_browser_handler.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\processes.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\types.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\_permission_features.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\_manifest_features.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\streams_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\browsing_data.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\input_method_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\file_browser_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\script_badge.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\runtime.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\proxy.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\tts_engine.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\_api_features.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\types_private.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\webstore.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="common\extensions\api\web_request_internal.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\browser_resources.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gesture_config.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\policy.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\identity_internals.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_stats.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_version.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\managed_mode_block_interstitial.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_nacl.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_nacl.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\policy.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\notification_2line.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\plugins.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\crashes.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_conflicts.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing_multiple_threat_block.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_conflicts.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chrome-logo-faded.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\tab_modal_confirm_dialog.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_version_android.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\dialog.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\translate.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\prerender_url_whitelist.dat">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\flags.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_memory.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\set_as_default_browser.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_version.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_nacl.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\profile_signin_confirmation.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\set_as_default_browser.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\components.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\managed_mode_block_interstitial.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\managed_mode_block_interstitial.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\profile_signin_confirmation.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\identity_internals.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\components.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\notification_icon.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\profile_signin_confirmation.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\flags.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\policy.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\crashes.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\identity_internals.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_memory.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\reader_out_of_date.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gesture_config.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\components.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_credits.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\set_as_default_browser.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_flash.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\notification_1line.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_memory.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_flash.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\flags.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\crashes.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\http_auth.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\plugins.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions_infobar.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_version.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\disclosure_triangle_small.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\plugins.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\about_stats.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\downloads_section.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gesture_config.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber_frame.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber_frame.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber_utils.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber_frame.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\uber\uber_shared.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\defines.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\main.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\task_manager.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\commands.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\includes.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\main.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\measure_time.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\measure_time_end.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\task_manager\preload.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\help.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\help_base_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\help.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\channel_change_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\help.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\channel_change_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\help_focus_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\help\channel_change_page.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\hangout_services\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\user_pod_template.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\resource_loader.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\user_pod_row.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\bubble.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\screen.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\bubble.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\display_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\screen_container.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\user_pod_row.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\screen_account_picker.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\screen_account_picker.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\oobe.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chromeos\login\screen_account_picker.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\plugin_metadata\plugins_win.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_discovery\printer.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_discovery\local_discovery.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_discovery\local_discovery.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_discovery\local_discovery.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_title.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_thumbnail.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_thumbnail.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_iframe.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_util.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_title.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\local_ntp.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\local_ntp.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\instant_iframe_validation.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\local_ntp.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_title.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\most_visited_thumbnail.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\images\2x\ntp_white_google_logo.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\local_ntp\images\2x\ntp_google_logo.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\autocomplete_action_predictor.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\predictors.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\predictors.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\predictors.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\resource_prefetch_predictor.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\autocomplete_action_predictor.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\predictors\resource_prefetch_predictor.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\media\webrtc_logs.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\media\webrtc_logs.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\media\webrtc_logs.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\feedback\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\webstore_app\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\pack_extension_overlay.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_severity_fatal.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_info.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_info.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_overlay.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_commands_overlay.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_overlay.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_overlay.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_severity_info.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_commands_overlay.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_command_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_commands_overlay.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_info.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extensions.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extensions.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extensions.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_inspect.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\pack_extension_overlay.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error_severity_warning.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_error.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\extension_focus_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\pack_extension_overlay.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_apps.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_app_disable_bailout_confirm.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_apps.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_apps.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_app_disable_bailout_confirm.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\extensions\chromeos\kiosk_app_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gaia_auth\manifest_keyboard.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gaia_auth\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gaia_auth\manifest_inline.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gaia_auth\manifest_saml.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\app_list\recommended_apps.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\app_list\start_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\app_list\start_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\app_list\start_page.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\app_list\recommended_apps.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\suggestions_internals\suggestions_internals.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\suggestions_internals\suggestions_internals.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\suggestions_internals\suggestions_internals.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\apps_debugger\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\downloads\downloads.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\downloads\downloads.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\downloads\downloads.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inspect\inspect.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inspect\inspect.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inspect\inspect.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\chrome_app\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\blocking.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\ssl_errors_common.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\roadblock.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\twisty_closed.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\blocking.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\roadblock_icon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\roadblock_background.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\twisty_open.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\blocking.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\roadblock.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ssl\images\1x\locked_page.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\malware_block_v2.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\malware_block_v2.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\malware_block_v2.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\images\malware_icon_v2.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\images\stripe.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\images\phishing_icon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\safe_browsing\images\subresource_icon.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\identity_scope_approval_dialog\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\bookmark_manager\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\google_now\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\settings_app\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\instant\instant.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\instant\instant.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\instant\instant.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\control_bar.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\user_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\user_manager.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\control_bar.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\control_bar.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_manager\user_manager.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_header.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview_page.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\no_destinations_promo.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_header.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\metrics.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\no_destinations_promo.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview_utils.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_header.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview_animations.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\preview_generator.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\cloud_print_interface.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\component.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\native_layer.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\print_preview.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\printer_shared.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\printer.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\search.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\mobile.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\cloud.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\google_doc.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\third_party.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\pdf.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\third_party_fedex.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\images\mobile_shared.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\margin_control.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\preview_area.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\margin_control.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\margin_control.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\preview_area.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\margin_control_container.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\preview_area.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\previewarea\margin_control_container.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list_item.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\fedex_tos.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\cloud_destination_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list_item.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\search_box.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\fedex_tos.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_search.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\search_box.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\search_box.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_list_item.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_search.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\recent_destination_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\destination_search.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\search\fedex_tos.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\print_ticket_store.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\app_state.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\page_number_set.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\coordinate2d.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\cloud_parsers.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\document_info.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\destination.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\measurement_system.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\destination_store.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\size.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\local_parsers.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\user_info.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\printable_area.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\capabilities_holder.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\margins.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\copies.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\selection_only.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\header_footer.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\custom_margins.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\css_background.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\color.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\margins_type.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\fit_to_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\page_range.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\ticket_item.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\collate.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\landscape.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\data\ticket_items\duplex.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\other_options_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\destination_settings.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\page_settings.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\color_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\layout_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\page_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\destination_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\copies_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\margin_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\copies_settings.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\copies_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\other_options_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\color_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\layout_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\margin_settings.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\destination_settings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\page_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\print_preview\settings\margin_settings.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\gaia_auth_host\gaia_auth_host.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\nav_dot.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_incognito_tab_theme.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\most_visited_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\other_sessions.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\apps_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\guest_tab.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_tab.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\page_switcher.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\tile_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\recently_closed.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\apps_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\nav_dot.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_tab_theme.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\footer_menu.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\page_list_view.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\incognito_tab.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\app_launcher_promo.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_guest_tab_theme.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_tab.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\trash.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\tile_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\most_visited_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\incognito_tab.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\suggestions_page.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\logging.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\suggestions_page.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\guest_tab.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\new_tab.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\dot_list.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\images\closed_window.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\ntp4\images\disclosure_triangle_mask.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\profiler\profiler.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\profiler\profiler.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\cloud_print_app\manifest.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\net_export\net_export.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\net_export\net_export.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\net_export\net_export.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\omnibox\omnibox.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\omnibox\omnibox.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\omnibox\omnibox.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_actions\user_actions.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_actions\user_actions.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\user_actions\user_actions.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\performance_monitor\chart.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\performance_monitor\chart.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\performance_monitor\chart.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inline_login\inline_login.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inline_login\inline_login.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\inline_login\inline_login.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\history.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\alert_overlay.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\other_devices.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\history.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\other_devices.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\history_mobile.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\alert_overlay.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\history_focus_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="browser\resources\history\history.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\click_to_play_plugin.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\plugin_blocked_android.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\error_app.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\plugin_placeholders.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\plugin_blocked.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\blocked_plugin.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\neterror.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\neterror.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\neterror.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\disabled_plugin.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\renderer_resources.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\default_200_percent\common\webview-crash.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\default_200_percent\common\sadplugin.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\web_view.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\chrome_direct_setting.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\web_request_internal_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\set_icon.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\downloads_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\unload_event.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\window_controls_template.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\entry_id_manager.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\json_schema.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\experimental.offscreenTabs_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\declarative_webrequest_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\media_galleries_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\page_actions_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\content_setting.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\ad_view.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\tag_watcher.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\sync_file_system_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\notifications_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\messaging.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\test_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\input.ime_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\window_controls.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\inject_app_titlebar.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\feedback_private_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\webstore_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\image_util.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\app_runtime_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\permissions_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\system_indicator_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\platform_app.css">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\messaging_utils.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\file_browser_private_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\searchbox_api.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\extension_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\binding.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\event.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\context_menus_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\webrtc_cast_send_transport_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\send_request.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\omnibox_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\webrtc_cast_udp_transport_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\platform_app.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\chrome_setting.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\utils.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\web_view_deny.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\declarative_content_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\schema_utils.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\runtime_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\file_system_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\ad_view_deny.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\greasemonkey_api.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\tts_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\tab_capture_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\browser_action_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\desktop_capture_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\i18n_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\app_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\app_window_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\page_action_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\bluetooth_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\tabs_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\tts_engine_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\web_view_experimental.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\file_browser_handler_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\page_capture_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\web_request_custom_bindings.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\last_error.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\extensions\storage_area.js">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\default_100_percent\common\sadplugin.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="renderer\resources\default_100_percent\common\webview-crash.png">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="$(OutDir)obj\global_intermediate\about_credits.html">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;browser\browser_resources.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\chrome&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot; &quot;-E&quot; &quot;about_credits_file=$(OutDir)obj\global_intermediate\about_credits.html&quot; &quot;-E&quot; &quot;additional_modules_list_file=$(OutDir)obj\global_intermediate\chrome\browser\internal\additional_modules_list.txt&quot;</Command>
+      <Message>Generating resources from browser/browser_resources.grd</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\grit\browser_resources.h;$(OutDir)obj\global_intermediate\chrome\browser_resources.pak;$(OutDir)obj\global_intermediate\chrome\browser_resources.rc</Outputs>
+      <AdditionalInputs>..\ui\webui\resources\images\laptop_small.png;browser\resources\omnibox\omnibox.html;browser\resources\identity_internals.js;..\tools\grit\grit\gather\chrome_html_unittest.py;browser\resources\print_preview\previewarea\preview_area.html;..\ui\webui\resources\css\bubble.css;browser\resources\extensions\extension_list.js;browser\resources\downloads\downloads.css;..\tools\grit\grit\format\policy_templates\PRESUBMIT.py;..\tools\grit\grit\pseudo_rtl.py;browser\resources\media\webrtc_logs.html;browser\resources\user_manager\control_bar.html;browser\resources\about_credits.js;browser\resources\user_manager\user_manager.css;browser\resources\history\history_mobile.css;browser\resources\ntp4\guest_tab.html;..\ui\resources\default_100_percent\close_2.png;browser\resources\inline_login\inline_login.html;browser\resources\print_preview\search\cloud_destination_list.js;app\theme\default_100_percent\common\error_managed_mode_blocked_page.png;browser\resources\components.html;browser\resources\ntp4\apps_page.js;browser\resources\ntp4\new_guest_tab_theme.css;browser\resources\task_manager\includes.js;..\tools\grit\grit_info.py;browser\resources\app_list\start_page.js;..\tools\grit\grit\tool\preprocess_interface.py;app\theme\default_200_percent\common\error_managed_mode_blocked_page.png;..\tools\grit\grit\__init__.py;..\ui\webui\resources\css\trash.css;browser\resources\plugins.css;browser\resources\safe_browsing\malware_block_v2.js;..\tools\grit\grit\format\js_map_format.py;browser\resources\downloads\downloads.js;browser\resources\ntp4\new_tab.js;browser\resources\profile_signin_confirmation.js;..\tools\grit\grit\tool\newgrd.py;browser\resources\dialog.css;browser\resources\history\history_focus_manager.js;..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py;browser\resources\local_ntp\most_visited_title.html;..\tools\grit\grit\format\policy_templates\template_formatter.py;..\ui\resources\default_200_percent\close_2_pressed.png;browser\resources\predictors\predictors.html;..\tools\grit\grit\gather\muppet_strings_unittest.py;browser\resources\gaia_auth\manifest_saml.json;browser\resources\print_preview\settings\page_settings.js;browser\resources\local_ntp\local_ntp.js;browser\resources\plugins.js;..\tools\grit\grit\node\include.py;browser\resources\local_ntp\images\2x\ntp_white_google_logo.png;browser\resources\print_preview\preview_generator.js;browser\resources\extensions\extension_focus_manager.js;..\ui\webui\resources\js\cr\ui\expandable_bubble.js;..\tools\grit\grit\format\policy_templates\__init__.py;browser\resources\print_preview\images\printer_shared.png;..\tools\grit\grit\node\misc_unittest.py;browser\resources\help\channel_change_page.css;..\tools\grit\grit\format\data_pack_unittest.py;browser\resources\print_preview\settings\other_options_settings.js;browser\resources\extensions\extension_error.css;..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py;..\ui\webui\resources\js\cr\event_target.js;..\ui\webui\resources\js\assert.js;browser\resources\inline_login\inline_login.css;browser\resources\flags.html;browser\resources\print_preview\search\destination_search.html;browser\resources\ntp4\new_tab.html;browser\resources\about_version.html;..\ui\webui\resources\html\alert_overlay.html;browser\resources\print_preview\data\ticket_items\collate.js;browser\resources\print_preview\data\cloud_parsers.js;browser\resources\notification_2line.html;..\tools\grit\grit\gather\admin_template.py;..\tools\grit\grit\grit_runner.py;browser\resources\about_flash.html;browser\resources\print_preview\data\document_info.js;browser\resources\local_ntp\images\2x\ntp_google_logo.png;browser\resources\help\help_base_page.js;browser\resources\local_ntp\most_visited_thumbnail.js;browser\resources\print_preview\settings\color_settings.html;browser\resources\policy.html;..\tools\grit\grit\format\resource_map.py;browser\resources\ntp4\trash.js;browser\resources\gaia_auth\manifest.json;browser\resources\flags.css;..\tools\grit\grit\format\policy_templates\writers\template_writer.py;browser\resources\prerender_url_whitelist.dat;..\tools\grit\grit\node\structure_unittest.py;..\tools\grit\grit\format\rc.py;..\tools\grit\grit\node\io_unittest.py;browser\resources\identity_scope_approval_dialog\manifest.json;browser\resources\managed_mode_block_interstitial.css;browser\resources\uber\uber.css;..\tools\grit\grit\grd_reader.py;browser\resources\chromeos\login\resource_loader.js;browser\resources\hangout_services\manifest.json;browser\resources\print_preview\data\printable_area.js;browser\resources\chrome_app\manifest.json;browser\resources\inspect\inspect.html;browser\resources\uber\uber_shared.css;browser\resources\ntp4\nav_dot.css;browser\resources\reader_out_of_date.html;..\ui\webui\resources\js\event_tracker.js;browser\resources\local_discovery\local_discovery.css;..\ui\webui\resources\html\trash.html;browser\resources\ssl\roadblock.html;browser\resources\print_preview\metrics.js;..\tools\grit\grit\tool\xmb.py;..\ui\webui\resources\js\cr\ui.js;browser\resources\predictors\predictors.css;browser\resources\print_preview\data\destination_store.js;browser\resources\history\other_devices.js;..\tools\grit\grit\node\include_unittest.py;browser\resources\print_preview\search\fedex_tos.html;browser\resources\extensions\extensions.js;browser\resources\print_preview\settings\layout_settings.js;..\tools\grit\grit\format\policy_templates\writers\adml_writer.py;..\tools\grit\grit\gather\igoogle_strings.py;browser\resources\ntp4\images\disclosure_triangle_mask.png;browser\resources\performance_monitor\chart.js;..\tools\grit\grit\extern\FP.py;app\theme\default_100_percent\about_conflicts.png;app\theme\default_200_percent\flags_section.png;..\tools\grit\grit\gather\chrome_scaled_image_unittest.py;..\tools\grit\grit\scons.py;browser\resources\task_manager\defines.js;..\tools\grit\grit\gather\__init__.py;browser\resources\extensions\extension_error.js;browser\resources\chromeos\login\screen_container.css;browser\resources\chromeos\login\user_pod_template.html;browser\resources\ntp4\page_switcher.js;..\ui\webui\resources\images\checkbox_white.png;..\tools\grit\grit\tclib.py;browser\resources\print_preview\previewarea\margin_control.js;browser\resources\set_as_default_browser.js;browser\resources\print_preview\settings\layout_settings.html;browser\resources\chromeos\login\display_manager.js;browser\resources\local_ntp\most_visited_title.js;..\tools\grit\grit\node\custom\__init__.py;app\theme\default_100_percent\common\error_network_generic.png;browser\resources\print_preview\data\ticket_items\ticket_item.js;browser\resources\print_preview\print_header.js;browser\resources\identity_internals.html;browser\resources\ntp4\suggestions_page.css;browser\resources\profile_signin_confirmation.css;..\ui\webui\resources\images\select.png;..\tools\grit\grit\node\base.py;browser\resources\local_ntp\local_ntp.html;..\tools\grit\grit\pseudo_unittest.py;..\ui\webui\resources\images\minus.png;..\tools\grit\grit\format\policy_templates\writer_configuration.py;browser\resources\print_preview\cloud_print_interface.js;browser\resources\extensions\extension_info.html;browser\resources\extensions\extensions.html;..\tools\grit\grit\tool\resize.py;browser\resources\print_preview\previewarea\margin_control.css;..\tools\grit\grit\lazy_re_unittest.py;..\ui\resources\default_100_percent\close_2_pressed.png;browser\resources\task_manager\main.html;..\tools\grit\grit\exception.py;browser\resources\apps_debugger\manifest.json;browser\resources\translate.js;..\ui\webui\resources\images\phone_small.png;browser\resources\user_manager\control_bar.js;browser\resources\user_manager\user_manager.js;browser\resources\ntp4\page_list_view.js;browser\resources\uber\uber_frame.js;..\tools\grit\PRESUBMIT.py;browser\resources\about_flash.js;browser\resources\plugin_metadata\plugins_win.json;..\tools\grit\grit\clique_unittest.py;browser\resources\managed_mode_block_interstitial.js;..\ui\webui\resources\js\cr\ui\menu_item.js;browser\resources\ntp4\dot_list.js;browser\resources\net_export\net_export.css;..\ui\webui\resources\css\widgets.css;browser\resources\about_nacl.js;..\tools\grit\grit\gather\igoogle_strings_unittest.py;browser\resources\ssl\roadblock_background.png;browser\resources\app_list\recommended_apps.css;browser\resources\print_preview\data\app_state.js;browser\resources\print_preview\settings\page_settings.html;browser\resources\local_ntp\most_visited_iframe.css;browser\resources\plugins.html;renderer\resources\neterror.css;..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py;..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py;..\tools\grit\grit\format\policy_templates\writers\admx_writer.py;browser\resources\task_manager\measure_time_end.js;browser\resources\print_preview\no_destinations_promo.html;browser\resources\local_discovery\local_discovery.html;browser\resources\chromeos\login\oobe.css;browser\resources\about_memory.css;browser\resources\print_preview\images\cloud.png;browser\resources\instant\instant.js;browser\resources\help\channel_change_page.html;browser\resources\gesture_config.js;browser\resources\task_manager\measure_time.js;browser\resources\print_preview\data\ticket_items\margins_type.js;..\tools\grit\grit\gather\json_loader.py;browser\resources\extensions\extension_error_severity_info.png;browser\resources\print_preview\native_layer.js;..\ui\webui\resources\images\tablet_small.png;browser\resources\print_preview\print_preview_animations.js;browser\resources\disclosure_triangle_small.png;browser\resources\chromeos\login\screen.js;..\tools\grit\grit\node\message_unittest.py;browser\resources\extensions\extension_error_severity_fatal.png;..\tools\gritsettings\resource_ids;browser\browser_resources.grd;..\ui\webui\resources\css\menu_button.css;..\tools\grit\grit\gather\skeleton_gatherer.py;..\tools\grit\grit\shortcuts_unittests.py;browser\resources\print_preview\data\measurement_system.js;browser\resources\print_preview\images\third_party_fedex.png;browser\resources\gaia_auth\manifest_keyboard.json;..\tools\grit\grit\node\custom\filename_unittest.py;..\ui\webui\resources\css\expandable_bubble.css;..\tools\grit\grit\node\message.py;..\ui\webui\resources\images\check.png;browser\resources\print_preview\search\destination_search.css;browser\resources\task_manager\preload.js;browser\resources\safe_browsing\images\malware_icon_v2.png;browser\resources\extensions\extension_error_inspect.png;..\ui\webui\resources\css\menu.css;browser\resources\print_preview\settings\margin_settings.html;..\ui\webui\resources\js\cr\ui\touch_handler.js;..\ui\webui\resources\images\otr_icon_standalone.png;..\tools\grit\grit\format\c_format.py;browser\resources\print_preview\images\google_doc.png;browser\resources\ssl\twisty_closed.png;browser\resources\extensions\extension_command_list.js;..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py;browser\resources\print_preview\data\local_parsers.js;browser\resources\uber\uber.html;browser\resources\performance_monitor\chart.html;browser\resources\extensions\extension_error_overlay.css;browser\resources\print_preview\settings\copies_settings.css;app\theme\default_100_percent\chromium\product_logo.png;..\tools\grit\grit\tool\unit.py;browser\resources\extensions\pack_extension_overlay.css;browser\resources\print_preview\component.js;browser\resources\about_version_android.css;app\theme\default_200_percent\sadtab.png;..\tools\grit\grit\extern\__init__.py;..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py;browser\resources\print_preview\data\coordinate2d.js;browser\resources\predictors\predictors.js;browser\resources\net_export\net_export.js;..\tools\grit\grit\xtb_reader.py;browser\resources\app_list\start_page.html;browser\resources\help\help.js;..\tools\grit\grit\format\policy_templates\policy_template_generator.py;browser\resources\print_preview\data\ticket_items\custom_margins.js;browser\resources\gesture_config.css;..\tools\grit\grit\grd_reader_unittest.py;..\tools\grit\grit\tool\buildinfo_unittest.py;browser\resources\history\other_devices.css;..\tools\grit\grit\format\repack.py;browser\resources\print_preview\data\size.js;browser\resources\extensions_infobar.css;browser\resources\print_preview\settings\margin_settings.css;browser\resources\notification_icon.html;browser\resources\print_preview\no_destinations_promo.css;..\tools\grit\grit\format\__init__.py;..\tools\grit\grit\format\chrome_messages_json.py;browser\resources\print_preview\search\destination_list_item.html;browser\resources\print_preview\print_preview_utils.js;app\theme\default_100_percent\sadtab.png;browser\resources\print_preview\print_preview.html;browser\resources\print_preview\settings\other_options_settings.html;browser\resources\notification_1line.html;..\tools\grit\grit\xtb_reader_unittest.py;browser\resources\user_actions\user_actions.js;..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py;..\ui\webui\resources\js\cr\ui\position_util.js;browser\resources\extensions\chromeos\kiosk_apps.css;..\tools\grit\grit\constants.py;browser\resources\profiler\profiler.html;browser\resources\print_preview\data\ticket_items\fit_to_page.js;browser\resources\predictors\resource_prefetch_predictor.js;..\tools\grit\grit\gather\chrome_html.py;browser\resources\print_preview\data\print_ticket_store.js;browser\resources\help\help.css;app\theme\chromium\product_logo_name_48.png;browser\resources\predictors\autocomplete_action_predictor.html;..\tools\grit\grit\format\resource_map_unittest.py;browser\resources\print_preview\search\search_box.html;browser\resources\components.js;..\tools\grit\grit\node\__init__.py;browser\resources\local_ntp\most_visited_util.js;browser\resources\print_preview\settings\color_settings.js;browser\resources\flags.js;..\tools\grit\grit\gather\policy_json.py;..\tools\grit\grit\tool\rc2grd_unittest.py;browser\resources\extensions\extension_error.html;browser\resources\about_version.js;browser\resources\print_preview\settings\destination_settings.js;browser\resources\ntp4\app_launcher_promo.png;..\tools\grit\grit\tool\preprocess_unittest.py;browser\resources\about_memory.js;..\ui\webui\resources\images\disabled_select.png;..\tools\grit\grit\format\rc_unittest.py;browser\resources\extensions\pack_extension_overlay.js;browser\resources\history\alert_overlay.css;..\ui\webui\resources\images\2x\x-thin.png;browser\resources\print_preview\images\printer.png;browser\resources\extensions\extension_error_severity_warning.png;..\tools\grit\grit\tool\build.py;browser\resources\print_preview\previewarea\preview_area.js;browser\resources\print_preview\images\search.png;browser\resources\app_list\recommended_apps.js;browser\resources\local_ntp\instant_iframe_validation.js;..\tools\grit\grit\gather\rc.py;browser\resources\chrome-logo-faded.png;browser\resources\print_preview\data\page_number_set.js;browser\resources\downloads_section.png;browser\resources\print_preview\data\ticket_items\selection_only.js;browser\resources\print_preview\data\ticket_items\page_range.js;..\tools\grit\grit\shortcuts.py;browser\resources\print_preview\data\ticket_items\header_footer.js;..\tools\grit\grit\format\chrome_messages_json_unittest.py;browser\resources\extensions\extensions.css;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py;..\ui\webui\resources\js\cr\ui\menu_button.js;browser\resources\print_preview\images\third_party.png;browser\resources\about_stats.js;browser\resources\ntp4\other_sessions.js;browser\resources\extensions\extension_error_overlay.html;..\tools\grit\grit\format\policy_templates\writers\json_writer.py;..\tools\grit\grit\clique.py;browser\resources\ntp4\most_visited_page.css;..\tools\grit\grit\pseudo.py;..\tools\grit\grit\format\android_xml.py;browser\resources\predictors\autocomplete_action_predictor.js;..\ui\webui\resources\js\cr\ui\bubble.js;..\tools\grit\grit\format\rc_header_unittest.py;browser\resources\extensions\chromeos\kiosk_apps.js;..\tools\grit\grit\tool\menu_from_parts.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer.py;..\ui\webui\resources\js\cr\ui\context_menu_handler.js;browser\resources\help\help_focus_manager.js;browser\resources\print_preview\settings\copies_settings.js;..\tools\grit\grit\extern\BogoFP.py;browser\resources\gesture_config.html;..\tools\grit\grit\format\data_pack.py;browser\resources\suggestions_internals\suggestions_internals.js;..\tools\grit\grit\tclib_unittest.py;browser\resources\media\webrtc_logs.css;browser\resources\ntp4\tile_page.js;..\tools\grit\grit\gather\muppet_strings.py;browser\resources\ntp4\new_incognito_tab_theme.css;..\ui\webui\resources\js\cr\ui\context_menu_button.js;..\tools\grit\grit\gather\tr_html_unittest.py;browser\resources\print_preview\search\destination_list.js;..\tools\grit\grit\tool\postprocess_interface.py;browser\resources\print_preview\data\ticket_items\copies.js;browser\resources\user_manager\control_bar.css;..\ui\webui\resources\js\cr\ui\drag_wrapper.js;browser\resources\instant\instant.css;browser\resources\print_preview\print_preview.css;app\theme\default_200_percent\extensions_section.png;..\tools\grit\grit\gather\interface.py;..\tools\grit\grit\tool\toolbar_postprocess.py;browser\resources\omnibox\omnibox.js;browser\resources\chromeos\login\screen_account_picker.css;browser\resources\http_auth.html;browser\resources\about_memory.html;browser\resources\print_preview\search\search_box.js;browser\resources\settings_app\manifest.json;..\ui\webui\resources\js\load_time_data.js;..\tools\grit\grit\format\html_inline.py;browser\resources\extensions\extension_info.css;..\tools\grit\grit\tool\diff_structures.py;browser\resources\safe_browsing\images\stripe.png;browser\resources\ssl\ssl_errors_common.js;browser\resources\chromeos\login\bubble.css;..\ui\webui\resources\images\2x\search.png;..\tools\grit\grit\gather\txt_unittest.py;browser\resources\extensions\chromeos\kiosk_app_disable_bailout_confirm.js;..\tools\grit\grit\format\android_xml_unittest.py;browser\resources\downloads\downloads.html;..\tools\grit\grit\node\custom\filename.py;browser\resources\profiler\profiler.js;browser\resources\gaia_auth_host\gaia_auth_host.js;browser\resources\ntp4\apps_page.css;..\tools\grit\grit\tool\android2grd_unittest.py;..\tools\grit\grit\lazy_re.py;browser\resources\history\alert_overlay.html;browser\resources\extensions\pack_extension_overlay.html;browser\resources\app_list\start_page.css;..\tools\grit\grit\format\policy_templates\writers\doc_writer.py;..\tools\grit\grit\test_suite_all.py;browser\resources\webstore_app\manifest.json;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py;..\tools\grit\grit\util_unittest.py;browser\resources\print_preview\previewarea\margin_control.html;browser\resources\chromeos\login\screen_account_picker.js;browser\resources\extensions\chromeos\kiosk_app_disable_bailout_confirm.html;browser\resources\uber\uber_utils.js;..\tools\grit\grit\node\base_unittest.py;browser\resources\extensions\extension_error_overlay.js;browser\resources\media\webrtc_logs.js;browser\resources\ntp4\images\closed_window.png;browser\resources\about_version.css;browser\resources\crashes.js;..\tools\grit\grit\extern\tclib.py;..\ui\webui\resources\js\cr.js;browser\resources\safe_browsing\malware_block_v2.css;browser\resources\print_preview\data\margins.js;browser\resources\about_nacl.html;..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py;..\tools\grit\grit\grit_runner_unittest.py;browser\resources\history\history.html;browser\resources\ssl\roadblock.js;browser\resources\user_actions\user_actions.html;browser\resources\ssl\blocking.js;..\ui\webui\resources\js\cr\ui\card_slider.js;..\tools\grit\grit\gather\policy_json_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image.py;browser\resources\safe_browsing_multiple_threat_block.html;..\tools\grit\grit\format\c_format_unittest.py;browser\resources\ntp4\nav_dot.js;browser\resources\performance_monitor\chart.css;browser\resources\extensions\extension_commands_overlay.js;..\tools\grit\grit\node\variant.py;browser\resources\local_ntp\most_visited_title.css;browser\resources\print_preview\search\destination_search.js;browser\resources\tab_modal_confirm_dialog.html;..\tools\grit\grit\node\mapping.py;browser\resources\print_preview\settings\destination_settings.css;browser\resources\instant\instant.html;browser\resources\ntp4\new_tab.css;browser\resources\print_preview\search\destination_list.html;browser\resources\history\history.css;browser\resources\print_preview\images\mobile_shared.png;..\ui\webui\resources\js\util.js;browser\resources\policy.js;browser\resources\google_now\manifest.json;browser\resources\print_preview\data\capabilities_holder.js;browser\resources\safe_browsing\images\phishing_icon.png;browser\resources\policy.css;browser\resources\managed_mode_block_interstitial.html;browser\resources\about_conflicts.js;browser\resources\crashes.html;browser\resources\print_preview\data\ticket_items\color.js;browser\resources\print_preview\data\user_info.js;browser\resources\local_discovery\local_discovery.js;..\ui\webui\resources\images\checkbox_black.png;..\tools\grit\grit\gather\regexp.py;browser\resources\ntp4\new_tab_theme.css;browser\resources\extensions\extension_info.js;browser\resources\print_preview\print_header.html;..\ui\resources\default_200_percent\close_2_hover.png;browser\resources\print_preview\search\destination_list_item.js;..\tools\grit\grit\node\io.py;browser\resources\task_manager\main.js;..\tools\grit\grit\format\rc_header.py;browser\resources\inspect\inspect.js;..\ui\webui\resources\images\star_small.png;browser\resources\ntp4\guest_tab.css;browser\resources\extensions\extension_commands_overlay.css;..\ui\webui\resources\images\plus.png;browser\resources\print_preview\search\recent_destination_list.js;..\ui\webui\resources\js\cr\ui\focus_manager.js;browser\resources\print_preview\images\mobile.png;..\tools\grit\grit\gather\txt.py;..\tools\grit\grit\format\js_map_format_unittest.py;browser\resources\cloud_print_app\manifest.json;browser\resources\set_as_default_browser.html;browser\resources\print_preview\settings\copies_settings.html;browser\resources\ssl\blocking.html;..\tools\grit\grit\node\empty.py;browser\resources\task_manager\commands.js;browser\resources\omnibox\omnibox.css;browser\resources\print_preview\data\destination.js;..\tools\grit\grit\gather\rc_unittest.py;..\tools\grit\grit\tool\test.py;browser\resources\history\history.js;browser\resources\ssl\images\1x\locked_page.png;browser\resources\ntp4\logging.js;browser\resources\ntp4\tile_page.css;browser\resources\crashes.css;browser\resources\print_preview\settings\margin_settings.js;browser\resources\ntp4\footer_menu.css;browser\resources\extensions\chromeos\kiosk_apps.html;browser\resources\extensions\chromeos\kiosk_app_list.js;browser\resources\feedback\manifest.json;..\third_party\flot\jquery.flot.min.js;..\tools\grit\grit\node\structure.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py;..\ui\webui\resources\js\parse_html_subset.js;browser\resources\chromeos\login\screen_account_picker.html;browser\resources\print_preview\print_preview.js;app\theme\default_100_percent\common\error_network_offline.png;..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py;browser\resources\inline_login\inline_login.js;renderer\resources\neterror.js;..\ui\webui\resources\js\cr\ui\menu.js;..\third_party\flot\jquery.min.js;browser\resources\print_preview\data\ticket_items\landscape.js;..\tools\grit\grit\tool\rc2grd.py;..\tools\grit\grit\tool\count.py;browser\resources\bookmark_manager\manifest.json;browser\resources\components.css;..\tools\grit\grit\format\policy_templates\writers\plist_helper.py;browser\resources\ntp4\incognito_tab.css;..\tools\grit\grit\node\misc.py;..\tools\grit\grit\format\policy_templates\writers\plist_writer.py;..\tools\grit\grit\tool\transl2tc.py;browser\resources\ntp4\most_visited_page.js;browser\resources\print_preview\previewarea\margin_control_container.css;browser\resources\about_nacl.css;browser\resources\print_preview\search\search_box.css;..\tools\grit\grit\tool\buildinfo.py;..\tools\grit\grit\tool\android2grd.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer.py;browser\resources\uber\uber_frame.css;browser\resources\about_stats.html;browser\resources\local_ntp\local_ntp.css;browser\resources\set_as_default_browser.css;browser\resources\print_preview\search\destination_list.css;browser\resources\predictors\resource_prefetch_predictor.html;..\tools\grit\grit\tool\interface.py;..\tools\grit\grit\format\html_inline_unittest.py;browser\resources\task_manager\task_manager.css;browser\resources\print_preview\settings\page_settings.css;..\ui\resources\default_100_percent\close_2_hover.png;..\tools\grit\grit\format\policy_templates\writers\__init__.py;..\tools\grit\grit\util.py;browser\resources\identity_internals.css;..\tools\grit\grit\format\policy_templates\writers\mock_writer.py;..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py;browser\resources\net_export\net_export.html;browser\resources\print_preview\previewarea\preview_area.css;browser\resources\inspect\inspect.css;..\tools\grit\grit\tool\build_unittest.py;..\ui\webui\resources\images\phishing_icon.png;..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py;..\tools\grit\grit\tool\xmb_unittest.py;..\tools\grit\grit.py;..\tools\grit\grit\tool\toolbar_preprocess.py;browser\resources\print_preview\print_header.css;browser\resources\local_ntp\most_visited_thumbnail.html;browser\resources\user_actions\user_actions.css;browser\resources\print_preview\previewarea\margin_control_container.js;browser\resources\local_discovery\printer.png;browser\resources\print_preview\search\destination_list_item.css;..\tools\grit\grit\tool\__init__.py;..\tools\grit\grit\gather\tr_html.py;browser\resources\ntp4\recently_closed.js;browser\resources\extensions\extension_commands_overlay.html;browser\resources\chromeos\login\bubble.js;app\theme\default_100_percent\flags_section.png;browser\resources\suggestions_internals\suggestions_internals.html;browser\resources\print_preview\data\ticket_items\duplex.js;browser\resources\suggestions_internals\suggestions_internals.css;..\tools\grit\grit\tool\transl2tc_unittest.py;browser\resources\ssl\roadblock_icon.png;browser\resources\gaia_auth\manifest_inline.json;browser\resources\local_ntp\most_visited_thumbnail.css;browser\resources\about_conflicts.html;browser\resources\help\help.html;..\tools\grit\grit\tool\postprocess_unittest.py;browser\resources\print_preview\settings\destination_settings.html;browser\resources\safe_browsing\images\subresource_icon.png;browser\resources\print_preview\search\fedex_tos.js;app\theme\default_100_percent\extensions_section.png;..\tools\grit\grit\gather\admin_template_unittest.py;browser\resources\safe_browsing\malware_block_v2.html;browser\resources\ssl\twisty_open.png;browser\resources\ssl\blocking.css;browser\resources\ntp4\suggestions_page.js;browser\resources\user_manager\user_manager.html;browser\resources\chromeos\login\user_pod_row.css;browser\resources\help\channel_change_page.js;browser\resources\uber\uber.js;browser\resources\print_preview\search\fedex_tos.css;browser\resources\print_preview\print_preview_page.html;browser\resources\print_preview\images\pdf.png;browser\resources\print_preview\data\ticket_items\css_background.js;browser\resources\profile_signin_confirmation.html;browser\resources\ntp4\incognito_tab.html;browser\resources\uber\uber_frame.html;browser\resources\chromeos\login\user_pod_row.js</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\tools\gritsettings\resource_ids">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;common\common_resources.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\chrome&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;renderer\resources\renderer_resources.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\chrome&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot;&#xD;&#xA;if %errorlevel% neq 0 exit /b %errorlevel%&#xD;&#xA;call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;common\extensions_api_resources.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\chrome&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot;</Command>
+      <Message>Generating resources from common/common_resources.grd, and also Generating resources from renderer/resources/renderer_resources.grd, and also Generating resources from common/extensions_api_resources.grd</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\common_resources.pak;$(OutDir)obj\global_intermediate\chrome\grit\renderer_resources.h;$(OutDir)obj\global_intermediate\chrome\grit\extensions_api_resources.h;$(OutDir)obj\global_intermediate\chrome\extensions_api_resources.rc;$(OutDir)obj\global_intermediate\chrome\renderer_resources_200_percent.pak;$(OutDir)obj\global_intermediate\chrome\renderer_resources_100_percent.pak;$(OutDir)obj\global_intermediate\chrome\extensions_api_resources.pak;$(OutDir)obj\global_intermediate\chrome\common_resources.rc;$(OutDir)obj\global_intermediate\chrome\grit\renderer_resources_map.cc;$(OutDir)obj\global_intermediate\chrome\grit\renderer_resources_map.h;$(OutDir)obj\global_intermediate\chrome\grit\common_resources.h</Outputs>
+      <AdditionalInputs>renderer\resources\extensions\chrome_direct_setting.js;..\tools\grit\grit\format\policy_templates\PRESUBMIT.py;renderer\resources\extensions\app_custom_bindings.js;renderer\resources\default_200_percent\common\sadplugin.png;..\tools\grit\grit\gather\chrome_html_unittest.py;..\tools\grit\grit\__init__.py;common\extensions\api\streams_private.json;..\tools\grit\grit\tool\postprocess_interface.py;renderer\resources\extensions\extension_custom_bindings.js;common\extensions_api_resources.grd;renderer\resources\extensions\inject_app_titlebar.js;..\tools\grit\grit\pseudo_rtl.py;..\tools\grit\grit\shortcuts.py;renderer\resources\extensions\input.ime_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py;common\extensions\api\input_method_private.json;renderer\resources\extensions\sync_file_system_custom_bindings.js;..\ui\resources\default_100_percent\close_2.png;renderer\resources\extensions\desktop_capture_custom_bindings.js;renderer\resources\extensions\declarative_webrequest_custom_bindings.js;renderer\resources\neterror.html;..\tools\grit\grit\format\policy_templates\writers\json_writer.py;..\tools\grit\grit_info.py;..\tools\grit\grit\clique.py;..\tools\grit\grit\tool\preprocess_interface.py;..\tools\grit\grit\pseudo.py;renderer\resources\extensions\searchbox_api.js;renderer\resources\extensions\schema_utils.js;renderer\resources\extensions\system_indicator_custom_bindings.js;common\extensions\api\webstore.json;..\tools\grit\grit\format\rc_header_unittest.py;..\tools\grit\grit\format\js_map_format.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer.py;..\tools\grit\grit\tool\xmb.py;renderer\resources\disabled_plugin.html;renderer\resources\extensions\messaging_utils.js;..\tools\grit\grit\extern\BogoFP.py;renderer\resources\plugin_placeholders.css;..\tools\grit\grit\format\data_pack.py;renderer\resources\extensions\ad_view.js;..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py;..\tools\grit\grit\format\policy_templates\template_formatter.py;..\ui\resources\default_200_percent\close_2_pressed.png;common\extensions\api\app.json;renderer\resources\extensions\media_galleries_custom_bindings.js;..\tools\grit\grit\gather\muppet_strings.py;renderer\resources\plugin_blocked.png;..\tools\grit\grit\gather\muppet_strings_unittest.py;renderer\resources\extensions\json_schema.js;..\tools\grit\grit\gather\tr_html_unittest.py;..\tools\grit\grit\node\include.py;..\tools\grit\grit\gather\rc.py;renderer\resources\extensions\omnibox_custom_bindings.js;renderer\resources\error_app.html;..\tools\grit\grit\format\policy_templates\__init__.py;..\tools\grit\grit\node\misc_unittest.py;..\tools\grit\grit\format\data_pack_unittest.py;..\tools\grit\grit\tool\toolbar_postprocess.py;..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py;renderer\resources\extensions\entry_id_manager.js;renderer\resources\extensions\browser_action_custom_bindings.js;renderer\resources\extensions\web_view_deny.js;renderer\resources\extensions\event.js;..\tools\grit\grit\format\html_inline.py;..\tools\grit\grit\tool\diff_structures.py;..\tools\grit\grit\gather\admin_template.py;..\tools\grit\grit\grit_runner.py;..\tools\grit\grit\gather\txt_unittest.py;..\tools\grit\grit\format\android_xml_unittest.py;..\tools\grit\grit\node\custom\filename.py;..\tools\grit\grit\format\resource_map.py;renderer\resources\extensions\tabs_custom_bindings.js;renderer\resources\extensions\file_browser_handler_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\template_writer.py;renderer\resources\extensions\page_actions_custom_bindings.js;..\tools\grit\grit\node\structure_unittest.py;..\tools\grit\grit\tool\android2grd_unittest.py;renderer\resources\extensions\last_error.js;..\tools\grit\grit\lazy_re.py;..\tools\grit\grit\format\rc.py;..\tools\grit\grit\node\io_unittest.py;renderer\resources\extensions\webrtc_cast_send_transport_custom_bindings.js;..\tools\grit\grit\grd_reader.py;..\tools\grit\PRESUBMIT.py;..\tools\grit\grit\test_suite_all.py;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py;..\tools\grit\grit\util_unittest.py;renderer\resources\extensions\window_controls.js;..\tools\grit\grit\node\base_unittest.py;renderer\resources\extensions\tts_engine_custom_bindings.js;renderer\resources\extensions\app_runtime_custom_bindings.js;..\tools\grit\grit\extern\tclib.py;renderer\resources\extensions\greasemonkey_api.js;common\extensions\api\page_actions.json;..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py;..\tools\grit\grit\grit_runner_unittest.py;renderer\resources\click_to_play_plugin.html;..\tools\grit\grit\node\include_unittest.py;..\tools\grit\grit\format\policy_templates\writers\adml_writer.py;renderer\resources\extensions\feedback_private_custom_bindings.js;..\tools\grit\grit\scons.py;common\extensions\api\_permission_features.json;common\extensions\api\browsing_data.json;..\tools\grit\grit\gather\policy_json_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image.py;common\extensions\api\webstore_private.json;renderer\resources\extensions\tts_custom_bindings.js;..\tools\grit\grit\gather\chrome_scaled_image_unittest.py;..\tools\grit\grit\format\c_format_unittest.py;..\tools\grit\grit\gather\igoogle_strings.py;app\theme\default_100_percent\common\error_network_generic.png;..\tools\grit\grit\node\mapping.py;..\tools\grit\grit\gather\__init__.py;common\extensions\api\file_browser_handler.json;renderer\resources\extensions\storage_area.js;..\tools\grit\grit\tclib.py;renderer\resources\blocked_plugin.html;renderer\resources\extensions\web_view_experimental.js;..\tools\grit\grit\node\custom\__init__.py;common\extensions\api\script_badge.json;..\tools\grit\grit\tool\interface.py;..\tools\grit\grit\gather\regexp.py;renderer\resources\extensions\webstore_custom_bindings.js;..\ui\resources\default_200_percent\close_2_hover.png;..\tools\grit\grit\node\base.py;..\tools\grit\grit\node\io.py;renderer\resources\extensions\web_view.js;..\tools\grit\grit\pseudo_unittest.py;renderer\resources\extensions\unload_event.js;..\tools\grit\grit\format\rc_header.py;..\tools\grit\grit\format\policy_templates\writer_configuration.py;renderer\resources\extensions\file_system_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py;..\tools\grit\grit\tool\resize.py;..\tools\grit\grit\lazy_re_unittest.py;..\ui\resources\default_100_percent\close_2_pressed.png;..\tools\grit\grit\tclib_unittest.py;..\tools\grit\grit\exception.py;renderer\resources\default_200_percent\common\webview-crash.png;..\tools\grit\grit\gather\txt.py;..\tools\grit\grit\format\js_map_format_unittest.py;renderer\resources\extensions\platform_app.js;..\tools\grit\grit\clique_unittest.py;..\tools\grit\grit\node\variant.py;..\tools\grit\grit\node\empty.py;common\extensions\api\proxy.json;..\tools\grit\grit\gather\rc_unittest.py;renderer\resources\default_100_percent\common\webview-crash.png;..\tools\grit\grit\tool\test.py;renderer\resources\extensions\utils.js;renderer\resources\extensions\downloads_custom_bindings.js;..\tools\grit\grit\gather\igoogle_strings_unittest.py;renderer\resources\extensions\image_util.js;renderer\resources\neterror.css;..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py;renderer\resources\extensions\web_request_internal_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py;..\tools\grit\grit\format\policy_templates\writers\admx_writer.py;..\ui\resources\default_200_percent\close_2.png;renderer\resources\extensions\messaging.js;renderer\resources\extensions\chrome_setting.js;common\extensions\api\declarative_web_request.json;renderer\resources\extensions\page_capture_custom_bindings.js;..\tools\grit\grit\node\structure.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py;renderer\resources\extensions\binding.js;..\tools\grit\grit\gather\json_loader.py;..\tools\grit\grit\tool\menu_from_parts.py;common\extensions\api\echo_private.json;app\theme\default_100_percent\common\error_network_offline.png;..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py;app\theme\default_200_percent\common\error_network_generic.png;renderer\resources\neterror.js;renderer\resources\extensions\send_request.js;..\tools\grit\grit\node\message_unittest.py;common\extensions\api\_api_features.json;common\extensions\api\virtual_keyboard_private.json;..\tools\grit\grit\tool\rc2grd.py;..\tools\grit\grit\tool\count.py;..\tools\grit\grit\format\chrome_messages_json_unittest.py;..\tools\grit\grit\tool\buildinfo.py;..\tools\grit\grit\gather\skeleton_gatherer.py;..\tools\grit\grit\shortcuts_unittests.py;..\tools\grit\grit\node\custom\filename_unittest.py;..\tools\grit\grit\format\policy_templates\writers\plist_helper.py;..\tools\grit\grit\node\misc.py;renderer\resources\extensions\web_request_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\plist_writer.py;..\tools\grit\grit\tool\transl2tc.py;common\extensions\api\processes.json;..\tools\grit\grit\node\message.py;renderer\resources\extensions\experimental.offscreenTabs_custom_bindings.js;common\extensions\api\tts.json;..\tools\grit\grit\tool\android2grd.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer.py;common\extensions\api\runtime.json;..\tools\grit\grit\extern\FP.py;..\tools\grit\grit\format\c_format.py;renderer\resources\renderer_resources.grd;..\tools\grit\grit\format\html_inline_unittest.py;renderer\resources\extensions\context_menus_custom_bindings.js;renderer\resources\plugin_blocked_android.png;..\tools\grit\grit\tool\newgrd.py;..\ui\resources\default_100_percent\close_2_hover.png;renderer\resources\extensions\window_controls_template.html;renderer\resources\extensions\permissions_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\__init__.py;..\tools\grit\grit\tool\unit.py;renderer\resources\extensions\bluetooth_custom_bindings.js;..\tools\grit\grit\util.py;..\tools\grit\grit\format\policy_templates\writers\mock_writer.py;..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py;renderer\resources\extensions\tag_watcher.js;renderer\resources\extensions\webrtc_cast_udp_transport_custom_bindings.js;..\tools\grit\grit\extern\__init__.py;renderer\resources\extensions\test_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py;..\tools\grit\grit\tool\build_unittest.py;..\tools\grit\grit\xtb_reader.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py;..\tools\grit\grit\format\policy_templates\policy_template_generator.py;..\tools\grit\grit\tool\xmb_unittest.py;renderer\resources\extensions\ad_view_deny.js;..\tools\grit\grit\tool\toolbar_preprocess.py;renderer\resources\extensions\tab_capture_custom_bindings.js;renderer\resources\extensions\file_browser_private_custom_bindings.js;..\tools\grit\grit\format\policy_templates\writers\doc_writer.py;..\tools\grit\grit\grd_reader_unittest.py;common\extensions\api\browser_action.json;..\tools\grit\grit\tool\buildinfo_unittest.py;..\tools\grit\grit\format\repack.py;renderer\resources\extensions\set_icon.js;..\tools\grit\grit\tool\__init__.py;..\tools\grit\grit\gather\tr_html.py;renderer\resources\default_100_percent\common\sadplugin.png;renderer\resources\extensions\platform_app.css;..\tools\grit\grit\format\android_xml.py;..\tools\grit\grit\format\__init__.py;..\tools\grit\grit\format\chrome_messages_json.py;..\tools\grit\grit\tool\transl2tc_unittest.py;..\tools\grit\grit\gather\interface.py;renderer\resources\extensions\page_action_custom_bindings.js;common\extensions\api\tts_engine.json;app\theme\default_200_percent\common\error_network_offline.png;..\tools\grit\grit\xtb_reader_unittest.py;renderer\resources\extensions\i18n_custom_bindings.js;common\extensions\api\web_request_internal.json;..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py;..\tools\grit\grit\tool\postprocess_unittest.py;common\extensions\api\_manifest_features.json;common\extensions\api\file_browser_private.json;renderer\resources\extensions\content_setting.js;common\extensions\api\types.json;..\tools\grit\grit\constants.py;common\extensions\api\page_action.json;renderer\resources\extensions\declarative_content_custom_bindings.js;..\tools\grit\grit\gather\admin_template_unittest.py;..\tools\grit\grit\gather\chrome_html.py;common\common_resources.grd;common\extensions\api\privacy.json;renderer\resources\extensions\notifications_custom_bindings.js;common\extensions\api\commands.json;..\tools\grit\grit\format\resource_map_unittest.py;..\tools\grit\grit\node\__init__.py;..\tools\grit\grit\gather\policy_json.py;..\tools\grit\grit\tool\rc2grd_unittest.py;common\extensions\api\declarative_content.json;..\tools\grit\grit.py;..\tools\grit\grit\tool\preprocess_unittest.py;common\extensions\api\types_private.json;..\tools\grit\grit\format\rc_unittest.py;common\web_app_schema.json;..\tools\grit\grit\tool\build.py;renderer\resources\extensions\runtime_custom_bindings.js;renderer\resources\extensions\app_window_custom_bindings.js</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="about_credits.vcxproj">
+      <Project>{A252AFD6-A073-524D-9DA4-7200D89DECAE}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="chrome_internal_resources_gen.vcxproj">
+      <Project>{50251DDD-A610-5E01-BEAF-561237A98094}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>

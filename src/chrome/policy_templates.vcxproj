@@ -1,0 +1,1406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{33F85466-8274-40D8-4B56-19AE80FC5607}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>policy_templates</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Utility</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\third_party\cygwin\bin\;$(MSBuildProjectDirectory)\..\third_party\python_26\</ExecutablePath>
+    <OutDir>..\build\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;DYNAMIC_ANNOTATIONS_ENABLED=1;WTF_USE_DYNAMIC_ANNOTATIONS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/safeseh /dynamicbase /ignore:4199 /ignore:4221 /nxcompat /largeaddressaware %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/MP /we4389 /Oy- %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4396;4503;4819;4100;4121;4125;4127;4130;4131;4189;4201;4238;4244;4245;4310;4428;4481;4505;4510;4512;4530;4610;4611;4701;4702;4706;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>false</MinimalRebuild>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/ignore:4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>wininet.lib;dnsapi.lib;version.lib;msimg32.lib;ws2_32.lib;usp10.lib;psapi.lib;dbghelp.lib;winmm.lib;shlwapi.lib;kernel32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;user32.lib;uuid.lib;odbc32.lib;odbccp32.lib;delayimp.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Program Files (x86)/Windows Kits/8.0/Lib/win8/um/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/dynamicbase /ignore:4199 /ignore:4221 /nxcompat %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>dbghelp.dll;dwmapi.dll;shell32.dll;uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>olepro32.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
+      <ProgramDatabaseFile>$(TargetPath).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <Midl>
+      <DllDataFileName>%(Filename).dlldata.c</DllDataFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..;$(OutDir)obj/global_intermediate;..\third_party\wtl\include;C:\Program Files (x86)\Windows Kits\8.0\Include\shared;C:\Program Files (x86)\Windows Kits\8.0\Include\um;C:\Program Files (x86)\Windows Kits\8.0\Include\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>ANGLE_DX11;_WIN32_WINNT=0x0602;WINVER=0x0602;WIN32;_WINDOWS;NOMINMAX;PSAPI_VERSION=1;_CRT_RAND_S;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;WIN32_LEAN_AND_MEAN;_ATL_NO_OPENGL;_SECURE_ATL;CHROMIUM_BUILD;COMPONENT_BUILD;TOOLKIT_VIEWS=1;USE_AURA=1;USE_ASH=1;USE_DEFAULT_RENDER_THEME=1;USE_LIBJPEG_TURBO=1;ENABLE_ONE_CLICK_SIGNIN;ENABLE_REMOTING=1;ENABLE_WEBRTC=1;ENABLE_PEPPER_CDMS;ENABLE_CONFIGURATION_POLICY;ENABLE_INPUT_SPEECH;ENABLE_NOTIFICATIONS;NO_TCMALLOC;ENABLE_EGLIMAGE=1;__STD_C;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x06020000;ENABLE_TASK_MANAGER=1;ENABLE_EXTENSIONS=1;ENABLE_PLUGIN_INSTALLATION=1;ENABLE_PLUGINS=1;ENABLE_SESSION_SERVICE=1;ENABLE_THEMES=1;ENABLE_AUTOFILL_DIALOG=1;ENABLE_BACKGROUND=1;ENABLE_AUTOMATION=1;ENABLE_GOOGLE_NOW=1;CLD_VERSION=2;ENABLE_FULL_PRINTING=1;ENABLE_PRINTING=1;ENABLE_SPELLCHECK=1;ENABLE_CAPTIVE_PORTAL_DETECTION=1;ENABLE_APP_LIST=1;ENABLE_SETTINGS_APP=1;ENABLE_MANAGED_USERS=1;ENABLE_MDNS=1;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="chrome.gyp"/>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\el\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\gu\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\mr\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\vi\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ca\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\am\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\it\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sv\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ar\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\cs\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\et\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\id\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-GB\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ru\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sr\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nl\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nb\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\tr\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lv\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lt\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\th\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-US\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es-419\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pl\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ta\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fr\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bg\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\uk\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sl\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hr\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bn\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\de\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\da\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fa\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hi\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-BR\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fi\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hu\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ja\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\he\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ro\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-PT\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-TW\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ko\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\kn\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sk\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-CN\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fil\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ms\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ml\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\te\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sw\chrome.adm">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\chrome.admx">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\el\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\gu\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ro\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\vi\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ca\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\am\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\it\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sv\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ar\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\cs\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\et\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\id\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-GB\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ru\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\he\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sr\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nl\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nb\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\tr\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lv\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lt\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\th\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-US\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es-419\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pl\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ta\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fr\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bg\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ms\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sl\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hr\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bn\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\de\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ko\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hu\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fa\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hi\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-BR\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fi\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\da\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ja\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ml\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\te\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-PT\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-TW\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sw\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\kn\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sk\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-CN\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fil\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\uk\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\mr\chrome.adml">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\windows\examples\chrome.reg">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\el\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\gu\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-TW\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sw\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ca\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\am\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\it\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sv\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ar\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\cs\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\et\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\id\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-GB\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ru\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sr\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nl\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nb\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\tr\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lv\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lt\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es-419\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\th\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\vi\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-US\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\te\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pl\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ta\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fr\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bg\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\uk\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sl\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hr\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bn\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\de\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\da\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fa\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hi\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-BR\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fi\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hu\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ja\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\he\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ro\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-PT\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ml\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ko\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\kn\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sk\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-CN\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fil\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ms\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\mr\chrome_policy_list.html">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="$(OutDir)obj\global_intermediate\chrome\app\policy\linux\examples\chrome.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_am.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_es-419.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ru.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ta.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ar.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ml.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_iw.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_kn.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_bg.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_pt-BR.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_sl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_lv.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_et.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_te.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_vi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_no.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates.json">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_hr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_th.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_bn.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_de.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_lt.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_fi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_it.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_sv.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_zh-CN.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_pl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_mr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_sw.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_id.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_es.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_el.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ja.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_pt-PT.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ro.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_zh-TW.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_fil.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ko.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_sk.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_sr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_da.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_hi.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_nl.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_tr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_fr.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates.grd">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ms.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_uk.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_hu.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_cs.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_en-GB.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_ca.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="app\policy\policy_templates_gu.xtb">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="tools\build\win\make_policy_zip.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit_info.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\scons.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\shortcuts_unittests.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\constants.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grd_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\pseudo_rtl.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\grit_runner_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\clique.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\xtb_reader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\util_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\exception.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\test_suite_all.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\lazy_re_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tclib_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\variant.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\io.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\mapping.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\misc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\base.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\empty.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\include.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\message.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\structure.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\node\custom\filename.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\FP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\tclib.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\extern\BogoFP.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\diff_structures.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\resize.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\newgrd.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\preprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_postprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\unit.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\android2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\count.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\xmb_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\build.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\toolbar_preprocess.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\rc2grd_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\postprocess_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\transl2tc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\test.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\menu_from_parts.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\tool\buildinfo_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\igoogle_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\admin_template_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\regexp.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\skeleton_gatherer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\muppet_strings.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\txt_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\json_loader.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\interface.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\chrome_scaled_image_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\tr_html_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\gather\policy_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\js_map_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\data_pack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\rc_header.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\repack.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\android_xml.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\chrome_messages_json.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\resource_map_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\html_inline.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\c_format_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\template_formatter.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\PRESUBMIT.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writer_configuration.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\mock_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\plist_helper.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\__init__.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\adml_writer.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+    <None Include="..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\build\precompile.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="VERSION">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;cp\&quot; \&quot;VERSION\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/chrome/app/policy/VERSION\&quot;&quot;</Command>
+      <Message>add_version</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\app\policy\VERSION</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="$(OutDir)obj\global_intermediate\chrome\app\policy\VERSION">
+      <FileType>Document</FileType>
+      <Command>call call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;tools/build/win/make_policy_zip.py\&quot; \&quot;--output\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/policy_templates.zip\&quot; \&quot;--basedir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/chrome/app/policy\&quot; \&quot;--grd_input\&quot; \&quot;app/policy/policy_templates.grd\&quot; \&quot;--grd_strip_path_prefix\&quot; \&quot;app/policy\&quot; \&quot;--extra_input\&quot; \&quot;VERSION\&quot; \&quot;--grit_info\&quot; \&quot;../tools/grit/grit_info.py\&quot; \&quot;-D\&quot; \&quot;_chromium\&quot; \&quot;-E\&quot; \&quot;CHROMIUM_BUILD=chromium\&quot; \&quot;-D\&quot; \&quot;toolkit_views\&quot; \&quot;-D\&quot; \&quot;use_aura\&quot; \&quot;-D\&quot; \&quot;use_ash\&quot; \&quot;-D\&quot; \&quot;remoting\&quot; \&quot;-D\&quot; \&quot;enable_extensions\&quot; \&quot;-D\&quot; \&quot;enable_printing\&quot; \&quot;-D\&quot; \&quot;enable_themes\&quot; \&quot;-D\&quot; \&quot;enable_app_list\&quot; \&quot;-D\&quot; \&quot;enable_settings_app\&quot; \&quot;-D\&quot; \&quot;enable_google_now\&quot; \&quot;-D\&quot; \&quot;use_concatenated_impulse_responses\&quot; \&quot;-D\&quot; \&quot;enable_webrtc\&quot; \&quot;-D\&quot; \&quot;enable_mdns\&quot;&quot;</Command>
+      <Message>Packing generated templates into &quot;$(OutDir)/policy_templates.zip&quot;</Message>
+      <Outputs>$(OutDir)\policy_templates.zip</Outputs>
+      <AdditionalInputs>$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lv\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ru\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bn\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sk\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ml\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\tr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sw\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ar\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\mr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\de\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bg\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hu\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\id\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\kn\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lt\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ta\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\da\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ar\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fa\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-BR\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sv\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es-419\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lv\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sw\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ca\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ar\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fil\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ro\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ru\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\te\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es-419\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ko\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\cs\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\cs\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\th\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-US\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\linux\examples\chrome.json;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hu\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nb\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ko\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\id\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\gu\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\uk\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\uk\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\mr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\el\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\da\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fa\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lt\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-TW\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\examples\chrome.reg;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ms\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-TW\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\kn\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-CN\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-GB\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-PT\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-GB\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\it\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\da\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\chrome.admx;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ml\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\tr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\th\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\kn\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-CN\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\he\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\he\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\vi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\te\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fil\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ml\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\uk\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sv\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ru\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-PT\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lt\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\vi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\vi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\mr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\el\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\id\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-BR\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es-419\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ta\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\am\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\cs\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fil\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\de\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-US\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ms\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sk\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ta\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\am\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-TW\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\te\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fa\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bn\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ro\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\am\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\gu\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\et\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ko\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\de\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bg\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nb\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-BR\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ja\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ca\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\th\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ca\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\et\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-PT\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sk\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sw\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ja\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-GB\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bg\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\gu\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\he\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-CN\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\it\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bn\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\et\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-US\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sv\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\tr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ja\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ms\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ro\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\it\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hu\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lv\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nb\chrome.adml;tools\build\win\make_policy_zip.py;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\el\chrome.adml</AdditionalInputs>
+    </CustomBuild>
+    <CustomBuild Include="..\tools\gritsettings\resource_ids">
+      <FileType>Document</FileType>
+      <Command>call call python &quot;..\tools\grit\grit.py&quot; &quot;-i&quot; &quot;app\policy\policy_templates.grd&quot; &quot;build&quot; &quot;-f&quot; &quot;..\tools\gritsettings\resource_ids&quot; &quot;-o&quot; &quot;$(OutDir)obj\global_intermediate\chrome&quot; &quot;-D&quot; &quot;_chromium&quot; &quot;-E&quot; &quot;CHROMIUM_BUILD=chromium&quot; &quot;-D&quot; &quot;toolkit_views&quot; &quot;-D&quot; &quot;use_aura&quot; &quot;-D&quot; &quot;use_ash&quot; &quot;-D&quot; &quot;remoting&quot; &quot;-D&quot; &quot;enable_extensions&quot; &quot;-D&quot; &quot;enable_printing&quot; &quot;-D&quot; &quot;enable_themes&quot; &quot;-D&quot; &quot;enable_app_list&quot; &quot;-D&quot; &quot;enable_settings_app&quot; &quot;-D&quot; &quot;enable_google_now&quot; &quot;-D&quot; &quot;use_concatenated_impulse_responses&quot; &quot;-D&quot; &quot;enable_webrtc&quot; &quot;-D&quot; &quot;enable_mdns&quot;</Command>
+      <Message>Generating resources from app/policy/policy_templates.grd</Message>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lv\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ru\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bn\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sk\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ml\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\tr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sw\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ar\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\mr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\de\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bg\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hu\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\id\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\kn\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\lt\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ta\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\da\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ar\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fa\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-BR\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sv\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\es-419\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lv\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sw\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ca\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ar\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fil\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ro\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ru\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\te\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es-419\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ko\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\cs\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\cs\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\th\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-US\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\linux\examples\chrome.json;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hu\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nb\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ko\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\id\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\gu\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\uk\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pt-PT\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\uk\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\mr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\el\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\da\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fa\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\hi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\lt\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-TW\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\examples\chrome.reg;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\th\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-TW\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\kn\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\zh-CN\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-GB\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-PT\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\en-GB\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\it\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ms\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\chrome.admx;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ml\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\tr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\kn\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-CN\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\he\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\he\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\vi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\te\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fil\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ml\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\es\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\uk\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sv\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ru\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-PT\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lt\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\vi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\vi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\mr\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\el\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\fi\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\id\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pt-BR\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\es-419\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ta\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\am\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\pl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\cs\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\pl\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fil\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\de\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\en-US\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ms\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sk\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ta\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\am\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\zh-TW\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\te\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\fa\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bn\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ro\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\am\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\fi\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\gu\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\et\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ko\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\de\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\bg\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nb\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\pt-BR\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ja\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ca\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\th\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ca\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\et\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\da\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\sk\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sr\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\sw\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\ja\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-GB\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\nl\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\bg\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\gu\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\he\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\zh-CN\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\it\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\hi\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\bn\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\et\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\en-US\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\nl\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\sv\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\tr\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ja\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\ms\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\adm\ro\chrome.adm;$(OutDir)obj\global_intermediate\chrome\app\policy\common\html\it\chrome_policy_list.html;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\hu\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\lv\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\nb\chrome.adml;$(OutDir)obj\global_intermediate\chrome\app\policy\windows\admx\el\chrome.adml</Outputs>
+      <AdditionalInputs>app\policy\policy_templates_gu.xtb;..\tools\grit\grit\format\policy_templates\PRESUBMIT.py;..\tools\grit\grit\format\html_inline_unittest.py;..\tools\grit\grit\tool\resize.py;..\tools\grit\grit\gather\chrome_html_unittest.py;..\tools\grit\grit\lazy_re_unittest.py;..\tools\grit\grit\__init__.py;app\policy\policy_templates_es.xtb;..\tools\grit\grit\tool\postprocess_interface.py;app\policy\policy_templates_vi.xtb;..\tools\grit\grit\exception.py;app\policy\policy_templates_ms.xtb;..\tools\grit\grit\gather\txt.py;..\tools\grit\grit\format\js_map_format_unittest.py;..\tools\grit\grit\pseudo_rtl.py;app\policy\policy_templates_lv.xtb;..\tools\grit\grit\shortcuts.py;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer.py;app\policy\policy_templates_iw.xtb;..\tools\grit\grit\clique_unittest.py;..\tools\grit\grit\format\policy_templates\writers\xml_writer_base_unittest.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer_unittest.py;app\policy\policy_templates_ca.xtb;..\tools\grit\grit\format\resource_map_unittest.py;..\tools\grit\grit\format\chrome_messages_json_unittest.py;..\tools\grit\grit\gather\rc_unittest.py;app\policy\policy_templates_fr.xtb;..\tools\grit\grit\tool\test.py;app\policy\policy_templates_zh-CN.xtb;..\tools\grit\grit\format\policy_templates\writers\json_writer.py;..\tools\grit\grit_info.py;..\tools\grit\grit\clique.py;..\tools\grit\grit\tool\preprocess_interface.py;..\tools\grit\grit\pseudo.py;..\tools\grit\grit\gather\igoogle_strings_unittest.py;..\tools\grit\grit\format\android_xml.py;app\policy\policy_templates_es-419.xtb;..\tools\grit\grit\format\rc_header_unittest.py;..\tools\grit\grit\format\policy_templates\writers\admx_writer_unittest.py;..\tools\grit\grit\format\js_map_format.py;app\policy\policy_templates_uk.xtb;..\tools\grit\grit\format\policy_templates\writers\xml_formatted_writer.py;app\policy\policy_templates_sw.xtb;..\tools\grit\grit\format\policy_templates\writers\admx_writer.py;app\policy\policy_templates_ro.xtb;..\tools\grit\grit\extern\BogoFP.py;..\tools\grit\grit\format\data_pack.py;app\policy\policy_templates_zh-TW.xtb;..\tools\grit\grit\format\policy_templates\writers\adm_writer_unittest.py;app\policy\policy_templates_hr.xtb;..\tools\grit\grit\tclib_unittest.py;..\tools\grit\grit\format\policy_templates\writers\writer_unittest_common.py;app\policy\policy_templates_ml.xtb;..\tools\grit\grit\format\policy_templates\template_formatter.py;..\tools\grit\grit\gather\json_loader.py;..\tools\grit\grit\tool\menu_from_parts.py;..\tools\grit\grit\gather\muppet_strings.py;..\tools\grit\grit\format\policy_templates\policy_template_generator_unittest.py;..\tools\grit\grit\format\policy_templates\writers\adm_writer.py;..\tools\grit\grit.py;..\tools\grit\grit\gather\tr_html_unittest.py;..\tools\grit\grit\node\include.py;..\tools\grit\grit\node\message_unittest.py;..\tools\grit\grit\format\policy_templates\writers\plist_writer_unittest.py;..\tools\grit\grit\tool\rc2grd.py;..\tools\grit\grit\node\structure_unittest.py;app\policy\policy_templates_nl.xtb;app\policy\policy_templates_sv.xtb;..\tools\grit\grit\tool\buildinfo.py;..\tools\grit\grit\gather\skeleton_gatherer.py;..\tools\grit\grit\shortcuts_unittests.py;app\policy\policy_templates_sl.xtb;..\tools\grit\grit\format\data_pack_unittest.py;app\policy\policy_templates.grd;..\tools\grit\grit\tool\toolbar_postprocess.py;..\tools\grit\grit\format\policy_templates\writers\template_writer_unittest.py;..\tools\grit\grit\node\custom\filename_unittest.py;..\tools\grit\grit\format\policy_templates\writers\plist_helper.py;app\policy\policy_templates_ta.xtb;..\tools\grit\grit\node\misc.py;app\policy\policy_templates_no.xtb;..\tools\grit\grit\format\policy_templates\writers\plist_writer.py;..\tools\grit\grit\tool\transl2tc.py;..\tools\grit\grit\extern\__init__.py;app\policy\policy_templates_pt-PT.xtb;app\policy\policy_templates_it.xtb;app\policy\policy_templates.json;app\policy\policy_templates_th.xtb;..\tools\grit\grit\tool\android2grd.py;..\tools\grit\grit\format\policy_templates\writers\reg_writer.py;app\policy\policy_templates_id.xtb;..\tools\grit\grit\extern\FP.py;..\tools\grit\grit\node\message.py;app\policy\policy_templates_mr.xtb;..\tools\grit\grit\grit_runner.py;app\policy\policy_templates_hu.xtb;..\tools\grit\grit\tool\interface.py;..\tools\grit\grit\gather\txt_unittest.py;..\tools\grit\grit\format\policy_templates\writers\adml_writer_unittest.py;..\tools\grit\grit\format\android_xml_unittest.py;app\policy\policy_templates_fi.xtb;..\tools\grit\grit\node\custom\filename.py;app\policy\policy_templates_en-GB.xtb;app\policy\policy_templates_da.xtb;..\tools\grit\grit\format\policy_templates\writers\__init__.py;..\tools\grit\grit\tool\unit.py;app\policy\policy_templates_bg.xtb;..\tools\grit\grit\util.py;..\tools\grit\grit\format\policy_templates\writers\template_writer.py;..\tools\grit\grit\format\policy_templates\writers\mock_writer.py;..\tools\grit\grit\tool\count.py;..\tools\grit\grit\tool\android2grd_unittest.py;..\tools\grit\grit\lazy_re.py;..\tools\grit\grit\format\rc.py;..\tools\grit\grit\node\structure.py;..\tools\grit\grit\node\io_unittest.py;..\tools\grit\grit\format\rc_header.py;..\tools\grit\grit\tool\newgrd.py;..\tools\grit\grit\format\policy_templates\writers\doc_writer_unittest.py;..\tools\grit\grit\node\misc_unittest.py;..\tools\grit\grit\grd_reader.py;..\tools\grit\grit\format\policy_templates\writers\doc_writer.py;..\tools\grit\grit\test_suite_all.py;..\tools\grit\grit\xtb_reader.py;..\tools\grit\grit\format\policy_templates\writers\plist_strings_writer_unittest.py;..\tools\grit\grit\util_unittest.py;..\tools\grit\grit\format\policy_templates\policy_template_generator.py;..\tools\grit\grit\tool\xmb_unittest.py;..\tools\grit\grit\gather\regexp.py;..\tools\grit\grit\tool\toolbar_preprocess.py;..\tools\grit\PRESUBMIT.py;..\tools\grit\grit\grd_reader_unittest.py;app\policy\policy_templates_el.xtb;..\tools\grit\grit\gather\rc.py;app\policy\policy_templates_bn.xtb;..\tools\grit\grit\format\repack.py;..\tools\grit\grit\tool\__init__.py;..\tools\grit\grit\gather\tr_html.py;..\tools\grit\grit\extern\tclib.py;app\policy\policy_templates_ko.xtb;app\policy\policy_templates_de.xtb;..\tools\grit\grit\tool\xmb.py;..\tools\grit\grit\format\__init__.py;app\policy\policy_templates_ja.xtb;..\tools\grit\grit\grit_runner_unittest.py;..\tools\grit\grit\format\chrome_messages_json.py;..\tools\grit\grit\node\include_unittest.py;..\tools\grit\grit\tool\transl2tc_unittest.py;..\tools\grit\grit\gather\interface.py;app\policy\policy_templates_ru.xtb;..\tools\grit\grit\format\policy_templates\writers\adml_writer.py;..\tools\grit\grit\format\policy_templates\__init__.py;app\policy\policy_templates_tr.xtb;..\tools\grit\grit\gather\igoogle_strings.py;..\tools\grit\grit\xtb_reader_unittest.py;app\policy\policy_templates_am.xtb;..\tools\grit\grit\format\html_inline.py;..\tools\grit\grit\gather\policy_json_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image.py;app\policy\policy_templates_pl.xtb;..\tools\grit\grit\format\policy_templates\writers\json_writer_unittest.py;..\tools\grit\grit\tool\postprocess_unittest.py;..\tools\grit\grit\gather\chrome_scaled_image_unittest.py;..\tools\grit\grit\format\c_format_unittest.py;..\tools\grit\grit\scons.py;..\tools\grit\grit\gather\muppet_strings_unittest.py;..\tools\grit\grit\constants.py;..\tools\grit\grit\node\variant.py;..\tools\grit\grit\gather\admin_template.py;app\policy\policy_templates_pt-BR.xtb;app\policy\policy_templates_hi.xtb;..\tools\grit\grit\gather\admin_template_unittest.py;..\tools\grit\grit\gather\chrome_html.py;..\tools\grit\grit\node\mapping.py;..\tools\grit\grit\gather\__init__.py;app\policy\policy_templates_kn.xtb;app\policy\policy_templates_fil.xtb;..\tools\grit\grit\format\resource_map.py;..\tools\grit\grit\tool\diff_structures.py;..\tools\grit\grit\node\empty.py;..\tools\grit\grit\tclib.py;..\tools\grit\grit\node\__init__.py;..\tools\grit\grit\node\base_unittest.py;..\tools\grit\grit\gather\policy_json.py;..\tools\grit\grit\tool\rc2grd_unittest.py;..\tools\grit\grit\node\custom\__init__.py;app\policy\policy_templates_et.xtb;app\policy\policy_templates_sk.xtb;app\policy\policy_templates_ar.xtb;..\tools\grit\grit\tool\buildinfo_unittest.py;..\tools\grit\grit\format\c_format.py;app\policy\policy_templates_cs.xtb;app\policy\policy_templates_lt.xtb;..\tools\grit\grit\tool\preprocess_unittest.py;app\policy\policy_templates_sr.xtb;..\tools\grit\grit\format\rc_unittest.py;..\tools\grit\grit\tool\build_unittest.py;..\tools\grit\grit\node\base.py;..\tools\grit\grit\node\io.py;..\tools\grit\grit\pseudo_unittest.py;..\tools\grit\grit\tool\build.py;app\policy\policy_templates_te.xtb;..\tools\grit\grit\format\policy_templates\writer_configuration.py</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>
