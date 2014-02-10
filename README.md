@@ -13,10 +13,7 @@ Follow the instruction up to and including the “Actual Checkout” step, igore the
 It will take a while, make sure your computer does not sleep. Sleep interrupts the checkout and cannot be resumed.
 - Switch to branch_1700, i.e. current Chromium Beta, by “sh -x go_branch_1700.sh” in the src directory
 - Delete all the .git directories by running, under the src directory, “find . -name .git | xargs rm -r”.
-- Check out files from the AMD repository to add to or overwrite those from the Google repository. Execute the following commands in src’s parent directory:
-	-- $ git init
-	-- $ git remote add origin https://github.com/amd/Chromium-WebCL.git
-	-- $ git fetch
-	-- $ git reset --hard origin/master
+- Check out files from the AMD repository to add to or overwrite those from the Google repository. Execute the following commands in **src**’s **parent** directory:
+	git init; git remote add origin https://github.com/amd/Chromium-WebCL.git; git fetch; git reset --hard origin/master*
 - Go to src/chrome/build directory, load chrome.sln, and build
 
