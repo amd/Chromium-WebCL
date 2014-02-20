@@ -52,10 +52,7 @@ https://code.google.com/p/chromium/issues/detail?id=230691]
  
 For more information consult http://dev.chromium.org/developers/how-tos/get-the-code
 
-18) Run setup.bat. You must run this script from the directory where setup.bat is. DO NOT RUN IT FROM OTHER DIRECTORIES. What this script does is the following: (a) switch to branch_1700, i.e. current Chromium Beta (b) Delete all the .git directories that came with your chromium clone
-
-19) Check out files from the AMD repository to add to or overwrite those from the Google repository. Execute the following commands in **src**’s **parent** directory:
-	git init; git remote add origin https://github.com/amd/Chromium-WebCL.git; git fetch; git reset --hard origin/master*
+18) Get and run setup.bat. Get setup.bat from https://github.com/amd/Chromium-WebCL/raw/master/setup.bat, and save it in the *src* directory. Then, cd into *src* and run setup.bat. NOTE: setup.bat MUST BE EXECUTED IN THE *src* DIRECTORY! What this script does is the following: (a) switch to branch_1700, i.e. current Chromium Beta (b) Delete all the .git .gitmodules directories that came with your chromium clone (c) point at and sync with AMD repository (WebCL related changes to Chromium)
 
 20) In Visual Studio, load chrome.sln from src/chrome, and build
 
