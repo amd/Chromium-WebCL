@@ -54,7 +54,10 @@ For more information consult http://dev.chromium.org/developers/how-tos/get-the-
 
 18) Get and run setup.bat. Get setup.bat from https://github.com/amd/Chromium-WebCL/raw/master/setup.bat, and save it in the *src* directory. Then, cd into *src* and run setup.bat. NOTE: setup.bat MUST BE EXECUTED IN THE *src* DIRECTORY! What this script does is the following: (a) switch to branch_1700, i.e. current Chromium Beta (b) Delete all the .git .gitmodules directories that came with your chromium clone (c) point at and sync with AMD repository (WebCL related changes to Chromium)
 
-20) In Visual Studio, load chrome.sln from src/chrome, and build
+19) In the *src* directory, run the following command: 
+gclient runhook -f
+
+20) In Visual Studio, load chrome.sln from src/chrome, set "chrome" project as Startup Project, and build
 
 21) Go to src/build/Debug or src/build/Release, depending on your build, and execute chrome.exe
 
