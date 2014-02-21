@@ -61,3 +61,5 @@ gclient runhook -f
 
 21) Go to src/build/Debug or src/build/Release, depending on your build, and execute chrome.exe
 
+22) Run Superconductor demos. Point your web server at the *superconductor* directory, which is at the same level of *src*; use a port number of your choice, say 8888. Then, in the browser, load http://localhost:8888/examples/linegraph-3d or http://localhost:8888/examples/treemap to load the main Superconductor demos. To get a sense of how the demos should look, watch the screen-capture video at http://youtu.be/dGD9NpipcrE
+
