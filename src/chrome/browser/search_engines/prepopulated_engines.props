@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(genstaticinitBeforeTargets)' == '' and '$(genstaticinitAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <genstaticinitBeforeTargets>Midl</genstaticinitBeforeTargets>
+    <genstaticinitAfterTargets>CustomBuild</genstaticinitAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <genstaticinitDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(genstaticinitDependsOn)</genstaticinitDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <genstaticinit>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../../../tools/json_to_struct/json_to_struct.py\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;--destbase=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate\&quot; \&quot;--destdir=chrome/browser/search_engines\&quot; \&quot;--namespace=TemplateURLPrepopulateData\&quot; \&quot;--schema=prepopulated_engines_schema.json\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\chrome\browser\search_engines\%(Filename).cc;$(OutDir)obj\global_intermediate\chrome\browser\search_engines\%(Filename).h</Outputs>
+      <ExecutionDescription>Generating C++ static initializers from %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>..\..\..\tools\json_to_struct\element_generator.py;..\..\..\tools\json_to_struct\json_to_struct.py;..\..\..\tools\json_to_struct\struct_generator.py;prepopulated_engines_schema.json</AdditionalDependencies>
+    </genstaticinit>
+  </ItemDefinitionGroup>
+</Project>

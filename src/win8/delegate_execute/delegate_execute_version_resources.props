@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(versionBeforeTargets)' == '' and '$(versionAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <versionBeforeTargets>Midl</versionBeforeTargets>
+    <versionAfterTargets>CustomBuild</versionAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <versionDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(versionDependsOn)</versionDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <version>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../../chrome/tools/build/version.py\&quot; \&quot;-f\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;-f\&quot; \&quot;../../chrome/VERSION\&quot; \&quot;-f\&quot; \&quot;../../chrome/app/theme/chromium/BRANDING\&quot; \&quot;-f\&quot; \&quot;../../build/util/LASTCHANGE\&quot; \&quot;../../chrome/app/chrome_version.rc.version\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/delegate_execute/%(Filename)_version.rc\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\delegate_execute\%(Filename)_version.rc</Outputs>
+      <ExecutionDescription>Generating version information in &quot;$(OutDir)obj/global_intermediate/delegate_execute/%(Filename)_version.rc&quot;</ExecutionDescription>
+      <AdditionalDependencies>..\..\chrome\tools\build\version.py;..\..\chrome\VERSION;..\..\chrome\app\theme\chromium\BRANDING;..\..\build\util\LASTCHANGE;..\..\chrome\app\chrome_version.rc.version</AdditionalDependencies>
+    </version>
+  </ItemDefinitionGroup>
+</Project>

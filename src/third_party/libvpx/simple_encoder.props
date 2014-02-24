@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(generate_exampleBeforeTargets)' == '' and '$(generate_exampleAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <generate_exampleBeforeTargets>Midl</generate_exampleBeforeTargets>
+    <generate_exampleAfterTargets>CustomBuild</generate_exampleAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <generate_exampleDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(generate_exampleDependsOn)</generate_exampleDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <generate_example>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;bash\&quot; \&quot;-c\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libvpx/simple_encoder/gen_example_code.sh `cygpath -m \\\&quot;${INPUTPATH}\\\&quot;` &gt; `cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libvpx/%(Filename).c\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\third_party\libvpx\%(Filename).c</Outputs>
+      <ExecutionDescription>Generate libvpx example code %(FullPath).</ExecutionDescription>
+      <AdditionalDependencies>$(OutDir)obj\global_intermediate\third_party\libvpx\simple_encoder\gen_example_code.sh</AdditionalDependencies>
+    </generate_example>
+  </ItemDefinitionGroup>
+</Project>

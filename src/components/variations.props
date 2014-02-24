@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(genprotoBeforeTargets)' == '' and '$(genprotoAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <genprotoBeforeTargets>Midl</genprotoBeforeTargets>
+    <genprotoAfterTargets>CustomBuild</genprotoAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <genprotoDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(genprotoDependsOn)</genprotoDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <genproto>
+      <CommandLineTemplate>call python &quot;..\tools\protoc_wrapper\protoc_wrapper.py&quot; &quot;--include&quot; &quot;&quot; &quot;--protobuf&quot; &quot;$(OutDir)obj\global_intermediate\protoc_out\components\variations\proto\%(Filename).pb.h&quot; &quot;--proto-in-dir&quot; &quot;variations\proto&quot; &quot;--proto-in-file&quot; &quot;%(Filename)%(Extension)&quot; &quot;--use-system-protobuf=0&quot; &quot;--&quot; &quot;$(OutDir)protoc.exe&quot; &quot;--cpp_out&quot; &quot;$(OutDir)obj\global_intermediate\protoc_out\components\variations\proto&quot; &quot;--python_out&quot; &quot;$(OutDir)pyproto\components\variations\proto&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)pyproto\components\variations\proto\%(Filename)_pb2.py;$(OutDir)obj\global_intermediate\protoc_out\components\variations\proto\%(Filename).pb.cc;$(OutDir)obj\global_intermediate\protoc_out\components\variations\proto\%(Filename).pb.h</Outputs>
+      <ExecutionDescription>Generating C++ and Python code from %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>..\tools\protoc_wrapper\protoc_wrapper.py;$(OutDir)protoc.exe</AdditionalDependencies>
+    </genproto>
+  </ItemDefinitionGroup>
+</Project>

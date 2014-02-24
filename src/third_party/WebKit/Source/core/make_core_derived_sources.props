@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(bisonBeforeTargets)' == '' and '$(bisonAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <bisonBeforeTargets>Midl</bisonBeforeTargets>
+    <bisonAfterTargets>CustomBuild</bisonAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <bisonDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(bisonDependsOn)</bisonDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <bison>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../build/scripts/rule_bison.py\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/blink\&quot; \&quot;../../../../third_party/bison/bin/bison.exe\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\blink\%(Filename).cpp;$(OutDir)obj\global_intermediate\blink\%(Filename).h</Outputs>
+      <ExecutionDescription>bison</ExecutionDescription>
+      <AdditionalDependencies></AdditionalDependencies>
+    </bison>
+  </ItemDefinitionGroup>
+</Project>

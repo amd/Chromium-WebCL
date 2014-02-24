@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(obj_int_extractBeforeTargets)' == '' and '$(obj_int_extractAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <obj_int_extractBeforeTargets>Midl</obj_int_extractBeforeTargets>
+    <obj_int_extractAfterTargets>CustomBuild</obj_int_extractAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <obj_int_extractDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(obj_int_extractDependsOn)</obj_int_extractDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <obj_int_extract>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;../../third_party/libvpx/obj_int_extract.sh\&quot; \&quot;-e\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/libvpx_obj_int_extract\&quot; \&quot;-f\&quot; \&quot;rvds\&quot; \&quot;-b\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;-o\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libvpx/%(Filename).asm\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\third_party\libvpx\%(Filename).asm</Outputs>
+      <ExecutionDescription>Generate assembly offsets %(FullPath).</ExecutionDescription>
+      <AdditionalDependencies>$(OutDir)libvpx_obj_int_extract;obj_int_extract.sh</AdditionalDependencies>
+    </obj_int_extract>
+  </ItemDefinitionGroup>
+</Project>

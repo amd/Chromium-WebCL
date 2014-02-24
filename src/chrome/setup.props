@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(setup_versionBeforeTargets)' == '' and '$(setup_versionAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <setup_versionBeforeTargets>Midl</setup_versionBeforeTargets>
+    <setup_versionAfterTargets>CustomBuild</setup_versionAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <setup_versionDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(setup_versionDependsOn)</setup_versionDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <setup_version>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../chrome/tools/build/version.py\&quot; \&quot;-f\&quot; \&quot;VERSION\&quot; \&quot;-f\&quot; \&quot;../build/util/LASTCHANGE\&quot; \&quot;-f\&quot; \&quot;app/theme/chromium/BRANDING\&quot; \&quot;installer/setup/setup_exe_version.rc.version\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/setup/setup_exe_version.rc\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\setup\setup_exe_version.rc</Outputs>
+      <ExecutionDescription>Generating version information</ExecutionDescription>
+      <AdditionalDependencies>installer\setup\setup_exe_version.rc.version;VERSION;..\build\util\LASTCHANGE;app\theme\chromium\BRANDING</AdditionalDependencies>
+    </setup_version>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(server_dllsBeforeTargets)' == '' and '$(server_dllsAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <server_dllsBeforeTargets>Midl</server_dllsBeforeTargets>
+    <server_dllsAfterTargets>CustomBuild</server_dllsAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <server_dllsDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(server_dllsDependsOn)</server_dllsDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <server_dlls>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set INTDIR=$(IntDir)&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;tools/build/win/scan_server_dlls.py\&quot; \&quot;--output_dir=`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`\&quot; \&quot;--input_file=`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;--header_output_dir=`cygpath -m \\\&quot;${INTDIR}\\\&quot;`\&quot; \&quot;--distribution=_google_chrome\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(IntDir)registered_dlls.h</Outputs>
+      <ExecutionDescription>server_dlls</ExecutionDescription>
+      <AdditionalDependencies>tools\build\win\scan_server_dlls.py;installer\mini_installer\chrome.release</AdditionalDependencies>
+    </server_dlls>
+  </ItemDefinitionGroup>
+</Project>

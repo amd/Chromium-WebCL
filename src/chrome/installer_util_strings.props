@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(installer_util_stringsBeforeTargets)' == '' and '$(installer_util_stringsAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <installer_util_stringsBeforeTargets>Midl</installer_util_stringsBeforeTargets>
+    <installer_util_stringsAfterTargets>CustomBuild</installer_util_stringsAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <installer_util_stringsDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(installer_util_stringsDependsOn)</installer_util_stringsDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <installer_util_strings>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;installer/util/prebuild/create_string_rc.py\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/installer_util_strings\&quot; \&quot;Chromium\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\installer_util_strings\installer_util_strings.h;$(OutDir)obj\global_intermediate\installer_util_strings\installer_util_strings.rc</Outputs>
+      <ExecutionDescription>Generating resources from %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>installer\util\prebuild\create_string_rc.py;%(FullPath)</AdditionalDependencies>
+    </installer_util_strings>
+  </ItemDefinitionGroup>
+</Project>

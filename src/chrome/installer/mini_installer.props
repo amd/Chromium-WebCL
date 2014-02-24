@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(mini_installer_versionBeforeTargets)' == '' and '$(mini_installer_versionAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <mini_installer_versionBeforeTargets>Midl</mini_installer_versionBeforeTargets>
+    <mini_installer_versionAfterTargets>CustomBuild</mini_installer_versionAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <mini_installer_versionDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(mini_installer_versionDependsOn)</mini_installer_versionDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <mini_installer_version>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../../chrome/tools/build/version.py\&quot; \&quot;-f\&quot; \&quot;../../chrome/VERSION\&quot; \&quot;-f\&quot; \&quot;../../build/util/LASTCHANGE\&quot; \&quot;-f\&quot; \&quot;../app/theme/chromium/BRANDING\&quot; \&quot;mini_installer/mini_installer_exe_version.rc.version\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/mini_installer_exe_version.rc\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)mini_installer_exe_version.rc</Outputs>
+      <ExecutionDescription>Generating version information</ExecutionDescription>
+      <AdditionalDependencies>mini_installer\mini_installer_exe_version.rc.version;..\..\chrome\VERSION;..\..\build\util\LASTCHANGE;..\app\theme\chromium\BRANDING</AdditionalDependencies>
+    </mini_installer_version>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(installer_archiveBeforeTargets)' == '' and '$(installer_archiveAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <installer_archiveBeforeTargets>Midl</installer_archiveBeforeTargets>
+    <installer_archiveAfterTargets>CustomBuild</installer_archiveAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <installer_archiveDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(installer_archiveDependsOn)</installer_archiveDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <installer_archive>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set INTDIR=$(IntDir)&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../tools/build/win/create_installer_archive.py\&quot; \&quot;--build_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`\&quot; \&quot;--staging_dir\&quot; \&quot;`cygpath -m \\\&quot;${INTDIR}\\\&quot;`\&quot; \&quot;--input_file\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;--resource_file_path\&quot; \&quot;`cygpath -m \\\&quot;${INTDIR}\\\&quot;`/packed_files.rc\&quot; \&quot;\&quot; \&quot;--enable_touch_ui=1\&quot; \&quot;--component_build=1\&quot; \&quot;--target_arch=x86\&quot; \&quot;--distribution=_google_chrome\&quot;&quot;</CommandLineTemplate>
+      <Outputs>xxx2.out;$(OutDir)%(Filename)%(Extension).7z;$(OutDir)setup.ex_;$(IntDir)packed_files.rc</Outputs>
+      <ExecutionDescription>Create installer archive</ExecutionDescription>
+      <AdditionalDependencies>..\tools\build\win\create_installer_archive.py;$(OutDir)chrome.exe;$(OutDir)chrome.dll;$(OutDir)nacl64.exe;$(OutDir)ppGoogleNaClPluginChrome.dll;$(OutDir)nacl_irt_x86_32.nexe;$(OutDir)nacl_irt_x86_64.nexe;$(OutDir)locales\en-US.pak;$(OutDir)icudt.dll</AdditionalDependencies>
+    </installer_archive>
+  </ItemDefinitionGroup>
+</Project>

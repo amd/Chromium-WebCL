@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(create_import_libBeforeTargets)' == '' and '$(create_import_libAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <create_import_libBeforeTargets>Midl</create_import_libBeforeTargets>
+    <create_import_libAfterTargets>CustomBuild</create_import_libAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <create_import_libDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(create_import_libDependsOn)</create_import_libDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <create_import_lib>
+      <CommandLineTemplate>call python &quot;..\build\win\importlibs\create_importlib_win.py&quot; &quot;--output-file&quot; &quot;$(OutDir)lib\%(Filename).lib&quot; &quot;%(FullPath)&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)lib\%(Filename).lib</Outputs>
+      <ExecutionDescription>Generating import library from %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>..\build\win\importlibs\create_importlib_win.py</AdditionalDependencies>
+    </create_import_lib>
+  </ItemDefinitionGroup>
+</Project>

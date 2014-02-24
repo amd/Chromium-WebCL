@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(versionBeforeTargets)' == '' and '$(versionAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <versionBeforeTargets>Midl</versionBeforeTargets>
+    <versionAfterTargets>CustomBuild</versionAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <versionDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(versionDependsOn)</versionDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <version>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;tools/build/remoting_localize.py\&quot; \&quot;--variables\&quot; \&quot;../chrome/VERSION\&quot; \&quot;--variables\&quot; \&quot;../remoting/VERSION\&quot; \&quot;--variables\&quot; \&quot;../build/util/LASTCHANGE\&quot; \&quot;--locale_dir\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/remoting/webapp/_locales\&quot; \&quot;--template\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot; \&quot;--output\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/remoting/version.rc\&quot; \&quot;ar\&quot; \&quot;bg\&quot; \&quot;ca\&quot; \&quot;cs\&quot; \&quot;da\&quot; \&quot;de\&quot; \&quot;el\&quot; \&quot;en\&quot; \&quot;en-GB\&quot; \&quot;es\&quot; \&quot;es-419\&quot; \&quot;et\&quot; \&quot;fi\&quot; \&quot;fil\&quot; \&quot;fr\&quot; \&quot;he\&quot; \&quot;hi\&quot; \&quot;hr\&quot; \&quot;hu\&quot; \&quot;id\&quot; \&quot;it\&quot; \&quot;ja\&quot; \&quot;ko\&quot; \&quot;lt\&quot; \&quot;lv\&quot; \&quot;nb\&quot; \&quot;nl\&quot; \&quot;pl\&quot; \&quot;pt-BR\&quot; \&quot;pt-PT\&quot; \&quot;ro\&quot; \&quot;ru\&quot; \&quot;sk\&quot; \&quot;sl\&quot; \&quot;sr\&quot; \&quot;sv\&quot; \&quot;th\&quot; \&quot;tr\&quot; \&quot;uk\&quot; \&quot;vi\&quot; \&quot;zh-CN\&quot; \&quot;zh-TW\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\remoting\version.rc</Outputs>
+      <ExecutionDescription>Localizing the version information</ExecutionDescription>
+      <AdditionalDependencies>..\chrome\VERSION;..\build\util\LASTCHANGE;..\remoting\VERSION</AdditionalDependencies>
+    </version>
+  </ItemDefinitionGroup>
+</Project>

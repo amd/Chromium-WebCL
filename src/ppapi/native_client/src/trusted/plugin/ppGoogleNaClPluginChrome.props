@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(assembler__gnu_compatible_BeforeTargets)' == '' and '$(assembler__gnu_compatible_AfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <assembler__gnu_compatible_BeforeTargets>Midl</assembler__gnu_compatible_BeforeTargets>
+    <assembler__gnu_compatible_AfterTargets>CustomBuild</assembler__gnu_compatible_AfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <assembler__gnu_compatible_DependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(assembler__gnu_compatible_DependsOn)</assembler__gnu_compatible_DependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <assembler__gnu_compatible_>
+      <CommandLineTemplate>call call ..\..\..\..\..\native_client\tools\win_py.cmd ..\..\..\..\..\native_client\tools\win_as.py -a $(Platform) -o $(IntDir)%(Filename).obj -p ..\..\..\..\.. %(FullPath)</CommandLineTemplate>
+      <Outputs>$(IntDir)%(Filename).obj</Outputs>
+      <ExecutionDescription>Building assembly language file %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>..\..\..\..\..\native_client\tools\win_as.py;%(FullPath)</AdditionalDependencies>
+    </assembler__gnu_compatible_>
+  </ItemDefinitionGroup>
+</Project>

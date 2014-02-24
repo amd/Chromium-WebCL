@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(generate_libsBeforeTargets)' == '' and '$(generate_libsAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <generate_libsBeforeTargets>Midl</generate_libsBeforeTargets>
+    <generate_libsAfterTargets>CustomBuild</generate_libsAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <generate_libsDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(generate_libsDependsOn)</generate_libsDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <generate_libs>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set INTDIR=$(IntDir)&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;python\&quot; \&quot;../../tools/generate_stubs/generate_stubs.py\&quot; \&quot;-i\&quot; \&quot;`cygpath -m \\\&quot;${INTDIR}\\\&quot;`\&quot; \&quot;-o\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/lib\&quot; \&quot;-t\&quot; \&quot;windows_lib\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)lib\%(Filename).lib</Outputs>
+      <ExecutionDescription>Generating FFmpeg import libraries.</ExecutionDescription>
+      <AdditionalDependencies>..\..\tools\generate_stubs\generate_stubs.py;chromium\ffmpegsumo.sigs</AdditionalDependencies>
+    </generate_libs>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(assembleBeforeTargets)' == '' and '$(assembleAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <assembleBeforeTargets>Midl</assembleBeforeTargets>
+    <assembleAfterTargets>CustomBuild</assembleAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <assembleDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(assembleDependsOn)</assembleDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <assemble>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`/yasm.exe\&quot; \&quot;-D\&quot; \&quot;CHROMIUM\&quot; \&quot;-I\&quot; \&quot;source/config/win/ia32\&quot; \&quot;-I\&quot; \&quot;source/config\&quot; \&quot;-I\&quot; \&quot;source/libvpx\&quot; \&quot;-I\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libvpx\&quot; \&quot;-DPREFIX\&quot; \&quot;-fwin32\&quot; \&quot;-m\&quot; \&quot;x86\&quot; \&quot;-o\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libvpx/%(Filename).obj\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\third_party\libvpx\%(Filename).obj</Outputs>
+      <ExecutionDescription>Compile assembly %(FullPath)</ExecutionDescription>
+      <AdditionalDependencies>$(OutDir)yasm.exe</AdditionalDependencies>
+    </assemble>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(AssembleBeforeTargets)' == '' and '$(AssembleAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <AssembleBeforeTargets>Midl</AssembleBeforeTargets>
+    <AssembleAfterTargets>CustomBuild</AssembleAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssembleDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(AssembleDependsOn)</AssembleDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Assemble>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set INTDIR=$(IntDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;ml\&quot; \&quot;/safeseh\&quot; \&quot;/Fo\&quot; \&quot;`cygpath -m \\\&quot;${INTDIR}\\\&quot;`\%(Filename).obj\&quot; \&quot;/c\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(IntDir)%(Filename).obj</Outputs>
+      <ExecutionDescription>Assembling %(FullPath) to $(IntDir)%(Filename).obj</ExecutionDescription>
+      <AdditionalDependencies></AdditionalDependencies>
+    </Assemble>
+  </ItemDefinitionGroup>
+</Project>

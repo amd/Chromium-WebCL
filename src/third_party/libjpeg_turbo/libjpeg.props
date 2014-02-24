@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(assembleBeforeTargets)' == '' and '$(assembleAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <assembleBeforeTargets>Midl</assembleBeforeTargets>
+    <assembleAfterTargets>CustomBuild</assembleAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <assembleDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(assembleDependsOn)</assembleDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <assemble>
+      <CommandLineTemplate>call &quot;$(ProjectDir)..\..\third_party\cygwin\setup_env.bat&quot; &amp;&amp; set CYGWIN=nontsec&amp;&amp; set OUTDIR=$(OutDir)&amp;&amp; set INPUTPATH=%(FullPath) &amp;&amp; bash -c &quot;\&quot;../yasm/binaries/win/yasm.exe\&quot; \&quot;-fwin32\&quot; \&quot;-D__x86__\&quot; \&quot;-DWIN32\&quot; \&quot;-DMSVC\&quot; \&quot;-Iwin/\&quot; \&quot;-DRGBX_FILLER_0XFF\&quot; \&quot;-DSTRICT_MEMORY_ACCESS\&quot; \&quot;-Isimd/\&quot; \&quot;-o\&quot; \&quot;`cygpath -m \\\&quot;${OUTDIR}\\\&quot;`obj/global_intermediate/third_party/libjpeg_turbo/%(Filename).obj\&quot; \&quot;`cygpath -m \\\&quot;${INPUTPATH}\\\&quot;`\&quot;&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\third_party\libjpeg_turbo\%(Filename).obj</Outputs>
+      <ExecutionDescription>Building %(Filename).obj</ExecutionDescription>
+      <AdditionalDependencies>..\yasm\binaries\win\yasm.exe</AdditionalDependencies>
+    </assemble>
+  </ItemDefinitionGroup>
+</Project>

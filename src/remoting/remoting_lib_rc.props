@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(generate_rcBeforeTargets)' == '' and '$(generate_rcAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <generate_rcBeforeTargets>Midl</generate_rcBeforeTargets>
+    <generate_rcAfterTargets>CustomBuild</generate_rcAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <generate_rcDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(generate_rcDependsOn)</generate_rcDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <generate_rc>
+      <CommandLineTemplate>call echo 1 typelib &quot;remoting\host\chromoting_lib.tlb&quot; &gt; &quot;$(OutDir)obj\global_intermediate\remoting\host\chromoting_lib.rc&quot;</CommandLineTemplate>
+      <Outputs>$(OutDir)obj\global_intermediate\remoting\host\chromoting_lib.rc</Outputs>
+      <ExecutionDescription>Generating &quot;$(OutDir)obj/global_intermediate/remoting/host/chromoting_lib.rc&quot;</ExecutionDescription>
+      <AdditionalDependencies></AdditionalDependencies>
+    </generate_rc>
+  </ItemDefinitionGroup>
+</Project>
