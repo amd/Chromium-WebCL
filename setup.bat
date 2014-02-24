@@ -29,6 +29,7 @@ git config branch.branch_%BRANCH%.merge refs/heads/%BRANCH%
 git config branch.branch_%BRANCH%.remote branch-heads
 REM   Checkout all the submodules at their branch DEPS revisions.
 gclient sync --jobs 16
+gclient runhooks --force
 
 REM Setup (2)
 
