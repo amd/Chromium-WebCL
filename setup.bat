@@ -37,6 +37,7 @@ RMDIR /S /Q .\.git\*.* .\breakpad\src\.git\*.* .\chrome\test\data\extensions\api
 
 # Step (3) init AMD repository and pull
 git init
+git remote rm origin 2> nul
 git remote add origin https://github.com/amd/Chromium-WebCL.git
 git fetch
 git reset --hard origin/master
