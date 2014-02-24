@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="generate_rc">
+      <Targets>_generate_rc</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="generate_rc">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(generate_rcAfterTargets)" BeforeTargets="$(generate_rcBeforeTargets)" Condition="'@(generate_rc)' != ''" DependsOnTargets="$(generate_rcDependsOn);Computegenerate_rcOutput" Inputs="%(generate_rc.Identity);%(generate_rc.AdditionalDependencies);$(MSBuildProjectFile)" Name="_generate_rc" Outputs="%(generate_rc.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <generate_rc Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(generate_rc)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_rc_inputs Include="%(generate_rc.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_rc_tlog Condition="'%(generate_rc.Outputs)' != '' and '%(generate_rc.ExcludedFromBuild)' != 'true'" Include="%(generate_rc.Outputs)">
+        <Source>@(generate_rc, &apos;|&apos;)</Source>
+        <Inputs>@(generate_rc_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </generate_rc_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(generate_rc.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(generate_rc_tlog)' != '' and '%(generate_rc_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(generate_rc_tlog.Source);@(generate_rc_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(generate_rc_tlog)' != '' and '%(generate_rc_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(generate_rc_tlog.Source);%(generate_rc_tlog.Inputs)"/>
+    <generate_rc AdditionalOptions="%(generate_rc.AdditionalOptions)" CommandLineTemplate="%(generate_rc.CommandLineTemplate)" Condition="'@(generate_rc)' != '' and '%(generate_rc.ExcludedFromBuild)' != 'true'" Inputs="%(generate_rc.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computegenerate_rcOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computegenerate_rcOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(generate_rc)' != ''" Name="Computegenerate_rcOutput">
+    <ItemGroup>
+      <generate_rcDirsToMake Condition="'@(generate_rc)' != '' and '%(generate_rc.ExcludedFromBuild)' != 'true'" Include="%(generate_rc.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_rcDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_rcDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_rcDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(generate_rcDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="version">
+      <Targets>_version</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="version">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(versionAfterTargets)" BeforeTargets="$(versionBeforeTargets)" Condition="'@(version)' != ''" DependsOnTargets="$(versionDependsOn);ComputeversionOutput" Inputs="%(version.Identity);%(version.AdditionalDependencies);$(MSBuildProjectFile)" Name="_version" Outputs="%(version.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <version Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(version)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <version_inputs Include="%(version.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <version_tlog Condition="'%(version.Outputs)' != '' and '%(version.ExcludedFromBuild)' != 'true'" Include="%(version.Outputs)">
+        <Source>@(version, &apos;|&apos;)</Source>
+        <Inputs>@(version_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </version_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(version.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(version_tlog)' != '' and '%(version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(version_tlog.Source);@(version_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(version_tlog)' != '' and '%(version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(version_tlog.Source);%(version_tlog.Inputs)"/>
+    <version AdditionalOptions="%(version.AdditionalOptions)" CommandLineTemplate="%(version.CommandLineTemplate)" Condition="'@(version)' != '' and '%(version.ExcludedFromBuild)' != 'true'" Inputs="%(version.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);ComputeversionOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);ComputeversionOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(version)' != ''" Name="ComputeversionOutput">
+    <ItemGroup>
+      <versionDirsToMake Condition="'@(version)' != '' and '%(version.ExcludedFromBuild)' != 'true'" Include="%(version.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(versionDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(versionDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(versionDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(versionDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="message_compiler">
+      <Targets>_message_compiler</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="message_compiler">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(message_compilerAfterTargets)" BeforeTargets="$(message_compilerBeforeTargets)" Condition="'@(message_compiler)' != ''" DependsOnTargets="$(message_compilerDependsOn);Computemessage_compilerOutput" Inputs="%(message_compiler.Identity);%(message_compiler.AdditionalDependencies);$(MSBuildProjectFile)" Name="_message_compiler" Outputs="%(message_compiler.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <message_compiler Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(message_compiler)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <message_compiler_inputs Include="%(message_compiler.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <message_compiler_tlog Condition="'%(message_compiler.Outputs)' != '' and '%(message_compiler.ExcludedFromBuild)' != 'true'" Include="%(message_compiler.Outputs)">
+        <Source>@(message_compiler, &apos;|&apos;)</Source>
+        <Inputs>@(message_compiler_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </message_compiler_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(message_compiler.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(message_compiler_tlog)' != '' and '%(message_compiler_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(message_compiler_tlog.Source);@(message_compiler_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(message_compiler_tlog)' != '' and '%(message_compiler_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(message_compiler_tlog.Source);%(message_compiler_tlog.Inputs)"/>
+    <message_compiler AdditionalOptions="%(message_compiler.AdditionalOptions)" CommandLineTemplate="%(message_compiler.CommandLineTemplate)" Condition="'@(message_compiler)' != '' and '%(message_compiler.ExcludedFromBuild)' != 'true'" Inputs="%(message_compiler.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computemessage_compilerOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computemessage_compilerOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(message_compiler)' != ''" Name="Computemessage_compilerOutput">
+    <ItemGroup>
+      <message_compilerDirsToMake Condition="'@(message_compiler)' != '' and '%(message_compiler.ExcludedFromBuild)' != 'true'" Include="%(message_compiler.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(message_compilerDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(message_compilerDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(message_compilerDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(message_compilerDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

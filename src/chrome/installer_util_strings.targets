@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="installer_util_strings">
+      <Targets>_installer_util_strings</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="installer_util_strings">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(installer_util_stringsAfterTargets)" BeforeTargets="$(installer_util_stringsBeforeTargets)" Condition="'@(installer_util_strings)' != ''" DependsOnTargets="$(installer_util_stringsDependsOn);Computeinstaller_util_stringsOutput" Inputs="%(installer_util_strings.Identity);%(installer_util_strings.AdditionalDependencies);$(MSBuildProjectFile)" Name="_installer_util_strings" Outputs="%(installer_util_strings.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <installer_util_strings Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(installer_util_strings)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <installer_util_strings_inputs Include="%(installer_util_strings.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <installer_util_strings_tlog Condition="'%(installer_util_strings.Outputs)' != '' and '%(installer_util_strings.ExcludedFromBuild)' != 'true'" Include="%(installer_util_strings.Outputs)">
+        <Source>@(installer_util_strings, &apos;|&apos;)</Source>
+        <Inputs>@(installer_util_strings_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </installer_util_strings_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(installer_util_strings.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(installer_util_strings_tlog)' != '' and '%(installer_util_strings_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(installer_util_strings_tlog.Source);@(installer_util_strings_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(installer_util_strings_tlog)' != '' and '%(installer_util_strings_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(installer_util_strings_tlog.Source);%(installer_util_strings_tlog.Inputs)"/>
+    <installer_util_strings AdditionalOptions="%(installer_util_strings.AdditionalOptions)" CommandLineTemplate="%(installer_util_strings.CommandLineTemplate)" Condition="'@(installer_util_strings)' != '' and '%(installer_util_strings.ExcludedFromBuild)' != 'true'" Inputs="%(installer_util_strings.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeinstaller_util_stringsOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeinstaller_util_stringsOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(installer_util_strings)' != ''" Name="Computeinstaller_util_stringsOutput">
+    <ItemGroup>
+      <installer_util_stringsDirsToMake Condition="'@(installer_util_strings)' != '' and '%(installer_util_strings.ExcludedFromBuild)' != 'true'" Include="%(installer_util_strings.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_util_stringsDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_util_stringsDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_util_stringsDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(installer_util_stringsDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

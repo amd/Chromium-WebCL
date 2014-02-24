@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="mini_installer_version">
+      <Targets>_mini_installer_version</Targets>
+    </AvailableItemName>
+    <AvailableItemName Include="installer_archive">
+      <Targets>_installer_archive</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="mini_installer_version">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="installer_archive">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(mini_installer_versionAfterTargets)" BeforeTargets="$(mini_installer_versionBeforeTargets)" Condition="'@(mini_installer_version)' != ''" DependsOnTargets="$(mini_installer_versionDependsOn);Computemini_installer_versionOutput" Inputs="%(mini_installer_version.Identity);%(mini_installer_version.AdditionalDependencies);$(MSBuildProjectFile)" Name="_mini_installer_version" Outputs="%(mini_installer_version.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <mini_installer_version Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(mini_installer_version)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <mini_installer_version_inputs Include="%(mini_installer_version.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <mini_installer_version_tlog Condition="'%(mini_installer_version.Outputs)' != '' and '%(mini_installer_version.ExcludedFromBuild)' != 'true'" Include="%(mini_installer_version.Outputs)">
+        <Source>@(mini_installer_version, &apos;|&apos;)</Source>
+        <Inputs>@(mini_installer_version_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </mini_installer_version_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(mini_installer_version.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(mini_installer_version_tlog)' != '' and '%(mini_installer_version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(mini_installer_version_tlog.Source);@(mini_installer_version_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(mini_installer_version_tlog)' != '' and '%(mini_installer_version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(mini_installer_version_tlog.Source);%(mini_installer_version_tlog.Inputs)"/>
+    <mini_installer_version AdditionalOptions="%(mini_installer_version.AdditionalOptions)" CommandLineTemplate="%(mini_installer_version.CommandLineTemplate)" Condition="'@(mini_installer_version)' != '' and '%(mini_installer_version.ExcludedFromBuild)' != 'true'" Inputs="%(mini_installer_version.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computemini_installer_versionOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computemini_installer_versionOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(mini_installer_version)' != ''" Name="Computemini_installer_versionOutput">
+    <ItemGroup>
+      <mini_installer_versionDirsToMake Condition="'@(mini_installer_version)' != '' and '%(mini_installer_version.ExcludedFromBuild)' != 'true'" Include="%(mini_installer_version.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(mini_installer_versionDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(mini_installer_versionDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(mini_installer_versionDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(mini_installer_versionDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+  <Target AfterTargets="$(installer_archiveAfterTargets)" BeforeTargets="$(installer_archiveBeforeTargets)" Condition="'@(installer_archive)' != ''" DependsOnTargets="$(installer_archiveDependsOn);Computeinstaller_archiveOutput" Inputs="%(installer_archive.Identity);%(installer_archive.AdditionalDependencies);$(MSBuildProjectFile)" Name="_installer_archive" Outputs="%(installer_archive.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <installer_archive Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(installer_archive)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <installer_archive_inputs Include="%(installer_archive.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <installer_archive_tlog Condition="'%(installer_archive.Outputs)' != '' and '%(installer_archive.ExcludedFromBuild)' != 'true'" Include="%(installer_archive.Outputs)">
+        <Source>@(installer_archive, &apos;|&apos;)</Source>
+        <Inputs>@(installer_archive_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </installer_archive_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(installer_archive.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(installer_archive_tlog)' != '' and '%(installer_archive_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(installer_archive_tlog.Source);@(installer_archive_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(installer_archive_tlog)' != '' and '%(installer_archive_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(installer_archive_tlog.Source);%(installer_archive_tlog.Inputs)"/>
+    <installer_archive AdditionalOptions="%(installer_archive.AdditionalOptions)" CommandLineTemplate="%(installer_archive.CommandLineTemplate)" Condition="'@(installer_archive)' != '' and '%(installer_archive.ExcludedFromBuild)' != 'true'" Inputs="%(installer_archive.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeinstaller_archiveOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeinstaller_archiveOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(installer_archive)' != ''" Name="Computeinstaller_archiveOutput">
+    <ItemGroup>
+      <installer_archiveDirsToMake Condition="'@(installer_archive)' != '' and '%(installer_archive.ExcludedFromBuild)' != 'true'" Include="%(installer_archive.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_archiveDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_archiveDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(installer_archiveDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(installer_archiveDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="localize">
+      <Targets>_localize</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="localize">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(localizeAfterTargets)" BeforeTargets="$(localizeBeforeTargets)" Condition="'@(localize)' != ''" DependsOnTargets="$(localizeDependsOn);ComputelocalizeOutput" Inputs="%(localize.Identity);%(localize.AdditionalDependencies);$(MSBuildProjectFile)" Name="_localize" Outputs="%(localize.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <localize Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(localize)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <localize_inputs Include="%(localize.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <localize_tlog Condition="'%(localize.Outputs)' != '' and '%(localize.ExcludedFromBuild)' != 'true'" Include="%(localize.Outputs)">
+        <Source>@(localize, &apos;|&apos;)</Source>
+        <Inputs>@(localize_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </localize_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(localize.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(localize_tlog)' != '' and '%(localize_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(localize_tlog.Source);@(localize_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(localize_tlog)' != '' and '%(localize_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(localize_tlog.Source);%(localize_tlog.Inputs)"/>
+    <localize AdditionalOptions="%(localize.AdditionalOptions)" CommandLineTemplate="%(localize.CommandLineTemplate)" Condition="'@(localize)' != '' and '%(localize.ExcludedFromBuild)' != 'true'" Inputs="%(localize.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);ComputelocalizeOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);ComputelocalizeOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(localize)' != ''" Name="ComputelocalizeOutput">
+    <ItemGroup>
+      <localizeDirsToMake Condition="'@(localize)' != '' and '%(localize.ExcludedFromBuild)' != 'true'" Include="%(localize.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(localizeDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(localizeDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(localizeDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(localizeDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

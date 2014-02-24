@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="bison">
+      <Targets>_bison</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="bison">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(bisonAfterTargets)" BeforeTargets="$(bisonBeforeTargets)" Condition="'@(bison)' != ''" DependsOnTargets="$(bisonDependsOn);ComputebisonOutput" Inputs="%(bison.Identity);%(bison.AdditionalDependencies);$(MSBuildProjectFile)" Name="_bison" Outputs="%(bison.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <bison Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(bison)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <bison_inputs Include="%(bison.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <bison_tlog Condition="'%(bison.Outputs)' != '' and '%(bison.ExcludedFromBuild)' != 'true'" Include="%(bison.Outputs)">
+        <Source>@(bison, &apos;|&apos;)</Source>
+        <Inputs>@(bison_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </bison_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(bison.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(bison_tlog)' != '' and '%(bison_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(bison_tlog.Source);@(bison_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(bison_tlog)' != '' and '%(bison_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(bison_tlog.Source);%(bison_tlog.Inputs)"/>
+    <bison AdditionalOptions="%(bison.AdditionalOptions)" CommandLineTemplate="%(bison.CommandLineTemplate)" Condition="'@(bison)' != '' and '%(bison.ExcludedFromBuild)' != 'true'" Inputs="%(bison.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);ComputebisonOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);ComputebisonOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(bison)' != ''" Name="ComputebisonOutput">
+    <ItemGroup>
+      <bisonDirsToMake Condition="'@(bison)' != '' and '%(bison.ExcludedFromBuild)' != 'true'" Include="%(bison.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(bisonDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(bisonDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(bisonDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(bisonDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

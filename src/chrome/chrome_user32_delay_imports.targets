@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="create_import_lib">
+      <Targets>_create_import_lib</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="create_import_lib">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(create_import_libAfterTargets)" BeforeTargets="$(create_import_libBeforeTargets)" Condition="'@(create_import_lib)' != ''" DependsOnTargets="$(create_import_libDependsOn);Computecreate_import_libOutput" Inputs="%(create_import_lib.Identity);%(create_import_lib.AdditionalDependencies);$(MSBuildProjectFile)" Name="_create_import_lib" Outputs="%(create_import_lib.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <create_import_lib Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(create_import_lib)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <create_import_lib_inputs Include="%(create_import_lib.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <create_import_lib_tlog Condition="'%(create_import_lib.Outputs)' != '' and '%(create_import_lib.ExcludedFromBuild)' != 'true'" Include="%(create_import_lib.Outputs)">
+        <Source>@(create_import_lib, &apos;|&apos;)</Source>
+        <Inputs>@(create_import_lib_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </create_import_lib_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(create_import_lib.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(create_import_lib_tlog)' != '' and '%(create_import_lib_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(create_import_lib_tlog.Source);@(create_import_lib_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(create_import_lib_tlog)' != '' and '%(create_import_lib_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(create_import_lib_tlog.Source);%(create_import_lib_tlog.Inputs)"/>
+    <create_import_lib AdditionalOptions="%(create_import_lib.AdditionalOptions)" CommandLineTemplate="%(create_import_lib.CommandLineTemplate)" Condition="'@(create_import_lib)' != '' and '%(create_import_lib.ExcludedFromBuild)' != 'true'" Inputs="%(create_import_lib.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computecreate_import_libOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computecreate_import_libOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(create_import_lib)' != ''" Name="Computecreate_import_libOutput">
+    <ItemGroup>
+      <create_import_libDirsToMake Condition="'@(create_import_lib)' != '' and '%(create_import_lib.ExcludedFromBuild)' != 'true'" Include="%(create_import_lib.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(create_import_libDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(create_import_libDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(create_import_libDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(create_import_libDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

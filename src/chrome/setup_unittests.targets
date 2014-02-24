@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="server_dlls">
+      <Targets>_server_dlls</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="server_dlls">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(server_dllsAfterTargets)" BeforeTargets="$(server_dllsBeforeTargets)" Condition="'@(server_dlls)' != ''" DependsOnTargets="$(server_dllsDependsOn);Computeserver_dllsOutput" Inputs="%(server_dlls.Identity);%(server_dlls.AdditionalDependencies);$(MSBuildProjectFile)" Name="_server_dlls" Outputs="%(server_dlls.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <server_dlls Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(server_dlls)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <server_dlls_inputs Include="%(server_dlls.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <server_dlls_tlog Condition="'%(server_dlls.Outputs)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Include="%(server_dlls.Outputs)">
+        <Source>@(server_dlls, &apos;|&apos;)</Source>
+        <Inputs>@(server_dlls_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </server_dlls_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(server_dlls.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(server_dlls_tlog)' != '' and '%(server_dlls_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(server_dlls_tlog.Source);@(server_dlls_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(server_dlls_tlog)' != '' and '%(server_dlls_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(server_dlls_tlog.Source);%(server_dlls_tlog.Inputs)"/>
+    <server_dlls AdditionalOptions="%(server_dlls.AdditionalOptions)" CommandLineTemplate="%(server_dlls.CommandLineTemplate)" Condition="'@(server_dlls)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Inputs="%(server_dlls.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeserver_dllsOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeserver_dllsOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(server_dlls)' != ''" Name="Computeserver_dllsOutput">
+    <ItemGroup>
+      <server_dllsDirsToMake Condition="'@(server_dlls)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Include="%(server_dlls.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(server_dllsDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

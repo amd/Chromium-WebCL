@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="assembler__gnu_compatible_">
+      <Targets>_assembler__gnu_compatible_</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="assembler__gnu_compatible_">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(assembler__gnu_compatible_AfterTargets)" BeforeTargets="$(assembler__gnu_compatible_BeforeTargets)" Condition="'@(assembler__gnu_compatible_)' != ''" DependsOnTargets="$(assembler__gnu_compatible_DependsOn);Computeassembler__gnu_compatible_Output" Inputs="%(assembler__gnu_compatible_.Identity);%(assembler__gnu_compatible_.AdditionalDependencies);$(MSBuildProjectFile)" Name="_assembler__gnu_compatible_" Outputs="%(assembler__gnu_compatible_.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <assembler__gnu_compatible_ Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(assembler__gnu_compatible_)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <assembler__gnu_compatible__inputs Include="%(assembler__gnu_compatible_.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <assembler__gnu_compatible__tlog Condition="'%(assembler__gnu_compatible_.Outputs)' != '' and '%(assembler__gnu_compatible_.ExcludedFromBuild)' != 'true'" Include="%(assembler__gnu_compatible_.Outputs)">
+        <Source>@(assembler__gnu_compatible_, &apos;|&apos;)</Source>
+        <Inputs>@(assembler__gnu_compatible__inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </assembler__gnu_compatible__tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(assembler__gnu_compatible_.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(assembler__gnu_compatible__tlog)' != '' and '%(assembler__gnu_compatible__tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(assembler__gnu_compatible__tlog.Source);@(assembler__gnu_compatible__tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(assembler__gnu_compatible__tlog)' != '' and '%(assembler__gnu_compatible__tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(assembler__gnu_compatible__tlog.Source);%(assembler__gnu_compatible__tlog.Inputs)"/>
+    <assembler__gnu_compatible_ AdditionalOptions="%(assembler__gnu_compatible_.AdditionalOptions)" CommandLineTemplate="%(assembler__gnu_compatible_.CommandLineTemplate)" Condition="'@(assembler__gnu_compatible_)' != '' and '%(assembler__gnu_compatible_.ExcludedFromBuild)' != 'true'" Inputs="%(assembler__gnu_compatible_.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeassembler__gnu_compatible_Output;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeassembler__gnu_compatible_Output;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(assembler__gnu_compatible_)' != ''" Name="Computeassembler__gnu_compatible_Output">
+    <ItemGroup>
+      <assembler__gnu_compatible_DirsToMake Condition="'@(assembler__gnu_compatible_)' != '' and '%(assembler__gnu_compatible_.ExcludedFromBuild)' != 'true'" Include="%(assembler__gnu_compatible_.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(assembler__gnu_compatible_DirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(assembler__gnu_compatible_DirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(assembler__gnu_compatible_DirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(assembler__gnu_compatible_DirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

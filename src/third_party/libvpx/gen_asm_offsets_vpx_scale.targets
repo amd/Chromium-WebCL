@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="obj_int_extract">
+      <Targets>_obj_int_extract</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="obj_int_extract">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(obj_int_extractAfterTargets)" BeforeTargets="$(obj_int_extractBeforeTargets)" Condition="'@(obj_int_extract)' != ''" DependsOnTargets="$(obj_int_extractDependsOn);Computeobj_int_extractOutput" Inputs="%(obj_int_extract.Identity);%(obj_int_extract.AdditionalDependencies);$(MSBuildProjectFile)" Name="_obj_int_extract" Outputs="%(obj_int_extract.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <obj_int_extract Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(obj_int_extract)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <obj_int_extract_inputs Include="%(obj_int_extract.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <obj_int_extract_tlog Condition="'%(obj_int_extract.Outputs)' != '' and '%(obj_int_extract.ExcludedFromBuild)' != 'true'" Include="%(obj_int_extract.Outputs)">
+        <Source>@(obj_int_extract, &apos;|&apos;)</Source>
+        <Inputs>@(obj_int_extract_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </obj_int_extract_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(obj_int_extract.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(obj_int_extract_tlog)' != '' and '%(obj_int_extract_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(obj_int_extract_tlog.Source);@(obj_int_extract_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(obj_int_extract_tlog)' != '' and '%(obj_int_extract_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(obj_int_extract_tlog.Source);%(obj_int_extract_tlog.Inputs)"/>
+    <obj_int_extract AdditionalOptions="%(obj_int_extract.AdditionalOptions)" CommandLineTemplate="%(obj_int_extract.CommandLineTemplate)" Condition="'@(obj_int_extract)' != '' and '%(obj_int_extract.ExcludedFromBuild)' != 'true'" Inputs="%(obj_int_extract.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeobj_int_extractOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeobj_int_extractOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(obj_int_extract)' != ''" Name="Computeobj_int_extractOutput">
+    <ItemGroup>
+      <obj_int_extractDirsToMake Condition="'@(obj_int_extract)' != '' and '%(obj_int_extract.ExcludedFromBuild)' != 'true'" Include="%(obj_int_extract.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(obj_int_extractDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(obj_int_extractDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(obj_int_extractDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(obj_int_extractDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

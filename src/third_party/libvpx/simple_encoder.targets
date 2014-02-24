@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="generate_example">
+      <Targets>_generate_example</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="generate_example">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(generate_exampleAfterTargets)" BeforeTargets="$(generate_exampleBeforeTargets)" Condition="'@(generate_example)' != ''" DependsOnTargets="$(generate_exampleDependsOn);Computegenerate_exampleOutput" Inputs="%(generate_example.Identity);%(generate_example.AdditionalDependencies);$(MSBuildProjectFile)" Name="_generate_example" Outputs="%(generate_example.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <generate_example Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(generate_example)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_example_inputs Include="%(generate_example.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_example_tlog Condition="'%(generate_example.Outputs)' != '' and '%(generate_example.ExcludedFromBuild)' != 'true'" Include="%(generate_example.Outputs)">
+        <Source>@(generate_example, &apos;|&apos;)</Source>
+        <Inputs>@(generate_example_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </generate_example_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(generate_example.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(generate_example_tlog)' != '' and '%(generate_example_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(generate_example_tlog.Source);@(generate_example_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(generate_example_tlog)' != '' and '%(generate_example_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(generate_example_tlog.Source);%(generate_example_tlog.Inputs)"/>
+    <generate_example AdditionalOptions="%(generate_example.AdditionalOptions)" CommandLineTemplate="%(generate_example.CommandLineTemplate)" Condition="'@(generate_example)' != '' and '%(generate_example.ExcludedFromBuild)' != 'true'" Inputs="%(generate_example.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computegenerate_exampleOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computegenerate_exampleOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(generate_example)' != ''" Name="Computegenerate_exampleOutput">
+    <ItemGroup>
+      <generate_exampleDirsToMake Condition="'@(generate_example)' != '' and '%(generate_example.ExcludedFromBuild)' != 'true'" Include="%(generate_example.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_exampleDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_exampleDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_exampleDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(generate_exampleDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

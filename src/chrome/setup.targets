@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="setup_version">
+      <Targets>_setup_version</Targets>
+    </AvailableItemName>
+    <AvailableItemName Include="server_dlls">
+      <Targets>_server_dlls</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="setup_version">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="server_dlls">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(setup_versionAfterTargets)" BeforeTargets="$(setup_versionBeforeTargets)" Condition="'@(setup_version)' != ''" DependsOnTargets="$(setup_versionDependsOn);Computesetup_versionOutput" Inputs="%(setup_version.Identity);%(setup_version.AdditionalDependencies);$(MSBuildProjectFile)" Name="_setup_version" Outputs="%(setup_version.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <setup_version Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(setup_version)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <setup_version_inputs Include="%(setup_version.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <setup_version_tlog Condition="'%(setup_version.Outputs)' != '' and '%(setup_version.ExcludedFromBuild)' != 'true'" Include="%(setup_version.Outputs)">
+        <Source>@(setup_version, &apos;|&apos;)</Source>
+        <Inputs>@(setup_version_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </setup_version_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(setup_version.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(setup_version_tlog)' != '' and '%(setup_version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(setup_version_tlog.Source);@(setup_version_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(setup_version_tlog)' != '' and '%(setup_version_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(setup_version_tlog.Source);%(setup_version_tlog.Inputs)"/>
+    <setup_version AdditionalOptions="%(setup_version.AdditionalOptions)" CommandLineTemplate="%(setup_version.CommandLineTemplate)" Condition="'@(setup_version)' != '' and '%(setup_version.ExcludedFromBuild)' != 'true'" Inputs="%(setup_version.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computesetup_versionOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computesetup_versionOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(setup_version)' != ''" Name="Computesetup_versionOutput">
+    <ItemGroup>
+      <setup_versionDirsToMake Condition="'@(setup_version)' != '' and '%(setup_version.ExcludedFromBuild)' != 'true'" Include="%(setup_version.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(setup_versionDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(setup_versionDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(setup_versionDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(setup_versionDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+  <Target AfterTargets="$(server_dllsAfterTargets)" BeforeTargets="$(server_dllsBeforeTargets)" Condition="'@(server_dlls)' != ''" DependsOnTargets="$(server_dllsDependsOn);Computeserver_dllsOutput" Inputs="%(server_dlls.Identity);%(server_dlls.AdditionalDependencies);$(MSBuildProjectFile)" Name="_server_dlls" Outputs="%(server_dlls.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <server_dlls Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(server_dlls)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <server_dlls_inputs Include="%(server_dlls.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <server_dlls_tlog Condition="'%(server_dlls.Outputs)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Include="%(server_dlls.Outputs)">
+        <Source>@(server_dlls, &apos;|&apos;)</Source>
+        <Inputs>@(server_dlls_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </server_dlls_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(server_dlls.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(server_dlls_tlog)' != '' and '%(server_dlls_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(server_dlls_tlog.Source);@(server_dlls_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(server_dlls_tlog)' != '' and '%(server_dlls_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(server_dlls_tlog.Source);%(server_dlls_tlog.Inputs)"/>
+    <server_dlls AdditionalOptions="%(server_dlls.AdditionalOptions)" CommandLineTemplate="%(server_dlls.CommandLineTemplate)" Condition="'@(server_dlls)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Inputs="%(server_dlls.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computeserver_dllsOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computeserver_dllsOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(server_dlls)' != ''" Name="Computeserver_dllsOutput">
+    <ItemGroup>
+      <server_dllsDirsToMake Condition="'@(server_dlls)' != '' and '%(server_dlls.ExcludedFromBuild)' != 'true'" Include="%(server_dlls.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(server_dllsDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(server_dllsDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

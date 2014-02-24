@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="generate_libs">
+      <Targets>_generate_libs</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="generate_libs">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(generate_libsAfterTargets)" BeforeTargets="$(generate_libsBeforeTargets)" Condition="'@(generate_libs)' != ''" DependsOnTargets="$(generate_libsDependsOn);Computegenerate_libsOutput" Inputs="%(generate_libs.Identity);%(generate_libs.AdditionalDependencies);$(MSBuildProjectFile)" Name="_generate_libs" Outputs="%(generate_libs.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <generate_libs Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(generate_libs)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_libs_inputs Include="%(generate_libs.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_libs_tlog Condition="'%(generate_libs.Outputs)' != '' and '%(generate_libs.ExcludedFromBuild)' != 'true'" Include="%(generate_libs.Outputs)">
+        <Source>@(generate_libs, &apos;|&apos;)</Source>
+        <Inputs>@(generate_libs_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </generate_libs_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(generate_libs.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(generate_libs_tlog)' != '' and '%(generate_libs_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(generate_libs_tlog.Source);@(generate_libs_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(generate_libs_tlog)' != '' and '%(generate_libs_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(generate_libs_tlog.Source);%(generate_libs_tlog.Inputs)"/>
+    <generate_libs AdditionalOptions="%(generate_libs.AdditionalOptions)" CommandLineTemplate="%(generate_libs.CommandLineTemplate)" Condition="'@(generate_libs)' != '' and '%(generate_libs.ExcludedFromBuild)' != 'true'" Inputs="%(generate_libs.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computegenerate_libsOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computegenerate_libsOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(generate_libs)' != ''" Name="Computegenerate_libsOutput">
+    <ItemGroup>
+      <generate_libsDirsToMake Condition="'@(generate_libs)' != '' and '%(generate_libs.ExcludedFromBuild)' != 'true'" Include="%(generate_libs.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_libsDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_libsDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_libsDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(generate_libsDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

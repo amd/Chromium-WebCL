@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="genstaticinit">
+      <Targets>_genstaticinit</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="genstaticinit">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(genstaticinitAfterTargets)" BeforeTargets="$(genstaticinitBeforeTargets)" Condition="'@(genstaticinit)' != ''" DependsOnTargets="$(genstaticinitDependsOn);ComputegenstaticinitOutput" Inputs="%(genstaticinit.Identity);%(genstaticinit.AdditionalDependencies);$(MSBuildProjectFile)" Name="_genstaticinit" Outputs="%(genstaticinit.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <genstaticinit Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(genstaticinit)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <genstaticinit_inputs Include="%(genstaticinit.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <genstaticinit_tlog Condition="'%(genstaticinit.Outputs)' != '' and '%(genstaticinit.ExcludedFromBuild)' != 'true'" Include="%(genstaticinit.Outputs)">
+        <Source>@(genstaticinit, &apos;|&apos;)</Source>
+        <Inputs>@(genstaticinit_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </genstaticinit_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(genstaticinit.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(genstaticinit_tlog)' != '' and '%(genstaticinit_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(genstaticinit_tlog.Source);@(genstaticinit_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(genstaticinit_tlog)' != '' and '%(genstaticinit_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(genstaticinit_tlog.Source);%(genstaticinit_tlog.Inputs)"/>
+    <genstaticinit AdditionalOptions="%(genstaticinit.AdditionalOptions)" CommandLineTemplate="%(genstaticinit.CommandLineTemplate)" Condition="'@(genstaticinit)' != '' and '%(genstaticinit.ExcludedFromBuild)' != 'true'" Inputs="%(genstaticinit.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);ComputegenstaticinitOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);ComputegenstaticinitOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(genstaticinit)' != ''" Name="ComputegenstaticinitOutput">
+    <ItemGroup>
+      <genstaticinitDirsToMake Condition="'@(genstaticinit)' != '' and '%(genstaticinit.ExcludedFromBuild)' != 'true'" Include="%(genstaticinit.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genstaticinitDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genstaticinitDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genstaticinitDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(genstaticinitDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

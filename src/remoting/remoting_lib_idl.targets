@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="generate_idl">
+      <Targets>_generate_idl</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="generate_idl">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(generate_idlAfterTargets)" BeforeTargets="$(generate_idlBeforeTargets)" Condition="'@(generate_idl)' != ''" DependsOnTargets="$(generate_idlDependsOn);Computegenerate_idlOutput" Inputs="%(generate_idl.Identity);%(generate_idl.AdditionalDependencies);$(MSBuildProjectFile)" Name="_generate_idl" Outputs="%(generate_idl.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <generate_idl Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(generate_idl)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_idl_inputs Include="%(generate_idl.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <generate_idl_tlog Condition="'%(generate_idl.Outputs)' != '' and '%(generate_idl.ExcludedFromBuild)' != 'true'" Include="%(generate_idl.Outputs)">
+        <Source>@(generate_idl, &apos;|&apos;)</Source>
+        <Inputs>@(generate_idl_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </generate_idl_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(generate_idl.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(generate_idl_tlog)' != '' and '%(generate_idl_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(generate_idl_tlog.Source);@(generate_idl_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(generate_idl_tlog)' != '' and '%(generate_idl_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(generate_idl_tlog.Source);%(generate_idl_tlog.Inputs)"/>
+    <generate_idl AdditionalOptions="%(generate_idl.AdditionalOptions)" CommandLineTemplate="%(generate_idl.CommandLineTemplate)" Condition="'@(generate_idl)' != '' and '%(generate_idl.ExcludedFromBuild)' != 'true'" Inputs="%(generate_idl.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);Computegenerate_idlOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);Computegenerate_idlOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(generate_idl)' != ''" Name="Computegenerate_idlOutput">
+    <ItemGroup>
+      <generate_idlDirsToMake Condition="'@(generate_idl)' != '' and '%(generate_idl.ExcludedFromBuild)' != 'true'" Include="%(generate_idl.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_idlDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_idlDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(generate_idlDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(generate_idlDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"/>
+    <AvailableItemName Include="genproto">
+      <Targets>_genproto</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask AssemblyName="Microsoft.Build.Tasks.v4.0" TaskFactory="XamlTaskFactory" TaskName="genproto">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target AfterTargets="$(genprotoAfterTargets)" BeforeTargets="$(genprotoBeforeTargets)" Condition="'@(genproto)' != ''" DependsOnTargets="$(genprotoDependsOn);ComputegenprotoOutput" Inputs="%(genproto.Identity);%(genproto.AdditionalDependencies);$(MSBuildProjectFile)" Name="_genproto" Outputs="%(genproto.Outputs)">
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <genproto Condition="'%(Identity)' != '@(SelectedFiles)'" Remove="@(genproto)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <genproto_inputs Include="%(genproto.AdditionalDependencies)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <genproto_tlog Condition="'%(genproto.Outputs)' != '' and '%(genproto.ExcludedFromBuild)' != 'true'" Include="%(genproto.Outputs)">
+        <Source>@(genproto, &apos;|&apos;)</Source>
+        <Inputs>@(genproto_inputs -&gt; &apos;%(Fullpath)&apos;, &apos;;&apos;)</Inputs>
+      </genproto_tlog>
+    </ItemGroup>
+    <Message Importance="High" Text="%(genproto.ExecutionDescription)"/>
+    <WriteLinesToFile Condition="'@(genproto_tlog)' != '' and '%(genproto_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).write.1.tlog" Lines="^%(genproto_tlog.Source);@(genproto_tlog-&gt;'%(Fullpath)')"/>
+    <WriteLinesToFile Condition="'@(genproto_tlog)' != '' and '%(genproto_tlog.ExcludedFromBuild)' != 'true'" File="$(IntDir)$(ProjectName).read.1.tlog" Lines="^%(genproto_tlog.Source);%(genproto_tlog.Inputs)"/>
+    <genproto AdditionalOptions="%(genproto.AdditionalOptions)" CommandLineTemplate="%(genproto.CommandLineTemplate)" Condition="'@(genproto)' != '' and '%(genproto.ExcludedFromBuild)' != 'true'" Inputs="%(genproto.Identity)"/>
+  </Target>
+  <PropertyGroup>
+    <ComputeLinkInputsTargets>$(ComputeLinkInputsTargets);ComputegenprotoOutput;</ComputeLinkInputsTargets>
+    <ComputeLibInputsTargets>$(ComputeLibInputsTargets);ComputegenprotoOutput;</ComputeLibInputsTargets>
+  </PropertyGroup>
+  <Target Condition="'@(genproto)' != ''" Name="ComputegenprotoOutput">
+    <ItemGroup>
+      <genprotoDirsToMake Condition="'@(genproto)' != '' and '%(genproto.ExcludedFromBuild)' != 'true'" Include="%(genproto.Outputs)"/>
+      <Link Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genprotoDirsToMake.Identity)"/>
+      <Lib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genprotoDirsToMake.Identity)"/>
+      <ImpLib Condition="'%(Extension)'=='.obj' or '%(Extension)'=='.res' or '%(Extension)'=='.rsc' or '%(Extension)'=='.lib'" Include="%(genprotoDirsToMake.Identity)"/>
+    </ItemGroup>
+    <MakeDir Directories="@(genprotoDirsToMake-&gt;'%(RootDir)%(Directory)')"/>
+  </Target>
+</Project>
