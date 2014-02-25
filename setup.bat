@@ -8,12 +8,16 @@ call gclient sync --with_branch_heads
 call git fetch
 
 set BRANCH=1700
-call git config --replace-all svn-remote.svn_%BRANCH%.url svn://svn.chromium.org/chrome
+git config --replace-all svn-remote.svn_$BRANCH.url http://src.chromium.org/chrome
+REM only for committers call git config --replace-all svn-remote.svn_%BRANCH%.url svn://svn.chromium.org/chrome
 call git config --replace-all svn-remote.svn_%BRANCH%.fetch branches/%BRANCH%/src:refs/remotes/origin/%BRANCH%
+REM NEW for 2014: You also need to convince git-svn that the commits on http://src.chromium.org/chrome are the same as those on svn://svn.chromium.org/chrome
+git config --replace-all svn-remote.svn_$BRANCH.rewriteRoot "svn://svn.chromium.org/chrome"
+git config --replace-all svn-remote.svn_$BRANCH.rewriteUUID "0039d316-1c4b-4281-b951-d872f2087c98"
 
 REM   This "initializes" the %BRANCH% refspec, to prevent 'git svn fetch' from scanning
 REM   the whole svn repo history for the branch commits we already synced above.
-REM "ref: refs/remotes/branch-heads/%BRANCH%" > .git/refs/remotes/origin/%BRANCH%
+echo "ref: refs/remotes/branch-heads/%BRANCH%" > .git/refs/remotes/origin/%BRANCH%
 
 REM   This should finish quickly, just doing a bit of git-svn housekeeping.
 REM   It might fetch a few recent revisions, if the git mirror is slightly out-of-date,
