@@ -17,7 +17,7 @@ git config --replace-all svn-remote.svn_$BRANCH.rewriteUUID "0039d316-1c4b-4281-
 
 REM   This "initializes" the %BRANCH% refspec, to prevent 'git svn fetch' from scanning
 REM   the whole svn repo history for the branch commits we already synced above.
-echo "ref: refs/remotes/branch-heads/%BRANCH%" > .git/refs/remotes/origin/%BRANCH%
+echo ref: refs/remotes/branch-heads/%BRANCH% > .git/refs/remotes/origin/%BRANCH%
 
 REM   This should finish quickly, just doing a bit of git-svn housekeeping.
 REM   It might fetch a few recent revisions, if the git mirror is slightly out-of-date,
@@ -32,7 +32,7 @@ REM   Make git-cl happy.
 call git config branch.branch_%BRANCH%.merge refs/heads/%BRANCH%
 call git config branch.branch_%BRANCH%.remote branch-heads
 REM   Checkout all the submodules at their branch DEPS revisions.
-call gclient sync --jobs 16
+call gclient sync
 call gclient runhooks --force
 
 REM Setup (2)
