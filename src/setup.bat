@@ -36,9 +36,15 @@ call gclient sync
 call gclient runhooks --force
 
 REM Setup (2)
-REM remove all .git and .gitmodules directories that came with the chromium clone
+REM remove all .git directories that came with the chromium clone
 
 FOR /F "tokens=*" %%G IN ('DIR /B /AD /S ".git"') DO RMDIR /Q /S "%%G"
+
+REM delete the Mesa CL include directory otherwise it shadows
+REM the real CL
+
+DEL /S /Q third_party\mesa\src\include\CL
+RMDIR /S /Q third_party\mesa\src\include\CL
 
 REM Step (3) init AMD repository and pull
 
