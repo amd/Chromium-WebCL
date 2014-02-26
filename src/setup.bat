@@ -33,6 +33,8 @@ call git config branch.branch_%BRANCH%.merge refs/heads/%BRANCH%
 call git config branch.branch_%BRANCH%.remote branch-heads
 REM   Checkout all the submodules at their branch DEPS revisions.
 call gclient sync
+set GYP_GENERATORS=msvs
+set GYP_DEFINES=component=shared_library
 call gclient runhooks --force
 
 REM Setup (2)
