@@ -14,7 +14,7 @@ Including .net libraries
 
 2.5) Google "AMD APP SDK" and install it. To verify the installation, check that you have the AMDAPPSDKROOT environment variable created for you. The tested version of the SDK for this project is AMD-APP-SDK-v2.9-Windows-64.exe
 
-3)      Install visual studio 2010, make sure x64 compiler and tools are installed
+3)      Install visual studio 2010, make sure x64 compiler and tools are installed. Install SP1. The tested environment looks like (Visual Studio -> Help -> About) Version 1.0.40219 SP1Rel.
 
 4)      Install VS2010 SP1 https://www.microsoft.com/en-us/download/details.aspx?id=23691
 (restart)
@@ -56,7 +56,9 @@ For more information consult http://dev.chromium.org/developers/how-tos/get-the-
 
 18) Get and run setup.bat. Get setup.bat from https://github.com/amd/Chromium-WebCL/raw/master/src/setup.bat, and save it in the *src* directory. Then, cd into *src* and run setup.bat. NOTE: setup.bat MUST BE EXECUTED IN THE *src* DIRECTORY! What this script does is the following: (a) switch to branch_1700, i.e. current Chromium Beta (b) Delete all the .git directories that came with your chromium clone (c) point at and sync with AMD repository (WebCL related changes to Chromium)
 
-19) In Visual Studio, load chrome.sln from src/chrome, set "chrome" project as Startup Project. Right click on project "chrome" in Visual Studio, in Configuration Properties, click on VC++ Directories. Add $(AMDAPPSDKROOT)\include to "Include Directories"; add $(AMDAPPSDKROOT)\lib\x86 to "Library Directories".
+19) In Visual Studio, load chrome.sln from src/chrome. (a) Set "chrome" project as Startup Project by right-clicking on it and selecting "Set as Startup Project". (b) Now we add AMD APP SDK paths globally to Visual Studio. To do this, click on project "chrome" to select it. Then in the View menu, select Property Manager, and Property Manager will show up as a tab beside Solution Explorer, Class View, etc. In Property Manager, expand the "chrome" project, then expand "Debug|Win32". Right click on Microsoft.Cpp.Win32.user, and select "Properties". Then, in Common Properties, click on "VC++ Directories". Add "$(AMDAPPSDKROOT)\include" to "Include Directories"; add $(AMDAPPSDKROOT)\lib\x86 to "Library Directories". Then, expand "Release|Win32", and repeat.
+
+19.5) Select Debug or Release, and start building the chrome project. This can take hours.
 
 20) Go to src/build/Debug or src/build/Release, depending on your build, and execute chrome.exe
 
