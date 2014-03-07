@@ -62,7 +62,13 @@ For more information consult http://dev.chromium.org/developers/how-tos/get-the-
 
 20) Go to src/build/Debug or src/build/Release, depending on your build, and execute chrome.exe
 
-21) Run Superconductor demos. Point your web server at the *superconductor* directory, which is at the same level of *src*; use a port number of your choice, say 8888. If you use the server that came with python in depot_tools, the command to run (with *src* as the current directory) is "python -m SimpleHTTPServer 8888". Then, in the browser, load http://localhost:8888/examples/linegraph-3d or http://localhost:8888/examples/treemap to load the main Superconductor demos. To get a sense of how the demos should look, watch the screen-capture video at http://youtu.be/dGD9NpipcrE
+Run Superconductor demos
+-----------------------------
 
-22) If you need a pre-compiled binary of the browser, download it from https://app.box.com/s/u33oh8opeooek2wtsf8m
+Point your web server at the *superconductor* directory, which is at the same level of *src*; use a port number of your choice, say 8888. If you use the server that came with python in depot_tools, the command to run (with *src* as the current directory) is "python -m SimpleHTTPServer 8888". Then, in the browser, load http://localhost:8888/examples/linegraph-3d or http://localhost:8888/examples/treemap to load the main Superconductor demos. To get a sense of how the demos should look, watch the screen-capture video at http://youtu.be/dGD9NpipcrE
+
+Precompiled Binary
+------------------------------
+
+If you need a pre-compiled binary of the browser, download it from https://app.box.com/s/u33oh8opeooek2wtsf8m
 
