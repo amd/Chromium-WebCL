@@ -40,6 +40,7 @@
 #include "base/win/windows_version.h"
 #include "base/win/scoped_com_initializer.h"
 #include "content/common/gpu/media/dxva_video_decode_accelerator.h"
+#include "content/common/gpu/media/vpx_video_decode_accelerator.h"
 #include "sandbox/win/src/sandbox.h"
 #elif defined(OS_CHROMEOS) && defined(ARCH_CPU_ARMEL) && defined(USE_X11)
 #include "content/common/gpu/media/exynos_video_decode_accelerator.h"
@@ -379,6 +380,7 @@ bool WarmUpSandbox(const CommandLine& command_line) {
     TRACE_EVENT0("gpu", "Initialize DXVA");
     // Initialize H/W video decoding stuff which fails in the sandbox.
     DXVAVideoDecodeAccelerator::PreSandboxInitialization();
+    VPXVideoDecodeAccelerator::PreSandboxInitialization();
   }
 
   {
