@@ -3,10 +3,14 @@ Chromium-WebCL
 
 WebCL implementation for Chromium
 
-Build Instruction:
+Build Instructions:
 ----------------------
 
 1)      Install windows 8.x SDK http://msdn.microsoft.com/en-us/windows/hardware/hh852363.aspx
+
+1.1) Patch the Windows 8 SDK to build with Visual C++ 2010
+ By default the Windows 8 SDK will install to C:\Program Files (x86)\Windows Kits\8.0\. This directory will require admin privileges to write to. Easiest way to do apply this patch is to start an administrative command prompt, cd to C:\Program Files (x86)\Windows Kits\8.0\Include\winrt\, run "notepad.exe asyncinfo.h" and comment out or delete the word "class" on line 66.
+
 
 2)      Install DirectX SDK june 2010 http://www.microsoft.com/en-us/download/details.aspx?id=6812
 Including .net libraries
