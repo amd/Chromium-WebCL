@@ -1077,7 +1077,9 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
     return;
 
   if (!pending_output_samples_.empty() || !pending_input_buffers_.empty()) {
-    pending_input_buffers_.push_back(sample);
+    VpxSample tmp;
+    pending_input_buffers_.push_back(tmp);
+    pending_input_buffers_.back().data_.swap(sample.data_);
     return;
   }
 
