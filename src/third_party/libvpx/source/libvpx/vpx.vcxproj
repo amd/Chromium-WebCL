@@ -1,0 +1,1028 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DCE19DAF-69AC-46DB-B14A-39F0FAA5DB74}</ProjectGuid>
+    <RootNamespace>vpx</RootNamespace>
+    <Keyword>ManagedCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\..\..\build\$(Configuration)\lib\</OutDir>
+    <IntDir>Win32\$(Configuration)\vpx\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\..\..\build\$(Configuration)\lib\</OutDir>
+    <IntDir>Win32\$(Configuration)\vpx\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>call obj_int_extract.bat c:/dev/freshfresh/src/third_party/libvpx/source/libvpx</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;c:/dev/freshfresh/src/third_party/libvpx/source/libvpx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvpx.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>call obj_int_extract.bat c:/dev/freshfresh/src/third_party/libvpx/source/libvpx</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>.;c:/dev/freshfresh/src/third_party/libvpx/source/libvpx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)libvpx.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include=".\vpx\src\vpx_decoder.c">
+      <ObjectFileName>$(IntDir)vpx_src_vpx_decoder.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx\src\vpx_encoder.c">
+      <ObjectFileName>$(IntDir)vpx_src_vpx_encoder.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx\src\vpx_codec.c">
+      <ObjectFileName>$(IntDir)vpx_src_vpx_codec.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx\src\vpx_image.c">
+      <ObjectFileName>$(IntDir)vpx_src_vpx_image.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_mem\vpx_mem.c">
+      <ObjectFileName>$(IntDir)vpx_mem_vpx_mem.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\generic\vpx_scale.c">
+      <ObjectFileName>$(IntDir)vpx_scale_generic_vpx_scale.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\generic\yv12config.c">
+      <ObjectFileName>$(IntDir)vpx_scale_generic_yv12config.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\generic\yv12extend.c">
+      <ObjectFileName>$(IntDir)vpx_scale_generic_yv12extend.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\generic\gen_scalers.c">
+      <ObjectFileName>$(IntDir)vpx_scale_generic_gen_scalers.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\vpx_scale_asm_offsets.c">
+      <ObjectFileName>$(IntDir)vpx_scale_vpx_scale_asm_offsets.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_scale\vpx_scale_rtcd.c">
+      <ObjectFileName>$(IntDir)vpx_scale_vpx_scale_rtcd.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vpx_ports\emms.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_ports_emms.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_ports_emms.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vpx_ports\x86_abi_support.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_ports_x86_abi_support.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_ports_x86_abi_support.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vpx_ports\x86_cpuid.c">
+      <ObjectFileName>$(IntDir)vpx_ports_x86_cpuid.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\alloccommon.c">
+      <ObjectFileName>$(IntDir)vp8_common_alloccommon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\blockd.c">
+      <ObjectFileName>$(IntDir)vp8_common_blockd.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\debugmodes.c">
+      <ObjectFileName>$(IntDir)vp8_common_debugmodes.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\dequantize.c">
+      <ObjectFileName>$(IntDir)vp8_common_dequantize.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\entropy.c">
+      <ObjectFileName>$(IntDir)vp8_common_entropy.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\entropymode.c">
+      <ObjectFileName>$(IntDir)vp8_common_entropymode.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\entropymv.c">
+      <ObjectFileName>$(IntDir)vp8_common_entropymv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\extend.c">
+      <ObjectFileName>$(IntDir)vp8_common_extend.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\filter.c">
+      <ObjectFileName>$(IntDir)vp8_common_filter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\findnearmv.c">
+      <ObjectFileName>$(IntDir)vp8_common_findnearmv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\generic\systemdependent.c">
+      <ObjectFileName>$(IntDir)vp8_common_generic_systemdependent.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\idct_blk.c">
+      <ObjectFileName>$(IntDir)vp8_common_idct_blk.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\idctllm.c">
+      <ObjectFileName>$(IntDir)vp8_common_idctllm.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\rtcd.c">
+      <ObjectFileName>$(IntDir)vp8_common_rtcd.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\loopfilter.c">
+      <ObjectFileName>$(IntDir)vp8_common_loopfilter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\loopfilter_filters.c">
+      <ObjectFileName>$(IntDir)vp8_common_loopfilter_filters.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\mbpitch.c">
+      <ObjectFileName>$(IntDir)vp8_common_mbpitch.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\modecont.c">
+      <ObjectFileName>$(IntDir)vp8_common_modecont.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\quant_common.c">
+      <ObjectFileName>$(IntDir)vp8_common_quant_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\reconinter.c">
+      <ObjectFileName>$(IntDir)vp8_common_reconinter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\reconintra.c">
+      <ObjectFileName>$(IntDir)vp8_common_reconintra.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\reconintra4x4.c">
+      <ObjectFileName>$(IntDir)vp8_common_reconintra4x4.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\sad_c.c">
+      <ObjectFileName>$(IntDir)vp8_common_sad_c.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\setupintrarecon.c">
+      <ObjectFileName>$(IntDir)vp8_common_setupintrarecon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\swapyv12buffer.c">
+      <ObjectFileName>$(IntDir)vp8_common_swapyv12buffer.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\variance_c.c">
+      <ObjectFileName>$(IntDir)vp8_common_variance_c.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\treecoder.c">
+      <ObjectFileName>$(IntDir)vp8_common_treecoder.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\x86\filter_x86.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_filter_x86.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\x86\vp8_asm_stubs.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_vp8_asm_stubs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\x86\loopfilter_x86.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_loopfilter_x86.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\mfqe.c">
+      <ObjectFileName>$(IntDir)vp8_common_mfqe.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\common\postproc.c">
+      <ObjectFileName>$(IntDir)vp8_common_postproc.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\dequantize_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_dequantize_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_dequantize_mmx.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\idct_blk_mmx.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_idct_blk_mmx.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\idctllm_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_idctllm_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_idctllm_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\iwalsh_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\loopfilter_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_loopfilter_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_loopfilter_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\recon_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_recon_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_recon_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\sad_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\subpixel_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_mmx.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\variance_mmx.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_variance_mmx.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\variance_impl_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_mmx.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\idct_blk_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_idct_blk_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\idctllm_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_idctllm_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_idctllm_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\recon_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_recon_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_recon_sse2.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\recon_wrapper_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_recon_wrapper_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\sad_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\subpixel_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\loopfilter_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_loopfilter_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_loopfilter_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\iwalsh_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_iwalsh_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_iwalsh_sse2.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\variance_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_variance_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\variance_impl_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\sad_sse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse3.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\sad_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_ssse3.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\subpixel_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_ssse3.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\variance_ssse3.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_variance_ssse3.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\variance_impl_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\sad_sse4.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse4.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse4.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\common\x86\postproc_x86.c">
+      <ObjectFileName>$(IntDir)vp8_common_x86_postproc_x86.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\common\x86\postproc_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\mfqe_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_mfqe_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_mfqe_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\common\x86\postproc_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_sse2.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\vp8_cx_iface.c">
+      <ObjectFileName>$(IntDir)vp8_vp8_cx_iface.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\bitstream.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_bitstream.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\boolhuff.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_boolhuff.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\dct.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_dct.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\encodeframe.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_encodeframe.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\encodeintra.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_encodeintra.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\encodemb.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_encodemb.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\encodemv.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_encodemv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\ethreading.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_ethreading.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\firstpass.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_firstpass.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\denoising.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_denoising.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\lookahead.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_lookahead.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\mcomp.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_mcomp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\modecosts.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_modecosts.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\onyx_if.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_onyx_if.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\pickinter.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_pickinter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\picklpf.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_picklpf.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\psnr.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_psnr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\quantize.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_quantize.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\ratectrl.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_ratectrl.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\rdopt.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_rdopt.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\segmentation.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_segmentation.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\tokenize.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_tokenize.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\treewriter.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_treewriter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\temporal_filter.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_temporal_filter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\vp8_asm_enc_offsets.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_vp8_asm_enc_offsets.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\encoder\x86\dct_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\subtract_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_subtract_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_subtract_mmx.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\encoder\x86\vp8_enc_stubs_mmx.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_x86_vp8_enc_stubs_mmx.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\encoder\x86\dct_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_dct_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_dct_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\fwalsh_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\encoder\x86\quantize_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_x86_quantize_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\encoder\x86\denoising_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_x86_denoising_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\encoder\x86\subtract_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_subtract_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_subtract_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\temporal_filter_apply_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\encoder\x86\vp8_enc_stubs_sse2.c">
+      <ObjectFileName>$(IntDir)vp8_encoder_x86_vp8_enc_stubs_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp8\encoder\x86\quantize_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\quantize_sse4.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_sse4.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_sse4.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\quantize_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp8\encoder\x86\encodeopt.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_encodeopt.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_encodeopt.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp8\vp8_dx_iface.c">
+      <ObjectFileName>$(IntDir)vp8_vp8_dx_iface.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\dboolhuff.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_dboolhuff.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\decodemv.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_decodemv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\decodeframe.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_decodeframe.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\detokenize.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_detokenize.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\onyxd_if.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_onyxd_if.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp8\decoder\threading.c">
+      <ObjectFileName>$(IntDir)vp8_decoder_threading.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_alloccommon.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_alloccommon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_convolve.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_convolve.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_debugmodes.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_debugmodes.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_entropy.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_entropy.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_entropymode.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_entropymode.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_entropymv.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_entropymv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_filter.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_filter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\generic\vp9_systemdependent.c">
+      <ObjectFileName>$(IntDir)vp9_common_generic_vp9_systemdependent.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_idct.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_idct.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_pred_common.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_pred_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_prob.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_prob.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_rtcd.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_rtcd.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_scale.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_scale.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_seg_common.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_seg_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_tile_common.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_tile_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_loopfilter.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_loopfilter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_loopfilter_filters.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_loopfilter_filters.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_mvref_common.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_mvref_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_quant_common.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_quant_common.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_reconinter.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_reconinter.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_reconintra.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_reconintra.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_treecoder.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_treecoder.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_common_data.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_common_data.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\vp9_scan.c">
+      <ObjectFileName>$(IntDir)vp9_common_vp9_scan.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\opencl\clew.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_opencl_clew.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\opencl\ocl_wrapper.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_opencl_ocl_wrapper.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\vp9_convolve_ocl_c.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_vp9_convolve_ocl_c.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\vp9_inter_ocl_init.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_vp9_inter_ocl_init.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\vp9_inter_ocl_param.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_vp9_inter_ocl_param.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\vp9_inter_ocl_calcu.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_vp9_inter_ocl_calcu.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\inter_ocl\vp9_yuv2rgba.c">
+      <ObjectFileName>$(IntDir)vp9_common_inter_ocl_vp9_yuv2rgba.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\x86\vp9_asm_stubs.c">
+      <ObjectFileName>$(IntDir)vp9_common_x86_vp9_asm_stubs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\common\x86\vp9_loopfilter_intrin_sse2.c">
+      <ObjectFileName>$(IntDir)vp9_common_x86_vp9_loopfilter_intrin_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\vp9\common\x86\vp9_loopfilter_mmx.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp9\common\x86\vp9_subpixel_8t_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp9\common\x86\vp9_subpixel_8t_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp9\common\x86\vp9_copy_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp9\common\x86\vp9_intrapred_sse2.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include=".\vp9\common\x86\vp9_intrapred_ssse3.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Outputs>
+    </CustomBuild>
+    <ClCompile Include=".\vp9\common\x86\vp9_idct_intrin_sse2.c">
+      <ObjectFileName>$(IntDir)vp9_common_x86_vp9_idct_intrin_sse2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\vp9_dx_iface.c">
+      <ObjectFileName>$(IntDir)vp9_vp9_dx_iface.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_decodemv.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_decodemv.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_detokenize.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_detokenize.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_reader.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_reader.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_thread.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_thread.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_onyxd_if.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_onyxd_if.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_dsubexp.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_dsubexp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_decodeframe_recon.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_decodeframe_recon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_append.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_append.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_intra_predict.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_intra_predict.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_detokenize_recon.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_detokenize_recon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\sched\queue.c">
+      <ObjectFileName>$(IntDir)vp9_sched_queue.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\sched\task.c">
+      <ObjectFileName>$(IntDir)vp9_sched_task.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\sched\device.c">
+      <ObjectFileName>$(IntDir)vp9_sched_device.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\sched\sched.c">
+      <ObjectFileName>$(IntDir)vp9_sched_sched.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\sched\step.c">
+      <ObjectFileName>$(IntDir)vp9_sched_step.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_device.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_device.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_step.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_step.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_loopfilter_recon.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_loopfilter_recon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\decoder\vp9_loopfilter_step.c">
+      <ObjectFileName>$(IntDir)vp9_decoder_vp9_loopfilter_step.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vp9\ppa.c">
+      <ObjectFileName>$(IntDir)vp9_ppa.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include=".\vpx_config.c">
+      <ObjectFileName>$(IntDir)vpx_config.obj</ObjectFileName>
+    </ClCompile>
+    <CustomBuild Include=".\third_party\x86inc\x86inc.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)third_party_x86inc_x86inc.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)third_party_x86inc_x86inc.obj</Outputs>
+    </CustomBuild>
+    <None Include=".\vpx.def" />
+    <CustomBuild Include=".\vpx_config.asm">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_config.obj</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_config.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include=".\vpx\vp8.h" />
+    <ClInclude Include=".\vpx\vp8cx.h" />
+    <ClInclude Include=".\vpx\vp8dx.h" />
+    <ClInclude Include=".\vpx\vpx_decoder.h" />
+    <ClInclude Include=".\vpx\vpx_encoder.h" />
+    <ClInclude Include=".\vpx\internal\vpx_codec_internal.h" />
+    <ClInclude Include=".\vpx\vpx_codec.h" />
+    <ClInclude Include=".\vpx\vpx_image.h" />
+    <ClInclude Include=".\vpx\vpx_external_frame_buffer.h" />
+    <ClInclude Include=".\vpx\vpx_integer.h" />
+    <ClInclude Include=".\vpx_mem\vpx_mem.h" />
+    <ClInclude Include=".\vpx_mem\include\vpx_mem_intrnl.h" />
+    <ClInclude Include=".\vpx_scale\yv12config.h" />
+    <ClInclude Include=".\vpx_scale\vpx_scale.h" />
+    <ClInclude Include=".\vpx_ports\asm_offsets.h" />
+    <ClInclude Include=".\vpx_ports\mem.h" />
+    <ClInclude Include=".\vpx_ports\vpx_timer.h" />
+    <ClInclude Include=".\vpx_ports\x86.h" />
+    <ClInclude Include=".\vp8\common\pragmas.h" />
+    <ClInclude Include=".\vp8\common\ppflags.h" />
+    <ClInclude Include=".\vp8\common\onyx.h" />
+    <ClInclude Include=".\vp8\common\onyxd.h" />
+    <ClInclude Include=".\vp8\common\coefupdateprobs.h" />
+    <ClInclude Include=".\vp8\common\default_coef_probs.h" />
+    <ClInclude Include=".\vp8\common\filter.h" />
+    <ClInclude Include=".\vp8\common\alloccommon.h" />
+    <ClInclude Include=".\vp8\common\blockd.h" />
+    <ClInclude Include=".\vp8\common\common.h" />
+    <ClInclude Include=".\vp8\common\entropy.h" />
+    <ClInclude Include=".\vp8\common\entropymode.h" />
+    <ClInclude Include=".\vp8\common\entropymv.h" />
+    <ClInclude Include=".\vp8\common\extend.h" />
+    <ClInclude Include=".\vp8\common\findnearmv.h" />
+    <ClInclude Include=".\vp8\common\header.h" />
+    <ClInclude Include=".\vp8\common\invtrans.h" />
+    <ClInclude Include=".\vp8\common\loopfilter.h" />
+    <ClInclude Include=".\vp8\common\modecont.h" />
+    <ClInclude Include=".\vp8\common\mv.h" />
+    <ClInclude Include=".\vp8\common\onyxc_int.h" />
+    <ClInclude Include=".\vp8\common\quant_common.h" />
+    <ClInclude Include=".\vp8\common\reconinter.h" />
+    <ClInclude Include=".\vp8\common\reconintra4x4.h" />
+    <ClInclude Include=".\vp8\common\setupintrarecon.h" />
+    <ClInclude Include=".\vp8\common\swapyv12buffer.h" />
+    <ClInclude Include=".\vp8\common\systemdependent.h" />
+    <ClInclude Include=".\vp8\common\threading.h" />
+    <ClInclude Include=".\vp8\common\treecoder.h" />
+    <ClInclude Include=".\vp8\common\variance.h" />
+    <ClInclude Include=".\vp8\common\vp8_entropymodedata.h" />
+    <ClInclude Include=".\vp8\common\x86\filter_x86.h" />
+    <ClInclude Include=".\vp8\common\postproc.h" />
+    <ClInclude Include=".\vp8\encoder\defaultcoefcounts.h" />
+    <ClInclude Include=".\vp8\encoder\encodeframe.h" />
+    <ClInclude Include=".\vp8\encoder\block.h" />
+    <ClInclude Include=".\vp8\encoder\boolhuff.h" />
+    <ClInclude Include=".\vp8\encoder\bitstream.h" />
+    <ClInclude Include=".\vp8\encoder\denoising.h" />
+    <ClInclude Include=".\vp8\encoder\encodeintra.h" />
+    <ClInclude Include=".\vp8\encoder\encodemb.h" />
+    <ClInclude Include=".\vp8\encoder\encodemv.h" />
+    <ClInclude Include=".\vp8\encoder\firstpass.h" />
+    <ClInclude Include=".\vp8\encoder\lookahead.h" />
+    <ClInclude Include=".\vp8\encoder\mcomp.h" />
+    <ClInclude Include=".\vp8\encoder\modecosts.h" />
+    <ClInclude Include=".\vp8\encoder\onyx_int.h" />
+    <ClInclude Include=".\vp8\encoder\pickinter.h" />
+    <ClInclude Include=".\vp8\encoder\psnr.h" />
+    <ClInclude Include=".\vp8\encoder\quantize.h" />
+    <ClInclude Include=".\vp8\encoder\ratectrl.h" />
+    <ClInclude Include=".\vp8\encoder\rdopt.h" />
+    <ClInclude Include=".\vp8\encoder\tokenize.h" />
+    <ClInclude Include=".\vp8\encoder\treewriter.h" />
+    <ClInclude Include=".\vp8\encoder\segmentation.h" />
+    <ClInclude Include=".\vp8\encoder\dct_value_cost.h" />
+    <ClInclude Include=".\vp8\encoder\dct_value_tokens.h" />
+    <ClInclude Include=".\vp8\decoder\dboolhuff.h" />
+    <ClInclude Include=".\vp8\decoder\decodemv.h" />
+    <ClInclude Include=".\vp8\decoder\decoderthreading.h" />
+    <ClInclude Include=".\vp8\decoder\detokenize.h" />
+    <ClInclude Include=".\vp8\decoder\onyxd_int.h" />
+    <ClInclude Include=".\vp8\decoder\treereader.h" />
+    <ClInclude Include=".\vp9\vp9_iface_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_pragmas.h" />
+    <ClInclude Include=".\vp9\common\vp9_ppflags.h" />
+    <ClInclude Include=".\vp9\common\vp9_onyx.h" />
+    <ClInclude Include=".\vp9\common\vp9_convolve.h" />
+    <ClInclude Include=".\vp9\common\vp9_default_coef_probs.h" />
+    <ClInclude Include=".\vp9\common\vp9_filter.h" />
+    <ClInclude Include=".\vp9\common\vp9_alloccommon.h" />
+    <ClInclude Include=".\vp9\common\vp9_blockd.h" />
+    <ClInclude Include=".\vp9\common\vp9_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_entropy.h" />
+    <ClInclude Include=".\vp9\common\vp9_entropymode.h" />
+    <ClInclude Include=".\vp9\common\vp9_entropymv.h" />
+    <ClInclude Include=".\vp9\common\vp9_enums.h" />
+    <ClInclude Include=".\vp9\common\vp9_idct.h" />
+    <ClInclude Include=".\vp9\common\vp9_loopfilter.h" />
+    <ClInclude Include=".\vp9\common\vp9_mv.h" />
+    <ClInclude Include=".\vp9\common\vp9_onyxc_int.h" />
+    <ClInclude Include=".\vp9\common\vp9_pred_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_prob.h" />
+    <ClInclude Include=".\vp9\common\vp9_quant_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_reconinter.h" />
+    <ClInclude Include=".\vp9\common\vp9_reconintra.h" />
+    <ClInclude Include=".\vp9\common\vp9_scale.h" />
+    <ClInclude Include=".\vp9\common\vp9_seg_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_systemdependent.h" />
+    <ClInclude Include=".\vp9\common\vp9_textblit.h" />
+    <ClInclude Include=".\vp9\common\vp9_tile_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_treecoder.h" />
+    <ClInclude Include=".\vp9\common\vp9_mvref_common.h" />
+    <ClInclude Include=".\vp9\common\vp9_common_data.h" />
+    <ClInclude Include=".\vp9\common\vp9_scan.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\opencl\clew.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\opencl\ocl_wrapper.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\vp9_convolve_ocl_c.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\vp9_inter_ocl_init.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\vp9_inter_ocl_param.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\vp9_inter_ocl_calcu.h" />
+    <ClInclude Include=".\vp9\common\inter_ocl\vp9_yuv2rgba.h" />
+    <ClInclude Include=".\vp9\common\x86\vp9_postproc_x86.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_reader.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_read_bit_buffer.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_decodemv.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_detokenize.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_onyxd.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_onyxd_int.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_thread.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_dsubexp.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_decodeframe_recon.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_append.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_intra_predict.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_detokenize_recon.h" />
+    <ClInclude Include=".\vp9\sched\thread.h" />
+    <ClInclude Include=".\vp9\sched\queue.h" />
+    <ClInclude Include=".\vp9\sched\task.h" />
+    <ClInclude Include=".\vp9\sched\device.h" />
+    <ClInclude Include=".\vp9\sched\sched.h" />
+    <ClInclude Include=".\vp9\sched\step.h" />
+    <ClInclude Include=".\vp9\sched\atomic.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_device.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_step.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_loopfilter_recon.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_loopfilter_step.h" />
+    <ClInclude Include=".\vp9\decoder\vp9_tile_info.h" />
+    <ClInclude Include=".\vp9\ppa.h" />
+    <ClInclude Include=".\vp9\ppaCPUEvents.h" />
+    <ClInclude Include=".\vpx_ports\emmintrin_compat.h" />
+    <ClInclude Include=".\vpx_ports\vpx_once.h" />
+    <ClInclude Include=".\vpx_scale_rtcd.h" />
+    <ClInclude Include=".\vp8_rtcd.h" />
+    <ClInclude Include=".\vp9_rtcd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\libs.mk" />
+    <None Include=".\vpx\vpx_codec.mk" />
+    <None Include=".\vpx_mem\vpx_mem.mk" />
+    <None Include=".\vpx_scale\vpx_scale.mk" />
+    <None Include=".\vpx_ports\vpx_ports.mk" />
+    <None Include=".\vp8\vp8_common.mk" />
+    <None Include=".\vp8\vp8cx.mk" />
+    <None Include=".\vp8\vp8dx.mk" />
+    <None Include=".\vp9\vp9_common.mk" />
+    <None Include=".\vp9\vp9dx.mk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="obj_int_extract.vcxproj">
+      <Project>{E1360C65-D375-4335-8057-7ED99CC3F9B2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,274 @@
+/*
+ *  Copyright (c) 2010 The WebM project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. An additional intellectual property rights grant can be found
+ *  in the file PATENTS.  All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ */
+
+/* This optimisation includes: memory cache, float_filter, saturate, fmad */
+
+#define SUBPEL_BITS 4
+#define SUBPEL_SHIFTS 16
+#define SUBPEL_TAPS 8
+
+//__attribute__((reqd_work_group_size(64, 0, 0)))
+
+typedef uchar   uint8_t;
+typedef short   int16_t;
+
+typedef struct inter_pred_param_for_gpu {
+  int src_stride;
+  int filter_x_mv;
+  int filter_y_mv;
+}INTER_PRED_PARAM_GPU;
+
+__constant const float filter_bits_f = 128.0f;
+
+/* the filters' array including 4 different filter' types */
+__constant const int16_t vp9_sub_pel_filters[512] = {
+  // Lagrangian interpolation filter
+   0, 0,   0, 128,   0,   0, 0,  0,
+   0, 1,  -5, 126,   8,  -3, 1,  0,
+  -1, 3, -10, 122,  18,  -6, 2,  0,
+  -1, 4, -13, 118,  27,  -9, 3, -1,
+  -1, 4, -16, 112,  37, -11, 4, -1,
+  -1, 5, -18, 105,  48, -14, 4, -1,
+  -1, 5, -19,  97,  58, -16, 5, -1,
+  -1, 6, -19,  88,  68, -18, 5, -1,
+  -1, 6, -19,  78,  78, -19, 6, -1,
+  -1, 5, -18,  68,  88, -19, 6, -1,
+  -1, 5, -16,  58,  97, -19, 5, -1,
+  -1, 4, -14,  48, 105, -18, 5, -1,
+  -1, 4, -11,  37, 112, -16, 4, -1,
+  -1, 3,  -9,  27, 118, -13, 4, -1,
+   0, 2,  -6,  18, 122, -10, 3, -1,
+   0, 1,  -3,   8, 126,  -5, 1,  0,
+  // Freqmultiplier = 0.5
+   0,  0,  0, 128,  0,  0,  0,  0,
+  -3, -1, 32,  64, 38,  1, -3,  0,
+  -2, -2, 29,  63, 41,  2, -3,  0,
+  -2, -2, 26,  63, 43,  4, -4,  0,
+  -2, -3, 24,  62, 46,  5, -4,  0,
+  -2, -3, 21,  60, 49,  7, -4,  0,
+  -1, -4, 18,  59, 51,  9, -4,  0,
+  -1, -4, 16,  57, 53, 12, -4, -1,
+  -1, -4, 14,  55, 55, 14, -4, -1,
+  -1, -4, 12,  53, 57, 16, -4, -1,
+   0, -4,  9,  51, 59, 18, -4, -1,
+   0, -4,  7,  49, 60, 21, -3, -2,
+   0, -4,  5,  46, 62, 24, -3, -2,
+   0, -4,  4,  43, 63, 26, -2, -2,
+   0, -3,  2,  41, 63, 29, -2, -2,
+   0, -3,  1,  38, 64, 32, -1, -3,
+  // DCT based filter
+   0,  0,   0, 128,   0,   0,  0,  0,
+  -1,  3,  -7, 127,   8,  -3,  1,  0,
+  -2,  5, -13, 125,  17,  -6,  3, -1,
+  -3,  7, -17, 121,  27, -10,  5, -2,
+  -4,  9, -20, 115,  37, -13,  6, -2,
+  -4, 10, -23, 108,  48, -16,  8, -3,
+  -4, 10, -24, 100,  59, -19,  9, -3,
+  -4, 11, -24,  90,  70, -21, 10, -4,
+  -4, 11, -23,  80,  80, -23, 11, -4,
+  -4, 10, -21,  70,  90, -24, 11, -4,
+  -3,  9, -19,  59, 100, -24, 10, -4,
+  -3,  8, -16,  48, 108, -23, 10, -4,
+  -2,  6, -13,  37, 115, -20,  9, -4,
+  -2,  5, -10,  27, 121, -17,  7, -3,
+  -1,  3,  -6,  17, 125, -13,  5, -2,
+   0,  1,  -3,   8, 127,  -7,  3, -1,
+  // Blinear filter
+   0, 0, 0, 128,   0, 0, 0, 0,
+   0, 0, 0, 120,   8, 0, 0, 0,
+   0, 0, 0, 112,  16, 0, 0, 0,
+   0, 0, 0, 104,  24, 0, 0, 0,
+   0, 0, 0,  96,  32, 0, 0, 0,
+   0, 0, 0,  88,  40, 0, 0, 0,
+   0, 0, 0,  80,  48, 0, 0, 0,
+   0, 0, 0,  72,  56, 0, 0, 0,
+   0, 0, 0,  64,  64, 0, 0, 0,
+   0, 0, 0,  56,  72, 0, 0, 0,
+   0, 0, 0,  48,  80, 0, 0, 0,
+   0, 0, 0,  40,  88, 0, 0, 0,
+   0, 0, 0,  32,  96, 0, 0, 0,
+   0, 0, 0,  24, 104, 0, 0, 0,
+   0, 0, 0,  16, 112, 0, 0, 0,
+   0, 0, 0,   8, 120, 0, 0, 0
+};
+
+/**
+ * vp9_convolve_horiz_ocl_8x15,
+ * do convolution in horizontal pass
+ * @src [in] input source
+ * @src_stride  [in] the size of one stride in source
+ * @dst [out] output results
+ * @filter_x0 [in] start position of one filter row
+ * @return void
+ */
+void vp9_convolve_horiz_ocl_4x11(
+				__global const uchar *src,
+				int src_stride,
+				__private float4 *dst,
+				__constant const short8 * filter_x0
+			    ) {
+  float8 filter_val;
+  float8 src1;
+  filter_val = (convert_float8(filter_x0[0])) / filter_bits_f;
+  
+  int nOffsetSrc;
+  for (nOffsetSrc = 0; nOffsetSrc < 11; ++nOffsetSrc) {
+     src1 = convert_float8(vload8(0,src + 4));
+     dst[0] = convert_float4(vload4(0,src));
+    //calculation
+    dst[0].s0 = mad(dst[0].s0 , filter_val.s0,
+      mad( dst[0].s1, filter_val.s1,
+      mad( dst[0].s2, filter_val.s2,
+      mad( dst[0].s3, filter_val.s3,
+      mad( src1.s0, filter_val.s4,
+      mad( src1.s1, filter_val.s5,
+      mad( src1.s2, filter_val.s6,
+      mad( src1.s3, filter_val.s7,
+      0.5f ))))))));
+
+    dst[0].s1 = mad(dst[0].s1 , filter_val.s0,
+      mad( dst[0].s2, filter_val.s1,
+      mad( dst[0].s3, filter_val.s2,
+      mad( src1.s0, filter_val.s3,
+      mad( src1.s1, filter_val.s4,
+      mad( src1.s2, filter_val.s5,
+      mad( src1.s3, filter_val.s6,
+      mad( src1.s4, filter_val.s7,
+      0.5f ))))))));
+
+    dst[0].s2 = mad(dst[0].s2 , filter_val.s0,
+      mad( dst[0].s3, filter_val.s1,
+      mad( src1.s0, filter_val.s2,
+      mad( src1.s1, filter_val.s3,
+      mad( src1.s2, filter_val.s4,
+      mad( src1.s3, filter_val.s5,
+      mad( src1.s4, filter_val.s6,
+      mad( src1.s5, filter_val.s7,
+      0.5f ))))))));
+
+    dst[0].s3 = mad(dst[0].s3 , filter_val.s0,
+      mad( src1.s0, filter_val.s1,
+      mad( src1.s1, filter_val.s2,
+      mad( src1.s2, filter_val.s3,
+      mad( src1.s3, filter_val.s4,
+      mad( src1.s4, filter_val.s5,
+      mad( src1.s5, filter_val.s6,
+      mad( src1.s6, filter_val.s7,
+      0.5f ))))))));
+
+    
+
+    dst[0] = convert_float4(convert_uchar4_sat(dst[0]));
+   
+
+    src += (src_stride);
+    dst += 1;
+  }
+}
+
+/**
+ * vp9_convolve_vert_ocl_8x8,
+ * do convolution in vertical pass
+ * @src [in] input source
+ * @dst  [out] ouput results
+ * @dst_stride [in] size of one stride in destination
+ * @filter_y0 [in] start position of one filter row
+ * @return void
+ */
+void vp9_convolve_vert_ocl_4x4(__private const float4 *src,
+                               __global uchar4 *dst,
+                               int dst_stride,
+                               __constant const short8 * filter_y0
+                               ) {
+  float8 filter_val;
+  float4 sum;
+
+  filter_val = (convert_float8(filter_y0[0])) / filter_bits_f;
+
+  // Float filter
+  
+ uint r;
+ for( r = 0; r < 4; r++) 
+ {
+  // dst line 0
+  #if 1
+   sum = src[0] * filter_val.s0;
+   sum += src[1] * filter_val.s1;
+   sum += src[2] * filter_val.s2;
+   sum += src[3] * filter_val.s3;
+   sum += src[4] * filter_val.s4;
+   sum += src[5] * filter_val.s5;
+   sum += src[6] * filter_val.s6;
+   sum += (src[7] * filter_val.s7) + 0.5f;
+#else
+   sum = mad(src[0], filter_val.s0,
+         mad(src[1], filter_val.s1,
+	 mad(src[2], filter_val.s2,
+	 mad(src[3], filter_val.s3,
+	 mad(src[4], filter_val.s4,
+	 mad(src[5], filter_val.s5,
+	 mad(src[6], filter_val.s6,
+	 mad(src[7], filter_val.s7,
+	 0.5f))))))));
+#endif
+    dst[0] = convert_uchar4_sat(sum);
+     src += 1;
+     dst += dst_stride;
+ 
+  }
+ 
+}
+
+
+/**
+ * inter_pred_calcu,
+ * the kernel of the inter prediction calculation
+ * @buffer_pool [in] input sources
+ * @new_buffer  [out] output results
+ * @inter_pred_param [in] block paramenters required to be calculated
+ * @param_num [in] the block number which the thread index
+ * @x_mv [in] the offset which the thread will start to process
+ * @buffer_size [in] one frame size
+ * @counts_8x8 [in] the real number of thread
+ * @return void
+ */
+
+__kernel void inter_pred_calcu(__global uint8_t *buffer_pool,
+                // __global uchar4 *new_buffer,
+		 __global int *dst_x_mv,
+                 __global const INTER_PRED_PARAM_GPU *inter_pred_param,
+                 __global const int * param_num,
+                 __global const int * x_mv,
+                 //uint buffer_size,
+                 uint counts_8x8) {
+  uint gIdx = get_global_id(0);
+  if (gIdx >= (counts_8x8 << 2))
+    return ;
+  __global int * nBlkPrmPtr = (__global int *) (inter_pred_param + param_num[gIdx >> 2]);
+  __private float temp_buffer[44];
+
+  int row = (gIdx >> 1) & 0x01;
+  int col = gIdx & 0x01;
+  int col1= ((gIdx >> 2) << 1) + col;
+  int src_stride = nBlkPrmPtr[0];
+
+  vp9_convolve_horiz_ocl_4x11(
+     (buffer_pool + x_mv[gIdx >> 2] + (row << 2) * src_stride + (col << 2) ),
+      src_stride,                       //nBlkPrmPtr[0] is src_stride of INTER_PRED_PARAM_GPU
+      (__private float4*)temp_buffer,
+      (__constant const short8*)(vp9_sub_pel_filters + nBlkPrmPtr[1]));//nBlkPrmPtr[1] is filter_x_mv of INTER_PRED_PARAM_GPU
+
+  vp9_convolve_vert_ocl_4x4(
+      (__private float4*)(temp_buffer),
+      //((__global uchar4*)(buffer_pool + dst_x_mv[gIdx >> 2])) + (/*new_buffer +*/ (row <<  2) * (src_stride >> 2) + col1),
+      (__global uchar4*)(buffer_pool + dst_x_mv[gIdx >> 2]  + (row << 2) * src_stride + (col << 2)),
+      (src_stride >> 2),
+      (__constant const short8*)(vp9_sub_pel_filters + nBlkPrmPtr[2]));//nBlkPrmPtr[2] is filter_y_mv of INTER_PRED_PARAM_GPU
+}
