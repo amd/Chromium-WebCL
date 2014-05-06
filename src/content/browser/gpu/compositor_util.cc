@@ -261,7 +261,7 @@ bool IsForceCompositingModeEnabled() {
 
 bool IsDelegatedRendererEnabled() {
 // ScalableVision
-  return false;
+//  return false;
 
   const CommandLine& command_line = *CommandLine::ForCurrentProcess();
   bool enabled = false;
