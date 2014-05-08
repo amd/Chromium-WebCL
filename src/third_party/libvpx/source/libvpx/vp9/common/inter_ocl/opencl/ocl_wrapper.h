@@ -19,6 +19,12 @@ typedef struct OCL_CONTEXT {
   cl_command_queue command_queue;
 }OCL_CONTEXT;
 
+typedef struct Interop_Context {
+  void* pSharedHandle; //HANDLE
+  void* pDevice;       //LPDIRECT3DDEVICE9EX
+  void* pSurface;      //LPDIRECT3DSURFACE9
+}Interop_Context;
+
  struct IDirect3DDevice9Ex;
 
 int ocl_wrapper_init(void);
@@ -27,7 +33,7 @@ int ocl_wrapper_finalize(void);
 
 int ocl_context_init(OCL_CONTEXT *ctx, int use_gpu);
 
-int ocl_context_init_for_d3d9_interOp(OCL_CONTEXT *ctx, struct IDirect3DDevice9Ex *iD3D9Device, int use_gpu);
+int ocl_context_init_for_d3d9_interOp(OCL_CONTEXT *ctx, Interop_Context *interop_context, int use_gpu);
 
 void ocl_context_fini(OCL_CONTEXT *context);
 

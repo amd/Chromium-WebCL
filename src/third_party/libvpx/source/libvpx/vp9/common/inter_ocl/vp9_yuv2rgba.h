@@ -53,8 +53,7 @@ int release_yuv2rgba_ocl_obj();
 
 int vp9_yv12_to_rgba_ocl(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, struct IDirect3DSurface9 *d3d_surface9);
 
-int create_buffer_from_d3d9_surface(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, 
-                                                                         struct IDirect3DSurface9 *d3d_surface9);
+int create_buffer_from_d3d9_surface(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, struct IDirect3DSurface9 *d3d_surface9, void* pSharedHandle);
 
 int vp9_i420_to_rgba_ocl(VP9_COMMON *cm, VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void *texture);
 extern VP9_YUV2RGBA_OCL yuv2rgba_ocl_obj;

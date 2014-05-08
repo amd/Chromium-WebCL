@@ -10,9 +10,20 @@
 #include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
 #include "vp9/common/inter_ocl/vp9_inter_ocl_param.h"
 #include "vp9/common/inter_ocl/opencl/CL/cl_dx9_media_sharing.h"
+#include "vp9/ppa.h"
 #include <d3d9.h>
+#ifdef _WIN32
+#include <Windows.h>
+#else
+  typedef void* HANDLE;
+#endif
 
 VP9_YUV2RGBA_OCL yuv2rgba_ocl_obj;
+
+#ifdef USE_PPA
+#undef USE_PPA
+#define USE_PPA 0
+#endif
 
 int init_yuv2rgba_ocl_obj() {
   int status;
@@ -50,17 +61,20 @@ int init_yuv2rgba_ocl_obj() {
 
 
 int create_buffer_from_d3d9_surface(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj,
-                                                                         struct IDirect3DSurface9 *d3d_surface9) {
+                                    struct IDirect3DSurface9 *d3d_surface9,
+									void *pSharedHandle) {
   cl_int status;
- 
+
   typedef struct cl_dx9_surface_info_khr
   {
       IDirect3DSurface9 *resource;
       HANDLE shared_handle;
   }cl_dx9_surface_info_khr;
 
+ 
   cl_dx9_surface_info_khr surface = {NULL, NULL};
   surface.resource= (IDirect3DSurface9*)(d3d_surface9);
+  surface.shared_handle = (HANDLE)pSharedHandle;
   
   yuv2rgba_ocl_obj->clImag = clCreateFromDX9MediaSurfaceKHR(ocl_context.context, 
                                                                                                    CL_MEM_WRITE_ONLY, 
@@ -73,15 +87,25 @@ int create_buffer_from_d3d9_surface(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj,
   return status;
 }
 
-int vp9_i420_to_rgba_ocl(VP9_COMMON *cm,VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void*texture) {
+int vp9_i420_to_rgba_ocl(VP9_COMMON *cm,VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void *texture) {
   int status, new_fb, arg = 0;
   IDirect3DSurface9 *d3d_surface9;
   YV12_BUFFER_CONFIG *current_frame;
   //create opencl buffer from d3d9 surface
-  d3d_surface9 = (IDirect3DSurface9 *)texture;
-
+  Interop_Context *interop_context;
+ 
+  interop_context = (Interop_Context*)texture;
+  d3d_surface9 = (IDirect3DSurface9 *)(interop_context->pSurface);
   
-  status = create_buffer_from_d3d9_surface(yuv2rgba_ocl_obj, d3d_surface9);
+  
+
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_create_surface_time);
+#endif
+  status = create_buffer_from_d3d9_surface(yuv2rgba_ocl_obj, d3d_surface9, interop_context->pSharedHandle);
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_create_surface_time);
+#endif
   if (status != 0) {
     printf("fail to create buffer from d3d9 surface\n");
     return -1;
@@ -97,6 +121,10 @@ int vp9_i420_to_rgba_ocl(VP9_COMMON *cm,VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void
                                                        (cm->new_fb_idx * current_frame->buffer_alloc_sz);
   yuv2rgba_ocl_obj->v_plane_offset = (current_frame->v_buffer - current_frame->buffer_alloc) +
                                                        (cm->new_fb_idx * current_frame->buffer_alloc_sz);
+
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_yuv2rgb_setArgs_time);
+#endif
   // set kernel args
   // (1) buffer_Pool
    status = clSetKernelArg(
@@ -171,29 +199,59 @@ int vp9_i420_to_rgba_ocl(VP9_COMMON *cm,VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void
     printf("yuv_rgba_kernel:Failed to set arguments 7, error: %d\n", status);
     return -1;
   }
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_yuv2rgb_setArgs_time);
+#endif
   yuv2rgba_ocl_obj->globalThreads[0] = (cm->width >> cm->subsampling_x);
   yuv2rgba_ocl_obj->globalThreads[1] = (cm->height >> cm->subsampling_y);
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_clEnqueueAcquireDX9MediaSurfacesKHR_time);
+#endif
   //NDRange kernel
    status = clEnqueueAcquireDX9MediaSurfacesKHR(ocl_context.command_queue, 1, 
                                                                &yuv2rgba_ocl_obj->clImag, 0, NULL, NULL);
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_clEnqueueAcquireDX9MediaSurfacesKHR_time);
+#endif
   if(CL_SUCCESS != status) {
     printf("Fail to clEnqueueAcquireDX9MediaSurfacesKHR status = %d\n", status);
     return -1;
   }
-
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_yuv2rgb_clEnqueueNDRangeKernel_time);
+#endif
   clEnqueueNDRangeKernel(ocl_context.command_queue, yuv2rgba_ocl_obj->yuv_rgba_kernel, 2,
                                       NULL, yuv2rgba_ocl_obj->globalThreads, NULL, 0, NULL, NULL );
-  
-  
-  status = clEnqueueReleaseDX9MediaSurfacesKHR(ocl_context.command_queue, 1,
-                                                                   &yuv2rgba_ocl_obj->clImag, 0, NULL, NULL);
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_yuv2rgb_clEnqueueNDRangeKernel_time);
+#endif  
+
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_clEnqueueReleaseDX9MediaSurfacesKHR_time);
+#endif
+  status = clEnqueueReleaseDX9MediaSurfacesKHR(ocl_context.command_queue, 1,&yuv2rgba_ocl_obj->clImag, 0, NULL, NULL);
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_clEnqueueReleaseDX9MediaSurfacesKHR_time);
+#endif                                                                   
   if(CL_SUCCESS != status) {
     printf("Fail to clEnqueueReleaseDX9MediaSurfacesKHR status = %d\n", status);
     return -1;
   }
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_yuv2rgb_clFinish_time);
+#endif
   clFinish(ocl_context.command_queue);
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_yuv2rgb_clFinish_time);
+#endif
   // release cl image
-  status = clReleaseMemObject(yuv2rgba_ocl_obj->clImag);                                                      
+#if USE_PPA
+  PPAStartCpuEventFunc(interop_clReleaseMemObject_time);
+#endif
+  status = clReleaseMemObject(yuv2rgba_ocl_obj->clImag);     
+#if USE_PPA
+  PPAStopCpuEventFunc(interop_clReleaseMemObject_time);
+#endif
   if(CL_SUCCESS != status) {
     printf("Fail to clReleaseMemObject clImag status = %d\n", status);
     return -1;

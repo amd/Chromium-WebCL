@@ -127,12 +127,15 @@ int ocl_context_init(OCL_CONTEXT *ctx, int use_gpu) {
 }
 
 //add function for D3D9 and OpenCL interOp
-int ocl_context_init_for_d3d9_interOp(OCL_CONTEXT *ctx, IDirect3DDevice9Ex *id3d9_device, int use_gpu) {
+int ocl_context_init_for_d3d9_interOp(OCL_CONTEXT *ctx, Interop_Context *interop_context, int use_gpu) {
   cl_int status = 0;
   cl_uint numDevices;
+  LPDIRECT3DDEVICE9EX id3d9_device;
+
   cl_dx9_media_adapter_type_khr tpAdapter = CL_ADAPTER_D3D9EX_KHR;
   // Number of OpenCL devices corresponding to the Direct3D 9 object
-  cl_context_properties cps[5];
+  cl_context_properties cps[7];
+  id3d9_device = (LPDIRECT3DDEVICE9EX)(interop_context->pDevice);
 
   status = clGetPlatformIDs(0, NULL, &ctx->num_platforms);
   if (CL_SUCCESS != status) {
@@ -189,7 +192,10 @@ int ocl_context_init_for_d3d9_interOp(OCL_CONTEXT *ctx, IDirect3DDevice9Ex *id3d
   cps[1] = (cl_context_properties)ctx->platforms[0];
   cps[2] = CL_CONTEXT_ADAPTER_D3D9EX_KHR;
   cps[3] = (int64_t)id3d9_device;
-  cps[4] = 0;
+  cps[4] = CL_CONTEXT_INTEROP_USER_SYNC;
+  cps[5] = CL_TRUE;
+  cps[6] = 0;
+
  
   // create opencl context
   ctx->context = clCreateContext(cps, 1, &ctx->devices[0], 0, 0, &status);

@@ -476,7 +476,7 @@ typedef struct _cl_image_format {
 #define CL_INVALID_GL_OBJECT                        -60
 #define CL_INVALID_BUFFER_SIZE                      -61
 #define CL_INVALID_MIP_LEVEL                        -62
-#define CL_INVALID_GLOBAL_WORK_SIZE                 -63
+#define CL_CONTEXT_INTEROP_USER_SYNC                0x1085
 
 // OpenCL Version
 #define CL_VERSION_1_0                              1
@@ -598,6 +598,7 @@ typedef struct _cl_image_format {
 #define CL_MEM_USE_HOST_PTR                         (1 << 3)
 #define CL_MEM_ALLOC_HOST_PTR                       (1 << 4)
 #define CL_MEM_COPY_HOST_PTR                        (1 << 5)
+
 
 // cl_channel_order
 #define CL_R                                        0x10B0

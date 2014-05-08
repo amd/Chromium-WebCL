@@ -632,20 +632,20 @@ int vp9_init_ocl() {
 }
 
 int vp9_init_ocl_ex(void *id3d9_devices) {
-  IDirect3DDevice9Ex *d3d9_device;
+  Interop_Context *interop_context_p;
   int status = 0;
   const char *psource = NULL;
   inter_ocl_obj.buffer_pool_flag = 0;
   inter_ocl_obj.inter_ocl_init = 1;
 
-  d3d9_device = (IDirect3DDevice9Ex *)id3d9_devices;
+  interop_context_p = (Interop_Context *)id3d9_devices;
   status = ocl_wrapper_init();
   if (status < 0) {
     LOGE("Failed to init ocl wrapper, error: %d\n", status);
     exit(1);
   }
 
-  status = ocl_context_init_for_d3d9_interOp(&ocl_context,d3d9_device, 1);
+  status = ocl_context_init_for_d3d9_interOp(&ocl_context,interop_context_p, 1);
   if (status < 0) {
     LOGE("Failed to init ocl context, error: %d\n", status);
     exit(1);
