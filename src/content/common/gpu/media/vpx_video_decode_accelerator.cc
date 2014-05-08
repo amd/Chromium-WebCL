@@ -36,14 +36,66 @@
 extern "C" {
 #include "third_party/libvpx/source/libvpx/vpx/vpx_decoder.h"
 #include "third_party/libvpx/source/libvpx/vpx/vp8dx.h"
+typedef struct Interop_Context {
+  void* pSharedHandle; //HANDLE
+  void* pDevice;       //LPDIRECT3DDEVICE9EX
+  void* pSurface;      //LPDIRECT3DSURFACE9
+}Interop_Context;
+
+
 }
+
+#include <windows.h>
+ 
+ typedef struct {
+     LARGE_INTEGER start;
+     LARGE_INTEGER stop;
+ } stopWatch;
+ 
+ class CStopWatch {
+ 
+ private:
+     stopWatch timer;
+     LARGE_INTEGER frequency;
+     double LIToSecs( LARGE_INTEGER & L) ;
+ public:
+     CStopWatch() ;
+     void startTimer( ) ;
+     void stopTimer( ) ;
+     double getElapsedTime() ;
+ };
+ 
+ double CStopWatch::LIToSecs( LARGE_INTEGER & L) {
+     return ((double)L.QuadPart /(double)frequency.QuadPart) ;
+ }
+ 
+ CStopWatch::CStopWatch(){
+     timer.start.QuadPart=0;
+     timer.stop.QuadPart=0; 
+     QueryPerformanceFrequency( &frequency ) ;
+ }
+ 
+ void CStopWatch::startTimer( ) {
+     QueryPerformanceCounter(&timer.start) ;
+ }
+ 
+ void CStopWatch::stopTimer( ) {
+     QueryPerformanceCounter(&timer.stop) ;
+ }
+ 
+ double CStopWatch::getElapsedTime() {
+     LARGE_INTEGER time;
+     time.QuadPart = timer.stop.QuadPart - timer.start.QuadPart;
+     return LIToSecs( time) ;
+ }
+ 
 
 namespace content {
 
 // We only request 5 picture buffers from the client which are used to hold the
 // decoded samples. These buffers are then reused when the client tells us that
 // it is done with the buffer.
-static const int kNumPictureBuffers = 5;
+static const int kNumPictureBuffers = 9;
 
 bool VPXVideoDecodeAccelerator::pre_sandbox_init_done_ = false;
 uint32 VPXVideoDecodeAccelerator::dev_manager_reset_token_ = 0;
@@ -127,7 +179,7 @@ struct VPXVideoDecodeAccelerator::VPXPictureBuffer {
     return picture_buffer_.size();
   }
 
- private:
+ public:
   explicit VPXPictureBuffer(const media::PictureBuffer& buffer);
 
   bool available_;
@@ -273,14 +325,19 @@ bool VPXVideoDecodeAccelerator::VPXPictureBuffer::
   hr = decoding_texture_->GetSurfaceLevel(0, d3d_surface.Receive());
   RETURN_ON_HR_FAILURE(hr, "Failed to get surface from texture", false);
 
+  CStopWatch timer;
+  timer.startTimer();
+
   hr = device_->StretchRect(dest_surface,
-                            NULL,
-                            d3d_surface,
-                            NULL,
-                            D3DTEXF_NONE);
+    NULL,
+    d3d_surface,
+    NULL,
+    D3DTEXF_NONE);
+
+
   RETURN_ON_HR_FAILURE(hr, "Colorspace conversion via StretchRect failed",
                         false);
-
+#if 1
   // Ideally, this should be done immediately before the draw call that uses
   // the texture. Flush it once here though.
   hr = query_->Issue(D3DISSUE_END);
@@ -302,8 +359,16 @@ bool VPXVideoDecodeAccelerator::VPXPictureBuffer::
   int iterations = 0;
   while ((query_->GetData(NULL, 0, D3DGETDATA_FLUSH) == S_FALSE) &&
           ++iterations < kMaxIterationsForD3DFlush) {
+    LOG(ERROR) << "Sleep(1)";
     Sleep(1);  // Poor-man's Yield().
   }
+  
+  timer.stopTimer();
+  double t = timer.getElapsedTime();
+  LOG(ERROR) << "ANGLE flush time (secs): " << t;
+#endif
+
+
   EGLDisplay egl_display = gfx::GLSurfaceEGL::GetHardwareDisplay();
   eglBindTexImage(
       egl_display,
@@ -370,7 +435,8 @@ bool VPXVideoDecodeAccelerator::CreateD3DDevManager() {
                              D3DDEVTYPE_HAL,
                              ::GetShellWindow(),
                              D3DCREATE_FPU_PRESERVE |
-                             D3DCREATE_SOFTWARE_VERTEXPROCESSING |
+                             //D3DCREATE_SOFTWARE_VERTEXPROCESSING |
+                             D3DCREATE_HARDWARE_VERTEXPROCESSING |
                              D3DCREATE_DISABLE_PSGP_THREADING |
                              D3DCREATE_MULTITHREADED,
                              &present_params,
@@ -404,13 +470,18 @@ VPXVideoDecodeAccelerator::VPXVideoDecodeAccelerator(
       pictures_requested_(false),
       inputs_before_decode_(0),
       make_context_current_(make_context_current),
-      temp_surface_(NULL) {
+      temp_surface_yv12_(NULL),
+      temp_surface_rgba_(NULL) {
   memset(&input_stream_info_, 0, sizeof(input_stream_info_));
   memset(&output_stream_info_, 0, sizeof(output_stream_info_));
 }
 
 VPXVideoDecodeAccelerator::~VPXVideoDecodeAccelerator() {
   client_ = NULL;
+  if (temp_surface_rgba_)
+    temp_surface_rgba_->Release();
+  if (temp_surface_yv12_)
+    temp_surface_yv12_->Release();
 }
 
 bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
@@ -421,6 +492,9 @@ bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
     RETURN_AND_NOTIFY_ON_FAILURE(false,
         "Unsupported vp9 profile", PLATFORM_FAILURE, false);
   }
+
+  restart_ = true;
+
 
   RETURN_AND_NOTIFY_ON_FAILURE(pre_sandbox_init_done_,
       "PreSandbox initialization not completed", PLATFORM_FAILURE, false);
@@ -468,15 +542,28 @@ void VPXVideoDecodeAccelerator::Decode(
                                 state_ == kFlushing),
       "Invalid state: " << state_, ILLEGAL_STATE,);
 
+  
+  CStopWatch timer;
+  double t;
+  timer.startTimer();
+
   VpxSample sample;
   InitSampleFromInputBuffer(sample, bitstream_buffer,
-                                            input_stream_info_.cbSize,
-                                            input_stream_info_.cbAlignment);
+    input_stream_info_.cbSize,
+    input_stream_info_.cbAlignment);
+
+  //timer.stopTimer();
+  //t = timer.getElapsedTime();
+  //LOG(ERROR) << "InitSampleFromInputBuffer time (secs): " << t;
 
   //RETURN_AND_NOTIFY_ON_HR_FAILURE(sample->SetSampleTime(bitstream_buffer.id()),
   //    "Failed to associate input buffer id with sample", PLATFORM_FAILURE,);
 
-  DecodeInternal(sample);
+  timer.startTimer();
+  DecodeInternal(sample, false);
+  timer.stopTimer();
+  t = timer.getElapsedTime();
+  LOG(ERROR) << "***Total decode+display time (secs): " << t;
 }
 
 void VPXVideoDecodeAccelerator::AssignPictureBuffers(
@@ -576,21 +663,36 @@ void VPXVideoDecodeAccelerator::Destroy() {
   delete this;
 }
 
-static vpx_codec_ctx* InitializeVpxContext(vpx_codec_ctx* context/*,
+static vpx_codec_ctx* InitializeVpxContext(IDirect3DDevice9Ex* device, vpx_codec_ctx* context/*,
                                            const VideoDecoderConfig& config*/) {
   
   context = new vpx_codec_ctx();
- /* vpx_codec_dec_cfg_t vpx_config = {0};
-  vpx_config.w = config.coded_size().width();
-  vpx_config.h = config.coded_size().height();
-  vpx_config.threads = GetThreadCount(config); */
+  vpx_codec_dec_cfg_t vpx_config = {0};
+  /*vpx_config.w = config.coded_size().width();
+  vpx_config.h = config.coded_size().height();*/
+  vpx_config.threads = 4; //GetThreadCount(config); 
 
+#ifndef AMD_ACCELERATED
   vpx_codec_err_t status = vpx_codec_dec_init(context,
                                               //config.codec() == kCodecVP9 ?
                                                   vpx_codec_vp9_dx() /*:
                                                   vpx_codec_vp8_dx()*/,
                                               NULL, //&vpx_config,
                                               0);
+#else
+  Interop_Context  interop_context;
+  interop_context.pDevice = device;
+
+  vpx_codec_err_t status = vpx_codec_dec_init_ver_ex(context,
+    //config.codec() == kCodecVP9 ?
+    vpx_codec_vp9_dx() /*:
+                       vpx_codec_vp8_dx()*/,
+                       NULL, //&vpx_config,
+                       0,
+                       VPX_DECODER_ABI_VERSION,
+                       &interop_context); //device);
+#endif
+
   if (status != VPX_CODEC_OK) {
     LOG(ERROR) << "vpx_codec_dec_init failed, status=" << status;
     delete context;
@@ -600,7 +702,7 @@ static vpx_codec_ctx* InitializeVpxContext(vpx_codec_ctx* context/*,
 }
 
 bool VPXVideoDecodeAccelerator::InitDecoder(media::VideoCodecProfile profile) {
-  vpx_codec_ = InitializeVpxContext(vpx_codec_/*, config*/);
+  vpx_codec_ = InitializeVpxContext(device_, vpx_codec_/*, config*/);
   if (!vpx_codec_)
     return false;
   /*
@@ -850,7 +952,8 @@ bool VPXVideoDecodeAccelerator::ProcessOutputSample(IMFSample* sample) {
 }
 */
 
-void VPXVideoDecodeAccelerator::ProcessPendingSamples() {
+void VPXVideoDecodeAccelerator::ProcessPendingSamples(
+  IDirect3DSurface9 *direct_output_surface) {
   RETURN_AND_NOTIFY_ON_FAILURE(make_context_current_.Run(),
       "Failed to make context current", PLATFORM_FAILURE,);
 
@@ -862,7 +965,7 @@ void VPXVideoDecodeAccelerator::ProcessPendingSamples() {
        ++index) {
     if (index->second->available()) {
       PendingSampleInfo sample_info = pending_output_samples_.front();
-
+#ifndef AMD_ACCELERATED
       HRESULT hr;
 
       /* base::win::ScopedComPtr<IMFMediaBuffer> output_buffer;
@@ -879,16 +982,16 @@ void VPXVideoDecodeAccelerator::ProcessPendingSamples() {
           PLATFORM_FAILURE,); */
       
       vpx_image_t *vpx_image = sample_info.output_sample;
-      // copy decoding result vpx_image into temp_surface_
-      if (!temp_surface_) {
+      // copy decoding result vpx_image into temp_surface_yv12_
+      if (!temp_surface_yv12_) {
         //device_->CheckDeviceFormatConversion(D3DADAPTER_DEFAULT,d3dCaps.DeviceType,
         //  (D3DFORMAT)MAKEFOURCC('Y', 'V', '1', '2'), D3DFMT_A8R8G8B8);
         // Creating an offscreen plain surface to load the YV12 image
         device_->CreateOffscreenPlainSurface(vpx_image->d_w, vpx_image->d_h,
-          (D3DFORMAT)MAKEFOURCC('Y','V','1','2'),D3DPOOL_DEFAULT ,&temp_surface_,NULL);
+          (D3DFORMAT)MAKEFOURCC('Y','V','1','2'),D3DPOOL_DEFAULT ,&temp_surface_yv12_,NULL);
       }
 
-      IDirect3DSurface9 *surface = temp_surface_;
+      IDirect3DSurface9 *surface = temp_surface_yv12_;
 
       { // Copy decoded frame into d3d surface
       int w = vpx_image->d_w, h = vpx_image->d_h;
@@ -926,8 +1029,8 @@ void VPXVideoDecodeAccelerator::ProcessPendingSamples() {
               static_cast<uint32>(index->second->size().width()) ||
           surface_desc.Height !=
               static_cast<uint32>(index->second->size().height())) {
-        temp_surface_->Release();
-        temp_surface_ = NULL;
+        temp_surface_yv12_->Release();
+        temp_surface_yv12_ = NULL;
 
         HandleResolutionChanged(surface_desc.Width, surface_desc.Height);
         return;
@@ -937,6 +1040,33 @@ void VPXVideoDecodeAccelerator::ProcessPendingSamples() {
           index->second->CopyOutputSampleDataToPictureBuffer(
               surface),
           "Failed to copy output sample", PLATFORM_FAILURE,);
+#else
+      // In the accelerated case, the decoded picture is in temp_surface_rgba_
+
+      if (width_ !=
+        static_cast<uint32>(index->second->size().width()) ||
+        height_ !=
+        static_cast<uint32>(index->second->size().height())) {
+          HandleResolutionChanged(width_, height_);
+          return;
+      }
+      //base::win::ScopedComPtr<IDirect3DSurface9> d3d_surface;
+      //HRESULT hr = index->second->decoding_texture_->GetSurfaceLevel(0,d3d_surface.Receive());
+      //RETURN_ON_HR_FAILURE(hr, "Failed to get surface from texture", );
+      if (direct_output_surface) {
+        base::win::ScopedComPtr<IDirect3DSurface9> d3d_surface;
+        HRESULT hr = index->second->decoding_texture_->GetSurfaceLevel(0, d3d_surface.Receive());
+        RETURN_ON_HR_FAILURE(hr, "Failed to get surface from texture 3", );
+        if (direct_output_surface != d3d_surface.get())
+          LOG(ERROR) << "Logic error!!!!!";
+      } else {
+
+        RETURN_AND_NOTIFY_ON_FAILURE(
+          index->second->CopyOutputSampleDataToPictureBuffer(
+          temp_surface_rgba_),
+          "Failed to copy output sample", PLATFORM_FAILURE,);
+      }
+#endif
 
       media::Picture output_picture(index->second->id(),
                                     sample_info.input_buffer_id);
@@ -1043,7 +1173,7 @@ void VPXVideoDecodeAccelerator::DecodePendingInputBuffers() {
 
   for (PendingInputs::iterator it = pending_input_buffers_copy.begin();
        it != pending_input_buffers_copy.end(); ++it) {
-    DecodeInternal(*it);
+    DecodeInternal(*it, true);
   }
 }
 
@@ -1070,9 +1200,21 @@ void VPXVideoDecodeAccelerator::FlushInternal() {
   state_ = kNormal;
 }
 
-void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
+void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pending_sample) {
   DCHECK(CalledOnValidThread());
-  
+    // if restart_ is true, the sample must be the first packet, get info
+  if (restart_) {
+    vpx_codec_stream_info_t info;
+    vpx_codec_peek_stream_info_ex(vpx_codec_vp9_dx(), &sample.data_[0], sample.data_.size(), &info);
+    width_ = info.w;
+    height_ = info.h;
+    LOG(ERROR) << "info.width=" << info.w << " info.height=" << info.h;
+    restart_ = false;
+  }
+
+
+
+
   if (state_ == kUninitialized)
     return;
 
@@ -1088,6 +1230,8 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
   }
 
   inputs_before_decode_++;
+
+  IDirect3DSurface9 *direct_output_surface = NULL;
 
 /*
   HRESULT hr = decoder_->ProcessInput(0, sample, 0);
@@ -1134,7 +1278,7 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
 //{
   //DCHECK(video_frame);
   //DCHECK(!buffer->end_of_stream());
-
+#ifndef AMD_ACCELERATED
   // Pass |buffer| to libvpx.
   //int64 timestamp = buffer->timestamp().InMicroseconds();
   void* user_priv = reinterpret_cast<void*>(sample.id_);
@@ -1203,40 +1347,207 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
   CopyVpxImageTo(vpx_image, vpx_image_alpha, video_frame);
   (*video_frame)->SetTimestamp(base::TimeDelta::FromMicroseconds(timestamp));
   */
+#else
+  {
+    if (!temp_surface_rgba_) {
+      HRESULT hr = device_->CreateOffscreenPlainSurfaceEx(width_, height_,
+        D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&temp_surface_rgba_, &temp_surface_rgba_shared_handle_, NULL);
+      LOG(ERROR) << "width_=" << width_ << " height_=" << height_;
+      LOG(ERROR) << "temp_surface_rgba_ = " << temp_surface_rgba_;
+      LOG(ERROR) << "hr = " << hr;
+      RETURN_ON_HR_FAILURE(hr, "Failed to create temp_surface_rgba", );
 
+      { // Copy decoded frame into d3d surface
+        int w = width_, h = height_;
+        D3DLOCKED_RECT LockedRect; // Describes a locked rectangular region.
+        RECT rect;
+        rect.left = 0;   rect.top = 0;
+        rect.right = w;   rect.bottom = h;
+
+        if(FAILED(temp_surface_rgba_->LockRect(&LockedRect, &rect, 0))){
+        }
+
+        BYTE *locked = (BYTE *) LockedRect.pBits; // Pointer to the locked bits.
+
+        int i, pitch=LockedRect.Pitch;
+        for (i =0; i<h; i++)
+          if ((i/16)%2)
+            memset(locked+pitch*i, 255, width_*4);
+          else
+            memset(locked+pitch*i, 0, width_*4);
+
+        temp_surface_rgba_->UnlockRect();
+      }
+
+    }
+
+    D3DSURFACE_DESC surface_desc;
+    HRESULT hr = temp_surface_rgba_->GetDesc(&surface_desc);
+    RETURN_AND_NOTIFY_ON_HR_FAILURE(
+          hr, "Failed to get temp_surface_rgba_ description", PLATFORM_FAILURE,);
+    if (width_ !=
+      static_cast<uint32>(surface_desc.Width) ||
+        height_ !=
+        static_cast<uint32>(surface_desc.Height)) {
+      temp_surface_rgba_->Release();
+      hr = device_->CreateOffscreenPlainSurface(width_, height_,
+        D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&temp_surface_rgba_,NULL);
+      RETURN_ON_HR_FAILURE(hr, "Failed to create resized temp_surface_rgba_", );
+
+    }
+
+    OutputBuffers::iterator index;
+//#define DIRECT_OUTPUT_TO_PICTURE_BUFFER
+#ifdef DIRECT_OUTPUT_TO_PICTURE_BUFFER
+    for (index = output_picture_buffers_.begin();
+      index != output_picture_buffers_.end();
+      ++index)
+        if (index->second->available())
+          break;
+
+    if (index != output_picture_buffers_.end()) {
+      base::win::ScopedComPtr<IDirect3DSurface9> d3d_surface;
+      hr = index->second->decoding_texture_->GetSurfaceLevel(0, d3d_surface.Receive());
+      RETURN_ON_HR_FAILURE(hr, "Failed to get surface from texture", );
+      direct_output_surface = d3d_surface;
+    }
+
+
+    GLint current_texture = 0;
+    if (direct_output_surface) {
+      // This function currently executes in the context of IPC handlers in the
+      // GPU process which ensures that there is always an OpenGL context.
+
+      glGetIntegerv(GL_TEXTURE_BINDING_2D, &current_texture);
+
+      glBindTexture(GL_TEXTURE_2D, index->second->picture_buffer_.texture_id());
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+      base::win::ScopedComPtr<IDirect3DSurface9> d3d_surface;
+      hr = index->second->decoding_texture_->GetSurfaceLevel(0, d3d_surface.Receive());
+      RETURN_ON_HR_FAILURE(hr, "Failed to get surface from texture 4", );
+
+      /*hr = device_->StretchRect(dest_surface,
+      NULL,
+      d3d_surface,
+      NULL,
+      D3DTEXF_NONE);
+      RETURN_ON_HR_FAILURE(hr, "Colorspace conversion via StretchRect failed",
+      false);*/
+    }
+#else //DIRECT_OUTPUT_TO_PICTURE_BUFFER
+    direct_output_surface = NULL;
+#endif //DIRECT_OUTPUT_TO_PICTURE_BUFFER
+
+    CStopWatch timer;
+    timer.startTimer();
+    Interop_Context  interop_context;
+    interop_context.pDevice = device_;
+    interop_context.pSharedHandle = temp_surface_rgba_shared_handle_;
+    interop_context.pSurface = temp_surface_rgba_;
+    vpx_codec_err_t status = vpx_codec_decode_ex(vpx_codec_,
+      &sample.data_[0], //buffer->data(),
+      sample.data_.size(), //buffer->data_size(),
+      NULL,
+      0,
+      &interop_context); //direct_output_surface ? direct_output_surface : temp_surface_rgba_);
+    timer.stopTimer();
+    double t = timer.getElapsedTime();
+    LOG(ERROR) << "vpx_codec_decode_ex time (secs): " << t;
+
+    if (status != VPX_CODEC_OK) {
+      LOG(ERROR) << "vpx_codec_decode_ex() failed, status=" << status;
+      return; // false;
+    }
+
+#ifdef DIRECT_OUTPUT_TO_PICTURE_BUFFER
+    if (direct_output_surface) {
+#if 1
+      // Ideally, this should be done immediately before the draw call that uses
+      // the texture. Flush it once here though.
+      hr = query_->Issue(D3DISSUE_END);
+      RETURN_ON_HR_FAILURE(hr, "Failed to issue END", );
+
+      // The VPX decoder has its own device which it uses for decoding. ANGLE
+      // has its own device which we don't have access to.
+      // The above code attempts to copy the decoded picture into a surface
+      // which is owned by ANGLE. As there are multiple devices involved in
+      // this, the StretchRect call above is not synchronous.
+      // We attempt to flush the batched operations to ensure that the picture is
+      // copied to the surface owned by ANGLE.
+      // We need to do this in a loop and call flush multiple times.
+      // We have seen the GetData call for flushing the command buffer fail to
+      // return success occassionally on multi core machines, leading to an
+      // infinite loop.
+      // Workaround is to have an upper limit of 10 on the number of iterations to
+      // wait for the Flush to finish.
+      int iterations = 0;
+      while ((query_->GetData(NULL, 0, D3DGETDATA_FLUSH) == S_FALSE) &&
+        ++iterations < kMaxIterationsForD3DFlush) {
+          Sleep(1);  // Poor-man's Yield().
+      }
+#endif
+
+      EGLDisplay egl_display = gfx::GLSurfaceEGL::GetHardwareDisplay();
+      eglBindTexImage(
+        egl_display,
+        index->second->decoding_surface_,
+        EGL_BACK_BUFFER);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glBindTexture(GL_TEXTURE_2D, current_texture);
+    }
+#endif //DIRECT_OUTPUT_TO_PICTURE_BUFFER
+  }
+#endif
 
   if (output_picture_buffers_.size()) {
     
     int input_buffer_id =  sample.id_;
 
     pending_output_samples_.push_back(
-      PendingSampleInfo(input_buffer_id, (vpx_image_t*)vpx_image));
+      PendingSampleInfo(input_buffer_id,
+#ifndef AMD_ACCELERATED
+      (vpx_image_t*)vpx_image
+#else
+      // in the accelerated case pass the decode result is i n temp_surface_rgba_
+      NULL
+#endif
+      ));
 
     // Have output buffer, present vpx_image immediately
-    ProcessPendingSamples();
+    ProcessPendingSamples(direct_output_surface);
     return; // true;
   } else { // don't have output buffer , request
 
     if (pictures_requested_) {
       DVLOG(1) << "Waiting for picture slots from the client.";
-      return; // true;
+    } else {
+
+      /* https://groups.google.com/a/webmproject.org/forum/#!topic/apps-devel/umsu4_bAv3g
+      > What really happens when h/w is different from d_h/d_w? 
+
+      The buffer is aligned. If the display dimensions are not multiples of 
+      16 or there is a border (used internally), then they will not match. 
+      When you copy the image after decoding, you want to copy the display 
+      size. 
+
+      */
+
+      // Go ahead and request picture buffers.
+      base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
+        &VPXVideoDecodeAccelerator::RequestPictureBuffers,
+        base::AsWeakPtr(this),
+#ifndef AMD_ACCELERATED
+        vpx_image->d_w, vpx_image->d_h
+#else
+        width_, height_
+#endif
+        ));
+       pictures_requested_ = true;
+
     }
 
-    /* https://groups.google.com/a/webmproject.org/forum/#!topic/apps-devel/umsu4_bAv3g
-    > What really happens when h/w is different from d_h/d_w? 
-
-    The buffer is aligned. If the display dimensions are not multiples of 
-    16 or there is a border (used internally), then they will not match. 
-    When you copy the image after decoding, you want to copy the display 
-    size. 
-
-    */
-
-    // Go ahead and request picture buffers.
-    base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
-      &VPXVideoDecodeAccelerator::RequestPictureBuffers,
-      base::AsWeakPtr(this), vpx_image->d_w, vpx_image->d_h));
-    pictures_requested_ = true;
   }
 
   //return true;
@@ -1248,7 +1559,7 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample) {
       "Failed to process output. Unexpected decoder state: " << state_,
       ILLEGAL_STATE,);
 
-  LONGLONG input_buffer_id = (LONGLONG)vpx_image->user_priv;
+  LONGLONG input_buffer_id = (LONGLONG)sample.id_; //vpx_image->user_priv;
 
 
   base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(

@@ -34,6 +34,12 @@ extern "C" {
 #include "third_party/libvpx/source/libvpx/vpx/vp8dx.h"
 }
 
+#define AMD_ACCELERATED
+
+#ifdef AMD_ACCELERATED
+#define vpx_codec_ctx vpx_codec_ctx_ex
+#endif
+
 interface IMFSample;
 interface IDirect3DSurface9;
 
@@ -148,7 +154,7 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
 
   // Processes pending output samples by copying them to available picture
   // slots.
-  void ProcessPendingSamples();
+  void ProcessPendingSamples(IDirect3DSurface9 *direct_output_surface = NULL);
 
   // Helper function to notify the accelerator client about the error.
   void StopOnError(media::VideoDecodeAccelerator::Error error);
@@ -187,7 +193,7 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
   void FlushInternal();
 
   // Helper for handling the Decode operation.
-  void DecodeInternal(VpxSample& sample);
+  void DecodeInternal(VpxSample& sample, bool pending);
 
   // Handles mid stream resolution changes.
   void HandleResolutionChanged(int width, int height);
@@ -266,7 +272,12 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
   typedef std::list<VpxSample/*base::win::ScopedComPtr<IMFSample>*/> PendingInputs;
   PendingInputs pending_input_buffers_;
 
-  IDirect3DSurface9 *temp_surface_;
+  IDirect3DSurface9 *temp_surface_yv12_;
+  IDirect3DSurface9 *temp_surface_rgba_;
+  HANDLE temp_surface_rgba_shared_handle_;
+
+  bool restart_;
+  unsigned int width_, height_;
 
   // Callback to set the correct gl context.
   base::Callback<bool(void)> make_context_current_;
