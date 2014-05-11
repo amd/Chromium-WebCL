@@ -40,11 +40,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>call obj_int_extract.bat c:/dev/freshfresh/src/third_party/libvpx/source/libvpx</Command>
+      <Command>call obj_int_extract.bat .</Command>
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;c:/dev/freshfresh/src/third_party/libvpx/source/libvpx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -56,12 +56,12 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
-      <Command>call obj_int_extract.bat c:/dev/freshfresh/src/third_party/libvpx/source/libvpx</Command>
+      <Command>call obj_int_extract.bat .</Command>
     </PreBuildEvent>
     <ClCompile>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>.;c:/dev/freshfresh/src/third_party/libvpx/source/libvpx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -107,18 +107,18 @@
     </ClCompile>
     <CustomBuild Include=".\vpx_ports\emms.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_ports_emms.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_ports_emms.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vpx_ports\x86_abi_support.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_ports_x86_abi_support.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_ports_x86_abi_support.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_ports_x86_abi_support.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vpx_ports\x86_cpuid.c">
@@ -222,10 +222,10 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\dequantize_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_dequantize_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_dequantize_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_dequantize_mmx.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\idct_blk_mmx.c">
@@ -233,50 +233,50 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\idctllm_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_idctllm_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_idctllm_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\iwalsh_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_iwalsh_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\loopfilter_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_loopfilter_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_loopfilter_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\recon_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_recon_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_recon_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\sad_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\subpixel_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_mmx.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\variance_mmx.c">
@@ -284,10 +284,10 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\variance_impl_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_mmx.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\idct_blk_sse2.c">
@@ -295,18 +295,18 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\idctllm_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_idctllm_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_idctllm_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_idctllm_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\recon_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_recon_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_recon_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_recon_sse2.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\recon_wrapper_sse2.c">
@@ -314,34 +314,34 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\sad_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\subpixel_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\loopfilter_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_loopfilter_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_loopfilter_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_loopfilter_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\iwalsh_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_iwalsh_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_iwalsh_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_iwalsh_sse2.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\variance_sse2.c">
@@ -349,34 +349,34 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\variance_impl_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\sad_sse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse3.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\sad_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_ssse3.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\subpixel_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_subpixel_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_subpixel_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_subpixel_ssse3.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\variance_ssse3.c">
@@ -384,18 +384,18 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\variance_impl_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_variance_impl_ssse3.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\sad_sse4.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_sad_sse4.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_sad_sse4.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_sad_sse4.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\common\x86\postproc_x86.c">
@@ -403,26 +403,26 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\common\x86\postproc_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\mfqe_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_mfqe_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_mfqe_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_mfqe_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\common\x86\postproc_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_common_x86_postproc_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_common_x86_postproc_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_common_x86_postproc_sse2.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\vp8_cx_iface.c">
@@ -505,18 +505,18 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\encoder\x86\dct_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_dct_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\subtract_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_subtract_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_subtract_mmx.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\encoder\x86\vp8_enc_stubs_mmx.c">
@@ -524,18 +524,18 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\encoder\x86\dct_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_dct_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_dct_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_dct_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\fwalsh_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_fwalsh_sse2.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\encoder\x86\quantize_sse2.c">
@@ -546,18 +546,18 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\encoder\x86\subtract_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_subtract_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_subtract_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_subtract_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\temporal_filter_apply_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_temporal_filter_apply_sse2.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\encoder\x86\vp8_enc_stubs_sse2.c">
@@ -565,34 +565,34 @@
     </ClCompile>
     <CustomBuild Include=".\vp8\encoder\x86\quantize_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_ssse3.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\quantize_sse4.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_sse4.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_sse4.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_sse4.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\quantize_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_quantize_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_quantize_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_quantize_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp8\encoder\x86\encodeopt.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp8_encoder_x86_encodeopt.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp8_encoder_x86_encodeopt.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp8_encoder_x86_encodeopt.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp8\vp8_dx_iface.c">
@@ -717,50 +717,50 @@
     </ClCompile>
     <CustomBuild Include=".\vp9\common\x86\vp9_loopfilter_mmx.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_loopfilter_mmx.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp9\common\x86\vp9_subpixel_8t_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp9\common\x86\vp9_subpixel_8t_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_subpixel_8t_ssse3.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp9\common\x86\vp9_copy_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_copy_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp9\common\x86\vp9_intrapred_sse2.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_sse2.obj</Outputs>
     </CustomBuild>
     <CustomBuild Include=".\vp9\common\x86\vp9_intrapred_ssse3.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vp9_common_x86_vp9_intrapred_ssse3.obj</Outputs>
     </CustomBuild>
     <ClCompile Include=".\vp9\common\x86\vp9_idct_intrin_sse2.c">
@@ -834,19 +834,19 @@
     </ClCompile>
     <CustomBuild Include=".\third_party\x86inc\x86inc.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)third_party_x86inc_x86inc.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)third_party_x86inc_x86inc.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)third_party_x86inc_x86inc.obj</Outputs>
     </CustomBuild>
     <None Include=".\vpx.def" />
     <CustomBuild Include=".\vpx_config.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)vpx_config.obj</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Assembling %(Filename)%(Extension)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -Ic:/dev/freshfresh/src/third_party/libvpx/source/libvpx "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">yasm -Xvc -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_config.obj</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)vpx_config.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
