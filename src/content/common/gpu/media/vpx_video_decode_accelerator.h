@@ -276,6 +276,11 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
   IDirect3DSurface9 *temp_surface_rgba_;
   HANDLE temp_surface_rgba_shared_handle_;
 
+  IDirect3DSurface9 *g_4k_temp_surface_rgba;
+  HANDLE g_4k_temp_surface_rgba_shared_handle;
+  IDirect3DSurface9 *g_hd_temp_surface_rgba;
+  HANDLE g_hd_temp_surface_rgba_shared_handle;
+
   bool restart_;
   unsigned int width_, height_;
 

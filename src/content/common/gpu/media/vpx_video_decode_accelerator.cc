@@ -92,11 +92,6 @@ typedef struct Interop_Context {
 
 namespace content {
 
-  IDirect3DSurface9 *g_4k_temp_surface_rgba = NULL;
-  HANDLE g_4k_temp_surface_rgba_shared_handle = 0;
-  IDirect3DSurface9 *g_hd_temp_surface_rgba = NULL;
-  HANDLE g_hd_temp_surface_rgba_shared_handle = 0;
-
 // We only request 5 picture buffers from the client which are used to hold the
 // decoded samples. These buffers are then reused when the client tells us that
 // it is done with the buffer.
@@ -482,6 +477,12 @@ VPXVideoDecodeAccelerator::VPXVideoDecodeAccelerator(
       temp_surface_rgba_(NULL) {
   memset(&input_stream_info_, 0, sizeof(input_stream_info_));
   memset(&output_stream_info_, 0, sizeof(output_stream_info_));
+  
+  g_4k_temp_surface_rgba = NULL;
+  g_4k_temp_surface_rgba_shared_handle = 0;
+  g_hd_temp_surface_rgba = NULL;
+  g_hd_temp_surface_rgba_shared_handle = 0;
+
 }
 
 VPXVideoDecodeAccelerator::~VPXVideoDecodeAccelerator() {
