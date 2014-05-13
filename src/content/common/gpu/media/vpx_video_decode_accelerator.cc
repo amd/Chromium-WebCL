@@ -401,18 +401,6 @@ void VPXVideoDecodeAccelerator::PreSandboxInitialization() {
   RETURN_ON_FAILURE(CreateD3DDevManager(),
     "Failed to initialize D3D device and manager",);
 
-  if (! g_4k_temp_surface_rgba) {
-    HRESULT hr = device_->CreateOffscreenPlainSurfaceEx(3840, 2160,
-      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_4k_temp_surface_rgba, &g_4k_temp_surface_rgba_shared_handle, NULL);
-    if (!SUCCEEDED(hr)) {
-      LOG(ERROR) << "failed to allocate g_4k_temp_surface_rgba";
-    }
-    hr = device_->CreateOffscreenPlainSurfaceEx(1920, 1080,
-      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_hd_temp_surface_rgba, &g_hd_temp_surface_rgba_shared_handle, NULL);
-    if (!SUCCEEDED(hr)) {
-      LOG(ERROR) << "failed to allocate g_hd_temp_surface_rgba";
-    }
-  }
 
   /*
   if (base::win::GetVersion() == base::win::VERSION_WIN8) {
@@ -498,10 +486,19 @@ VPXVideoDecodeAccelerator::VPXVideoDecodeAccelerator(
 
 VPXVideoDecodeAccelerator::~VPXVideoDecodeAccelerator() {
   client_ = NULL;
-  if (temp_surface_rgba_)
+  if (temp_surface_rgba_ && temp_surface_rgba_!=g_4k_temp_surface_rgba && temp_surface_rgba_!=g_hd_temp_surface_rgba)
     temp_surface_rgba_->Release();
   if (temp_surface_yv12_)
     temp_surface_yv12_->Release();
+  if (g_4k_temp_surface_rgba) {
+    g_4k_temp_surface_rgba->Release();
+    g_4k_temp_surface_rgba = NULL;
+    g_4k_temp_surface_rgba_shared_handle = 0;
+    g_hd_temp_surface_rgba->Release();
+    g_hd_temp_surface_rgba_shared_handle = 0;
+    g_hd_temp_surface_rgba = NULL;
+  }
+    
 }
 
 bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
@@ -514,6 +511,20 @@ bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
   }
 
   restart_ = true;
+
+  
+  if (! g_4k_temp_surface_rgba) {
+    HRESULT hr = device_->CreateOffscreenPlainSurfaceEx(3840, 2160,
+      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_4k_temp_surface_rgba, &g_4k_temp_surface_rgba_shared_handle, NULL);
+    if (!SUCCEEDED(hr)) {
+      LOG(ERROR) << "failed to allocate g_4k_temp_surface_rgba";
+    }
+    hr = device_->CreateOffscreenPlainSurfaceEx(1920, 1080,
+      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_hd_temp_surface_rgba, &g_hd_temp_surface_rgba_shared_handle, NULL);
+    if (!SUCCEEDED(hr)) {
+      LOG(ERROR) << "failed to allocate g_hd_temp_surface_rgba";
+    }
+  }
 
 
   RETURN_AND_NOTIFY_ON_FAILURE(pre_sandbox_init_done_,
@@ -1225,6 +1236,7 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
     // if restart_ is true, the sample must be the first packet, get info
   if (restart_) {
     vpx_codec_stream_info_t info;
+    info.sz = sample.data_.size();
     vpx_codec_peek_stream_info_ex(vpx_codec_vp9_dx(), &sample.data_[0], sample.data_.size(), &info);
     width_ = info.w;
     height_ = info.h;
@@ -1404,27 +1416,29 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 
       { // Copy decoded frame into d3d surface
         int w = width_, h = height_;
-        D3DLOCKED_RECT LockedRect; // Describes a locked rectangular region.
+        D3DLOCKED_RECT LockedRect = {0, NULL} ; // Describes a locked rectangular region.
         RECT rect;
         rect.left = 0;   rect.top = 0;
         rect.right = w;   rect.bottom = h;
 
-        if(FAILED(temp_surface_rgba_->LockRect(&LockedRect, &rect, 0))){
-        }
+        //if(FAILED(temp_surface_rgba_->LockRect(&LockedRect, &rect, 0))){
+        //}
 
         BYTE *locked = (BYTE *) LockedRect.pBits; // Pointer to the locked bits.
 
-        int i, pitch=LockedRect.Pitch;
-        for (i =0; i<h; i++)
+        int i=0, pitch=LockedRect.Pitch;
+        /*for (i =0; i<h; i++)
           if ((i/16)%2)
             memset(locked+pitch*i, 255, width_*4);
           else
-            memset(locked+pitch*i, 0, width_*4);
+            memset(locked+pitch*i, 0, width_*4);*/
 
-        temp_surface_rgba_->UnlockRect();
+        //temp_surface_rgba_->UnlockRect();
       }
 
+
     }
+
 
     D3DSURFACE_DESC surface_desc;
     HRESULT hr = temp_surface_rgba_->GetDesc(&surface_desc);
