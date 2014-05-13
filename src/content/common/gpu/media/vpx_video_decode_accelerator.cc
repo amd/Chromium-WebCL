@@ -92,6 +92,11 @@ typedef struct Interop_Context {
 
 namespace content {
 
+  IDirect3DSurface9 *g_4k_temp_surface_rgba = NULL;
+  HANDLE g_4k_temp_surface_rgba_shared_handle = 0;
+  IDirect3DSurface9 *g_hd_temp_surface_rgba = NULL;
+  HANDLE g_hd_temp_surface_rgba_shared_handle = 0;
+
 // We only request 5 picture buffers from the client which are used to hold the
 // decoded samples. These buffers are then reused when the client tells us that
 // it is done with the buffer.
@@ -134,7 +139,7 @@ IDirect3D9Ex* VPXVideoDecodeAccelerator::d3d9_ = NULL;
 // Maximum number of iterations we allow before aborting the attempt to flush
 // the batched queries to the driver and allow torn/corrupt frames to be
 // rendered.
-enum { kMaxIterationsForD3DFlush = 10 };
+enum { kMaxIterationsForD3DFlush = 10000 };
 
 
 static void InitSampleFromInputBuffer(VpxSample &sample,
@@ -359,13 +364,14 @@ bool VPXVideoDecodeAccelerator::VPXPictureBuffer::
   int iterations = 0;
   while ((query_->GetData(NULL, 0, D3DGETDATA_FLUSH) == S_FALSE) &&
           ++iterations < kMaxIterationsForD3DFlush) {
-    LOG(ERROR) << "Sleep(1)";
-    Sleep(1);  // Poor-man's Yield().
+    //LOG(ERROR) << "Sleep(0)";
+    Sleep(0);  // Poor-man's Yield().
   }
   
   timer.stopTimer();
   double t = timer.getElapsedTime();
-  LOG(ERROR) << "ANGLE flush time (secs): " << t;
+  LOG(ERROR) << "ANGLE flush time (secs): " << t << " ; Sleep(0) called "
+    << iterations << " times";
 #endif
 
 
@@ -393,7 +399,21 @@ void VPXVideoDecodeAccelerator::PreSandboxInitialization() {
   DCHECK(!pre_sandbox_init_done_);
 
   RETURN_ON_FAILURE(CreateD3DDevManager(),
-                    "Failed to initialize D3D device and manager",);
+    "Failed to initialize D3D device and manager",);
+
+  if (! g_4k_temp_surface_rgba) {
+    HRESULT hr = device_->CreateOffscreenPlainSurfaceEx(3840, 2160,
+      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_4k_temp_surface_rgba, &g_4k_temp_surface_rgba_shared_handle, NULL);
+    if (!SUCCEEDED(hr)) {
+      LOG(ERROR) << "failed to allocate g_4k_temp_surface_rgba";
+    }
+    hr = device_->CreateOffscreenPlainSurfaceEx(1920, 1080,
+      D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&g_hd_temp_surface_rgba, &g_hd_temp_surface_rgba_shared_handle, NULL);
+    if (!SUCCEEDED(hr)) {
+      LOG(ERROR) << "failed to allocate g_hd_temp_surface_rgba";
+    }
+  }
+
   /*
   if (base::win::GetVersion() == base::win::VERSION_WIN8) {
     // On Windows 8+ mf.dll forwards to mfcore.dll. It does not exist in
@@ -1350,12 +1370,37 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 #else
   {
     if (!temp_surface_rgba_) {
-      HRESULT hr = device_->CreateOffscreenPlainSurfaceEx(width_, height_,
-        D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&temp_surface_rgba_, &temp_surface_rgba_shared_handle_, NULL);
-      LOG(ERROR) << "width_=" << width_ << " height_=" << height_;
-      LOG(ERROR) << "temp_surface_rgba_ = " << temp_surface_rgba_;
-      LOG(ERROR) << "hr = " << hr;
-      RETURN_ON_HR_FAILURE(hr, "Failed to create temp_surface_rgba", );
+      if (width_ == 3840 && height_ == 2160) {
+        temp_surface_rgba_ = g_4k_temp_surface_rgba;
+        temp_surface_rgba_shared_handle_ = g_4k_temp_surface_rgba_shared_handle;
+      } else if (width_ == 1920 && height_ == 1080) {
+        temp_surface_rgba_ = g_hd_temp_surface_rgba;
+        temp_surface_rgba_shared_handle_ = g_hd_temp_surface_rgba_shared_handle;
+      } else {
+        int try_again = 1000;
+        HRESULT hr;
+        while (try_again--) {
+          hr = query_->Issue(D3DISSUE_END);
+          RETURN_ON_HR_FAILURE(hr, "Failed to issue END", );
+          int iterations = 0;
+          while ((query_->GetData(NULL, 0, D3DGETDATA_FLUSH) == S_FALSE) &&
+            ++iterations < 10000) {
+              LOG(ERROR) << "Sleep(1) d3d flush";
+              Sleep(1);
+          }
+          hr = device_->CreateOffscreenPlainSurfaceEx(width_, height_,
+            D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&temp_surface_rgba_, &temp_surface_rgba_shared_handle_, NULL);
+
+          if (SUCCEEDED(hr))
+            break;
+          LOG(ERROR) << "temp_surface_rgba_=0, try again";
+          Sleep(1);
+        }
+        LOG(ERROR) << "width_=" << width_ << " height_=" << height_;
+        LOG(ERROR) << "temp_surface_rgba_ = " << temp_surface_rgba_;
+        LOG(ERROR) << "hr = " << hr;
+        RETURN_ON_HR_FAILURE(hr, "Failed to create temp_surface_rgba", );
+      }
 
       { // Copy decoded frame into d3d surface
         int w = width_, h = height_;
