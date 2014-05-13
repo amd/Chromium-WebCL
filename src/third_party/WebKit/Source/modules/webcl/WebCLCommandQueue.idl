@@ -1,110 +1,280 @@
 /*
-* Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided the following conditions
-* are met:
-* 
-* 1.  Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-* 
-* 2.  Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the
-*     documentation and/or other materials provided with the distribution.
-* 
-* THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
-* CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
-* BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
-* ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-* INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
-* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-* DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
-* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
-* NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (C) 2011, 2012, 2013 Samsung Electronics Corporation. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided the following conditions
+ * are met:
+ *
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ * ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ * NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+typedef unsigned long CLenum;
+typedef boolean CLboolean;
+typedef unsigned long CLuint;
+
+typedef unsigned long CLuint;
+
+[
+    Conditional=WEBCL,
+] interface WebCLCommandQueue {
+
+    [StrictTypeChecking, Custom, RaisesException] void getInfo(CLenum queuenfo);
+
+    [RaisesException] void enqueueWriteBuffer(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            [EnforceRange] CLuint bufferOffset,
+            [EnforceRange] CLuint bufferSize,
+            ArrayBufferView ptr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBuffer(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            [EnforceRange] CLuint bufferOffset,
+            ImageData srcPixels,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBuffer(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            [EnforceRange] CLuint bufferOffset,
+            HTMLImageElement srcImage,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+   [RaisesException] void enqueueWriteBuffer(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            [EnforceRange] CLuint bufferOffset,
+            HTMLCanvasElement srcCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBufferRect(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            [EnforceRange] CLuint hostRowPitch,
+            [EnforceRange] CLuint hostSlicePitch,
+            ArrayBufferView ptr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBufferRect(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            ImageData srcPixels,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBufferRect(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            HTMLCanvasElement srcCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteBufferRect(WebCLBuffer bufferId,
+            CLboolean blockingWrite,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            HTMLImageElement srcImage,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueReadBuffer(WebCLBuffer buffer,
+            CLboolean blockingRead,
+            [EnforceRange] CLuint bufferOffset,
+            [EnforceRange] CLuint numBytes,
+            ArrayBufferView hostPtr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueReadBufferRect(WebCLBuffer buffer,
+            CLboolean blockingRead,
+            sequence<CLuint> bufferOrigin,
+            sequence<CLuint> hostOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            [EnforceRange] CLuint hostRowPitch,
+            [EnforceRange] CLuint hostSlicePitch,
+            ArrayBufferView hostPtr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+   [RaisesException] void enqueueReadImage(WebCLImage image,
+            CLboolean blockingRead,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint hostRowPitch,
+            ArrayBufferView hostPtr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueNDRangeKernel(WebCLKernel kernel,
+            [StrictTypeChecking, EnforceRange] CLuint workDim,
+            [Default=Undefined] sequence<CLuint> offsets,
+            sequence<CLuint> globalWorkSize,
+            [Default=Undefined] sequence<CLuint> localWorkSize,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteImage(WebCLImage image,
+            CLboolean blockingWrite,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint hostRowPitch,
+            ArrayBufferView hostPtr,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteImage(WebCLImage image,
+            CLboolean blockingWrite,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            ImageData srcPixels,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteImage(WebCLImage image,
+            CLboolean blockingWrite,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            HTMLCanvasElement srcCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueWriteImage(WebCLImage image,
+            CLboolean blockingWrite,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            HTMLImageElement srcImage,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
 
-	 [
-		Conditional=WEBCL,
-	] interface WebCLCommandQueue {
-	[StrictTypeChecking, Custom,RaisesException]  void getInfo(long queuenfo);
-	[RaisesException] void enqueueWriteBuffer( WebCLMem bufferId, 
-				 boolean blockingWrite, 
-				 long offset, 
-				 long bufferSize, 
-				 ArrayBufferView ptr,
-				 optional WebCLEventList eventWaitList,
-                 optional WebCLEvent event);
+    [RaisesException] void enqueueCopyBuffer(WebCLBuffer sourceBuffer,
+            WebCLBuffer targetBuffer,
+            [EnforceRange] CLuint sourceOffset,
+            [EnforceRange] CLuint targetOffset,
+            [EnforceRange] CLuint sizeInBytes,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
-	[RaisesException] WebCLEvent enqueueWriteBuffer( WebCLMem bufferId, 
-				 boolean blockingWrite, 
-				 long offset, 
-				 long bufferSize, 
-				 ImageData ptr, 
-				 long eventWaitList);
+    [RaisesException] void enqueueCopyBufferRect(WebCLBuffer sourceBuffer,
+            WebCLBuffer targetBuffer,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint sourceRowPitch,
+            [EnforceRange] CLuint sourceSlicePitch,
+            [EnforceRange] CLuint targetRowPitch,
+            [EnforceRange] CLuint targetSlicePitch,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
-	[RaisesException] void enqueueReadBuffer( WebCLMem bufferId, 
-				 boolean blockingRead, 
-				 long offset, 
-				 long bufferSize, 
-				 ArrayBufferView ptr, 
-				 optional WebCLEventList eventWaitList,
-                                 optional WebCLEvent event);
-	
-	[RaisesException] WebCLEvent enqueueReadBuffer( WebCLMem bufferId, 
-				 boolean blockingRead, 
-				 long offset, 
-				 long bufferSize, 
-				 ImageData ptr, 
-				 long eventWaitList);
+    [RaisesException] void enqueueCopyImage(WebCLImage sourceImage,
+            WebCLImage targetImage,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
-	
-	[RaisesException] void enqueueNDRangeKernel( WebCLKernel kernel,
-				 Int32Array offsets,  Int32Array globalWorkSize,
-				 Int32Array localWorkSize,  optional WebCLEventList eventWaitList, 
-				 optional WebCLEvent event);		
+    [RaisesException] void enqueueCopyImageToBuffer(WebCLImage sourceImage,
+            WebCLBuffer targetBuffer,
+            sequence<CLuint> sourceOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint targetOffset,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
-		//[Custom] void finish(in WebCLFinishCallback notifyCallback, in long userData) raises(DOMException);
-		[Custom,RaisesException] void finish();
-		[RaisesException] void flush();
-		[RaisesException] void releaseCL();
-		[RaisesException] WebCLEvent enqueueWriteImage( WebCLMem image, 
-				 boolean blockingWrite, 
-				 Int32Array origin, 
-				 Int32Array region, 
-				 HTMLCanvasElement canvasElement, 
-				 long eventWaitList);
-		
-		//long enqueueReadImage(in WebCLMem image,
-		//		in boolean blockingRead,
-		//		in Int32Array origin,
-		//		in Int32Array region,
-		//		in HTMLCanvasElement canvasElement,
-		//		in long eventWaitList) raises(DOMException);
+    [RaisesException] void enqueueCopyBufferToImage(WebCLBuffer sourceBuffer,
+            WebCLImage targetImage,
+            [EnforceRange] CLuint sourceOffset,
+            sequence<CLuint> targetOrigin,
+            sequence<CLuint> region,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
-		[RaisesException] void enqueueAcquireGLObjects( WebCLMem MemObjects,
-				 optional WebCLEventList eventWaitList,  
-                optional WebCLEvent event);
+    [RaisesException] void enqueueWaitForEvents(sequence<WebCLEvent> eventWaitList);
 
-		[RaisesException] void enqueueReleaseGLObjects( WebCLMem memObjects,
-				optional WebCLEventList eventWaitList,
-                optional WebCLEvent event);
+    [RaisesException] void enqueueBarrier();
 
-		[RaisesException] void enqueueCopyBuffer( WebCLMem srcBuffer,
-				 WebCLMem dstBuffer,
-				 long cb);
+    [RaisesException] void enqueueMarker(WebCLEvent event);
 
-		[RaisesException] void enqueueBarrier();
+    [RaisesException] void finish();
 
-		[RaisesException] void enqueueMarker(WebCLEvent event);
-		
-		[RaisesException] void enqueueWaitForEvents(WebCLEventList events);
-		
-		[RaisesException] WebCLEvent enqueueTask( WebCLKernel kernel,
-							long eventWaitList);
+    [RaisesException] void flush();
 
-	
-	};
+    [RaisesException] void enqueueReadBuffer(WebCLBuffer bufferId,
+            CLboolean blockingRead,
+            [EnforceRange] CLuint bufferOffset,
+            [EnforceRange] CLuint numBytes,
+            HTMLCanvasElement dstCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
 
+    [RaisesException] void enqueueReadBufferRect(WebCLBuffer buffer,
+            CLboolean blockingRead,
+            sequence<CLuint> bufferOrigin,
+            sequence<CLuint> dstOrigin,
+            sequence<CLuint> region,
+            [EnforceRange] CLuint bufferRowPitch,
+            [EnforceRange] CLuint bufferSlicePitch,
+            HTMLCanvasElement dstCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueReadImage(WebCLImage image,
+            CLboolean blockingRead,
+            sequence<CLuint> origin,
+            sequence<CLuint> region,
+            HTMLCanvasElement dstCanvas,
+            [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+            [Default=Undefined] optional WebCLEvent event);
+
+#if defined(ENABLE_WEBGL) && ENABLE_WEBGL
+    [RaisesException] void enqueueAcquireGLObjects(sequence<WebCLMemoryObject> memObjects,
+        [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+        [Default=Undefined] optional WebCLEvent event);
+
+    [RaisesException] void enqueueReleaseGLObjects(sequence<WebCLMemoryObject> memObjects,
+        [Default=Undefined] optional sequence<WebCLEvent> eventWaitList,
+        [Default=Undefined] optional WebCLEvent event);
+#endif
+
+#if defined(LANGUAGE_JAVASCRIPT) && LANGUAGE_JAVASCRIPT
+    void release();
+#endif
+};

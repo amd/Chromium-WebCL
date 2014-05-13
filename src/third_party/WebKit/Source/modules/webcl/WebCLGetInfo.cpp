@@ -1,17 +1,17 @@
 /*
 * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided the following conditions
 * are met:
-* 
+*
 * 1.  Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
-* 
+*
 * 2.  Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
 * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
 * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -31,13 +31,6 @@
 
 #include "WebCLGetInfo.h"
 
-#include "WebCLProgram.h"
-#include "WebCLContext.h"
-#include <wtf/Float32Array.h>
-#include <wtf/Int32Array.h>
-#include <wtf/Uint32Array.h>
-#include <wtf/Uint8Array.h>
-
 namespace WebCore {
 
 WebCLGetInfo::WebCLGetInfo(bool value)
@@ -46,23 +39,7 @@ WebCLGetInfo::WebCLGetInfo(bool value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(const bool* value, int size)
-    : m_type(kTypeBoolArray)
-{
-    if (!value || size <=0)
-        return;
-    m_boolArray.resize(size);
-    for (int ii = 0; ii < size; ++ii)
-        m_boolArray[ii] = value[ii];
-}
-
-WebCLGetInfo::WebCLGetInfo(float value)
-    : m_type(kTypeFloat)
-    , m_float(value)
-{
-}
-
-WebCLGetInfo::WebCLGetInfo(int value)
+WebCLGetInfo::WebCLGetInfo(CCint value)
     : m_type(kTypeInt)
     , m_int(value)
 {
@@ -79,70 +56,74 @@ WebCLGetInfo::WebCLGetInfo(const String& value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(unsigned int value)
+WebCLGetInfo::WebCLGetInfo(CCuint value)
     : m_type(kTypeUnsignedInt)
     , m_unsignedInt(value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(unsigned long value)
-    : m_type(kTypeUnsignedInt)
+WebCLGetInfo::WebCLGetInfo(CCulong value)
+    : m_type(kTypeUnsignedLong)
     , m_unsignedLong(value)
 {
 }
+
 WebCLGetInfo::WebCLGetInfo(void* value)
     : m_type(kTypeVoidPointer)
     , m_voidPointer(value)
 {
 }
-
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<Float32Array> value)
-    : m_type(kTypeWebCLFloatArray)
-    , m_webclFloatArray(value)
-{
-}
-
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<Int32Array> value)
+WebCLGetInfo::WebCLGetInfo(const Vector<CCuint>& value)
     : m_type(kTypeWebCLIntArray)
     , m_webclIntArray(value)
 {
-
-	printf("Int32 Construcor Called \n");
 }
 
-
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<Int8Array> value)
-    : m_type(kTypeWebCLInt8Array)
-    , m_webclInt8Array(value)
+WebCLGetInfo::WebCLGetInfo(WebCLImageDescriptor* value)
+    : m_type(kTypeWebCLImageDescriptor)
+    , m_webclImageDescriptor(value)
 {
 }
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<WebCLProgram> value)
+
+WebCLGetInfo::WebCLGetInfo(WebCLProgram* value)
     : m_type(kTypeWebCLProgram)
     , m_webclProgram(value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<WebCLContext> value)
+WebCLGetInfo::WebCLGetInfo(WebCLContext* value)
     : m_type(kTypeWebCLContext)
     , m_webclContext(value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<WebCLCommandQueue> value)
+WebCLGetInfo::WebCLGetInfo(WebCLCommandQueue* value)
     : m_type(kTypeWebCLCommandQueue)
     , m_webCLCommandQueue(value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<WebCLDevice> value)
+WebCLGetInfo::WebCLGetInfo(WebCLDevice* value)
     : m_type(kTypeWebCLDevice)
     , m_webCLDevice(value)
 {
 }
 
-WebCLGetInfo::WebCLGetInfo(PassRefPtr<WebCLDeviceList> value)
-    : m_type(kTypeWebCLDeviceList)
-    , m_webCLDeviceList(value)
+WebCLGetInfo::WebCLGetInfo(WebCLMemoryObject* value)
+    : m_type(kTypeWebCLMemoryObject)
+    , m_webCLMemoryObject(value)
+{
+}
+
+WebCLGetInfo::WebCLGetInfo(const Vector<RefPtr<WebCLDevice> >& value)
+    : m_type(kTypeWebCLDevices)
+    , m_webCLDevices(value)
+{
+}
+
+WebCLGetInfo::WebCLGetInfo(WebCLPlatform* value)
+    : m_type(kTypeWebCLPlatform)
+    , m_webCLPlatform(value)
 {
 }
 
@@ -161,19 +142,7 @@ bool WebCLGetInfo::getBool() const
     return m_bool;
 }
 
-const Vector<bool>& WebCLGetInfo::getBoolArray() const
-{
-    ASSERT(getType() == kTypeBoolArray);
-    return m_boolArray;
-}
-
-float WebCLGetInfo::getFloat() const
-{
-    ASSERT(getType() == kTypeFloat);
-    return m_float;
-}
-
-int WebCLGetInfo::getInt() const
+CCint WebCLGetInfo::getInt() const
 {
     ASSERT(getType() == kTypeInt);
     return m_int;
@@ -185,41 +154,34 @@ const String& WebCLGetInfo::getString() const
     return m_string;
 }
 
-unsigned int WebCLGetInfo::getUnsignedInt() const
+CCuint WebCLGetInfo::getUnsignedInt() const
 {
     ASSERT(getType() == kTypeUnsignedInt);
     return m_unsignedInt;
 }
 
-unsigned long WebCLGetInfo::getUnsignedLong() const
+CCulong WebCLGetInfo::getUnsignedLong() const
 {
     ASSERT(getType() == kTypeUnsignedLong);
     return m_unsignedLong;
 }
+
 void* WebCLGetInfo::getVoidPointer() const
 {
     ASSERT(getType() == kTypeVoidPointer);
     return m_voidPointer;
 }
 
-PassRefPtr<Float32Array> WebCLGetInfo::getWebCLFloatArray() const
+Vector<CCuint> WebCLGetInfo::getWebCLUintArray() const
 {
-    ASSERT(getType() == kTypeWebCLFloatArray);
-    return m_webclFloatArray;
-}
-
-PassRefPtr<Int32Array> WebCLGetInfo::getWebCLIntArray() const
-{
-	printf("Int32 Construcor Called \n");
     ASSERT(getType() == kTypeWebCLIntArray);
     return m_webclIntArray;
 }
 
-
-PassRefPtr<Int8Array> WebCLGetInfo::getWebCLInt8Array() const
+PassRefPtr<WebCLImageDescriptor> WebCLGetInfo::getWebCLImageDescriptor() const
 {
-    ASSERT(getType() == kTypeWebCLInt8Array);
-    return m_webclInt8Array;
+    ASSERT(getType() == kTypeWebCLImageDescriptor);
+    return m_webclImageDescriptor;
 }
 
 PassRefPtr<WebCLContext> WebCLGetInfo::getWebCLContext() const
@@ -242,12 +204,21 @@ PassRefPtr<WebCLDevice> WebCLGetInfo::getWebCLDevice() const
     ASSERT(getType() == kTypeWebCLDevice);
     return m_webCLDevice;
 }
-PassRefPtr<WebCLDeviceList> WebCLGetInfo::getWebCLDeviceList() const
+const Vector<RefPtr<WebCLDevice> >& WebCLGetInfo::getWebCLDevices() const
 {
-    ASSERT(getType() == kTypeWebCLDeviceList);
-    return m_webCLDeviceList;
+    ASSERT(getType() == kTypeWebCLDevices);
+    return m_webCLDevices;
 }
-
+PassRefPtr<WebCLMemoryObject> WebCLGetInfo::getWebCLMemoryObject() const
+{
+    ASSERT(getType() == kTypeWebCLMemoryObject);
+    return m_webCLMemoryObject;
+}
+PassRefPtr<WebCLPlatform> WebCLGetInfo::getWebCLPlatform() const
+{
+    ASSERT(getType() == kTypeWebCLPlatform);
+    return m_webCLPlatform;
+}
 } // namespace WebCore
 
 #endif // ENABLE(WEBCL)

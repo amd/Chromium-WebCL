@@ -1,17 +1,17 @@
 /*
-* Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
+* Copyright (C) 2011, 2012, 2013 Samsung Electronics Corporation. All rights reserved.
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided the following conditions
 * are met:
-* 
+*
 * 1.  Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
-* 
+*
 * 2.  Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
 * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
 * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -30,9 +30,12 @@
 #if ENABLE(WEBCL)
 
 #include "WebCLImage.h"
-#include "WebCLException.h"
+
+#include "ComputeMemoryObject.h"
 #include "WebCLContext.h"
-#include "WebCL.h"
+#include "WebCLImageDescriptor.h"
+#include "WebGLRenderbuffer.h"
+#include "WebGLTexture.h"
 
 namespace WebCore {
 
@@ -40,86 +43,140 @@ WebCLImage::~WebCLImage()
 {
 }
 
-PassRefPtr<WebCLImage> WebCLImage::create(WebCL* compute_context, 
-	cl_mem image, bool is_shared = false)
+PassRefPtr<WebCLImage> WebCLImage::create(WebCLContext* context, CCenum flags, PassRefPtr<WebCLImageDescriptor> imageDescriptor, void* data, ExceptionObject& exception)
 {
-	return adoptRef(new WebCLImage(compute_context, image, is_shared));
+    CCerror error;
+    ComputeMemoryObject* memoryObject = context->computeContext()->createImage2D(flags, imageDescriptor->width(),
+        imageDescriptor->height(), imageDescriptor->rowPitch(), imageDescriptor->imageFormat(), data, error);
+    if (error != ComputeContext::SUCCESS) {
+        delete memoryObject;
+        setExceptionFromComputeErrorCode(error, exception);
+        return 0;
+    }
+
+    return adoptRef(new WebCLImage(context, memoryObject, imageDescriptor));
 }
 
-WebCLImage::WebCLImage(WebCL* compute_context, cl_mem image, bool is_shared) 
-		: m_context(compute_context), m_cl_mem(image), m_shared(is_shared)
+#if ENABLE(WEBGL)
+PassRefPtr<WebCLImage> WebCLImage::create(WebCLContext* context, CCenum flags, WebGLRenderbuffer* webGLRenderbuffer, ExceptionObject& exception)
 {
+    ASSERT(webGLRenderbuffer);
+
+    unsigned int renderbufferID = webGLRenderbuffer->object();
+    if (!renderbufferID) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_GL_OBJECT, exception);
+        return 0;
+    }
+
+	GC3Dsizei width = webGLRenderbuffer->width();
+	GC3Dsizei height = webGLRenderbuffer->height();
+
+    CCerror error;
+    ComputeMemoryObject* memoryObject = context->computeContext()->createFromGLRenderbuffer(flags, renderbufferID, error);
+    if (error != ComputeContext::SUCCESS) {
+        delete memoryObject;
+        setExceptionFromComputeErrorCode(error, exception);
+        return 0;
+    }
+
+    // FIXME: Format is wrong here. It should have been gotten from WebGLRenderbuffer as well.
+
+    RefPtr<WebCLImageDescriptor> imageDescriptor = WebCLImageDescriptor::create(width, height);
+    RefPtr<WebCLImage> imageObject = adoptRef(new WebCLImage(context, memoryObject, imageDescriptor.release()));
+    imageObject->cacheGLObjectInfo(ComputeContext::GL_OBJECT_RENDERBUFFER, webGLRenderbuffer);
+    return imageObject.release();
 }
 
-cl_mem WebCLImage::getCLImage()
+PassRefPtr<WebCLImage> WebCLImage::create(WebCLContext* context, CCenum flags, CCenum textureTarget, CCenum miplevel,
+                                           WebGLTexture* webGLTexture, ExceptionObject& exception)
 {
-	return m_cl_mem;
+    ASSERT(webGLTexture);
+    unsigned int textureID = webGLTexture->object();
+    if (!textureID) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_GL_OBJECT, exception);
+        return 0;
+    }
+
+    GC3Dsizei width = webGLTexture->getWidth(textureTarget, miplevel);
+    GC3Dsizei height = webGLTexture->getHeight(textureTarget, miplevel);
+
+    CCerror error;
+    ComputeMemoryObject* memoryObject = context->computeContext()->createFromGLTexture2D(flags, textureTarget, miplevel, textureID, error);
+    if (error != ComputeContext::SUCCESS) {
+        delete memoryObject;
+        setExceptionFromComputeErrorCode(error, exception);
+        return 0;
+    }
+
+    // FIXME: Format is wrong here. It should have been gotten from WebGLTexture as well.
+    RefPtr<WebCLImageDescriptor> imageDescriptor = WebCLImageDescriptor::create(width, height);
+    RefPtr<WebCLImage> imageObject = adoptRef(new WebCLImage(context, memoryObject, imageDescriptor));
+    imageObject->cacheGLObjectInfo(ComputeContext::GL_OBJECT_TEXTURE2D, webGLTexture);
+    return imageObject.release();
 }
 
-int WebCLImage::getGLtextureInfo(int paramNameobj, ExceptionState& ec)
+int WebCLImage::getGLTextureInfo(CCenum textureInfoType, ExceptionObject& exception)
 {
-      cl_int err = 0;
-      
-      if (m_cl_mem == NULL) {
-		printf("Error: Invalid CL Context\n");
-		ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-		return NULL;
-	  }
-	  cl_int int_units = 0;
-	  
-	  switch(paramNameobj)
-	  {
-            case WebCL::TEXTURE_TARGET:
-			err = clGetGLTextureInfo(m_cl_mem, CL_GL_TEXTURE_TARGET, sizeof(cl_int), &int_units, NULL);
-			if (err == CL_SUCCESS)
-			return ((int)int_units);
-			break;
-		
-            case WebCL::MIPMAP_LEVEL:
-			err = clGetGLTextureInfo(m_cl_mem, CL_GL_MIPMAP_LEVEL, sizeof(cl_int), &int_units, NULL);
-			if (err == CL_SUCCESS)
-			return ((int)int_units);
-			break;
-			
-	     default:
-			printf("Error: Unsupported paramName Info type = %d ",paramNameobj);
-			return (NULL);
-                          
-      }
-      if(err != CL_SUCCESS)
-	  {
-        	switch (err) {
-        		case CL_INVALID_MEM_OBJECT:
-        			ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-        			printf("Error: CL_INVALID_MEM_OBJECT  \n");
-        			break;
-        		case CL_INVALID_GL_OBJECT:
-        			ec.throwDOMException(WebCLException::INVALID_GL_OBJECT, "WebCLException::INVALID_GL_OBJECT");
-        			printf("Error: CL_INVALID_GL_OBJECT \n");
-        			break;
-        		case CL_INVALID_VALUE:
-        			ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-        			printf("Error: CL_INVALID_VALUE \n");
-        			break;
-       			case CL_OUT_OF_RESOURCES:
-        			ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-        			printf("Error: CL_OUT_OF_RESOURCES \n");
-        			break;
-        		case CL_OUT_OF_HOST_MEMORY:
-        			ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-        			printf("Error: CL_OUT_OF_HOST_MEMORY  \n");
-        			break;
-        		default:
-        			ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-        			printf("Invaild Error Type\n");
-        			break;
-        	}
-	  }
-	  
-      return (NULL);
-      //clGetGLObjectInfo (cl_mem memobj,cl_gl_object_type *gl_object_type,GLuint *gl_object_name)
-      
-      
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return 0;
+    }
+
+    if (!WebCLInputChecker::isValidGLTextureInfo(textureInfoType)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return 0;
+    }
+
+    // FIXME: Is a WebCLImage was created from a WebGLRenderbuffer instead of WebGLTexture,
+    // what should happen here?
+    // http://www.khronos.org/bugzilla/show_bug.cgi?id=940
+
+    CCint err = 0;
+    switch (textureInfoType) {
+    case ComputeContext::GL_TEXTURE_TARGET:
+    case ComputeContext::GL_MIPMAP_LEVEL: {
+        CCint glTextureInfo = 0;
+        err = platformObject()->getGLTextureInfo(textureInfoType, &glTextureInfo);
+        if (err == ComputeContext::SUCCESS)
+            return glTextureInfo;
+        break;
+    }
+    }
+
+    ASSERT(err != ComputeContext::SUCCESS);
+    setExceptionFromComputeErrorCode(err, exception);
+    return 0;
+}
+
+void WebCLImage::cacheGLObjectInfo(CCenum type, WebGLObject* glObject)
+{
+    m_objectInfo = WebCLGLObjectInfo::create(type, glObject);
+}
+#endif
+
+WebCLImage::WebCLImage(WebCLContext* context, ComputeMemoryObject* image, PassRefPtr<WebCLImageDescriptor> imageDescriptor)
+    : WebCLMemoryObject(context, image, 0 /* sizeInBytes */)
+    , m_imageDescriptor(imageDescriptor)
+{
+    size_t memorySizeValue = 0;
+    CCint err = image->getMemoryObjectInfo(ComputeContext::MEM_SIZE, &memorySizeValue);
+    if (err == ComputeContext::SUCCESS)
+        m_sizeInBytes = memorySizeValue;
+}
+
+WebCLImageDescriptor* WebCLImage::getInfo(ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return 0;
+    }
+
+    return m_imageDescriptor.get();
+}
+
+const CCImageFormat& WebCLImage::imageFormat() const
+{
+    return m_imageDescriptor->imageFormat();
 }
 
 } // namespace WebCore

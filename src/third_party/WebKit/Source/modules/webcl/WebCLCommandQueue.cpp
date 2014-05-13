@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided the following conditions
  * are met:
- * 
+ *
  * 1.  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
  * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
  * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -30,1436 +30,1202 @@
 #if ENABLE(WEBCL)
 
 #include "WebCLCommandQueue.h"
-#include "WebCLEventList.h"
-#include "WebCL.h"
-#include <wtf/ArrayBuffer.h>
-//#include <wtf/ByteArray.h>
-//#include "CanvasPixelArray.h"
-#include "WebCLException.h"
+
+#include "ComputeDevice.h"
+#include "ComputeEvent.h"
+#include "ComputeMemoryObject.h"
+#include "WebCLBuffer.h"
+#include "WebCLContext.h"
+#include "WebCLEvent.h"
+#include "WebCLGetInfo.h"
+#include "WebCLHTMLInterop.h"
+#include "WebCLImage.h"
+#include "WebCLImageDescriptor.h"
+#include "WebCLInputChecker.h"
+#include "WebCLKernel.h"
+#include "WebCLMemoryObject.h"
+#include "WebCLProgram.h"
+#include "../../wtf/Int32Array.h"
 
 namespace WebCore {
 
 WebCLCommandQueue::~WebCLCommandQueue()
 {
+    releasePlatformObject();
 }
 
-PassRefPtr<WebCLCommandQueue> WebCLCommandQueue::create(WebCL* compute_context, cl_command_queue command_queue)
+PassRefPtr<WebCLCommandQueue> WebCLCommandQueue::create(WebCLContext* context, CCenum properties, WebCLDevice* webCLDevice, ExceptionObject& exception)
 {
-		return adoptRef(new WebCLCommandQueue(compute_context, command_queue));
+    CCerror error = ComputeContext::SUCCESS;
+    ComputeCommandQueue* computeCommandQueue = context->computeContext()->createCommandQueue(webCLDevice->platformObject(), properties, error);
+    if (error != ComputeContext::SUCCESS) {
+        delete computeCommandQueue;
+        setExceptionFromComputeErrorCode(error, exception);
+        return 0;
+    }
+
+    RefPtr<WebCLCommandQueue> queue = adoptRef(new WebCLCommandQueue(context, computeCommandQueue, webCLDevice));
+    return queue.release();
 }
 
-WebCLCommandQueue::WebCLCommandQueue(WebCL* compute_context, cl_command_queue command_queue) : m_context(compute_context), m_cl_command_queue(command_queue)
+WebCLCommandQueue::WebCLCommandQueue(WebCLContext* context, ComputeCommandQueue *computeCommandQueue, WebCLDevice* webCLDevice)
+    : WebCLObjectImpl(computeCommandQueue)
+    , m_context(context)
+    , m_device(webCLDevice)
+    , m_weakFactoryForLazyInitialization(this)
 {
+    context->trackReleaseableWebCLObject(createWeakPtr());
 }
 
-WebCLGetInfo WebCLCommandQueue:: getInfo(int param_name, ExceptionState& ec)
+WebCLGetInfo WebCLCommandQueue::getInfo(CCenum paramName, ExceptionObject& exception)
 {
-		cl_int err = 0;
-		cl_uint uint_units = 0;
-		cl_context cl_context_id = NULL;
-		cl_device_id cl_device = NULL;
-		cl_command_queue_properties queue_properties = NULL;
-		RefPtr<WebCLContext> contextObj = NULL;
-		RefPtr<WebCLDevice> deviceObj = NULL;
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return WebCLGetInfo();
+    }
 
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return WebCLGetInfo();
-		}		
-		switch(param_name)
-		{
+    CCerror err = 0;
 
-				case WebCL::QUEUE_REFERENCE_COUNT:
-						err=webcl_clGetCommandQueueInfo(webcl_channel_, m_cl_command_queue, CL_QUEUE_REFERENCE_COUNT , sizeof(cl_uint), &uint_units, NULL);
-						if (err == CL_SUCCESS)
-								return WebCLGetInfo(static_cast<unsigned int>(uint_units));	
-						break;
-				case WebCL::QUEUE_CONTEXT:
-						webcl_clGetCommandQueueInfo(webcl_channel_, m_cl_command_queue, CL_QUEUE_CONTEXT, sizeof(cl_context), &cl_context_id, NULL);
-						contextObj = WebCLContext::create(m_context, cl_context_id);
-						if (err == CL_SUCCESS)
-								return WebCLGetInfo(PassRefPtr<WebCLContext>(contextObj));
-						break;
-				case WebCL::QUEUE_DEVICE:
-						webcl_clGetCommandQueueInfo(webcl_channel_, m_cl_command_queue, CL_QUEUE_DEVICE, sizeof(cl_device_id), &cl_device, NULL);
-						deviceObj = WebCLDevice::create(m_context, cl_device);
-						if (err == CL_SUCCESS)
-								return WebCLGetInfo(PassRefPtr<WebCLDevice>(deviceObj));
-						break;
-				case WebCL::QUEUE_PROPERTIES:
-						   webcl_clGetCommandQueueInfo(webcl_channel_, m_cl_command_queue, CL_QUEUE_PROPERTIES, sizeof(cl_command_queue_properties), &queue_properties, NULL);
-						   return WebCLGetInfo(static_cast<unsigned int>(queue_properties));
-							break;
+    switch (paramName) {
+    case ComputeContext::QUEUE_CONTEXT:
+        return WebCLGetInfo(m_context.get());
+    case ComputeContext::QUEUE_DEVICE:
+        return WebCLGetInfo(m_device.get());
+    case ComputeContext::QUEUE_PROPERTIES: {
+        CCCommandQueueProperties ccCommandQueueProperties = 0;
+        err = platformObject()->commandQueueInfo(paramName, &ccCommandQueueProperties);
+        if (err == ComputeContext::SUCCESS)
+            return WebCLGetInfo(static_cast<CCenum>(ccCommandQueueProperties));
+        break;
+    }
+    default:
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return WebCLGetInfo();
+    }
 
-				default:
-						printf("Error: Unsupported Commans Queue Info type\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						return WebCLGetInfo();
-		}
-		switch (err) {
-				case CL_INVALID_COMMAND_QUEUE:
-						printf("Error: CL_INVALID_COMMAND_QUEUE \n");
-						ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-						break;
-				case CL_INVALID_VALUE:
-						printf("Error: CL_INVALID_VALUE \n");
-						ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-						break;
-				case CL_OUT_OF_RESOURCES:
-						printf("Error: CL_OUT_OF_RESOURCES \n");
-						ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-						break;
-				case CL_OUT_OF_HOST_MEMORY:
-						printf("Error: CL_OUT_OF_HOST_MEMORY \n");
-						ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-						break;
-				default:
-						printf("Error: Invaild Error Type\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						break;
-		}				
-		return WebCLGetInfo();
+    ASSERT(err != ComputeContext::SUCCESS);
+    setExceptionFromComputeErrorCode(err, exception);
+    return WebCLGetInfo();
 }
 
-
-
-void  WebCLCommandQueue::enqueueWriteBuffer(WebCLMem* mem, bool blocking_write,
-				int offset, int buffer_size, ArrayBufferView* ptr, WebCLEventList* events,
-                                WebCLEvent* event, ExceptionState& ec)
+void WebCLCommandQueue::ccEventListFromWebCLEventList(const Vector<RefPtr<WebCLEvent> >& events, Vector<ComputeEvent*>& computeEvents, ExceptionObject& exception, WebCLToCCEventsFilterCriteria criteria)
 {
-		cl_mem cl_mem_id = NULL;
-		cl_int err = 0;
-		int eventsLength = 0;
-		cl_event *cl_event_wait_lists = NULL;
-        cl_event cl_event_id = NULL;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}	
-
-		if (mem != NULL) {
-				cl_mem_id = mem->getCLMem();
-				if (cl_mem_id == NULL) {
-						ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-						printf("Error: cl_mem_id null\n");
-						return;
-				}
-		}
-
-		if(ptr == NULL) {
-				printf("Error: Invalid Buffer\n");
-				ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-				return;
-		}
-
-		if (events != NULL) {
-                cl_event_wait_lists = events->getCLEvents();
-                eventsLength = events->length();
-        }
-        if (event != NULL) {
-                cl_event_id = event->getCLEvent();
+    for (size_t i = 0; i < events.size(); ++i) {
+        RefPtr<WebCLEvent> event = events[i];
+        if (event->isPlatformObjectNeutralized()
+            || !event->holdsValidCLObject()) {
+            setExceptionFromComputeErrorCode(ComputeContext::INVALID_EVENT_WAIT_LIST, exception);
+            return;
         }
 
-		// TODO(siba samal) - NULL parameters need to be addressed later
-		if(blocking_write)
-				err = webcl_clEnqueueWriteBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_TRUE, offset, 
-								buffer_size, ptr->baseAddress(), eventsLength, cl_event_wait_lists, &cl_event_id);
-		else
-				err = webcl_clEnqueueWriteBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_FALSE, offset, 
-								buffer_size, ptr->baseAddress(), eventsLength, cl_event_wait_lists, &cl_event_id);
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueWriteBuffer\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-								//case CL_MISALIGNED_SUB_BUFFER_OFFSET:
-								//	printf("Error: CL_MISALIGNED_SUB_BUFFER_OFFSET\n");
-								//	ec.throwDOMException(WebCLException::MISALIGNED_SUB_BUFFER_OFFSET, "WebCLException::MISALIGNED_SUB_BUFFER_OFFSET");
-								//	break;
-								//case CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST:
-								//	printf("Error: CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST\n");
-								//	ec.throwDOMException(WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST, "WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
-								//	break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-
-				}
-
-		} 
-		return;
-
-}
-
-
-
-PassRefPtr<WebCLEvent> WebCLCommandQueue::enqueueWriteBuffer(WebCLMem* mem, bool blocking_write, int offset, int buffer_size,
-				ImageData* ptr, int event_wait_list, ExceptionState& ec)
-{
-		printf("WebCLCommandQueue::enqueueWriteBuffer(ImageData) offset=%d buffer_size=%d event_wait_list=%d\n",
-						offset, buffer_size, event_wait_list);
-
-		cl_mem cl_mem_id = NULL;
-		cl_int err = 0;
-		cl_event cl_event_id = NULL;
-		//float* imageData = NULL; 
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCL::FAILURE, "WebCL::FAILURE");
-				return NULL;
-		}   
-		if (mem != NULL) {
-				cl_mem_id = mem->getCLMem();
-				//cl_mem cl_mem_id = (m_mem_list[0].get())->getCLMem();
-				if (cl_mem_id == NULL) {
-						printf("Error: cl_mem_id null\n");
-						return NULL;
-				}
-		}
-
-		unsigned char* buffer = ptr->data()->data();
-        buffer_size =  ptr->data()->length();
-
-		//Copy ImageData to a float array
-		//	imageData = (float*) malloc(sizeof(float) * ptr->data()->length());
-		//for(int i=0; i <  (int)ptr->data()->length(); i++)
-		//		imageData[i] = ptr->data()->get(i);
-
-
-		// TODO(won.jeon) - NULL parameters need to be addressed later
-		if(blocking_write) 
-				err = webcl_clEnqueueWriteBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_TRUE, 
-								offset, buffer_size, buffer, event_wait_list, NULL, &cl_event_id);
-		//		err = clEnqueueWriteBuffer(m_cl_command_queue, cl_mem_id, CL_TRUE, 
-		//						offset, buffer_size, imageData, event_wait_list, NULL, &cl_event_id);
-		else
-				err = webcl_clEnqueueWriteBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_FALSE, 
-								offset, buffer_size, buffer, event_wait_list, NULL, &cl_event_id);
-		//		err = clEnqueueWriteBuffer(m_cl_command_queue, cl_mem_id, CL_FALSE, 
-		//						offset, buffer_size, imageData, event_wait_list, NULL, &cl_event_id);
-
-		//if(imageData)
-		//		free(imageData);
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueWriteBuffer\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								ec.throwDOMException(WebCL::INVALID_COMMAND_QUEUE, "WebCL::INVALID_COMMAND_QUEUE");
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								break;
-						case CL_INVALID_CONTEXT:
-								ec.throwDOMException(WebCL::INVALID_CONTEXT, "WebCL::INVALID_CONTEXT");
-								printf("Error: CL_INVALID_CONTEXT\n");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								ec.throwDOMException(WebCL::INVALID_MEM_OBJECT, "WebCL::INVALID_MEM_OBJECT");
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								break;
-
-						case CL_INVALID_VALUE:
-								ec.throwDOMException(WebCL::INVALID_VALUE, "WebCL::INVALID_VALUE");
-								printf("Error: CL_INVALID_VALUE\n");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								ec.throwDOMException(WebCL::INVALID_EVENT_WAIT_LIST, "WebCL::INVALID_EVENT_WAIT_LIST");
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								ec.throwDOMException(WebCL::MEM_OBJECT_ALLOCATION_FAILURE, "WebCL::MEM_OBJECT_ALLOCATION_FAILURE");
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								ec.throwDOMException(WebCL::OUT_OF_HOST_MEMORY, "WebCL::OUT_OF_HOST_MEMORY");
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								break;
-						default:
-								ec.throwDOMException(WebCL::FAILURE, "WebCL::FAILURE");
-								printf("Error: Invaild Error Type\n");
-								break;
-				}
-
-		} else {
-				printf("Success: clEnqueueWriteBuffer\n");
-				RefPtr<WebCLEvent> o = WebCLEvent::create(m_context, cl_event_id);
-				m_event_list.append(o);
-				m_num_events++;
-				printf("m_num_events=%ld\n", m_num_events);
-				return o;
-		}
-		return NULL;
-}
-
-PassRefPtr<WebCLEvent>  WebCLCommandQueue::enqueueReadBuffer(WebCLMem* mem, bool blocking_read,
-				int offset, int buffer_size, ImageData* ptr, int event_wait_list, ExceptionState& ec)
-{
-		printf("WebCLCommandQueue::enqueueWriteBuffer(ImageData) offset=%d buffer_size=%d event_wait_list=%d\n",
-						offset, buffer_size, event_wait_list);
-
-		cl_mem cl_mem_id = NULL;
-		cl_int err = 0;
-		cl_event cl_event_id = NULL;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-				return NULL;
-		}
-		if (mem != NULL) {
-				cl_mem_id = mem->getCLMem();
-				if (cl_mem_id == NULL) {
-						printf("Error: cl_mem_id null\n");
-						return NULL;
-				}
-
-
-		}
-
-		//printf("\nLength for imageData = %d buffer_size = %d \n", ptr->data()->length(), buffer_size);
-
-		//Copy ImageData to a float array
-		//float* imageData = (float*) malloc(sizeof(float) * ptr->data()->length());
-
-		unsigned char* buffer = ptr->data()->data();
-		buffer_size =  ptr->data()->length();
-
-
-		// TODO(siba samal) - NULL parameters need to be addressed later
-		if(blocking_read)
-				err = webcl_clEnqueueReadBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_TRUE, 
-								offset,buffer_size, buffer, event_wait_list, NULL, &cl_event_id);
-		//		err = clEnqueueReadBuffer(m_cl_command_queue, cl_mem_id, CL_TRUE, 
-		//						offset,buffer_size, imageData, event_wait_list, NULL, &cl_event_id);
-		else
-				err = webcl_clEnqueueReadBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_FALSE, 
-								offset, buffer_size,  buffer, event_wait_list, NULL, &cl_event_id);
-		//		err = clEnqueueReadBuffer(m_cl_command_queue, cl_mem_id, CL_FALSE, 
-		//						offset, buffer_size,  imageData, event_wait_list, NULL, &cl_event_id);
-
-
-		//for(int i=0; i <  (int)ptr->data()->length(); i++)
-		//{
-				//printf("%f  %d ...\n", imageData[i],i );		
-		//		ptr->data()->set(i, (double)imageData[i]);
-		//}
-
-		//printf("End of Copy    ptr->data()->length() = %d buffer_size = %d \n", ptr->data()->length(), buffer_size);
-
-	//	if(imageData)
-	//			free(imageData);
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueReadBuffer\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-								//case CL_MISALIGNED_SUB_BUFFER_OFFSET :
-								//	printf("Error: CL_MISALIGNED_SUB_BUFFER_OFFSET \n");
-								//	ec.throwDOMException(WebCLException::MISALIGNED_SUB_BUFFER_OFFSET, "WebCLException::MISALIGNED_SUB_BUFFER_OFFSET");
-								//	break;
-								//case CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST  :
-								//	printf("Error: CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST  \n");
-								//	ec.throwDOMException(WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST, "WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
-								//	break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES \n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								printf("WebCLCommandQueue::enqueueReadBuffer() offset=%d buffer_size=%d event_wait_list=%d\n", offset, buffer_size, event_wait_list);
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-
-				}
-
-		} else {
-				RefPtr<WebCLEvent> o = WebCLEvent::create(m_context, cl_event_id);
-				m_event_list.append(o);
-				m_num_events++;
-				return o;
-		}
-		return NULL;
-}
-
-
-
-
-void  WebCLCommandQueue::enqueueReadBuffer(WebCLMem* mem, bool blocking_read,
-				int offset, int buffer_size, ArrayBufferView* ptr, WebCLEventList* events,
-                                WebCLEvent* event, ExceptionState& ec)
-{
-		cl_mem cl_mem_id = NULL;
-		cl_int err = 0;
-		cl_event cl_event_id = NULL;
-		cl_event* cl_event_wait_lists = NULL;
-		int eventsLength = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-				return; 
-		}
-		if (mem != NULL) {
-				cl_mem_id = mem->getCLMem();
-				if (cl_mem_id == NULL) {
-						printf("Error: cl_mem_id null\n");
-						return;
-				}
-
-
-		}
-		if (events != NULL) {
-                cl_event_wait_lists = events->getCLEvents();
-                eventsLength = events->length();
-        }
-        if (event != NULL) {
-                cl_event_id = event->getCLEvent();
+        if (criteria == DoNotAcceptUserEvent && event->isUserEvent()) {
+            setExceptionFromComputeErrorCode(ComputeContext::INVALID_EVENT, exception);
+            return;
         }
 
-		// TODO(siba samal) - NULL parameters need to be addressed later
-		if(blocking_read)
-				err = webcl_clEnqueueReadBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_TRUE, offset, buffer_size, ptr->baseAddress(), eventsLength, cl_event_wait_lists, &cl_event_id);
-		else
-				err = webcl_clEnqueueReadBuffer(webcl_channel_, m_cl_command_queue, cl_mem_id, CL_FALSE, offset, buffer_size, ptr->baseAddress(), eventsLength, cl_event_wait_lists, &cl_event_id);
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueReadBuffer\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-								//case CL_MISALIGNED_SUB_BUFFER_OFFSET :
-								//	printf("Error: CL_MISALIGNED_SUB_BUFFER_OFFSET \n");
-								//	ec.throwDOMException(WebCLException::MISALIGNED_SUB_BUFFER_OFFSET, "WebCLException::MISALIGNED_SUB_BUFFER_OFFSET");
-								//	break;
-								//case CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST  :
-								//	printf("Error: CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST  \n");
-								//	ec.throwDOMException(WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST, "WebCLException::EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
-								//	break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES \n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-
-				}
-		}
-		return ;
-}
-
-
-
-void  WebCLCommandQueue::enqueueNDRangeKernel(WebCLKernel* kernel, Int32Array* offsets, 
-				Int32Array* global_work_size, Int32Array* local_work_size, WebCLEventList* events,
-				WebCLEvent* event, ExceptionState& ec)
-{
-
-		cl_int err = 0;
-		cl_kernel cl_kernel_id = NULL;
-		cl_event *cl_event_wait_lists = NULL;
-		cl_event cl_event_id = NULL;
-		int eventsLength = 0; 
-
-		size_t *g_work_size   = NULL;
-		size_t *l_work_size   = NULL;
-		size_t *g_work_offset = NULL;
-		int work_dim = 0; 
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return ;
-		}
-		if (kernel != NULL) {
-				cl_kernel_id = kernel->getCLKernel();
-				if (cl_kernel_id == NULL) {
-						ec.throwDOMException(WebCLException::INVALID_KERNEL, "WebCLException::INVALID_KERNEL");
-						printf("Error: cl_kernel_id null\n");
-						return ;
-				}
-		}
-
-		if (events != NULL) {
-				cl_event_wait_lists = events->getCLEvents();
-				eventsLength = events->length();
-		}
-		if (event != NULL) {
-				cl_event_id = event->getCLEvent();
-		}
-
-		if(global_work_size != NULL) {
-				g_work_size = (size_t*)malloc(global_work_size->length() * sizeof(size_t));
-				for (unsigned int i = 0; i < global_work_size->length(); i++) {
-						g_work_size[i] = global_work_size->item(i);
-				}
-				work_dim = global_work_size->length();
-		}
-		if(local_work_size != NULL) {
-				l_work_size = (size_t*)malloc(local_work_size->length() * sizeof(size_t));
-				for (unsigned int i = 0; i < local_work_size->length(); i++) {
-						l_work_size[i] = local_work_size->item(i);
-				}
-		}
-		if(offsets != NULL)
-		{
-				g_work_offset = (size_t*)malloc(offsets->length() * sizeof(size_t));
-				for (unsigned int i = 0; i < offsets->length(); i++) {
-						g_work_offset[i] = offsets->item(i);
-				}
-		}
-
-
-		err = webcl_clEnqueueNDRangeKernel(webcl_channel_, m_cl_command_queue, cl_kernel_id, work_dim, 
-						g_work_offset, g_work_size, l_work_size, eventsLength, 
-						cl_event_wait_lists, &cl_event_id);
-
-
-		// Is free needed ??
-		free(g_work_size);
-		free(l_work_size);
-		free(g_work_offset);
-
-		if (err != CL_SUCCESS) {
-				switch(err) {
-						case CL_INVALID_PROGRAM_EXECUTABLE:
-								printf("Error: CL_INVALID_PROGRAM_EXECUTABLE\n");
-								ec.throwDOMException(WebCLException::INVALID_PROGRAM_EXECUTABLE, "WebCLException::INVALID_PROGRAM_EXECUTABLE");
-								break;
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_KERNEL:
-								printf("Error: CL_INVALID_KERNEL\n");
-								ec.throwDOMException(WebCLException::INVALID_KERNEL, "WebCLException::INVALID_KERNEL");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_KERNEL_ARGS:
-								printf("Error: CL_INVALID_KERNEL_ARGS\n");
-								ec.throwDOMException(WebCLException::INVALID_KERNEL_ARGS, "WebCLException::INVALID_KERNEL_ARGS");
-								break;
-						case CL_INVALID_WORK_DIMENSION:
-								printf("Error: CL_INVALID_WORK_DIMENSION\n");
-								ec.throwDOMException(WebCLException::INVALID_WORK_DIMENSION, "WebCLException::INVALID_WORK_DIMENSION");
-								break;
-								//case CL_INVALID_GLOBAL_WORK_SIZE:
-								//	printf("Error: CL_INVALID_GLOBAL_WORK_SIZE\n");
-								//	ec.throwDOMException(WebCLException::INVALID_GLOBAL_WORK_SIZE, "WebCLException::INVALID_GLOBAL_WORK_SIZE");
-								//	break;
-						case CL_INVALID_GLOBAL_OFFSET:
-								printf("Error: CL_INVALID_GLOBAL_OFFSET\n");
-								ec.throwDOMException(WebCLException::INVALID_GLOBAL_OFFSET, "WebCLException::INVALID_GLOBAL_OFFSET");
-								break;
-						case CL_INVALID_WORK_GROUP_SIZE:
-								printf("Error: CL_INVALID_WORK_GROUP_SIZE\n");
-								ec.throwDOMException(WebCLException::INVALID_WORK_GROUP_SIZE, "WebCLException::INVALID_WORK_GROUP_SIZE");
-								break;
-								//case CL_MISALIGNED_SUB_BUFFER_OFFSET:
-								//	   printf("Error: CL_MISALIGNED_SUB_BUFFER_OFFSET\n");
-								//	   ec.throwDOMException(WebCLException::MISALIGNED_SUB_BUFFER_OFFSET, "WebCLException::MISALIGNED_SUB_BUFFER_OFFSET");
-								//	   break;
-						case CL_INVALID_WORK_ITEM_SIZE:
-								printf("Error: CL_INVALID_WORK_ITEM_SIZE\n");
-								ec.throwDOMException(WebCLException::INVALID_WORK_ITEM_SIZE, "WebCLException::INVALID_WORK_ITEM_SIZE");
-								break;
-						case CL_INVALID_IMAGE_SIZE:
-								printf("Error: CL_INVALID_IMAGE_SIZE\n");
-								ec.throwDOMException(WebCLException::INVALID_IMAGE_SIZE, "WebCLException::INVALID_IMAGE_SIZE");
-								break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:	
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} 
-		return;	
-}
-void WebCLCommandQueue::finish(ExceptionState& ec)
-{
-		cl_int err = 0;
-
-		if (m_cl_command_queue == NULL) {
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				printf("Error: Invalid Command Queue\n");
-				return;
-		}
-		err = webcl_clFinish(webcl_channel_, m_cl_command_queue);
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMAND_QUEUE \n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY \n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES \n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}		
-		}
-		return;
-}
-/*
-// TODO(siba.samal) Need to change user_data to Object type
-void WebCLCommandQueue::finish(PassRefPtr<WebCLFinishCallback> notify, int user_data, ExceptionState& ec)//object userData
-{
-cl_int err = 0;
-
-if (m_cl_command_queue == NULL) {
-ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-printf("Error: Invalid Command Queue\n");
-return;
-}
-err = clFinish(m_cl_command_queue);
-if (err != CL_SUCCESS) {
-switch (err) {
-case CL_INVALID_COMMAND_QUEUE:
-printf("Error: CL_INVALID_COMAND_QUEUE \n");
-ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-break;
-case CL_OUT_OF_HOST_MEMORY:
-printf("Error: CL_OUT_OF_HOST_MEMORY \n");
-ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-break;
-case CL_OUT_OF_RESOURCES:
-printf("Error: CL_OUT_OF_RESOURCES \n");
-ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-break;
-default:
-printf("Error: Invaild Error Type\n");
-printf("Unused Argument %d\n",user_data);
-ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-break;
-}		
-} else {
-m_finishCallback = notify;
-//m_finishCallback->handleEvent(user_data);			
-m_finishCallback->handleEvent(m_context);			
-return;
-}
-return;
-}
- */
-
-void WebCLCommandQueue::flush( ExceptionState& ec)
-{
-		cl_int err = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-				return;
-		}
-		err = webcl_clFlush(webcl_channel_, m_cl_command_queue);
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY \n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES \n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
-}
-
-
-void WebCLCommandQueue::releaseCL( ExceptionState& ec)
-{
-		cl_int err = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		err = webcl_clReleaseCommandQueue(webcl_channel_, m_cl_command_queue);
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE  :
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_OUT_OF_RESOURCES   :
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY    :
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				m_command_queue = NULL;
-				return;
-		}
-		return; 
-}
-
-PassRefPtr<WebCLEvent> WebCLCommandQueue::enqueueWriteImage(WebCLMem* mem_image, 
-				bool blocking_write, 
-				Int32Array* origin, 
-				Int32Array* region, 
-				HTMLCanvasElement* canvasElement, 
-				int event_wait_list,
-				ExceptionState& ec)
-{
-
-		cl_int err = 0;
-		cl_mem cl_mem_image = NULL;
-		cl_event cl_event_id = NULL;
-
-
-		size_t *origin_array = NULL;
-		size_t *region_array = NULL;
-
-
-		SharedBuffer* sharedBuffer = NULL;
-
-		Image* image = NULL;
-		const char* image_data = NULL;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return NULL;
-		}
-
-		if (mem_image != NULL) {
-				cl_mem_image = mem_image->getCLMem();
-				if (cl_mem_image == NULL) {
-						printf("Error: cl_mem_image null\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						return NULL;
-				}
-		}
-
-		unsigned origin_array_length = origin->length();
-		origin_array = (size_t*)malloc(origin_array_length*sizeof(size_t));
-		for (unsigned int i = 0; i < origin_array_length; i++) {
-				origin_array[i] = origin->item(i);
-		}
-		unsigned  region_array_length = region->length();
-		region_array = (size_t*)malloc(region_array_length*sizeof(size_t));
-		for (unsigned int i = 0; i < region_array_length; i++) {
-				region_array[i] = region->item(i);
-		}
-
-		if (canvasElement != NULL) {
-				image = canvasElement->copiedImage();
-				sharedBuffer = image->data();
-				if (sharedBuffer == NULL) {
-						printf("Error: sharedBuffer null\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						return NULL;
-				} else {
-						image_data = sharedBuffer->data();
-
-						if (image_data == NULL) {
-								printf("Error: image_data null\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								return NULL;
-						}
-				}
-		}
-
-		if(blocking_write)
-				err = webcl_clEnqueueWriteImage(webcl_channel_, m_cl_command_queue, cl_mem_image, CL_TRUE, 
-								origin_array, region_array, 0, 0, image_data, event_wait_list, NULL, &cl_event_id);
-		else
-				err = webcl_clEnqueueWriteImage(webcl_channel_, m_cl_command_queue, cl_mem_image, CL_FALSE, 
-								origin_array, region_array, 0, 0, image_data, event_wait_list, NULL, &cl_event_id);
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueWriteImage\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_INVALID_IMAGE_SIZE:
-								printf("Error: CL_INVALID_IMAGE_SIZE\n");
-								ec.throwDOMException(WebCLException::INVALID_IMAGE_SIZE, "WebCLException::INVALID_IMAGE_SIZE");
-								break;
-						case CL_INVALID_OPERATION:
-								printf("Error: CL_INVALID_OPERATION\n");
-								ec.throwDOMException(WebCLException::INVALID_OPERATION, "WebCLException::INVALID_OPERATION");
-								break;
-								// CHECK(won.jeon) - from spec 1.1?
-								//case CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST:
-								//	printf("Error: CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST\n");
-								//	break;
-								//case CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST:
-								//	printf("Error: CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST\n");
-								//	ec.throwDOMException(EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST, "EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
-								//	break;
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								printf("WebCLCommandQueue::enqueueWriteImage width=%d height=%d event_wait_list=%d\n", 
-												canvasElement->width(), canvasElement->height(), event_wait_list);
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				RefPtr<WebCLEvent> o = WebCLEvent::create(m_context, cl_event_id);
-				m_event_list.append(o);
-				m_num_events++;
-				return o;
-		}
-		return NULL;
-}
-
-void WebCLCommandQueue::enqueueAcquireGLObjects(WebCLMem* mem_objects, WebCLEventList* events,
-					 WebCLEvent* event, ExceptionState& ec)
-{
-		cl_int err = 0;
-		cl_mem cl_mem_ids = NULL;
-		cl_event *cl_event_wait_lists = NULL;
-        cl_event cl_event_id = NULL;
-        int eventsLength = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		if ((mem_objects != NULL) && (mem_objects->isShared() == true)) {
-				cl_mem_ids = mem_objects->getCLMem();
-				if (cl_mem_ids == NULL) {
-						printf("Error: cl_mem_ids null\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						return;
-				}
-		}
-		if (events != NULL) {
-                cl_event_wait_lists = events->getCLEvents();
-                eventsLength = events->length();
-        }
-        if (event != NULL) {
-                cl_event_id = event->getCLEvent();
-        }
-		err = webcl_clEnqueueAcquireGLObjects(webcl_channel_, m_cl_command_queue, 1, &cl_mem_ids, eventsLength, cl_event_wait_lists, &cl_event_id);
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueAcquireGLObjects\n");
-				switch (err) {
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_GL_OBJECT:
-								printf("Error: CL_INVALID_GL_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_GL_OBJECT, "WebCLException::INVALID_GL_OBJECT");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
-}
-
-void WebCLCommandQueue::enqueueReleaseGLObjects(WebCLMem* mem_objects, WebCLEventList* events,
-                     WebCLEvent* event, ExceptionState& ec)
-{
-		cl_mem cl_mem_ids = NULL;
-		cl_int err = 0;
-		cl_event *cl_event_wait_lists = NULL;
-        cl_event cl_event_id = NULL;
-        int eventsLength = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		if ((mem_objects != NULL) && (mem_objects->isShared())) {
-				cl_mem_ids = mem_objects->getCLMem();
-				if (cl_mem_ids == NULL) {
-						printf("Error: cl_mem_ids null\n");
-						ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-						return;
-				}
-		}
-		if (events != NULL) {
-                cl_event_wait_lists = events->getCLEvents();
-                eventsLength = events->length();
-        }
-        if (event != NULL) {
-                cl_event_id = event->getCLEvent();
+        ASSERT(event->context());
+        if (!WebCLInputChecker::compareContext(event->context(), m_context.get())) {
+            setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+            return;
         }
 
-		err = webcl_clEnqueueReleaseGLObjects(webcl_channel_, m_cl_command_queue, 1, &cl_mem_ids, 
-					eventsLength, cl_event_wait_lists, &cl_event_id);
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_GL_OBJECT:
-								printf("Error: CL_INVALID_GL_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_GL_OBJECT, "WebCLException::INVALID_GL_OBJECT");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				unsigned int i;
-
-				for (i = 0; i < m_mem_list.size(); i++) {
-						if ((m_mem_list[i].get())->getCLMem() == cl_mem_ids) {
-								m_mem_list.remove(i);
-								m_num_mems = m_mem_list.size();
-								break;
-						}
-				}
-				return;
-		}
-		return;
+        computeEvents.append(event->platformObject());
+    }
 }
 
-void WebCLCommandQueue::enqueueCopyBuffer(WebCLMem* src_buffer, WebCLMem* dst_buffer, int cb, ExceptionState& ec)
+ComputeEvent* WebCLCommandQueue::computeEventFromWebCLEventIfApplicable(WebCLEvent* event, ExceptionObject& exception)
 {
-		cl_mem cl_src_buffer_id = NULL;
-		cl_mem cl_dst_buffer_id = NULL;
-		cl_int err = 0;
+    if (!event)
+        return 0;
 
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		if (src_buffer != NULL) {
-				cl_src_buffer_id = src_buffer->getCLMem();
-				if (cl_src_buffer_id == NULL) {
-						printf("Error: cl_src_buffer_id null\n");
-						ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-						return;
-				}
-		}
-		if (dst_buffer != NULL) {
-				cl_dst_buffer_id = dst_buffer->getCLMem();
-				if (cl_dst_buffer_id == NULL) {
-						printf("Error: cl_dst_buffer_id null\n");
-						ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-						return;
-				}
-		}
-		err = webcl_clEnqueueCopyBuffer(webcl_channel_, m_cl_command_queue, cl_src_buffer_id, cl_dst_buffer_id,
-						0, 0, cb, 0, NULL, NULL);
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueCopyBuffer\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_MEM_OBJECT:
-								printf("Error: CL_INVALID_MEM_OBJECT\n");
-								ec.throwDOMException(WebCLException::INVALID_MEM_OBJECT, "WebCLException::INVALID_MEM_OBJECT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_MEM_COPY_OVERLAP:
-								printf("Error: CL_MEM_COPY_OVERLAP\n");
-								ec.throwDOMException(WebCLException::MEM_COPY_OVERLAP, "WebCLException::MEM_COPY_OVERLAP");
-								break;
-								/* CHECK(won.jeon) - defined in 1.1?
-								   case CL_MISALIGNED_SUB_BUFFER_OFFSET:
-								   printf("Error: CL_MISALIGNED_SUB_BUFFER_OFFSET\n");
-								   break;
-								 */
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE\n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
+    // Throw an exception if:
+    // #1 - Event has been released.
+    // #2 - Event has been used before
+    // #3 - Event is a user event.
+    if (event->isPlatformObjectNeutralized()
+        || event->holdsValidCLObject()
+        || event->isUserEvent()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_EVENT, exception);
+        return 0;
+    }
+
+    event->setAssociatedCommandQueue(this);
+    return event->platformObject();
 }
 
-void WebCLCommandQueue::enqueueBarrier( ExceptionState& ec)
+void WebCLCommandQueue::enqueueWriteBufferBase(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, CCuint numBytes, void* hostPtr, size_t hostPtrLength,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
-		cl_int err = 0;
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
 
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-#if defined(CL_VERSION_1_2)
-		err = webcl_clEnqueueBarrierWithWaitList(webcl_channel_,m_cl_command_queue, 0 /*eventWaitListLength*/, 0 /*eventsWaitList*/, 0 /*event*/);
-#else
-		err = webcl_clEnqueueBarrier(webcl_channel_, m_cl_command_queue);
+    if (!WebCLInputChecker::compareContext(m_context.get(), buffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(buffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+    ComputeMemoryObject* computeMemory = buffer->platformObject();
+
+    if (!hostPtr) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_HOST_PTR, exception);
+        return;
+    }
+
+    if (hostPtrLength < numBytes
+        || buffer->sizeInBytes() < (offset + numBytes)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingWrite ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror error = platformObject()->enqueueWriteBuffer(computeMemory, blockingWrite, offset, numBytes, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(error, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, CCuint numBytes, ArrayBufferView* ptr,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(numBytes, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+    enqueueWriteBufferBase(buffer, blockingWrite, offset, numBytes, ptr->baseAddress(), ptr->byteLength(), events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, ImageData* srcPixels,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t pixelSize = 0;
+    WebCLHTMLInterop::extractDataFromImageData(srcPixels, hostPtr, pixelSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferBase(buffer, blockingWrite, offset, pixelSize, hostPtr, pixelSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, HTMLCanvasElement* srcCanvas,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(srcCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferBase(buffer, blockingWrite, offset, canvasSize, hostPtr, canvasSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, HTMLImageElement* srcImage,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t imageSize = 0;
+    WebCLHTMLInterop::extractDataFromImage(srcImage, hostPtr, imageSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferBase(buffer, blockingWrite, offset, imageSize, hostPtr, imageSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBufferRectBase(WebCLBuffer* buffer, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
+    const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+    void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), buffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(buffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+    ComputeMemoryObject* computeMemory = buffer->platformObject();
+
+    if (!hostPtr) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (bufferOrigin.size() != 3 || hostOrigin.size() != 3 || region.size() != 3) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    Vector<size_t> bufferOriginCopy, hostOriginCopy, regionCopy;
+    bufferOriginCopy.appendVector(bufferOrigin);
+    hostOriginCopy.appendVector(hostOrigin);
+    regionCopy.appendVector(region);
+
+    if (!WebCLInputChecker::isValidRegionForMemoryObject(bufferOriginCopy, regionCopy, bufferRowPitch, bufferSlicePitch, buffer->sizeInBytes())
+        || !WebCLInputChecker::isValidRegionForMemoryObject(hostOriginCopy, regionCopy, hostRowPitch, hostSlicePitch, hostPtrLength)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingWrite ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueWriteBufferRect(computeMemory, blockingWrite, bufferOriginCopy,
+        hostOriginCopy, regionCopy, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer* buffer, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
+    const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+    ArrayBufferView* ptr, const Vector<RefPtr<WebCLEvent> >& eventWaitlist, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(hostRowPitch, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidDataSizeForArrayBufferView(hostSlicePitch, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+    enqueueWriteBufferRectBase(buffer, blockingWrite, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch,
+        ptr->baseAddress(), ptr->byteLength(), eventWaitlist, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer* buffer, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin,
+    const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch,
+    ImageData* srcPixels, const Vector<RefPtr<WebCLEvent> >& eventWaitlist, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t pixelSize = 0;
+    WebCLHTMLInterop::extractDataFromImageData(srcPixels, hostPtr, pixelSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferRectBase(buffer, blockingWrite, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch, 0 /* hostRowPitch */, 0 /* hostSlicePitch */,
+        hostPtr, pixelSize, eventWaitlist, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer* buffer, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin,
+    const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch,
+    HTMLCanvasElement* srcCanvas, const Vector<RefPtr<WebCLEvent> >& eventWaitlist, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(srcCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferRectBase(buffer, blockingWrite, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch,
+        0 /* hostRowPitch */, 0 /* hostSlicePitch */, hostPtr, canvasSize, eventWaitlist, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer* buffer, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin,
+    const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch,
+    HTMLImageElement* srcImage, const Vector<RefPtr<WebCLEvent> >& eventWaitlist, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t imageSize = 0;
+    WebCLHTMLInterop::extractDataFromImage(srcImage, hostPtr, imageSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteBufferRectBase(buffer, blockingWrite, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch, 0 /* hostRowPitch */, 0 /*hostSlicePitch*/,
+        hostPtr, imageSize, eventWaitlist, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBufferBase(WebCLBuffer* buffer, CCbool blockingRead, CCuint offset, CCuint numBytes, void* hostPtr, size_t hostPtrLength,
+    const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), buffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(buffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (hostPtrLength < numBytes
+        || buffer->sizeInBytes() < (offset + numBytes)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* computeMemory = buffer->platformObject();
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingRead ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueReadBuffer(computeMemory, blockingRead, offset, numBytes, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBuffer(WebCLBuffer* buffer, CCbool blockingRead, CCuint offset, CCuint numBytes,
+    ArrayBufferView* ptr, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(numBytes, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    enqueueReadBufferBase(buffer, blockingRead, offset, numBytes, ptr->baseAddress(), ptr->byteLength(), events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBuffer(WebCLBuffer* buffer, CCbool blockingRead, CCuint offset, CCuint numBytes,
+    HTMLCanvasElement* dstCanvas, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(dstCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueReadBufferBase(buffer, blockingRead, offset, numBytes, hostPtr, canvasSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadImageBase(WebCLImage* image, CCbool blockingRead, const Vector<CCuint>& origin, const Vector<CCuint>& region,
+    CCuint hostRowPitch, void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), image->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(image)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!hostPtr) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+    if (origin.size() != 2 || region.size() != 2) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidRegionForImage(image->imageDescriptor(), origin, region)
+        || !WebCLInputChecker::isValidRegionForHostPtr(region, hostRowPitch, image->imageDescriptor(), hostPtrLength)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* computeMemory = image->platformObject();
+
+    Vector<size_t> originCopy, regionCopy;
+    originCopy.appendVector(origin);
+    regionCopy.appendVector(region);
+    // No support for 3D-images, so set default values of 0 for all origin & region arrays at 3rd index.
+    originCopy.append(0);
+    regionCopy.append(1);
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingRead ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueReadImage(computeMemory, blockingRead, originCopy, regionCopy, hostRowPitch, 0 /* slice_pitch */, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueReadImage(WebCLImage* image, CCbool blockingRead, const Vector<CCuint>& origin, const Vector<CCuint>& region,
+    CCuint hostRowPitch, ArrayBufferView* ptr, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(hostRowPitch, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    enqueueReadImageBase(image, blockingRead, origin, region, hostRowPitch, ptr->baseAddress(), ptr->byteLength(), events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadImage(WebCLImage* image, CCbool blockingRead, const Vector<CCuint>& origin, const Vector<CCuint>& region,
+    HTMLCanvasElement* dstCanvas, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(dstCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueReadImageBase(image, blockingRead, origin, region, 0 /* rowPitch */, hostPtr, canvasSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBufferRectBase(WebCLBuffer* buffer, CCbool blockingRead,
+    const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region,
+    CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+    void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), buffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(buffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+    ComputeMemoryObject* computeMemory = buffer->platformObject();
+
+    if (!hostPtr) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (bufferOrigin.size() != 3 || hostOrigin.size() != 3 || region.size() != 3) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    Vector<size_t> bufferOriginCopy, hostOriginCopy, regionCopy;
+    bufferOriginCopy.appendVector(bufferOrigin);
+    hostOriginCopy.appendVector(hostOrigin);
+    regionCopy.appendVector(region);
+
+    if (!WebCLInputChecker::isValidRegionForMemoryObject(hostOriginCopy, regionCopy, hostRowPitch, hostSlicePitch, hostPtrLength)
+        || !WebCLInputChecker::isValidRegionForMemoryObject(bufferOriginCopy, regionCopy, bufferRowPitch, bufferSlicePitch, buffer->sizeInBytes())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingRead ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueReadBufferRect(computeMemory, blockingRead, bufferOriginCopy, hostOriginCopy,
+        regionCopy, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBufferRect(WebCLBuffer* buffer, CCbool blockingRead,
+    const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region,
+    CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+    ArrayBufferView* ptr, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(hostRowPitch, ptr)
+        || !WebCLInputChecker::isValidDataSizeForArrayBufferView(hostSlicePitch, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    enqueueReadBufferRectBase(buffer, blockingRead, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch,
+        hostRowPitch, hostSlicePitch, ptr->baseAddress(), ptr->byteLength(), events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueReadBufferRect(WebCLBuffer* buffer, CCbool blockingRead,
+    const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin, const Vector<CCuint>& region,
+    CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLCanvasElement* dstCanvas, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(dstCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueReadBufferRectBase(buffer, blockingRead, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch,
+        0 /* hostRowPitch */, 0 /* hostSlicePitch */, hostPtr, canvasSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueNDRangeKernel(WebCLKernel* kernel, CCuint workDim, const Vector<unsigned>& globalWorkOffsets,
+    const Vector<unsigned>& globalWorkSize, const Vector<unsigned>& localWorkSize, const Vector<RefPtr<WebCLEvent> >& events,
+    WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(kernel)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_KERNEL, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), kernel->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+    ComputeKernel* computeKernel = kernel->computeKernel();
+
+    if (workDim > 3) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_WORK_DIMENSION, exception);
+        return;
+    }
+
+    if (workDim != globalWorkSize.size()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_GLOBAL_WORK_SIZE, exception);
+        return;
+    }
+
+    if (globalWorkOffsets.size() && workDim != globalWorkOffsets.size()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_GLOBAL_OFFSET, exception);
+        return;
+    }
+    if (localWorkSize.size() && workDim != localWorkSize.size()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_WORK_GROUP_SIZE, exception);
+        return;
+    }
+
+    // FIXME :: Need to add validation if user sent value in each of globalWorkSize, globalWorkOffset and localWorkSize
+    // array are valid (not more than 2^32 -1). Currently it is auto clamped by webkit.
+
+    Vector<size_t> globalWorkSizeCopy, localWorkSizeCopy, globalWorkOffsetCopy;
+    globalWorkSizeCopy.appendVector(globalWorkSize);
+    globalWorkOffsetCopy.appendVector(globalWorkOffsets);
+    localWorkSizeCopy.appendVector(localWorkSize);
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror computeContextError = platformObject()->enqueueNDRangeKernel(computeKernel,
+        workDim, globalWorkOffsetCopy, globalWorkSizeCopy, localWorkSizeCopy, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(computeContextError, exception);
+}
+
+void WebCLCommandQueue::enqueueWaitForEvents(const Vector<RefPtr<WebCLEvent> >& events, ExceptionObject& exception)
+{
+    if (!events.size()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_EVENT_WAIT_LIST, exception);
+        return;
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror error = platformObject()->enqueueWaitForEvents(computeEvents);
+    setExceptionFromComputeErrorCode(error, exception);
+}
+
+void WebCLCommandQueue::finish(ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    CCerror computeContextError = platformObject()->finish();
+    setExceptionFromComputeErrorCode(computeContextError, exception);
+}
+
+
+void WebCLCommandQueue::flush(ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    CCerror computeContextError = platformObject()->flush();
+    setExceptionFromComputeErrorCode(computeContextError, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteImageBase(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
+    CCuint hostRowPitch, void* hostPtr, const size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), image->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(image)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!hostPtr) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (origin.size() != 2 || region.size() != 2) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidRegionForImage(image->imageDescriptor(), origin, region)
+        || !WebCLInputChecker::isValidRegionForHostPtr(region, hostRowPitch, image->imageDescriptor(), hostPtrLength)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* computeMemory = image->platformObject();
+
+    Vector<size_t> originCopy, regionCopy;
+    originCopy.appendVector(origin);
+    regionCopy.appendVector(region);
+    // No support for 3D-images, so set default values of 0 for all origin & region arrays at 3rd index.
+    originCopy.append(0);
+    regionCopy.append(1);
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception, blockingWrite ? DoNotAcceptUserEvent : AcceptUserEvent);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueWriteImage(computeMemory, blockingWrite, originCopy, regionCopy, hostRowPitch, 0 /* input_slice_pitch */, hostPtr, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteImage(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
+    CCuint hostRowPitch, ArrayBufferView* ptr, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!ptr || !WebCLInputChecker::isValidDataSizeForArrayBufferView(hostRowPitch, ptr)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+    enqueueWriteImageBase(image, blockingWrite, origin, region, hostRowPitch, ptr->baseAddress(), ptr->byteLength(), events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteImage(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
+    ImageData* srcPixels, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t pixelSize = 0;
+    WebCLHTMLInterop::extractDataFromImageData(srcPixels, hostPtr, pixelSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteImageBase(image, blockingWrite, origin, region, 0 /* hostRowPitch */, hostPtr, pixelSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteImage(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
+    HTMLCanvasElement* srcCanvas, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t canvasSize = 0;
+    WebCLHTMLInterop::extractDataFromCanvas(srcCanvas, hostPtr, canvasSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteImageBase(image, blockingWrite, origin, region, 0 /* hostRowPitch */, hostPtr, canvasSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueWriteImage(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
+    HTMLImageElement* srcImage , const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "WEBCL_html_image")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+    void* hostPtr = 0;
+    size_t imageSize = 0;
+    WebCLHTMLInterop::extractDataFromImage(srcImage, hostPtr, imageSize, exception);
+    if (willThrowException(exception))
+        return;
+
+    enqueueWriteImageBase(image, blockingWrite, origin, region, 0 /* hostRowPitch */, hostPtr, imageSize, events, event, exception);
+}
+
+void WebCLCommandQueue::enqueueCopyImage(WebCLImage* sourceImage, WebCLImage* targetImage, const Vector<unsigned>& sourceOrigin,
+    const Vector<unsigned>& targetOrigin, const Vector<unsigned>& region, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), sourceImage->context())
+        || !WebCLInputChecker::compareContext(m_context.get(), targetImage->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(sourceImage)
+        || !WebCLInputChecker::validateWebCLObject(targetImage)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareImageFormat(sourceImage->imageFormat(), targetImage->imageFormat())) {
+        setExceptionFromComputeErrorCode(ComputeContext::IMAGE_FORMAT_MISMATCH, exception);
+        return;
+    }
+
+    if (sourceOrigin.size() != 2 || targetOrigin.size() != 2 || region.size() != 2) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidRegionForImage(sourceImage->imageDescriptor(), sourceOrigin, region)
+        || !WebCLInputChecker::isValidRegionForImage(targetImage->imageDescriptor(), targetOrigin, region)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+    }
+
+    ComputeMemoryObject* computeSourceImage = sourceImage->platformObject();
+    ComputeMemoryObject* computeTargetImage = targetImage->platformObject();
+
+    Vector<size_t> sourceOriginCopy, targetOriginCopy, regionCopy;
+    sourceOriginCopy.appendVector(sourceOrigin);
+    targetOriginCopy.appendVector(targetOrigin);
+    regionCopy.appendVector(region);
+
+    // No support for 3D-images, so set default values of 0 for all origin & region arrays at 3rd index.
+    sourceOriginCopy.append(0);
+    targetOriginCopy.append(0);
+    regionCopy.append(1);
+
+    if (WebCLInputChecker::isRegionOverlapping(sourceImage, targetImage, sourceOrigin, targetOrigin, region)) {
+        setExceptionFromComputeErrorCode(ComputeContext::MEM_COPY_OVERLAP, exception);
+        return;
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueCopyImage(computeSourceImage, computeTargetImage, sourceOriginCopy, targetOriginCopy, regionCopy, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueCopyImageToBuffer(WebCLImage* sourceImage, WebCLBuffer* targetBuffer, const Vector<unsigned>&
+    sourceOrigin, const Vector<unsigned>& region, CCuint targetOffset, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), sourceImage->context())
+        || !WebCLInputChecker::compareContext(m_context.get(), targetBuffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(sourceImage)
+        || !WebCLInputChecker::validateWebCLObject(targetBuffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (sourceOrigin.size() != 2 || region.size() != 2) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidRegionForBuffer(targetBuffer->sizeInBytes(), region, targetOffset, sourceImage->imageDescriptor())
+        || !WebCLInputChecker::isValidRegionForImage(sourceImage->imageDescriptor(), sourceOrigin, region)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* computeSourceImage = sourceImage->platformObject();
+    ComputeMemoryObject* ccTargetBuffer = targetBuffer->platformObject();
+
+    Vector<size_t> sourceOriginCopy, regionCopy;
+    sourceOriginCopy.appendVector(sourceOrigin);
+    regionCopy.appendVector(region);
+    // No support for 3D-images, so set default values of 0 for all origin & region arrays at 3rd index.
+    sourceOriginCopy.append(0);
+    regionCopy.append(1);
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueCopyImageToBuffer(computeSourceImage, ccTargetBuffer,
+        sourceOriginCopy, regionCopy, targetOffset, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueCopyBufferToImage(WebCLBuffer* sourceBuffer, WebCLImage* targetImage, CCuint sourceOffset,
+    const Vector<unsigned>& targetOrigin, const Vector<unsigned>& region, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(sourceBuffer)
+        || !WebCLInputChecker::validateWebCLObject(targetImage)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), sourceBuffer->context())
+        || !WebCLInputChecker::compareContext(m_context.get(), targetImage->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (targetOrigin.size() != 2 || region.size() != 2) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::isValidRegionForBuffer(sourceBuffer->sizeInBytes(), region, sourceOffset, targetImage->imageDescriptor())
+        || !WebCLInputChecker::isValidRegionForImage(targetImage->imageDescriptor(), targetOrigin, region)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* ccSourceBuffer = sourceBuffer->platformObject();
+    ComputeMemoryObject* computeTargetImage = targetImage->platformObject();
+
+    Vector<size_t> targetOriginCopy, regionCopy;
+    targetOriginCopy.appendVector(targetOrigin);
+    regionCopy.appendVector(region);
+
+    // No support for 3D-images, so set default values of 0 for all origin & region arrays at 3rd index.
+    targetOriginCopy.append(0);
+    regionCopy.append(1);
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueCopyBufferToImage(ccSourceBuffer, computeTargetImage,
+        sourceOffset, targetOriginCopy, regionCopy, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueCopyBuffer(WebCLBuffer* sourceBuffer, WebCLBuffer* targetBuffer, CCuint sourceOffset,
+    CCuint targetOffset, CCuint sizeInBytes, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(sourceBuffer)
+        || !WebCLInputChecker::validateWebCLObject(targetBuffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), sourceBuffer->context())
+        || !WebCLInputChecker::compareContext(m_context.get(), targetBuffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    if (WebCLInputChecker::isRegionOverlapping(sourceBuffer, targetBuffer, sourceOffset, targetOffset, sizeInBytes)) {
+        setExceptionFromComputeErrorCode(ComputeContext::MEM_COPY_OVERLAP, exception);
+        return;
+    }
+
+    if ((sourceOffset + sizeInBytes) > sourceBuffer->sizeInBytes()
+        || (targetOffset + sizeInBytes) > targetBuffer->sizeInBytes()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeMemoryObject* ccSourceBuffer = sourceBuffer->platformObject();
+    ComputeMemoryObject* ccTargetBuffer = targetBuffer->platformObject();
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueCopyBuffer(ccSourceBuffer, ccTargetBuffer,
+        sourceOffset, targetOffset, sizeInBytes, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueCopyBufferRect(WebCLBuffer* sourceBuffer, WebCLBuffer* targetBuffer, const Vector<unsigned>& sourceOrigin,
+    const Vector<unsigned>& targetOrigin, const Vector<unsigned>& region, CCuint sourceRowPitch, CCuint sourceSlicePitch, CCuint targetRowPitch,
+    CCuint targetSlicePitch, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(sourceBuffer)
+        || !WebCLInputChecker::validateWebCLObject(targetBuffer)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_MEM_OBJECT, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::compareContext(m_context.get(), sourceBuffer->context())
+        || !WebCLInputChecker::compareContext(m_context.get(), targetBuffer->context())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_CONTEXT, exception);
+        return;
+    }
+
+    ComputeMemoryObject* ccSourceBuffer = sourceBuffer->platformObject();
+    ComputeMemoryObject* ccTargetBuffer = targetBuffer->platformObject();
+
+    if (sourceOrigin.size() != 3 || targetOrigin.size() != 3 || region.size() != 3) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+    size_t sourceOffset = sourceOrigin[2] * sourceSlicePitch + sourceOrigin[1] * sourceRowPitch + sourceOrigin[0];
+    size_t targetOffset = targetOrigin[2] * targetSlicePitch + targetOrigin[1] * targetRowPitch + targetOrigin[0];
+    size_t numBytes = region[2] * region[1] * region[0];
+    if (WebCLInputChecker::isRegionOverlapping(sourceBuffer, targetBuffer, sourceOffset, targetOffset, numBytes)) {
+        setExceptionFromComputeErrorCode(ComputeContext::MEM_COPY_OVERLAP, exception);
+        return;
+    }
+
+    Vector<size_t> sourceOriginCopy, targetOriginCopy, regionCopy;
+    sourceOriginCopy.appendVector(sourceOrigin);
+    targetOriginCopy.appendVector(targetOrigin);
+    regionCopy.appendVector(region);
+
+    if (!WebCLInputChecker::isValidRegionForMemoryObject(sourceOriginCopy, regionCopy, sourceRowPitch, sourceSlicePitch, sourceBuffer->sizeInBytes())
+        || !WebCLInputChecker::isValidRegionForMemoryObject(targetOriginCopy, regionCopy, targetSlicePitch, targetRowPitch, targetBuffer->sizeInBytes())) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueCopyBufferRect(ccSourceBuffer, ccTargetBuffer,
+        sourceOriginCopy, targetOriginCopy, regionCopy, sourceRowPitch, sourceSlicePitch, targetRowPitch, targetSlicePitch, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueBarrier(ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    CCerror computeContextError = platformObject()->enqueueBarrier();
+    setExceptionFromComputeErrorCode(computeContextError, exception);
+}
+
+void WebCLCommandQueue::enqueueMarker(WebCLEvent* event, ExceptionObject& exception)
+{
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    if (!WebCLInputChecker::validateWebCLObject(event)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception)) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return;
+    }
+
+    CCerror computeContextError = platformObject()->enqueueMarker(computeEvent);
+    setExceptionFromComputeErrorCode(computeContextError, exception);
+}
+
+bool WebCLCommandQueue::isExtensionEnabled(WebCLContext* context, const String& name) const
+{
+    return context->isExtensionEnabled(name);
+};
+
+#if ENABLE(WEBGL)
+void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    Vector<ComputeMemoryObject*> computeMemoryObjects;
+    for (size_t i = 0; i < memoryObjects.size(); ++i) {
+        if (!memoryObjects[i]->sharesGLResources()) {
+            setExceptionFromComputeErrorCode(ComputeContext::INVALID_GL_OBJECT, exception);
+            return;
+        }
+        computeMemoryObjects.append(memoryObjects[i]->platformObject());
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueAcquireGLObjects(computeMemoryObjects, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
+
+void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
+{
+    if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
+        setExtensionsNotEnabledException(exception);
+        return;
+    }
+
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
+        return;
+    }
+
+    Vector<ComputeMemoryObject*> computeMemoryObjects;
+    for (size_t i = 0; i < memoryObjects.size(); ++i) {
+        if (!memoryObjects[i]->sharesGLResources()) {
+            setExceptionFromComputeErrorCode(ComputeContext::INVALID_GL_OBJECT, exception);
+            return;
+        }
+        computeMemoryObjects.append(memoryObjects[i]->platformObject());
+    }
+
+    Vector<ComputeEvent*> computeEvents;
+    ccEventListFromWebCLEventList(events, computeEvents, exception);
+    if (willThrowException(exception))
+        return;
+
+    ComputeEvent* computeEvent = computeEventFromWebCLEventIfApplicable(event, exception);
+    if (willThrowException(exception))
+        return;
+
+    CCerror err = platformObject()->enqueueReleaseGLObjects(computeMemoryObjects, computeEvents, computeEvent);
+    setExceptionFromComputeErrorCode(err, exception);
+}
 #endif
-
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								printf("Error: Invaild Error Type\n");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
-}
-
-
-void WebCLCommandQueue::enqueueMarker(WebCLEvent* event, ExceptionState& ec)
-{
-		cl_int err = 0;
-		cl_event cl_event_id = 0;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		if (event != NULL) {
-				cl_event_id = event->getCLEvent();
-				if (cl_event_id == NULL) {
-						printf("cl_event_id null\n");
-						ec.throwDOMException(WebCLException::INVALID_EVENT, "WebCLException::INVALID_EVENT");
-						return ;
-				}
-		}
-
-#if defined(CL_VERSION_1_2)
-    err = webcl_clEnqueueBarrierWithWaitList(webcl_channel_, m_cl_command_queue, 0 /*eventWaitListLength*/, 0 /*eventsWaitList*/,&cl_event_id /*event*/);
-#else
-    err = clEnqueueMarker(m_cl_command_queue, &cl_event_id);
-#endif
-		//err = clEnqueueMarker(m_cl_command_queue, &cl_event_id);
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								printf("Error: Invaild Error Type\n");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
-}
-
-void WebCLCommandQueue::enqueueWaitForEvents(WebCLEventList* events, ExceptionState& ec)
-{
-		cl_int err = 0;
-		cl_event* cl_event_id = NULL;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return;
-		}
-		if (events != NULL) {
-				cl_event_id = events->getCLEvents();
-				if (cl_event_id == NULL) {
-						printf("Error: cl_event null\n");
-						ec.throwDOMException(WebCLException::INVALID_EVENT, "WebCLException::INVALID_EVENT");
-						return;
-				}
-		}
-#if defined(CL_VERSION_1_2)
-    //err = clWaitForEvents(events->length(), cl_event_id);
-    printf("Error:opencl1.2 doesn't support clEnqueueWaitForEvents \n");
-    ec.throwDOMException(WebCLException::INVALID_EVENT, "WebCLException::INVALID_EVENT");
-    return;
-#else
-    err = clEnqueueWaitForEvents(m_cl_command_queue, events->length(), cl_event_id);
-#endif
-		if (err != CL_SUCCESS) {
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_EVENT:
-								printf("Error: CL_INVALID_EVENT\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT, "WebCLException::INVALID_EVENT");
-								break;
-						case CL_INVALID_VALUE:
-								printf("Error: CL_INVALID_VALUE\n");
-								ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-								break;
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES\n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						default:
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								printf("Error: Invaild Error Type\n");
-								break;
-				}
-		} else {
-				return;
-		}
-		return;
-}
-
-PassRefPtr<WebCLEvent> WebCLCommandQueue::enqueueTask(WebCLKernel* kernel, 
-				int event_wait_list, ExceptionState& ec)
-{
-
-		cl_kernel cl_kernel_id = NULL;
-		cl_int err = 0;
-		cl_event cl_event_id = NULL;
-
-		if (m_cl_command_queue == NULL) {
-				printf("Error: Invalid Command Queue\n");
-				ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-				return NULL;
-		}
-		if (kernel != NULL) {
-				cl_kernel_id = kernel->getCLKernel();
-				if (cl_kernel_id == NULL) {
-						printf("Error: cl_kernel_id null\n");
-						//TODO (siba samal) Handle enqueueTask  API
-						printf("WebCLCommandQueue::enqueueTask event_wait_list=%d\n",
-										event_wait_list);
-						ec.throwDOMException(WebCLException::INVALID_KERNEL, "WebCLException::INVALID_KERNEL");
-						return NULL;
-				}
-		}
-
-		err = webcl_clEnqueueTask(webcl_channel_, m_cl_command_queue, cl_kernel_id, 0, NULL,&cl_event_id); 
-
-		if (err != CL_SUCCESS) {
-				printf("Error: clEnqueueTask\n");
-				switch (err) {
-						case CL_INVALID_COMMAND_QUEUE:
-								printf("Error: CL_INVALID_COMMAND_QUEUE\n");
-								ec.throwDOMException(WebCLException::INVALID_COMMAND_QUEUE, "WebCLException::INVALID_COMMAND_QUEUE");
-								break;
-						case CL_INVALID_CONTEXT:
-								printf("Error: CL_INVALID_CONTEXT\n");
-								ec.throwDOMException(WebCLException::INVALID_CONTEXT, "WebCLException::INVALID_CONTEXT");
-								break;
-						case CL_INVALID_PROGRAM_EXECUTABLE :
-								printf("Error: CL_INVALID_PROGRAM_EXECUTABLE \n");
-								ec.throwDOMException(WebCLException::INVALID_PROGRAM_EXECUTABLE, "WebCLException::INVALID_PROGRAM_EXECUTABLE");
-								break;				
-						case CL_INVALID_KERNEL :
-								printf("Error: CL_INVALID_KERNEL \n");
-								ec.throwDOMException(WebCLException::INVALID_KERNEL, "WebCLException::INVALID_KERNEL");
-								break;
-						case CL_INVALID_EVENT_WAIT_LIST:
-								printf("Error: CL_INVALID_EVENT_WAIT_LIST\n");
-								ec.throwDOMException(WebCLException::INVALID_EVENT_WAIT_LIST, "WebCLException::INVALID_EVENT_WAIT_LIST");
-								break;
-						case CL_INVALID_KERNEL_ARGS :
-								printf("Error: CL_INVALID_KERNEL_ARGS \n");
-								ec.throwDOMException(WebCLException::INVALID_KERNEL_ARGS, "WebCLException::INVALID_KERNEL_ARGS");
-								break;
-						case CL_OUT_OF_HOST_MEMORY:
-								printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-								ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-								break;
-						case CL_INVALID_WORK_GROUP_SIZE :
-								printf("Error: CL_INVALID_WORK_GROUP_SIZE \n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;		
-						case CL_OUT_OF_RESOURCES:
-								printf("Error: CL_OUT_OF_RESOURCES  \n");
-								ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-								break;			
-						case CL_MEM_OBJECT_ALLOCATION_FAILURE:
-								printf("Error: CL_MEM_OBJECT_ALLOCATION_FAILURE  \n");
-								ec.throwDOMException(WebCLException::MEM_OBJECT_ALLOCATION_FAILURE, "WebCLException::MEM_OBJECT_ALLOCATION_FAILURE");
-								break;	
-						default:
-								printf("Error: Invaild Error Type\n");
-								ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
-								break;
-				}
-
-		} else {
-				RefPtr<WebCLEvent> o = WebCLEvent::create(m_context, cl_event_id);
-				m_event_list.append(o);
-				m_num_events++;
-				return o;
-		}
-		return NULL;
-}
-
-cl_command_queue WebCLCommandQueue::getCLCommandQueue()
-{
-		return m_cl_command_queue;
-}
 
 } // namespace WebCore
 

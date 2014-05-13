@@ -42,7 +42,7 @@
 
 namespace WebCore {
 
-	
+/*	
 void V8WebCL::getImageInfoMethodCustom(const v8::Arguments& args)
 {
    
@@ -57,6 +57,8 @@ void V8WebCL::getImageInfoMethodCustom(const v8::Arguments& args)
 
     v8SetReturnValue(args, toV8Object(info,args.Holder(), args.GetIsolate()));
 }
+*/
+
 
 void V8WebCL::constructorCustom(const v8::Arguments& args)
 {
@@ -70,11 +72,12 @@ void V8WebCL::constructorCustom(const v8::Arguments& args)
 	}
 
     // Get the script execution context.
-    ScriptExecutionContext* context = (ScriptExecutionContext*)getExecutionContext(); //getScriptExecutionContext();
+	//ScalableVision - the static create no longer takes a point to ScriptExecutionContext
+    //ScriptExecutionContext* context = (ScriptExecutionContext*)getExecutionContext(); //getScriptExecutionContext();
    // if (!context)
         //{ throwError(ReferenceError, "WebCL constructor's associated frame is not available", args.GetIsolate()); return; }
 
-    RefPtr<WebCL> computeContext = WebCL::create(context);
+    RefPtr<WebCL> computeContext = WebCL::create(); //context); //ScalableVision
 	const WrapperTypeInfo &info = wrapperTypeInfo; // ScalableVision
 
     V8DOMWrapper::setNativeInfo(args.Holder(), &info, computeContext.get());

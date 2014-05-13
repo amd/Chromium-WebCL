@@ -33,7 +33,7 @@
 #define  __WEBCL_CL_INIT_MAIN__
 #define WEBCLEXPORT
 #include "WebCL.h"
-#define WEBCLEXPORT
+#undef WEBCLEXPORT
 #undef   __WEBCL_CL_INIT_MAIN__
 
 content::GpuChannelHost* webcl_channel_ = NULL;
@@ -153,57 +153,60 @@ WebCLPlatformList::~WebCLPlatformList()
 
 PassRefPtr<WebCLPlatformList> WebCLPlatformList::create(WebCL* ctx)
 {
-	
-	return adoptRef(new WebCLPlatformList(ctx));
+
+        return adoptRef(new WebCLPlatformList(ctx));
 }
 
 WebCLPlatformList::WebCLPlatformList(WebCL* ctx) : m_context(ctx)
 {
-	
-	cl_int err = 0;
-	
-	err = webcl_clGetPlatformIDs(webcl_channel_, 0, NULL, &m_num_platforms);
-	if (err != CL_SUCCESS) {
-		// TODO (siba samal) Error handling
-	}
-	
-	m_cl_platforms = new cl_platform_id[m_num_platforms];
-	err = webcl_clGetPlatformIDs(webcl_channel_, m_num_platforms, m_cl_platforms, NULL);
-	if (err != CL_SUCCESS) {
-		// TODO (siba samal) Error handling
-	}
-	
-	for (unsigned int i = 0 ; i < m_num_platforms; i++) {
-		RefPtr<WebCLPlatform> o = WebCLPlatform::create(m_context, m_cl_platforms[i]);
-		if (o != NULL) {
-			m_platform_id_list.append(o);
-		} else {
-			// TODO (siba samal) Error handling
-		}
-	}
-	
+/*
+        cl_int err = 0;
+
+        err = webcl_clGetPlatformIDs(webcl_channel_, 0, NULL, &m_num_platforms);
+        if (err != CL_SUCCESS) {
+                // TODO (siba samal) Error handling
+        }
+
+        m_cl_platforms = new cl_platform_id[m_num_platforms];
+        err = webcl_clGetPlatformIDs(webcl_channel_, m_num_platforms, m_cl_platforms, NULL);
+        if (err != CL_SUCCESS) {
+                // TODO (siba samal) Error handling
+        }
+
+        for (unsigned int i = 0 ; i < m_num_platforms; i++) {
+                RefPtr<WebCLPlatform> o = WebCLPlatform::create(m_context, m_cl_platforms[i]);
+                if (o != NULL) {
+                        m_platform_id_list.append(o);
+                } else {
+                        // TODO (siba samal) Error handling
+                }
+        }
+*/
+
 }
 
 cl_platform_id WebCLPlatformList::getCLPlatforms()
 {
-	return *m_cl_platforms;
+        return *m_cl_platforms;
 }
 
 unsigned WebCLPlatformList::length() const
 {
-	return m_num_platforms;
+        return m_num_platforms;
 }
 
 WebCLPlatform* WebCLPlatformList::item(unsigned index)
 {
-	if (index >= m_num_platforms) {
-		return 0;
-	}
-	WebCLPlatform* ret = (m_platform_id_list[index]).get();
-	return ret;
+        if (index >= m_num_platforms) {
+                return 0;
+        }
+        WebCLPlatform* ret = (m_platform_id_list[index]).get();
+        return ret;
 }
 
 
 } // namespace WebCore
+
+
 
 #endif // ENABLE(WEBCL)

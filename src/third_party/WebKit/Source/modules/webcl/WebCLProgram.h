@@ -1,17 +1,17 @@
 /*
 * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided the following conditions
 * are met:
-* 
+*
 * 1.  Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
-* 
+*
 * 2.  Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
 * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
 * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -28,57 +28,59 @@
 #ifndef WebCLProgram_h
 #define WebCLProgram_h
 
-#ifndef THIRD_PARTY_WEBKIT_MODULES_WEBCL // ScalableVision to avoid conflict between TraceEvent.h and trace_event.h
-#define THIRD_PARTY_WEBKIT_MODULES_WEBCL
-#endif
+#if ENABLE(WEBCL)
 
-#if OS(DARWIN)
-#include <OpenCL/opencl.h>
-#else
-#include <CL/opencl.h>
-#endif
-#include <wtf/PassRefPtr.h>
-#include <wtf/RefCounted.h>
-//#include <PlatformString.h>
-#include "../../bindings/v8/ExceptionState.h"
+#include "ComputeProgram.h"
+#include "WebCLCallback.h"
+#include "WebCLObject.h"
 
-#include "WebCLDevice.h"
-#include "WebCLDeviceList.h"
+#include <wtf/WeakPtr.h>
 
 namespace WebCore {
 
-class WebCL;
+class WebCLContext;
+class WebCLDevice;
 class WebCLGetInfo;
 class WebCLKernel;
-class WebCLKernelList;
 
-class WebCLProgram : public RefCounted<WebCLProgram> {
+typedef ComputeProgram* ComputeProgramPtr;
+class WebCLProgram : public WebCLObjectImpl<ComputeProgramPtr> {
 public:
-	virtual ~WebCLProgram();
-	static PassRefPtr<WebCLProgram> create(WebCL*, cl_program);
-	WebCLGetInfo getInfo(int, ExceptionState&);
-	WebCLGetInfo getBuildInfo(WebCLDevice*, int, ExceptionState&);
-	PassRefPtr<WebCLKernel> createKernel(const String&, ExceptionState&);
-	void buildProgram(int, int, int, ExceptionState&);
-	void buildProgram(WebCLDevice*,int, int, int, ExceptionState&);
-	void buildProgram(WebCLDeviceList*,int, int, int, ExceptionState&);
-	void releaseCL( ExceptionState&);
-	void setDevice(RefPtr<WebCLDevice>);
-	PassRefPtr<WebCLKernelList> createKernelsInProgram( ExceptionState&); 
-	cl_program getCLProgram();
+    virtual ~WebCLProgram();
+    static PassRefPtr<WebCLProgram> create(WebCLContext*, const String& programSource, ExceptionObject&);
+
+    WebCLGetInfo getInfo(CCenum flag, ExceptionObject&);
+    WebCLGetInfo getBuildInfo(WebCLDevice*, CCenum flag, ExceptionObject&);
+
+    void build(const Vector<RefPtr<WebCLDevice> >&, const String* buildOptions, PassRefPtr<WebCLCallback>, ExceptionObject&);
+
+    PassRefPtr<WebCLKernel> createKernel(const String& kernelName, ExceptionObject&);
+    Vector<RefPtr<WebCLKernel> > createKernelsInProgram(ExceptionObject&);
+
+    ComputeProgram* computeProgram() const { return platformObject(); }
+
+    const String& sourceWithCommentsStripped();
 
 private:
-	WebCLProgram(WebCL*, cl_program);
-	WebCL* m_context;
-	cl_program m_cl_program;
-	long m_num_programs;
-	long m_num_kernels;
-	Vector<RefPtr<WebCLProgram> > m_program_list;
-	Vector<RefPtr<WebCLKernel> > m_kernel_list;
-	RefPtr<WebCLDevice> m_device_id;
-	
+    WebCLProgram(WebCLContext*, ComputeProgram*, const String&);
+    void ccDeviceListFromWebCLDeviceList(const Vector<RefPtr<WebCLDevice> >&, Vector<ComputeDevice*>&, ExceptionObject&);
+
+    static void callbackProxyOnMainThread(void* userData);
+    static void callbackProxy(CCProgram, void* userData);
+    void callEvent()
+    {
+        ASSERT(m_callback);
+        m_callback->handleEvent();
+        m_callback = 0;
+    };
+
+    RefPtr<WebCLCallback> m_callback;
+    RefPtr<WebCLContext> m_context;
+    String m_programSource;
+    String m_programSourceWithCommentsStripped;
 };
 
 } // namespace WebCore
 
+#endif
 #endif // WebCLProgram_h

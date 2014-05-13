@@ -60,7 +60,7 @@ void V8WebCLKernel::getWorkGroupInfoMethodCustom(const v8::Arguments& args)
     WebCLGetInfo info = kernel->getWorkGroupInfo(device, workgroup_index, es);
     v8SetReturnValue(args, toV8Object(info,args.Holder(), args.GetIsolate()));
 }
-
+/*
 void V8WebCLKernel::setKernelArgMethodCustom(const v8::Arguments& args)
 {
     
@@ -74,6 +74,7 @@ void V8WebCLKernel::setKernelArgMethodCustom(const v8::Arguments& args)
     int argType = toInt32(args[2]);
     kernel->setKernelArg(argIndex, kernelObject.toWebCLKernelTypeValue(ScriptState::current()), argType, es);
 }
+*/
 
 } // namespace WebCore
 

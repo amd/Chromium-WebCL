@@ -29,19 +29,19 @@
 #if ENABLE(WEBCL)
 
 #include "V8WebCLCustom.h"
-#include "V8WebCLMem.h"
+#include "V8WebCLMemoryObject.h"
 
 namespace WebCore {
 
-void V8WebCLMem::getInfoMethodCustom(const v8::Arguments& args)
+void V8WebCLMemoryObject::getInfoMethodCustom(const v8::Arguments& args)
 {
   
     if (args.Length() != 1)
         { throwNotEnoughArgumentsError(args.GetIsolate()); return; }
 
     ExceptionState es(args.GetIsolate());
-    WebCLMem* mem = V8WebCLMem::toNative(args.Holder()); 
-    int mem_index = toInt32(args[0]);
+    WebCLMemoryObject* mem = V8WebCLMemoryObject::toNative(args.Holder());
+	int mem_index = toInt32(args[0]);
     WebCLGetInfo info = mem->getInfo(mem_index, es);
 
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
@@ -50,3 +50,4 @@ void V8WebCLMem::getInfoMethodCustom(const v8::Arguments& args)
 } // namespace WebCore
 
 #endif // ENABLE(WEBCL)
+; 

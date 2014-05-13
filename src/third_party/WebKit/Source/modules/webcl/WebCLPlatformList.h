@@ -28,9 +28,6 @@
 #ifndef WebCLPlatformList_h
 #define WebCLPlatformList_h
 
-#ifndef THIRD_PARTY_WEBKIT_MODULES_WEBCL // ScalableVision to avoid conflict between TraceEvent.h and trace_event.h
-#define THIRD_PARTY_WEBKIT_MODULES_WEBCL
-#endif
 
 #if OS(DARWIN)
 #include <OpenCL/opencl.h>

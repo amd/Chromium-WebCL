@@ -1,76 +1,73 @@
 /*
-* Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided the following conditions
-* are met:
-* 
-* 1.  Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-* 
-* 2.  Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the
-*     documentation and/or other materials provided with the distribution.
-* 
-* THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
-* CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
-* BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
-* ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-* INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
-* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-* DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
-* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
-* NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright (C) 2011, 2012, 2013 Samsung Electronics Corporation. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided the following conditions
+ * are met:
+ *
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ * ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ * NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+typedef unsigned long CLuint;
+typedef unsigned long CLenum;
+typedef boolean CLboolean;
+typedef long GLint;
+
+[
+    Conditional=WEBCL,
+] interface WebCLContext {
+    [StrictTypeChecking, Custom, RaisesException] any getInfo (CLenum contextInfo);
+
+    [RaisesException] WebCLUserEvent createUserEvent();
+
+    [RaisesException] sequence<WebCLImageDescriptor> getSupportedImageFormats(CLenum memFlags);
+
+    [StrictTypeChecking, RaisesException] WebCLCommandQueue createCommandQueue([Default=Undefined] optional WebCLDevice device, [Default=Undefined] optional CLenum prop);
+
+    [RaisesException] WebCLProgram createProgram(DOMString kernelSource);
+
+    [StrictTypeChecking, RaisesException] WebCLBuffer createBuffer(CLenum memFlags, ImageData srcPixels);
+    [StrictTypeChecking, RaisesException] WebCLBuffer createBuffer(CLenum memFlags, HTMLCanvasElement srcCanvas);
+    [StrictTypeChecking, RaisesException] WebCLBuffer createBuffer(CLenum memFlags, HTMLImageElement srcCanvas);
+    [StrictTypeChecking, RaisesException] WebCLBuffer createBuffer(CLenum memFlags, [EnforceRange] CLuint sizeInBytes, [Default=Undefined] optional ArrayBufferView hostPtr);
+
+    [RaisesException] WebCLSampler createSampler(CLboolean normCords, CLenum addrMode, CLenum fltrMode);
+
+    // FIXME: Use overloading provided by our IDL code generator when
+    // WebIDL dictionary gets fully supported: issue #110.
+/*
+    [StrictTypeChecking, Custom, RaisesException] WebCLImage createImage(CLenum flags, HTMLCanvasElement canvasElement);
+    [StrictTypeChecking, Custom, RaisesException] WebCLImage createImage(CLenum flags, ImageData data);
+    //[StrictTypeChecking, Custom, RaisesException] WebCLImage createImage(CLenum flags, HTMLVideoElement videoElement);
+    [StrictTypeChecking, Custom, RaisesException] WebCLImage createImage(CLenum flags, HTMLImageElement imageElement);
+    [StrictTypeChecking, Custom, RaisesException] WebCLImage createImage(CLenum flags, WebCLImageDescriptor descriptor, [Default=Undefined] optional ArrayBufferView hostPtr);
 */
 
+#if defined(ENABLE_WEBGL) && ENABLE_WEBGL
+    [RaisesException] WebCLBuffer createFromGLBuffer(CLenum memFlags, WebGLBuffer buffer);
+    [RaisesException] WebCLImage createFromGLRenderbuffer(CLenum memFlags, WebGLRenderbuffer renderbuffer);
+    [RaisesException] WebCLImage createFromGLTexture(CLenum memFlags, CLenum textureTarget, GLint miplevel, WebGLTexture texture);
+#endif
 
-	 [
-		Conditional=WEBCL,
-	] interface WebCLContext {
-	[StrictTypeChecking, Custom,RaisesException]  void getInfo ( long contextinfo);		
-	
-	[RaisesException] WebCLEvent createUserEvent();		
+#if defined(LANGUAGE_JAVASCRIPT) && LANGUAGE_JAVASCRIPT
+    void release();
+#endif
 
-	[RaisesException] WebCLCommandQueue createCommandQueue(optional WebCLDeviceList devices, 
-				optional long prop);
-
-
-
-	//WebCLCommandQueue createCommandQueue(in WebCLDevice devices, 
-	//			in long prop) raises(DOMException);
-	[RaisesException] WebCLProgram createProgram( DOMString kernelSource);
-	[RaisesException] WebCLMem createBuffer( long flags, long size);			
-	[RaisesException] WebCLSampler createSampler( boolean normCords,  long addrMode,
-			 long fltrMode);	
-	[RaisesException] void releaseCL();				
-	[RaisesException] WebCLMem createImage2D( long flags, 
-				 HTMLCanvasElement canvasElement);
-	[RaisesException] WebCLMem createImage2D( long flags, 
-				 HTMLImageElement imageElement);
-	[RaisesException] WebCLMem createImage2D( long flags, 
-				 HTMLVideoElement videoElement);
-	[RaisesException] WebCLMem createImage2D( long flags, 
-				 ImageData data);
-	[RaisesException] WebCLMem createImage2D( long flags,
-				 unsigned long width,
-				 unsigned long height,
-				 ArrayBuffer data);
-	[RaisesException] WebCLMem createImage3D( long flags,
-				 unsigned long width,
-				 unsigned long height,
-				 unsigned long depth,
-				 ArrayBuffer data);
-	[RaisesException] WebCLMem createFromGLBuffer( long flags,
-				 WebGLBuffer bufobj);
-	[RaisesException] WebCLImage createFromGLRenderBuffer( long flags, 
-                 WebGLRenderbuffer renderbufferobj);
-	[RaisesException] WebCLMem createFromGLTexture2D( long flags,
-				 unsigned long textureTarget,
-				 long miplevel,
-				 unsigned long texture);
-	
-	
-	};
-
+    void releaseAll();
+};

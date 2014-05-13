@@ -1,153 +1,168 @@
 /*
-* Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided the following conditions
-* are met:
-* 
-* 1.  Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-* 
-* 2.  Redistributions in binary form must reproduce the above copyright
-*     notice, this list of conditions and the following disclaimer in the
-*     documentation and/or other materials provided with the distribution.
-* 
-* THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
-* CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
-* BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
-* ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-* INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
-* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-* DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
-* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
-* NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Copyright (C) 2011, 2012, 2013 Samsung Electronics Corporation. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided the following conditions
+ * are met:
+ *
+ * 1.  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ * 2.  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ * ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ * NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef WebCLCommandQueue_h
 #define WebCLCommandQueue_h
 
-#ifndef THIRD_PARTY_WEBKIT_MODULES_WEBCL // ScalableVision to avoid conflict between TraceEvent.h and trace_event.h
-#define THIRD_PARTY_WEBKIT_MODULES_WEBCL
-#endif
+#if ENABLE(WEBCL)
 
-#if OS(DARWIN)
-#include <OpenCL/opencl.h>
-#else
-#include <CL/opencl.h>
-#endif
-
-#include <wtf/PassRefPtr.h>
-#include <wtf/RefCounted.h>
-#include <wtf/Vector.h>
-#include <wtf/ArrayBufferView.h>
-#include <wtf/Uint8ClampedArray.h>
-
-#include "WebCLGetInfo.h"
-#include "WebCLFinishCallback.h"
-#include "WebCLProgram.h"
-#include "WebCLKernel.h"
-#include "WebCLMem.h"
-#include "WebCLEvent.h"
-#include "WebCLSampler.h"
-#include "core/html/ImageData.h"
-#include "core/html/HTMLCanvasElement.h"
+#include "ComputeCommandQueue.h"
+#include "WebCLObject.h"
 
 namespace WebCore {
 
-class WebCL;
-class WebCLEventList;
+class ImageData;
+class HTMLCanvasElement;
+class HTMLImageElement;
+class WebCLBuffer;
+class WebCLContext;
+class WebCLDevice;
+class WebCLEvent;
+class WebCLGetInfo;
+class WebCLImage;
+class WebCLKernel;
+class WebCLMemoryObject;
 
-class WebCLCommandQueue : public RefCounted<WebCLCommandQueue> {
+typedef ComputeCommandQueue* ComputeCommandQueuePtr;
+class WebCLCommandQueue : public WebCLObjectImpl<ComputeCommandQueuePtr> {
 public:
-	virtual ~WebCLCommandQueue();
-	static PassRefPtr<WebCLCommandQueue> create(WebCL*, cl_command_queue);
-	WebCLGetInfo getInfo(int, ExceptionState&);
-	
-	void enqueueWriteBuffer(WebCLMem*, bool, int, int, ArrayBufferView*, WebCLEventList* ,WebCLEvent* , ExceptionState&);
-	
-	void enqueueWriteBuffer(WebCLMem* mem, bool blocking_write, int offset, int buffer_size, ArrayBufferView* ptr, 
-									WebCLEventList* events, ExceptionState& ec) {
-		return(enqueueWriteBuffer(mem, blocking_write, offset, buffer_size, ptr, events, NULL, ec));
-	}
+    ~WebCLCommandQueue();
+    static PassRefPtr<WebCLCommandQueue> create(WebCLContext*, CCenum queueProperties, WebCLDevice*, ExceptionObject&);
+    WebCLGetInfo getInfo(CCenum, ExceptionObject&);
 
-	void enqueueWriteBuffer(WebCLMem* mem, bool blocking_write, int offset, int buffer_size, ArrayBufferView* ptr, 
-												 ExceptionState& ec) {
-		return(enqueueWriteBuffer(mem, blocking_write, offset, buffer_size, ptr, NULL, NULL, ec));
-	}
-	PassRefPtr<WebCLEvent> enqueueWriteBuffer(WebCLMem*, bool, int, int, 
-		ImageData*, int, ExceptionState&);
+    void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, ImageData*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
-	PassRefPtr<WebCLEvent>  enqueueReadBuffer(WebCLMem*, bool, int, int, 
-		ImageData*, int, ExceptionState&);
-	
-	void enqueueReadBuffer(WebCLMem*, bool, int, int, ArrayBufferView*, WebCLEventList* ,WebCLEvent* , ExceptionState&);
-	void enqueueReadBuffer(WebCLMem* mem, bool blocking_read, int offset, int buffer_size, ArrayBufferView* ptr, 
-									WebCLEventList* events, ExceptionState& ec) {
-		return(enqueueReadBuffer(mem, blocking_read, offset, buffer_size, ptr, events, NULL, ec));
-	}
+    void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
+        CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch, ArrayBufferView*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
+        CCuint bufferRowPitch, CCuint bufferSlicePitch, ImageData*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
+        CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
+        CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
-	void enqueueReadBuffer(WebCLMem* mem, bool blocking_read, int offset, int buffer_size, ArrayBufferView* ptr, 
-												 ExceptionState& ec) {
-		return(enqueueReadBuffer(mem, blocking_read, offset, buffer_size, ptr, NULL, NULL, ec));
-	}
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
-	void  enqueueNDRangeKernel(WebCLKernel* ,Int32Array* ,
-		Int32Array* ,Int32Array* ,WebCLEventList* ,WebCLEvent* , ExceptionState&);
-	void  enqueueNDRangeKernel(WebCLKernel* kernel, Int32Array* offsets,
-			Int32Array* global_work_size, Int32Array* local_work_size, WebCLEventList* events, ExceptionState& ec) {
-			return (enqueueNDRangeKernel(kernel ,offsets ,global_work_size ,local_work_size ,events, NULL, ec)); 	
-		}
-	void  enqueueNDRangeKernel(WebCLKernel* kernel, Int32Array* offsets,
-			Int32Array* global_work_size, Int32Array* local_work_size, ExceptionState& ec) {
-			return (enqueueNDRangeKernel(kernel ,offsets ,global_work_size ,local_work_size , NULL,	NULL, ec)); 	
-		}
-	
-	void finish(ExceptionState&);
-	void flush( ExceptionState&);
-	void releaseCL( ExceptionState&);
-	PassRefPtr<WebCLEvent> enqueueWriteImage(WebCLMem*, bool, Int32Array*, 
-		Int32Array*, HTMLCanvasElement*, int, ExceptionState&);
-	//long enqueueReadImage(WebCLMem*, bool, Int32Array*, 
-	//		Int32Array*, HTMLCanvasElement*, int, ExceptionState&);
-	void enqueueAcquireGLObjects(WebCLMem* ,WebCLEventList* ,WebCLEvent*, ExceptionState&);
-	void enqueueAcquireGLObjects(WebCLMem* mem, WebCLEventList* events, ExceptionState& ec) {
-		return(enqueueAcquireGLObjects(mem,  events,  NULL, ec));
-	}
-	void enqueueAcquireGLObjects(WebCLMem* mem, ExceptionState& ec) {
-		return(enqueueAcquireGLObjects(mem,  NULL, NULL, ec));
-	}
-	
-	void enqueueReleaseGLObjects(WebCLMem*, WebCLEventList* ,WebCLEvent*, ExceptionState&);
-	void enqueueReleaseGLObjects(WebCLMem* mem,WebCLEventList* events, ExceptionState& ec) {
-		return(enqueueReleaseGLObjects(mem,  events,  NULL, ec));
-	}
-	void enqueueReleaseGLObjects(WebCLMem* mem, ExceptionState& ec) {
-		return(enqueueReleaseGLObjects(mem,  NULL, NULL, ec));
-	}
 
-	void enqueueCopyBuffer(WebCLMem*, WebCLMem*, int, ExceptionState&);
-	void enqueueBarrier( ExceptionState&);
-	void enqueueMarker(WebCLEvent*, ExceptionState&);
-	void enqueueWaitForEvents(WebCLEventList*, ExceptionState&);
-	PassRefPtr<WebCLEvent> enqueueTask( WebCLKernel* ,int, ExceptionState&);
-	cl_command_queue getCLCommandQueue();	
+    void enqueueReadBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
+        const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+        ArrayBufferView*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
+        const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueReadImage(WebCLImage*, CCbool blockingWrite,  const Vector<CCuint>& origin, const Vector<CCuint>& region, CCuint rowPitch,
+        ArrayBufferView*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadImage(WebCLImage*, CCbool blockingWrite,  const Vector<CCuint>& origin, const Vector<CCuint>& region, HTMLCanvasElement*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region, CCuint hostRowPitch,
+        ArrayBufferView*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region,
+        ImageData*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region,
+        HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region,
+        HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueCopyBuffer(WebCLBuffer*, WebCLBuffer*, CCuint sourceOffset, CCuint targetOffset, CCuint sizeInBytes,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueCopyBufferRect(WebCLBuffer*, WebCLBuffer*, const Vector<unsigned>& sourceOrigin, const Vector<unsigned>& targetOrigin,
+        const Vector<unsigned>& region, CCuint sourceRowPitch, CCuint sourceSlicePitch, CCuint targetRowPitch, CCuint targetSlicePitch,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueCopyImage(WebCLImage*, WebCLImage*, const Vector<unsigned>& sourceOrigin, const Vector<unsigned>& targetOrigin,
+        const Vector<unsigned>& region, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueCopyImageToBuffer(WebCLImage*, WebCLBuffer*, const Vector<unsigned>& sourceOrigin, const Vector<unsigned>& region,
+        CCuint targetOffset, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueCopyBufferToImage(WebCLBuffer*, WebCLImage*, CCuint sourceOffset, const Vector<unsigned>& sourceOrigin, const Vector<unsigned>& region,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueNDRangeKernel(WebCLKernel*, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
+        const Vector<unsigned>& localWorkSize, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    void enqueueWaitForEvents(const Vector<RefPtr<WebCLEvent> >&, ExceptionObject&);
+
+    void finish(ExceptionObject&);
+    void flush(ExceptionObject&);
+
+    void enqueueBarrier(ExceptionObject&);
+
+    void enqueueMarker(WebCLEvent*, ExceptionObject&);
+
+#if ENABLE(WEBGL)
+    void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+#endif
+
+    WebCLContext* context() const { return m_context.get(); }
+    bool isExtensionEnabled(WebCLContext*, const String& name) const;
+
+    WeakPtr<WebCLCommandQueue> createWeakPtrForLazyInitialization() { return m_weakFactoryForLazyInitialization.createWeakPtr(); }
+
 private:
-	WebCLCommandQueue(WebCL*, cl_command_queue);	
-	WebCL* m_context;
-	cl_command_queue m_cl_command_queue;
-	RefPtr<WebCLFinishCallback> m_finishCallback;
-	RefPtr<WebCLCommandQueue> m_command_queue;
-	
-	
-	long m_num_events;
-	long m_num_commandqueues;
-	long m_num_mems;
-	Vector<RefPtr<WebCLEvent> > m_event_list;
-	Vector<RefPtr<WebCLCommandQueue> > m_commandqueue_list;
-	Vector<RefPtr<WebCLMem> > m_mem_list;
+    WebCLCommandQueue(WebCLContext*, ComputeCommandQueue*, WebCLDevice*);
+
+    void enqueueWriteBufferBase(WebCLBuffer*, CCbool blockingWrite, CCuint, CCuint, void* hostPtr, size_t hostPtrLength,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadBufferBase(WebCLBuffer*, CCbool blockingRead, CCuint, CCuint, void* hostPtr, size_t hostPtrLength,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadBufferRectBase(WebCLBuffer*, CCbool blockingRead, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&, CCuint, CCuint,
+        CCuint, CCuint, void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadImageBase(WebCLImage*, CCbool blockingRead, const Vector<CCuint>&, const Vector<CCuint>&, CCuint, void* hostPtr,
+        size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteBufferRectBase(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
+        const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
+        void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueWriteImageBase(WebCLImage*, CCbool blockingWrite, const Vector<unsigned>&, const Vector<unsigned>&, CCuint hostRowPitch, void* hostPtr,
+        size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    typedef enum {AcceptUserEvent, DoNotAcceptUserEvent} WebCLToCCEventsFilterCriteria;
+    void ccEventListFromWebCLEventList(const Vector<RefPtr<WebCLEvent> >&, Vector<ComputeEvent*>&, ExceptionObject&, WebCLToCCEventsFilterCriteria = AcceptUserEvent);
+
+    ComputeEvent* computeEventFromWebCLEventIfApplicable(WebCLEvent*, ExceptionObject&);
+
+    RefPtr<WebCLContext> m_context;
+    RefPtr<WebCLDevice> m_device;
+
+    WeakPtrFactory<WebCLCommandQueue> m_weakFactoryForLazyInitialization;
 };
 
 } // namespace WebCore
+
+#endif // ENABLE(WEBCL)
 #endif // WebCLCommandQueue_h

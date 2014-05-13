@@ -1,17 +1,17 @@
 /*
 * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided the following conditions
 * are met:
-* 
+*
 * 1.  Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
-* 
+*
 * 2.  Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
 * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
 * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -30,143 +30,62 @@
 #if ENABLE(WEBCL)
 
 #include "WebCLSampler.h"
-#include "WebCL.h"
-#include "WebCLException.h"
+
+#include "ComputeSampler.h"
+#include "WebCLContext.h"
 
 namespace WebCore {
 
 WebCLSampler::~WebCLSampler()
 {
+    releasePlatformObject();
 }
 
-PassRefPtr<WebCLSampler> WebCLSampler::create(WebCL* compute_context, 
-	cl_sampler sampler)
+PassRefPtr<WebCLSampler> WebCLSampler::create(WebCLContext* context, CCbool normCoords, CCenum addressingMode, CCenum filterMode, ExceptionObject& exception)
 {
-	return adoptRef(new WebCLSampler(compute_context, sampler));
+    CCerror error;
+    ComputeSampler* computeSampler = context->computeContext()->createSampler(normCoords, addressingMode, filterMode, error);
+    if (error != ComputeContext::SUCCESS) {
+        delete computeSampler;
+        setExceptionFromComputeErrorCode(error, exception);
+        return 0;
+    }
+
+    return adoptRef(new WebCLSampler(context, computeSampler, normCoords, addressingMode, filterMode));
 }
 
-WebCLSampler::WebCLSampler(WebCL* compute_context, cl_sampler sampler) 
-		: m_context(compute_context), m_cl_sampler(sampler)
+WebCLSampler::WebCLSampler(WebCLContext* context, ComputeSampler* sampler, CCbool normCoords, CCenum addressingMode, CCenum filterMode)
+    : WebCLObjectImpl(sampler)
+    , m_normCoords(normCoords)
+    , m_addressingMode(addressingMode)
+    , m_filterMode(filterMode)
+    , m_context(context)
 {
-	m_num_samplers = 0;
+    context->trackReleaseableWebCLObject(createWeakPtr());
 }
 
-WebCLGetInfo WebCLSampler::getInfo(cl_sampler_info param_name, ExceptionState& ec)
+WebCLGetInfo WebCLSampler::getInfo(CCenum infoType, ExceptionObject& exception)
 {
-	cl_int err = 0;
-	cl_uint uint_units = 0;
-	cl_bool bool_units = false;
-	cl_context cl_context_id = NULL;
-	RefPtr<WebCLContext> contextObj =  NULL;
-	if (m_cl_sampler == NULL) {
-		ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-		printf("Error: Invalid Sampler\n");
-		return WebCLGetInfo();
-	}
-	switch(param_name)
-	{
-		case WebCL::SAMPLER_REFERENCE_COUNT:
-			err = webcl_clGetSamplerInfo (webcl_channel_, m_cl_sampler, CL_SAMPLER_REFERENCE_COUNT , sizeof(cl_uint), &uint_units, NULL);
-			if (err == CL_SUCCESS)
-				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
-			break;
-		case WebCL::SAMPLER_NORMALIZED_COORDS:
-			err = webcl_clGetSamplerInfo(webcl_channel_, m_cl_sampler, CL_SAMPLER_NORMALIZED_COORDS , sizeof(cl_bool), &bool_units, NULL);
-			if (err == CL_SUCCESS)
-				return WebCLGetInfo(static_cast<bool>(bool_units));
-			break;
-		case WebCL::SAMPLER_CONTEXT:
-			err = webcl_clGetSamplerInfo(webcl_channel_, m_cl_sampler, CL_SAMPLER_CONTEXT, sizeof(cl_context), &cl_context_id, NULL);
-			contextObj = WebCLContext::create(m_context, cl_context_id);
-			if (err == CL_SUCCESS)
-				return WebCLGetInfo(PassRefPtr<WebCLContext>(contextObj));
-			break;
-		case WebCL::SAMPLER_ADDRESSING_MODE:
-			err = webcl_clGetSamplerInfo (webcl_channel_, m_cl_sampler, CL_SAMPLER_ADDRESSING_MODE , sizeof(cl_uint), &uint_units, NULL);
-			if (err == CL_SUCCESS)
-				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
-			break;
-		case WebCL::SAMPLER_FILTER_MODE:
-			err = webcl_clGetSamplerInfo (webcl_channel_, m_cl_sampler, CL_SAMPLER_FILTER_MODE , sizeof(cl_uint), &uint_units, NULL);
-			if (err == CL_SUCCESS)
-				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
-			break;
-		default:
-			printf("Error: Unsupported Sampler Info type\n");
-			ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-			return WebCLGetInfo();	
-	}
-	switch (err) {
+    if (isPlatformObjectNeutralized()) {
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_SAMPLER, exception);
+        return WebCLGetInfo();
+    }
 
-		case CL_INVALID_VALUE:
-			ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
-			printf("Error: CL_INVALID_VALUE \n");
-			break;
-		case CL_INVALID_SAMPLER:
-			ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-			printf("Error: CL_INVALID_SAMPLER\n");
-			break;
-		case CL_OUT_OF_RESOURCES:
-			ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-			printf("Error: CL_OUT_OF_RESOURCES\n");
-			break; 
-		case CL_OUT_OF_HOST_MEMORY:
-			ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-			printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-			break;
-		default:
-			ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-			printf("Error: Invaild Error Type\n");
-			break;
-	}				
-	return WebCLGetInfo();
+    switch (infoType) {
+    case ComputeContext::SAMPLER_NORMALIZED_COORDS:
+        return WebCLGetInfo(static_cast<bool>(m_normCoords));
+    case ComputeContext::SAMPLER_CONTEXT:
+        return WebCLGetInfo(m_context.get());
+    case ComputeContext::SAMPLER_ADDRESSING_MODE:
+        return WebCLGetInfo(m_addressingMode);
+    case ComputeContext::SAMPLER_FILTER_MODE:
+        return WebCLGetInfo(m_filterMode);
+    default:
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        return WebCLGetInfo();
+    }
 
-}
-void WebCLSampler::releaseCL( ExceptionState& ec)
-{
-	cl_int err = 0;
-	if (m_cl_sampler == NULL) {
-		printf("Error: Invalid Sampler\n");
-		ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-		return;
-	}
-	err = webcl_clReleaseSampler(webcl_channel_, m_cl_sampler);
-	if (err != CL_SUCCESS) {
-		switch (err) {
-			case CL_INVALID_SAMPLER :
-				printf("Error: CL_INVALID_SAMPLER\n");
-				ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-				break;
-			case CL_OUT_OF_RESOURCES :
-				printf("Error: CL_OUT_OF_RESOURCES\n");
-				ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
-				break;
-			case CL_OUT_OF_HOST_MEMORY :
-				printf("Error: CL_OUT_OF_HOST_MEMORY\n");
-				ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
-				break;
-
-			default:
-				printf("Error: Invaild Error Type\n");
-				ec.throwDOMException(WebCLException::INVALID_SAMPLER, "WebCLException::INVALID_SAMPLER");
-				break;
-		}
-	} else {
-		for (int i = 0; i < m_num_samplers; i++) {
-			if ((m_sampler_list[i].get())->getCLSampler() == m_cl_sampler) {
-				m_sampler_list.remove(i);
-				m_num_samplers = m_sampler_list.size();
-				break;
-			}
-		}
-		return;
-	}
-	return;
-}
-
-cl_sampler WebCLSampler::getCLSampler()
-{
-	return m_cl_sampler;
+    ASSERT_NOT_REACHED();
 }
 
 } // namespace WebCore

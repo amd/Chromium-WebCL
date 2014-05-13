@@ -1,17 +1,17 @@
 /*
- * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
- * 
+ * Copyright (C) 2011, 2012, 2013 Samsung Electronics Corporation. All rights reserved.
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided the following conditions
  * are met:
- * 
+ *
  * 1.  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
  * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
  * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -24,73 +24,70 @@
  * NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+typedef long CLint;
 
+[
+    Conditional=WEBCL,
+    //JSNoStaticTables,
+    //ImplementationLacksVTable,
+    DoNotCheckConstants
+] interface WebCLException {
+    readonly attribute CLint code;
+    readonly attribute DOMString name;
+    readonly attribute DOMString message;
 
-     [
-        Conditional=WEBCL,
-        //JSNoStaticTables,
-        DoNotCheckConstants
-    ]interface WebCLException {
-/*
- 		readonly attribute long   code;
-        readonly attribute DOMString        name;
-        readonly attribute DOMString        message;
+    // WebCLExceptionCode
+    const unsigned short SUCCESS = 0;
+    const unsigned short DEVICE_NOT_FOUND                         = 1;
+    const unsigned short DEVICE_NOT_AVAILABLE                     = 2;
+    const unsigned short COMPILER_NOT_AVAILABLE                   = 3;
+    const unsigned short MEM_OBJECT_ALLOCATION_FAILURE            = 4;
+    const unsigned short OUT_OF_RESOURCES                         = 5;
+    const unsigned short OUT_OF_HOST_MEMORY                       = 6;
+    const unsigned short PROFILING_INFO_NOT_AVAILABLE             = 7;
+    const unsigned short MEM_COPY_OVERLAP                         = 8;
+    const unsigned short IMAGE_FORMAT_MISMATCH                    = 9;
+    const unsigned short IMAGE_FORMAT_NOT_SUPPORTED               = 10;
+    const unsigned short BUILD_PROGRAM_FAILURE                    = 11;
+    const unsigned short MAP_FAILURE                              = 12;
+    const unsigned short MISALIGNED_SUB_BUFFER_OFFSET             = 13;
+    const unsigned short EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST = 14;
 
-
-		// WebCLExceptionCode
-		const unsigned short SUCCESS = 0;
-		const unsigned short DEVICE_NOT_FOUND                         = 1;
-		const unsigned short DEVICE_NOT_AVAILABLE                     = 2;
-		const unsigned short COMPILER_NOT_AVAILABLE                   = 3;
-		const unsigned short MEM_OBJECT_ALLOCATION_FAILURE            = 4;
-		const unsigned short OUT_OF_RESOURCES                         = 5;
-		const unsigned short OUT_OF_HOST_MEMORY                       = 6;
-		const unsigned short PROFILING_INFO_NOT_AVAILABLE             = 7;
-		const unsigned short MEM_COPY_OVERLAP                         = 8;
-		const unsigned short IMAGE_FORMAT_MISMATCH                    = 9;
-		const unsigned short IMAGE_FORMAT_NOT_SUPPORTED               = 10;
-		const unsigned short BUILD_PROGRAM_FAILURE                    = 11;
-		const unsigned short MAP_FAILURE                              = 12;
-		const unsigned short MISALIGNED_SUB_BUFFER_OFFSET             = 13;
-		const unsigned short EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST = 14;
-	
-		const unsigned short INVALID_VALUE                            = 30;
-		const unsigned short INVALID_DEVICE_TYPE                      = 31;
-		const unsigned short INVALID_PLATFORM                         = 32;
-		const unsigned short INVALID_DEVICE                           = 33;
-		const unsigned short INVALID_CONTEXT                          = 34;
-		const unsigned short INVALID_QUEUE_PROPERTIES                 = 35;
-		const unsigned short INVALID_COMMAND_QUEUE                    = 36;
-		const unsigned short INVALID_HOST_PTR                         = 37;
-		const unsigned short INVALID_MEM_OBJECT                       = 38;
-		const unsigned short INVALID_IMAGE_FORMAT_DESCRIPTOR          = 39;
-		const unsigned short INVALID_IMAGE_SIZE                       = 40;
-		const unsigned short INVALID_SAMPLER                          = 41;
-		const unsigned short INVALID_BINARY                           = 42;
-		const unsigned short INVALID_BUILD_OPTIONS                    = 43;
-		const unsigned short INVALID_PROGRAM                          = 44;
-		const unsigned short INVALID_PROGRAM_EXECUTABLE               = 45;
-		const unsigned short INVALID_KERNEL_NAME                      = 46;
-		const unsigned short INVALID_KERNEL_DEFINITION                = 47;
-		const unsigned short INVALID_KERNEL                           = 48;
-		const unsigned short INVALID_ARG_INDEX                        = 49;
-		const unsigned short INVALID_ARG_VALUE                        = 50;
-		const unsigned short INVALID_ARG_SIZE                         = 51;
-		const unsigned short INVALID_KERNEL_ARGS                      = 52;
-		const unsigned short INVALID_WORK_DIMENSION                   = 53;
-		const unsigned short INVALID_WORK_GROUP_SIZE                  = 54;
-		const unsigned short INVALID_WORK_ITEM_SIZE                   = 55;
-		const unsigned short INVALID_GLOBAL_OFFSET                    = 56;
-		const unsigned short INVALID_EVENT_WAIT_LIST                  = 57;
-		const unsigned short INVALID_EVENT                            = 58;
-		const unsigned short INVALID_OPERATION                        = 59;
-		const unsigned short INVALID_GL_OBJECT                        = 60;
-		const unsigned short INVALID_BUFFER_SIZE                      = 61;
-		const unsigned short INVALID_MIP_LEVEL                        = 62;
-		const unsigned short INVALID_GLOBAL_WORK_SIZE                 = 63;
-		const unsigned short INVALID_PROPERTY                         = 64;
-		const unsigned short FAILURE                                  = 65;     
-*/
-    };
-
+    const unsigned short INVALID_VALUE                            = 30;
+    const unsigned short INVALID_DEVICE_TYPE                      = 31;
+    const unsigned short INVALID_PLATFORM                         = 32;
+    const unsigned short INVALID_DEVICE                           = 33;
+    const unsigned short INVALID_CONTEXT                          = 34;
+    const unsigned short INVALID_QUEUE_PROPERTIES                 = 35;
+    const unsigned short INVALID_COMMAND_QUEUE                    = 36;
+    const unsigned short INVALID_HOST_PTR                         = 37;
+    const unsigned short INVALID_MEM_OBJECT                       = 38;
+    const unsigned short INVALID_IMAGE_FORMAT_DESCRIPTOR          = 39;
+    const unsigned short INVALID_IMAGE_SIZE                       = 40;
+    const unsigned short INVALID_SAMPLER                          = 41;
+    const unsigned short INVALID_BINARY                           = 42;
+    const unsigned short INVALID_BUILD_OPTIONS                    = 43;
+    const unsigned short INVALID_PROGRAM                          = 44;
+    const unsigned short INVALID_PROGRAM_EXECUTABLE               = 45;
+    const unsigned short INVALID_KERNEL_NAME                      = 46;
+    const unsigned short INVALID_KERNEL_DEFINITION                = 47;
+    const unsigned short INVALID_KERNEL                           = 48;
+    const unsigned short INVALID_ARG_INDEX                        = 49;
+    const unsigned short INVALID_ARG_VALUE                        = 50;
+    const unsigned short INVALID_ARG_SIZE                         = 51;
+    const unsigned short INVALID_KERNEL_ARGS                      = 52;
+    const unsigned short INVALID_WORK_DIMENSION                   = 53;
+    const unsigned short INVALID_WORK_GROUP_SIZE                  = 54;
+    const unsigned short INVALID_WORK_ITEM_SIZE                   = 55;
+    const unsigned short INVALID_GLOBAL_OFFSET                    = 56;
+    const unsigned short INVALID_EVENT_WAIT_LIST                  = 57;
+    const unsigned short INVALID_EVENT                            = 58;
+    const unsigned short INVALID_OPERATION                        = 59;
+    const unsigned short INVALID_GL_OBJECT                        = 60;
+    const unsigned short INVALID_BUFFER_SIZE                      = 61;
+    const unsigned short INVALID_MIP_LEVEL                        = 62;
+    const unsigned short INVALID_GLOBAL_WORK_SIZE                 = 63;
+    const unsigned short INVALID_PROPERTY                         = 64;
+    const unsigned short WEBCL_EXTENSION_NOT_ENABLED              = 65;
+    const unsigned short WEBCL_IMPLEMENTATION_FAILURE             = 66;
+};

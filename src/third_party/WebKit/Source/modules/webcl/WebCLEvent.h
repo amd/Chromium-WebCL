@@ -1,17 +1,17 @@
 /*
 * Copyright (C) 2011 Samsung Electronics Corporation. All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided the following conditions
 * are met:
-* 
+*
 * 1.  Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
-* 
+*
 * 2.  Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in the
 *     documentation and/or other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
 * CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
 * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -28,51 +28,57 @@
 #ifndef WebCLEvent_h
 #define WebCLEvent_h
 
-#ifndef THIRD_PARTY_WEBKIT_MODULES_WEBCL // ScalableVision to avoid conflict between TraceEvent.h and trace_event.h
-#define THIRD_PARTY_WEBKIT_MODULES_WEBCL
-#endif
+#if ENABLE(WEBCL)
 
-#if OS(DARWIN)
-#include <OpenCL/opencl.h>
-#else
-#include <CL/opencl.h>
-#endif
-#include <wtf/PassRefPtr.h>
-#include <wtf/RefCounted.h>
-#include <wtf/Vector.h>
-
-#include "WebCLFinishCallback.h"
+#include "WebCLCallback.h"
 #include "WebCLGetInfo.h"
+#include "WebCLObject.h"
 
 namespace WebCore {
 
-class WebCL;
+class ComputeEvent;
+class WebCLCommandQueue;
 
-class WebCLEvent : public RefCounted<WebCLEvent> {
+typedef ComputeEvent* ComputeEventPtr;
+class WebCLEvent : public WebCLObjectImpl<ComputeEventPtr> {
 public:
-        virtual ~WebCLEvent();
-        static PassRefPtr<WebCLEvent> create(WebCL*, cl_event);
-		WebCLGetInfo getInfo(int, ExceptionState&);
-		WebCLGetInfo getProfilingInfo(int, ExceptionState&);
-		void setEventCallback(int, PassRefPtr<WebCLFinishCallback>, int , ExceptionState&);
-		void setUserEventStatus (int, ExceptionState&);
-		void releaseCL( ExceptionState&);
-        cl_event getCLEvent();
-		RefPtr<WebCLFinishCallback> m_finishCallback;
-		WebCL*  getContext();
-		int b;
-		
+    virtual ~WebCLEvent();
+    static PassRefPtr<WebCLEvent> create();
+
+    virtual WebCLGetInfo getInfo(CCenum, ExceptionObject&);
+    WebCLGetInfo getProfilingInfo(CCenum, ExceptionObject&);
+
+    void setCallback(CCenum, PassRefPtr<WebCLCallback>, ExceptionObject&);
+    void setAssociatedCommandQueue(WebCLCommandQueue* commandQueue);
+
+    bool isUserEvent() const;
+
+    virtual WebCLContext* context() const;
+
+    bool holdsValidCLObject() const;
+
+    virtual bool isPlatformObjectNeutralized() const;
+
+protected:
+    WebCLEvent(ComputeEvent*);
+
 private:
-        WebCLEvent(WebCL*, cl_event);
-		//	void CL_CALLBACK execComplete(cl_event ev, cl_int event_status, void* user_data);
-		//static 	void  execComplete(cl_event ev, cl_int event_status, void* this_pointer);
-        WebCL* m_context;
-		Vector<RefPtr<WebCLEvent> > m_event_list;
-        cl_event m_cl_Event;
-		long m_num_events;
+    typedef Vector<std::pair<CCint, RefPtr<WebCLCallback> > > CallbackDataVector;
+    typedef HashMap<RefPtr<WebCLEvent>, OwnPtr<CallbackDataVector> > WebCLEventCallbackRegisterQueue;
+
+    static void callbackProxy(CCEvent, CCint, void*);
+    static void callbackProxyOnMainThread(void* userData);
+    static WebCLEventCallbackRegisterQueue& callbackRegisterQueue()
+    {
+        DEFINE_STATIC_LOCAL(WebCLEventCallbackRegisterQueue, instance, ());
+        return instance;
+    }
+
+    RefPtr<WebCLCommandQueue> m_commandQueue;
 };
 
 } // namespace WebCore
 
+#endif // ENABLE(WEBCL)
 #endif // WebCLEvent_h
 

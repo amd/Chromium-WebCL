@@ -48,6 +48,14 @@
     'include_dirs': [
       '$(AMDAPPSDKROOT)/include',
       '../core/dom',
+      '../core/frame',
+      '../core/html',
+      '../core/html/canvas',
+      '../core/platform',
+      '../core/platform/graphics',
+      '../platform',
+      '../platform/graphics',
+      '../wtf',
     ],
     'sources': [
       '<@(modules_files)',

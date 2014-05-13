@@ -47,6 +47,7 @@ void V8WebCLPlatform::getInfoMethodCustom(const v8::Arguments& args)
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }
 
+/*
 void V8WebCLPlatform::getSupportedExtensionsMethodCustom(const v8::Arguments& args)
 {
     
@@ -59,6 +60,7 @@ void V8WebCLPlatform::getSupportedExtensionsMethodCustom(const v8::Arguments& ar
         array->Set(v8::Integer::New(i), v8::String::New(fromWebCoreString(extensions[i]), extensions[i].length()));
     v8SetReturnValue(args, array);
 }
+*/
 
 } // namespace WebCore
 

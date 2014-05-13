@@ -37,7 +37,7 @@
 #include "V8WebCLCommandQueue.h"
 #include "V8WebCLContext.h"
 #include "V8WebCLDevice.h"
-#include "V8WebCLDeviceList.h"
+//#include "V8WebCLDeviceList.h"
 #include "V8WebCLProgram.h"
 
 #include "modules/webcl/WebCLCommandQueue.h"
@@ -65,15 +65,15 @@ static v8::Handle<v8::Value> toV8Object(const WebCLGetInfo& info,v8::Handle<v8::
     switch (info.getType()) {
         case WebCLGetInfo::kTypeBool:
             return v8::Boolean::New(info.getBool());
-        case WebCLGetInfo::kTypeBoolArray: {
+        /*case WebCLGetInfo::kTypeBoolArray: {
             const Vector<bool>& value = info.getBoolArray();
             v8::Local<v8::Array> array = v8::Array::New(value.size());
             for (size_t ii = 0; ii < value.size(); ++ii)
                 array->Set(v8::Integer::New(ii), v8::Boolean::New(value[ii]));
             return array;
-        }
         case WebCLGetInfo::kTypeFloat:
             return v8::Number::New(info.getFloat());
+	*/
         case WebCLGetInfo::kTypeInt:
             return v8::Integer::New(info.getInt());
         case WebCLGetInfo::kTypeNull:
@@ -84,10 +84,14 @@ static v8::Handle<v8::Value> toV8Object(const WebCLGetInfo& info,v8::Handle<v8::
             return v8::Integer::NewFromUnsigned(info.getUnsignedInt());
         case WebCLGetInfo::kTypeUnsignedLong:
             //return v8::Interger::NewFromUnsigned(info.getUnsignedInt());
-        case WebCLGetInfo::kTypeWebCLFloatArray:
-            return toV8(info.getWebCLFloatArray(),creationContext, isolate);
-        case WebCLGetInfo::kTypeWebCLIntArray:
-            return toV8(info.getWebCLIntArray(),creationContext, isolate);
+        /*case WebCLGetInfo::kTypeWebCLFloatArray:
+            return toV8(info.getWebCLFloatArray(),creationContext, isolate);*/
+        case WebCLGetInfo::kTypeWebCLIntArray: //TODO
+            return v8::Undefined();//return toV8(info.getWebCLUintArray(),creationContext, isolate);
+
+    case WebCLGetInfo::kTypeWebCLImageDescriptor: //TODO
+        return v8::Undefined();//return toV8(info.getWebCLImageDescriptor(), creationContext, isolate);
+
         case WebCLGetInfo::kTypeWebCLProgram:
             return toV8(info.getWebCLProgram(),creationContext, isolate);
         case WebCLGetInfo::kTypeWebCLContext:
@@ -96,8 +100,15 @@ static v8::Handle<v8::Value> toV8Object(const WebCLGetInfo& info,v8::Handle<v8::
             return toV8(info.getWebCLCommandQueue(),creationContext, isolate);
         case WebCLGetInfo::kTypeWebCLDevice:
             return toV8(info.getWebCLDevice(), creationContext,isolate);
-        case WebCLGetInfo::kTypeWebCLDeviceList:
-            return toV8(info.getWebCLDeviceList(),creationContext, isolate);
+        /*case WebCLGetInfo::kTypeWebCLDeviceList:
+            return toV8(info.getWebCLDeviceList(),creationContext, isolate);*/
+    case WebCLGetInfo::kTypeWebCLDevices: //TODO
+        return v8::Undefined();//return toV8(info.getWebCLDevices(), creationContext, isolate);
+    case WebCLGetInfo::kTypeWebCLMemoryObject: //TODO
+        return v8::Undefined();//return toV8(info.getWebCLMemoryObject(), creationContext, isolate);
+    case WebCLGetInfo::kTypeWebCLPlatform: //TODO
+        return v8::Undefined();//return toV8(info.getWebCLPlatform(), creationContext, isolate);
+
         default:
             // notImplemented(); //ScalableVision
             return v8::Undefined();

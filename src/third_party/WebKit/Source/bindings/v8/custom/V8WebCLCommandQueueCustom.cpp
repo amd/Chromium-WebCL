@@ -47,7 +47,7 @@ void V8WebCLCommandQueue::getInfoMethodCustom(const v8::Arguments& args)
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }
-
+/*
 void V8WebCLCommandQueue::finishMethodCustom(const v8::Arguments& args)
 {
 
@@ -56,6 +56,7 @@ void V8WebCLCommandQueue::finishMethodCustom(const v8::Arguments& args)
     queue->finish(es);
     //return v8::Undefined();
 }
+*/
 
 } // namespace WebCore
 
