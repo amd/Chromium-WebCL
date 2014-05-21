@@ -95,7 +95,7 @@ namespace content {
 // We only request 5 picture buffers from the client which are used to hold the
 // decoded samples. These buffers are then reused when the client tells us that
 // it is done with the buffer.
-static const int kNumPictureBuffers = 9;
+static const int kNumPictureBuffers = 10;
 
 bool VPXVideoDecodeAccelerator::pre_sandbox_init_done_ = false;
 uint32 VPXVideoDecodeAccelerator::dev_manager_reset_token_ = 0;
@@ -134,7 +134,7 @@ IDirect3D9Ex* VPXVideoDecodeAccelerator::d3d9_ = NULL;
 // Maximum number of iterations we allow before aborting the attempt to flush
 // the batched queries to the driver and allow torn/corrupt frames to be
 // rendered.
-enum { kMaxIterationsForD3DFlush = 10000 };
+enum { kMaxIterationsForD3DFlush = 20000 };
 
 
 static void InitSampleFromInputBuffer(VpxSample &sample,
@@ -505,6 +505,8 @@ VPXVideoDecodeAccelerator::~VPXVideoDecodeAccelerator() {
 bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
   DCHECK(CalledOnValidThread());
 
+  BOOL ret = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+
   if (profile != media::VP9PROFILE_MIN &&
       profile != media::VP9PROFILE_MAIN) {
     RETURN_AND_NOTIFY_ON_FAILURE(false,
@@ -512,6 +514,8 @@ bool VPXVideoDecodeAccelerator::Initialize(media::VideoCodecProfile profile) {
   }
 
   restart_ = true;
+  buffering_ =  false;
+  num_available_picture_buffers_ = 0;
 
   
   if (! g_4k_temp_surface_rgba) {
@@ -602,6 +606,8 @@ void VPXVideoDecodeAccelerator::AssignPictureBuffers(
     const std::vector<media::PictureBuffer>& buffers) {
   DCHECK(CalledOnValidThread());
 
+  num_available_picture_buffers_ = buffers.size();
+
   RETURN_AND_NOTIFY_ON_FAILURE((state_ != kUninitialized),
       "Invalid state: " << state_, ILLEGAL_STATE,);
   RETURN_AND_NOTIFY_ON_FAILURE((kNumPictureBuffers == buffers.size()),
@@ -640,7 +646,7 @@ void VPXVideoDecodeAccelerator::ReusePictureBuffer(
   RETURN_AND_NOTIFY_ON_FAILURE(it != output_picture_buffers_.end(),
       "Invalid picture id: " << picture_buffer_id, INVALID_ARGUMENT,);
 
-  it->second->ReusePictureBuffer();
+  it->second->ReusePictureBuffer(); num_available_picture_buffers_ = 0;
   ProcessPendingSamples();
 
   if (state_ == kFlushing && pending_output_samples_.empty())
@@ -677,6 +683,9 @@ void VPXVideoDecodeAccelerator::Reset() {
   state_ = kResetting;
 
   pending_output_samples_.clear();
+
+  buffered_picture_buffers_.clear();
+  buffering_ = false;
 
   NotifyInputBuffersDropped();
 
@@ -1100,11 +1109,33 @@ void VPXVideoDecodeAccelerator::ProcessPendingSamples(
       }
 #endif
 
+
       media::Picture output_picture(index->second->id(),
-                                    sample_info.input_buffer_id);
-      base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
+        sample_info.input_buffer_id);
+      if (! buffering_) {
+        base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
           &VPXVideoDecodeAccelerator::NotifyPictureReady,
           base::AsWeakPtr(this), output_picture));
+      } else {
+        buffered_picture_buffers_.push_back(
+                MyPicture(index->second->id(), sample_info.input_buffer_id));
+        if (buffered_picture_buffers_.size() >= kNumPictureBuffers - 3) {
+          // buffering over, now notify display
+          for (unsigned int i=0; i<buffered_picture_buffers_.size(); i++) {
+            const MyPicture &pic = buffered_picture_buffers_[i];
+            base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
+              &VPXVideoDecodeAccelerator::NotifyPictureReady,
+              base::AsWeakPtr(this), media::Picture(pic.id,
+                  pic.input_buffer_id)));
+            /*this->NotifyPictureReady(media::Picture(pic.id,
+                  pic.input_buffer_id));*/
+          }
+          buffered_picture_buffers_.clear();
+          buffering_ = false;
+        } else {
+          //state_ = kStopped; // Signal more input required
+        }
+      }
 
       index->second->set_available(false);
       pending_output_samples_.pop_front();
@@ -1243,6 +1274,7 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
     height_ = info.h;
     LOG(ERROR) << "info.width=" << info.w << " info.height=" << info.h;
     restart_ = false;
+    buffering_ = true;
   }
 
 
@@ -1253,6 +1285,7 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 
   if (!pending_output_samples_.empty() || !pending_input_buffers_.empty()) {
     VpxSample tmp;
+    tmp.id_ = sample.id_;
     pending_input_buffers_.push_back(tmp);
     pending_input_buffers_.back().data_.swap(sample.data_);
     return;
@@ -1383,13 +1416,13 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 #else
   {
     if (!temp_surface_rgba_) {
-      if (width_ == 3840 && height_ == 2160) {
+      /*if (width_ == 3840 && height_ == 2160) {
         temp_surface_rgba_ = g_4k_temp_surface_rgba;
         temp_surface_rgba_shared_handle_ = g_4k_temp_surface_rgba_shared_handle;
       } else if (width_ == 1920 && height_ == 1080) {
         temp_surface_rgba_ = g_hd_temp_surface_rgba;
         temp_surface_rgba_shared_handle_ = g_hd_temp_surface_rgba_shared_handle;
-      } else {
+      } else*/ {
         int try_again = 1000;
         HRESULT hr;
         while (try_again--) {
@@ -1401,8 +1434,9 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
               LOG(ERROR) << "Sleep(1) d3d flush";
               Sleep(1);
           }
+          temp_surface_rgba_shared_handle_ = NULL;
           hr = device_->CreateOffscreenPlainSurfaceEx(width_, height_,
-            D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT ,&temp_surface_rgba_, &temp_surface_rgba_shared_handle_, NULL);
+            /*D3DFMT_A8R8G8B8*/(D3DFORMAT)MAKEFOURCC('Y','V','1','2'),D3DPOOL_DEFAULT ,&temp_surface_rgba_, &temp_surface_rgba_shared_handle_, NULL);
 
           if (SUCCEEDED(hr))
             break;
@@ -1560,8 +1594,6 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 #endif //DIRECT_OUTPUT_TO_PICTURE_BUFFER
   }
 #endif
-
-  if (output_picture_buffers_.size()) {
     
     int input_buffer_id =  sample.id_;
 
@@ -1575,9 +1607,12 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
 #endif
       ));
 
+  if (output_picture_buffers_.size()) {
+
+
     // Have output buffer, present vpx_image immediately
     ProcessPendingSamples(direct_output_surface);
-    return; // true;
+    //return; // true;
   } else { // don't have output buffer , request
 
     if (pictures_requested_) {
@@ -1619,12 +1654,14 @@ void VPXVideoDecodeAccelerator::DecodeInternal(VpxSample& sample, bool is_a_pend
       "Failed to process output. Unexpected decoder state: " << state_,
       ILLEGAL_STATE,);
 
-  LONGLONG input_buffer_id = (LONGLONG)sample.id_; //vpx_image->user_priv;
+  /*if (! is_a_pending_sample)*/ {
+    LONGLONG input_buffer_id = (LONGLONG)sample.id_; //vpx_image->user_priv;
 
 
-  base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
+    base::MessageLoop::current()->PostTask(FROM_HERE, base::Bind(
       &VPXVideoDecodeAccelerator::NotifyInputBufferRead,
       base::AsWeakPtr(this), input_buffer_id));
+  }
 }
 
 void VPXVideoDecodeAccelerator::HandleResolutionChanged(int width,

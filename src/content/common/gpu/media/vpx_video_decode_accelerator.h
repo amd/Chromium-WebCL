@@ -70,7 +70,7 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
     kFlushing,        // upon flush request received.
   };
 
-
+  bool CanDecodeOnIOThread() { return false; }
 
   // Does not take ownership of |client| which must outlive |*this|.
   explicit VPXVideoDecodeAccelerator(
@@ -281,7 +281,17 @@ class CONTENT_EXPORT VPXVideoDecodeAccelerator
   IDirect3DSurface9 *g_hd_temp_surface_rgba;
   HANDLE g_hd_temp_surface_rgba_shared_handle;
 
-  bool restart_;
+  bool restart_, buffering_;
+
+  unsigned int num_available_picture_buffers_;
+  struct MyPicture {
+    int id;
+    int32 input_buffer_id;
+    MyPicture() : id(0), input_buffer_id(0) {}
+    MyPicture(int a, int32 b) : id(a), input_buffer_id(b) {}
+  };
+  std::vector<MyPicture> buffered_picture_buffers_;
+
   unsigned int width_, height_;
 
   // Callback to set the correct gl context.
