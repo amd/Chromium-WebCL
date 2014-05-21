@@ -79,23 +79,32 @@ static void sched_power_first(struct scheduler *sched, struct task *tsk) {
   }
 
   dev = NULL;
-  sched_for_each_dev(pos, sched) {
-    if (device_is_enabled(pos)
-        && gpu_or_dsp
-        && (pos->type & (DEV_DSP | DEV_GPU))) {
-      if (seleced_gpu_or_dsp) {
-        if (device_qlen(pos) < qlen && step->dev_type & pos->type) {
-          qlen = device_qlen(pos);
+  if (tsk->dev_type) {
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos) && (tsk->dev_type & pos->type)) {
+        dev = pos;
+        break;
+      }
+    }
+  } else {
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos)
+          && gpu_or_dsp
+          && (pos->type & (DEV_DSP | DEV_GPU))) {
+        if (seleced_gpu_or_dsp) {
+          if (device_qlen(pos) < qlen && step->dev_type & pos->type) {
+            qlen = device_qlen(pos);
+            dev = pos;
+          }
+        } else if (step->dev_type & pos->type) {
           dev = pos;
+          qlen = device_qlen(pos);
+          seleced_gpu_or_dsp = 1;
         }
-      } else if (step->dev_type & pos->type) {
+      } else if (pos->type & DEV_CPU) {
         dev = pos;
         qlen = device_qlen(pos);
-        seleced_gpu_or_dsp = 1;
       }
-    } else if (pos->type & DEV_CPU) {
-      dev = pos;
-      qlen = device_qlen(pos);
     }
   }
 
@@ -111,15 +120,21 @@ static void sched_perf_first(struct scheduler *sched, struct task *tsk) {
   step = TASK_TO_STEP(tsk, tsk->curr_step);
 
   dev = NULL;
-  sched_for_each_dev(pos, sched) {
-    if (device_is_enabled(pos) && (step->dev_type & pos->type)) {
-      // scheduler control
-      // if (pos->type == DEV_GPU &&
-      //    sched->blk_cpu_count < (sched->blk_gpu_count << 4))
-      //  continue;
-      if (device_qlen(pos) < qlen) {
-          qlen = device_qlen(pos);
-          dev = pos;
+
+  if (tsk->dev_type) {
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos) && (tsk->dev_type & pos->type)) {
+        dev = pos;
+        break;
+      }
+    }
+  } else {
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos) && (step->dev_type & pos->type)) {
+        if (device_qlen(pos) < qlen) {
+           qlen = device_qlen(pos);
+           dev = pos;
+        }
       }
     }
   }
@@ -143,13 +158,22 @@ static void sched_balance(struct scheduler *sched, struct task *tsk) {
   };
 
   dev = NULL;
-  step = TASK_TO_STEP(tsk, tsk->curr_step);
-  sched_for_each_dev(pos, sched) {
-    if (device_is_enabled(pos) && (step->dev_type & pos->type)) {
-      int len = device_qlen(pos) * weight[pos->type];
-      if (len  < qlen) {
+  if (tsk->dev_type) {
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos) && (tsk->dev_type & pos->type)) {
+        dev = pos;
+        break;
+      }
+    }
+  } else { 
+    step = TASK_TO_STEP(tsk, tsk->curr_step);
+    sched_for_each_dev(pos, sched) {
+      if (device_is_enabled(pos) && (step->dev_type & pos->type)) {
+        int len = device_qlen(pos) * weight[pos->type];
+        if (len  < qlen) {
           qlen = len;
           dev = pos;
+        }
       }
     }
   }

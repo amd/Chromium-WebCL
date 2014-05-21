@@ -19,6 +19,22 @@ enum { DEV_THREE = 3};
 #include "vp9/common/vp9_onyxc_int.h"
 #include "vp9/decoder/vp9_onyxd_int.h"
 
+void pbi_copy(VP9D_COMP *pbi, VP9D_COMP *pbi_new);
+
+void init_pre_pbi(VP9D_COMP *pbi, VP9D_COMP *pbi_new);
+
+void ret_pbi_queue(VP9D_COMP *pbi, VP9D_COMP *pbi_new);
+
+void pbi_queue(VP9D_COMP *pbi, VP9D_COMP *pbi_new);
+
+void common_queue(VP9_COMMON *cm, VP9_COMMON* cm_new, int copy_flag);
+
+void swap_frame_buffers_recon(VP9D_COMP *pbi);
+
+void pbi_queue_recon(VP9D_COMP *pbi, VP9D_COMP *pbi_new);
+
+void common_queue_recon(VP9_COMMON *cm, VP9_COMMON* cm_new);
+
 void store_frame_size(VP9D_COMP *pbi, int *width, int *height);
 
 void store_inter_info_recon(MACROBLOCKD *xd, int offset,int mi_col,

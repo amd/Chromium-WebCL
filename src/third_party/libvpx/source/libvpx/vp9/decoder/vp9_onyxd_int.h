@@ -79,7 +79,6 @@ typedef struct loop_filter_recon{
   unsigned char bsize;    //the block size of the macro block
 }LOOP_FILTER_RECON;
 
-
 typedef struct VP9_decoder_recon{
   DECLARE_ALIGNED(16, MACROBLOCKD, mb);
   DECLARE_ALIGNED(16, unsigned char, token_cache[1024]);
@@ -99,6 +98,12 @@ typedef struct VP9_decoder_recon{
   TileInfo tile;
 } VP9_DECODER_RECON;
 
+
+struct entropy_param {
+  struct VP9Decompressor *pbi;
+  const uint8_t *data;
+  struct VP9Decompressor *pbi_new;
+};
 
 typedef struct VP9Decompressor {
   DECLARE_ALIGNED(16, MACROBLOCKD, mb);
@@ -141,13 +146,24 @@ typedef struct VP9Decompressor {
 
   DECLARE_ALIGNED(16, uint8_t, token_cache[1024]);
 
+  VP9_DECODER_RECON *decoder_for_entropy; 
+
   struct scheduler *sched;
   struct task_steps_pool *steps_pool;
   struct task_steps_pool *lf_steps_pool;
+  struct task_steps_pool *entropy_steps_pool;
   struct task_cache *tsk_cache;
   struct task_cache *lf_tsk_cache;
+  struct task_cache *entropy_tsk_cache;
   vp9_reader *last_reader;
   TileBuffer tile_buffers[4][1 << 6];
+
+  VP9Worker entropy_worker_frame;
+  VP9Worker copy_worker_frame;
+  struct entropy_param entropy_param;
+  long l_bufpool_flag_output;
+  int res;
+
 } VP9D_COMP;
 
 #endif  // VP9_DECODER_VP9_ONYXD_INT_H_

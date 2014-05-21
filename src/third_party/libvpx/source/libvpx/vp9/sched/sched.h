@@ -70,6 +70,19 @@ static INLINE struct device *scheduler_get_dev(struct scheduler *sched,
   return NULL;
 }
 
+static INLINE struct device *scheduler_get_dev_tail(struct scheduler *sched,
+                                                    int dev_type) {
+  struct device *dev;
+  struct device *d = NULL;
+
+  sched_for_each_dev(dev, sched) {
+    if (dev->type & dev_type)
+      d = dev;
+  }
+
+  return d;
+}
+
 void scheduler_sched_task(struct scheduler *sched, struct task *tsk);
 
 void scheduler_finish_task(struct scheduler *sched, struct task *tsk);

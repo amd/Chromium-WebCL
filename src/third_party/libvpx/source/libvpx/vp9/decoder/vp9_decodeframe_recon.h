@@ -22,6 +22,10 @@ int vp9_decode_frame_recon(struct VP9Decompressor *cpi,
 void decode_tile_recon_entropy(VP9D_COMP *pbi, const TileInfo *const tile,
                                vp9_reader *r, int tile_col);
 
+void decode_tile_recon_entropy_for_entropy(VP9D_COMP *pbi,
+                               const TileInfo *const tile,
+                               vp9_reader *r, int tile_col);
+
 void decode_tile_recon_inter_transform(VP9D_COMP *pbi,
                                        const TileInfo *const tile,
                                        vp9_reader *r, int tile_col);
@@ -37,12 +41,27 @@ void decode_tile_recon_intra(VP9D_COMP *pbi, const TileInfo *const tile,
 
 int vp9_decode_frame_tail(VP9D_COMP *pbi);
 
+int vp9_decode_frame_mt_entropy_recon(VP9D_COMP *pbi, VP9D_COMP **storage_pbi,
+                                                    const uint8_t **p_data_end);
+
+
+int vp9_decode_frame_mt_entropy_recon_last_frame(VP9D_COMP *pbi,
+                                                                  VP9D_COMP **storage_pbi,
+                                                                  const uint8_t **p_data_end);
+
+
+
 void decode_tile_recon_inter_prepare_ocl(VP9D_COMP *pbi,
                                          const TileInfo *const tile,
                                          vp9_reader *r, int tile_col);
 
-void decode_tile_recon_inter_calcu_ocl(VP9D_COMP *pbi,
+void decode_tile_recon_inter_index_ocl(VP9D_COMP *pbi,
                                        const TileInfo *const tile,
                                        vp9_reader *r, int tile_col);
+
+void decode_tile_recon_inter_calcu_ocl(VP9D_COMP *pbi,
+                                       const TileInfo *const tile,
+                                       vp9_reader *r, int tile_col,
+                                       int dev_gpu);
 
 #endif  // VP9_DECODER_VP9_DECODEFRAME_RECON_H_

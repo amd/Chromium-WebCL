@@ -15,7 +15,7 @@
 #include "nestegg/include/nestegg/nestegg.h"
 
 static int nestegg_read_cb(void *buffer, size_t length, void *userdata) {
-  FILE *f = (FILE*)userdata;
+  FILE *f = (FILE *)userdata;
 
   if (fread(buffer, 1, length, f) < length) {
     if (ferror(f))

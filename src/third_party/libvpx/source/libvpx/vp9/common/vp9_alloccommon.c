@@ -17,6 +17,9 @@
 #include "vp9/common/vp9_entropymv.h"
 #include "vp9/common/vp9_onyxc_int.h"
 #include "vp9/common/vp9_systemdependent.h"
+#include "vp9/decoder/vp9_copy_mip_ocl.h"
+#define align_addr(addr,align) (void*)(((size_t)(addr) + ((align) - 1)) & (size_t)-(align))
+
 
 void vp9_update_mode_info_border(VP9_COMMON *cm, MODE_INFO *mi) {
   const int stride = cm->mode_info_stride;
@@ -37,9 +40,32 @@ void vp9_free_frame_buffers(VP9_COMMON *cm) {
     vp9_free_frame_buffer(&cm->yv12_fb[i]);
 
   vp9_free_frame_buffer(&cm->post_proc_buffer);
-
+#if !COPY_MIP_GPU
   vpx_free(cm->mip);
   vpx_free(cm->prev_mip);
+#endif
+  vpx_free(cm->last_frame_seg_map);
+  vpx_free(cm->mi_grid_base);
+  vpx_free(cm->prev_mi_grid_base);
+
+  cm->mip = NULL;
+  cm->prev_mip = NULL;
+  cm->last_frame_seg_map = NULL;
+  cm->mi_grid_base = NULL;
+  cm->prev_mi_grid_base = NULL;
+}
+
+void vp9_free_frame_buffers_recon(VP9_COMMON *cm) {
+  // int i;
+
+  // for (i = 0; i < cm->fb_count; i++)
+    // vp9_free_frame_buffer(&cm->yv12_fb[i]);
+
+  vp9_free_frame_buffer(&cm->post_proc_buffer);
+#if !COPY_MIP_GPU
+  vpx_free(cm->mip);
+  vpx_free(cm->prev_mip);
+#endif
   vpx_free(cm->last_frame_seg_map);
   vpx_free(cm->mi_grid_base);
   vpx_free(cm->prev_mi_grid_base);
@@ -128,6 +154,152 @@ int vp9_resize_frame_buffers(VP9_COMMON *cm, int width, int height) {
   return 1;
 }
 
+int vp9_resize_frame_buffers_recon(VP9_COMMON *cm,
+                                             VP9_COMMON **cm_new,
+                                             int width, int height) {
+  const int aligned_width = ALIGN_POWER_OF_TWO(width, MI_SIZE_LOG2);
+  const int aligned_height = ALIGN_POWER_OF_TWO(height, MI_SIZE_LOG2);
+  const int ss_x = cm->subsampling_x;
+  const int ss_y = cm->subsampling_y;
+  int mi_size;
+
+  if (vp9_realloc_frame_buffer(&cm->post_proc_buffer, width, height, ss_x, ss_y,
+                               VP9BORDERINPIXELS, NULL, NULL, NULL) < 0)
+    goto fail;
+
+  if (vp9_realloc_frame_buffer(&cm_new[0]->post_proc_buffer, width, height, ss_x, ss_y,
+                               VP9BORDERINPIXELS, NULL, NULL, NULL) < 0)
+    goto fail;
+
+  if (vp9_realloc_frame_buffer(&cm_new[1]->post_proc_buffer, width, height, ss_x, ss_y,
+                               VP9BORDERINPIXELS, NULL, NULL, NULL) < 0)
+    goto fail;
+
+  set_mb_mi(cm, aligned_width, aligned_height);
+
+  //create and map ocl mip buffers
+  // Allocation
+  mi_size = cm->mode_info_stride * (cm->mi_rows + MI_BLOCK_SIZE);
+
+  vpx_free(cm->mip);
+
+  cm->mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+
+  if (!cm->mip) {
+    goto fail;
+  }
+
+  vpx_free(cm->prev_mip);
+
+  cm->prev_mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+
+ 
+  if (!cm->prev_mip)
+    goto fail;
+
+  vpx_free(cm->mi_grid_base);
+  cm->mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->mi_grid_base));
+  if (!cm->mi_grid_base)
+    goto fail;
+
+  vpx_free(cm->prev_mi_grid_base);
+  cm->prev_mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->prev_mi_grid_base));
+  if (!cm->prev_mi_grid_base)
+    goto fail;
+
+    vpx_free(cm->trip_mip);
+  cm->trip_mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+  if (!cm->trip_mip)
+    goto fail;
+  
+  vpx_free(cm->trip_mi_grid_base);
+  cm->trip_mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->trip_mi_grid_base));
+  if (!cm->trip_mi_grid_base)
+    goto fail;
+/*
+  vpx_free(cm_new[0]->mip);
+ #if COPY_MIP_GPU
+  cm_new[0]->mip = (MODE_INFO *)ocl_cpy_mip_obj.dst_mip_map;
+#else
+  cm_new[0]->mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+#endif
+ 
+  if (!cm_new[0]->mip) {
+    goto fail;
+  }
+
+  vpx_free(cm_new[0]->prev_mip);
+  cm_new[0]->prev_mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+                                      
+  if (!cm_new[0]->prev_mip)
+    goto fail;
+
+  vpx_free(cm_new[0]->mi_grid_base);
+  cm_new[0]->mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->mi_grid_base));
+  if (!cm_new[0]->mi_grid_base)
+    goto fail;
+
+  vpx_free(cm_new[0]->prev_mi_grid_base);
+  cm_new[0]->prev_mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->prev_mi_grid_base));
+  if (!cm_new[0]->prev_mi_grid_base)
+    goto fail;
+
+
+  vpx_free(cm_new[1]->mip);
+ #if COPY_MIP_GPU
+  cm_new[1]->mip = (MODE_INFO *)ocl_cpy_mip_obj.dst_mip_map_1;
+#else
+  cm_new[1]->mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+#endif
+ 
+  if (!cm_new[1]->mip) {
+    goto fail;
+  }
+
+  vpx_free(cm_new[1]->prev_mip);
+  cm_new[1]->prev_mip = vpx_calloc(mi_size, sizeof(MODE_INFO));
+                                      
+  if (!cm_new[1]->prev_mip)
+    goto fail;
+
+  vpx_free(cm_new[1]->mi_grid_base);
+  cm_new[1]->mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->mi_grid_base));
+  if (!cm_new[1]->mi_grid_base)
+    goto fail;
+
+  vpx_free(cm_new[1]->prev_mi_grid_base);
+  cm_new[1]->prev_mi_grid_base = vpx_calloc(mi_size, sizeof(*cm->prev_mi_grid_base));
+  if (!cm_new[1]->prev_mi_grid_base)
+    goto fail;
+
+*/
+  setup_mi(cm);
+
+  // Create the segmentation map structure and set to 0.
+  vpx_free(cm->last_frame_seg_map);
+  cm->last_frame_seg_map = vpx_calloc(cm->mi_rows * cm->mi_cols, 1);
+  if (!cm->last_frame_seg_map)
+    goto fail;
+
+  vpx_free(cm_new[0]->last_frame_seg_map);
+  cm_new[0]->last_frame_seg_map = vpx_calloc(cm->mi_rows * cm->mi_cols, 1);
+  if (!cm_new[0]->last_frame_seg_map)
+    goto fail;
+
+  vpx_free(cm_new[1]->last_frame_seg_map);
+  cm_new[1]->last_frame_seg_map = vpx_calloc(cm->mi_rows * cm->mi_cols, 1);
+  if (!cm_new[1]->last_frame_seg_map)
+    goto fail;
+
+  return 0;
+
+ fail:
+  vp9_free_frame_buffers(cm);
+  vp9_free_frame_buffers_recon(cm_new[0]);
+  vp9_free_frame_buffers_recon(cm_new[1]);
+  return 1;
+}
+
 int vp9_alloc_frame_buffers(VP9_COMMON *cm, int width, int height) {
   int i;
 
@@ -213,6 +385,18 @@ void vp9_remove_common(VP9_COMMON *cm) {
   vp9_free_frame_buffers(cm);
 
   vpx_free(cm->yv12_fb);
+  vpx_free(cm->fb_idx_ref_cnt);
+  vpx_free(cm->fb_idx_ref_lru);
+
+  cm->yv12_fb = NULL;
+  cm->fb_idx_ref_cnt = NULL;
+  cm->fb_idx_ref_lru = NULL;
+}
+
+void vp9_remove_common_recon(VP9_COMMON *cm) {
+  vp9_free_frame_buffers_recon(cm);
+
+  // vpx_free(cm->yv12_fb);
   vpx_free(cm->fb_idx_ref_cnt);
   vpx_free(cm->fb_idx_ref_lru);
 

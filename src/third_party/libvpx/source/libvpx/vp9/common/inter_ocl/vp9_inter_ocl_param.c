@@ -97,9 +97,9 @@ int vp9_setup_interp_filters_ocl(MACROBLOCKD *xd,
   return ret_filter_num;
 }
 
-static void build_mc_border(const uint8_t *src, int src_stride,
-                            uint8_t *dst, int dst_stride,
-                            int x, int y, int b_w, int b_h, int w, int h) {
+void build_mc_border_ocl(const uint8_t *src, int src_stride,
+                         uint8_t *dst, int dst_stride,
+                         int x, int y, int b_w, int b_h, int w, int h) {
   // Get a pointer to the start of the real data for this row.
   const uint8_t *ref_row = src - x - y * src_stride;
   if (y >= h)
@@ -147,10 +147,8 @@ void build_inter_pred_param_sec_ref_ocl(const int plane,
                                         const int filter_num,
                                         const int tile_num) {
   int xs, ys, w, h;
-  int filter_radix;
   int subpel_x, subpel_y;
 
-  const int16_t *filter;
   const uint8_t *dst_fri; // *src_fri
   const uint8_t *dst; // *pre
 
@@ -161,6 +159,8 @@ void build_inter_pred_param_sec_ref_ocl(const int plane,
   struct buf_2d *pre_buf, *dst_buf;
   //const YV12_BUFFER_CONFIG *cfg_src;
   const YV12_BUFFER_CONFIG *cfg_dst;
+
+  int reset_src_buffer = 0;
 
   const INTER_PRED_ARGS_OCL * const arg = argv;
   MACROBLOCKD *const xd = arg->xd;
@@ -264,9 +264,20 @@ void build_inter_pred_param_sec_ref_ocl(const int plane,
     if (x0 < 0 || x0 > frame_width - 1 || x1 < 0 || x1 > frame_width ||
           y0 < 0 || y0 > frame_height - 1 || y1 < 0 || y1 > frame_height - 1) {
       uint8_t *buf_ptr1 = ref_frame + y0 * pre_buf->stride + x0;
-      // Extend the border.
-      build_mc_border(buf_ptr1, pre_buf->stride, inter_ocl_obj.pref[tile_num], x1 - x0,
-                     x0, y0, x1 - x0, y1 - y0, frame_width, frame_height);
+
+      reset_src_buffer = 1;
+
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->pref =
+          inter_ocl_obj.pref[tile_num];
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->buf_ptr1 = buf_ptr1;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->pre_stride = pre_buf->stride;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->x0 = x0;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->x1 = x1;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->y0 = y0;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->y1 = y1;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->frame_width = frame_width;
+      inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->frame_height = frame_height;
+
       buf_stride = x1 - x0;
       buf_ptr = inter_ocl_obj.pref[tile_num] + y_pad * 3 * buf_stride + x_pad * 3;
       inter_ocl_obj.pref[tile_num] += (x1 - x0) * (y1 - y0);
@@ -275,9 +286,6 @@ void build_inter_pred_param_sec_ref_ocl(const int plane,
 
   cfg_dst = &cm->yv12_fb[cm->new_fb_idx];
   dst_fri = cfg_dst->buffer_alloc;
-
-  filter = inter_filter[filter_num];
-  filter_radix = filter_num << 7;
 
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->pred_mode =
     ((subpel_x != 0) << 2) + ((subpel_y != 0) << 1);
@@ -290,15 +298,18 @@ void build_inter_pred_param_sec_ref_ocl(const int plane,
 
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->filter_x =
     subpix->filter_x[subpel_x];
-  inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->x_step_q4 = xs;
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->filter_y =
     subpix->filter_y[subpel_y];
+
+  inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->x_step_q4 = xs;
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->y_step_q4 = ys;
 
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->w = 4 << pred_w;
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->h = 4 << pred_h;
 
-  inter_ocl_obj.cpu_sec_count[tile_num]++;
+  inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]->reset_src_buffer = reset_src_buffer;
+
+  inter_ocl_obj.cpu_sec_count_pre[tile_num]++;
   inter_ocl_obj.pred_param_cpu_sec_pre[tile_num]++;
 }
 
@@ -314,7 +325,6 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
   int buf_offset;
   int filter_radix;
   int pred_mode;
-  int index_wide;
   int subpel_x, subpel_y;
   int sub_x, sub_y;
 
@@ -329,6 +339,8 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
   struct buf_2d *pre_buf, *dst_buf;
   const YV12_BUFFER_CONFIG *cfg_src;
   const YV12_BUFFER_CONFIG *cfg_dst;
+
+  int reset_src_buffer = 0;
 
   const INTER_PRED_ARGS_OCL * const arg = argv;
   MACROBLOCKD *const xd = arg->xd;
@@ -418,7 +430,6 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
   y1 = ((y0_16 + (h - 1) * ys) >> SUBPEL_BITS) + 1;
   buf_ptr = ref_frame + y0 * pre_buf->stride + x0;
   buf_stride = pre_buf->stride;
-  // int changed = 0;
   if (scaled_mv.col || scaled_mv.row ||
       (frame_width & 0x7) || (frame_height & 0x7)) {
     int x_pad = 0, y_pad = 0;
@@ -439,12 +450,23 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
           y0 < 0 || y0 > frame_height - 1 || y1 < 0 || y1 > frame_height - 1) {
       uint8_t *buf_ptr1 = ref_frame + y0 * pre_buf->stride + x0;
       // Extend the border.
-      build_mc_border(buf_ptr1, pre_buf->stride, inter_ocl_obj.pref[tile_num], x1 - x0,
-                     x0, y0, x1 - x0, y1 - y0, frame_width, frame_height);
+
+      reset_src_buffer = 1;
+
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->pref =
+          inter_ocl_obj.pref[tile_num];
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->buf_ptr1 = buf_ptr1;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->pre_stride = pre_buf->stride;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->x0 = x0;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->x1 = x1;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->y0 = y0;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->y1 = y1;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->frame_width = frame_width;
+      inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->frame_height = frame_height;
+
       buf_stride = x1 - x0;
       buf_ptr = inter_ocl_obj.pref[tile_num] + y_pad * 3 * buf_stride + x_pad * 3;
       inter_ocl_obj.pref[tile_num] += (x1 - x0) * (y1 - y0);
-      // changed = 1;
     }
   }
 
@@ -461,12 +483,9 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
   sub_y = (subpel_y != 0);
   buf_offset = buf_ptr - src_fri;
 
-#if USE_INTER_CALCU_CPU_MT
-  if (pred_mode != 0 && !ref_idx && xs == 16 && ys == 16 && buf_offset > 0 &&
-#else
   if (!ref_idx && xs == 16 && ys == 16 && buf_offset > 0 &&
-#endif // USE_INTER_CALCU_CPU_MT
-      buf_offset < inter_ocl_obj.buffer_size && !CpuFlag) {
+      buf_offset < inter_ocl_obj.buffer_size && !CpuFlag &&
+      cm->show_frame) {
     inter_ocl_obj.pred_param_gpu_pre[tile_num]->src_stride = pre_buf->stride;
     inter_ocl_obj.pred_param_gpu_pre[tile_num]->filter_x_mv =
         filter_radix + subpix->filter_x[subpel_x] - filter;
@@ -475,8 +494,6 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
 
     h = h >> 2;
     w = w >> 2;
-
-    index_wide = h * w;
 
     inter_ocl_obj.index_param_gpu_pre[tile_num]->pred_mode = pred_mode;
     inter_ocl_obj.index_param_gpu_pre[tile_num]->buf_offset = buf_offset;
@@ -489,7 +506,7 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
     inter_ocl_obj.index_param_gpu_pre[tile_num]->sub_x = sub_x;
     inter_ocl_obj.index_param_gpu_pre[tile_num]->sub_y = sub_y;
 
-    inter_ocl_obj.gpu_index_count[tile_num] += index_wide;
+    inter_ocl_obj.index_count_pre[tile_num] += w * h;
 
     inter_ocl_obj.gpu_block_count[tile_num]++;
     inter_ocl_obj.index_param_gpu_pre[tile_num]++;
@@ -504,15 +521,18 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
 
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->filter_x =
       subpix->filter_x[subpel_x];
-    inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->x_step_q4 = xs;
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->filter_y =
       subpix->filter_y[subpel_y];
+
+    inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->x_step_q4 = xs;
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->y_step_q4 = ys;
 
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->w = w;
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->h = h;
 
-    inter_ocl_obj.cpu_fri_count[tile_num]++;
+    inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]->reset_src_buffer = reset_src_buffer;
+
+    inter_ocl_obj.cpu_fri_count_pre[tile_num]++;
     inter_ocl_obj.pred_param_cpu_fri_pre[tile_num]++;
   }
 }

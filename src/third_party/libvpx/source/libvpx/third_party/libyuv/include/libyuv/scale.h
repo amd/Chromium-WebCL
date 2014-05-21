@@ -15,7 +15,7 @@
 
 #ifdef __cplusplus
 namespace libyuv {
-//extern "C" {
+extern "C" {
 #endif
 
 // Supported filtering
@@ -63,7 +63,7 @@ int ScaleOffset(const uint8* src, int src_width, int src_height,
 void SetUseReferenceImpl(int use);
 
 #ifdef __cplusplus
-//}  // extern "C"
+}  // extern "C"
 }  // namespace libyuv
 #endif
 

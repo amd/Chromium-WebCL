@@ -83,6 +83,7 @@ VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_inter_ocl_param.c
 VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_inter_ocl_param.h
 VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_inter_ocl_calcu.c
 VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_inter_ocl_calcu.h
+
 VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_yuv2rgba.c
 VP9_COMMON_SRCS-yes += common/inter_ocl/vp9_yuv2rgba.h
 

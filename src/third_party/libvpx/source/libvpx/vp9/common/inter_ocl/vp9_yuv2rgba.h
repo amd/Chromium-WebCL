@@ -16,6 +16,8 @@
 #include "vp9/common/inter_ocl/opencl/ocl_wrapper.h"
 #include "vp9/common/inter_ocl/vp9_inter_ocl_init.h"
 
+extern FILE *pLog;
+
 #define IMAGE_CACHE 50
 typedef struct vp9_yuv2rgba_ocl {
   int sub_sampling_x;
@@ -35,14 +37,24 @@ typedef struct vp9_yuv2rgba_ocl {
   int u_plane_offset;
   int v_plane_offset;
   int use_ex_flag;
+  cl_mem rgb_buffer;
+  uint8_t *rgb_map;
+  int show_id;
 
+  int prev_fb_idx;
+ 
+  
+  cl_mem clImages[50];
+  void *d3d9_surfaces[50];
+  int surface_index;
   char *source;
   size_t source_len;
   size_t globalThreads[2];
   
-  cl_mem clImag;
+  //cl_mem clImag;
   cl_program program;
   cl_kernel yuv_rgba_kernel;
+  cl_kernel only_color_space_transform_kernel; //for the last frame
 } VP9_YUV2RGBA_OCL;
 
 struct IDirect3DSurface9;
@@ -51,11 +63,10 @@ int init_yuv2rgba_ocl_obj();
 
 int release_yuv2rgba_ocl_obj();
 
-int vp9_yv12_to_rgba_ocl(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, struct IDirect3DSurface9 *d3d_surface9);
+int vp9_yuv2rgba( VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void *texture) ;
 
-int create_buffer_from_d3d9_surface(VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, struct IDirect3DSurface9 *d3d_surface9, void* pSharedHandle);
 
-int vp9_i420_to_rgba_ocl(VP9_COMMON *cm, VP9_YUV2RGBA_OCL *yuv2rgba_ocl_obj, void *texture);
 extern VP9_YUV2RGBA_OCL yuv2rgba_ocl_obj;
+
 
 #endif

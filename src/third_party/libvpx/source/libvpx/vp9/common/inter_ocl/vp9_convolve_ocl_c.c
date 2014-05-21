@@ -50,64 +50,6 @@ static const int16_t vp9_inter_pred_filters_8_ocl_c[INTER_FILER_COUNT_OCL] = {
 
 static const int vp9_convolve_mode_ocl_c[2][2] = {{24, 16}, {8, 0}};
 
-void *build_inter_pred_calcu_ocl_mt(void *pred_param) {
-  int i;
-  int mode_num;
-  uint8_t *src;
-  uint8_t *dst;
-  const int16_t *filter_x;
-  const int16_t *filter_y;
-
-  INTER_MT_ATTR *inter_mt_attr = (INTER_MT_ATTR *)pred_param;
-
-  int tile_num = inter_mt_attr->tile_num;
-  uint8_t *new_buffer = inter_mt_attr->new_buffer;
-
-  const int fri_block_count = inter_ocl_obj.cpu_fri_count[tile_num];
-  const int sec_block_count = inter_ocl_obj.cpu_sec_count[tile_num];
-  const INTER_PRED_PARAM_CPU *pred_param_fri =
-            inter_ocl_obj.pred_param_cpu_fri[tile_num];
-  const INTER_PRED_PARAM_CPU *pred_param_sec =
-            inter_ocl_obj.pred_param_cpu_sec[tile_num];
-  convolve_fn_t *switch_convolve_t = inter_ocl_obj.switch_convolve_t;
-
-  for (i = 0; i < fri_block_count; ++i) {
-    mode_num = vp9_convolve_mode_ocl_c[(pred_param_fri[i].x_step_q4 == 16)]
-                                      [(pred_param_fri[i].y_step_q4 == 16)];
-
-    src = pred_param_fri[i].psrc;
-    dst = new_buffer + pred_param_fri[i].dst_mv;
-
-    filter_x = pred_param_fri[i].filter_x;
-    filter_y = pred_param_fri[i].filter_y;
-
-    switch_convolve_t[pred_param_fri[i].pred_mode + mode_num](
-                      src, pred_param_fri[i].src_stride,
-                      dst, pred_param_fri[i].dst_stride,
-                      filter_x, pred_param_fri[i].x_step_q4,
-                      filter_y, pred_param_fri[i].y_step_q4,
-                      pred_param_fri[i].w, pred_param_fri[i].h);
-  }
-
-  for (i = 0; i < sec_block_count; ++i) {
-    mode_num = vp9_convolve_mode_ocl_c[(pred_param_sec[i].x_step_q4 == 16)]
-                                      [(pred_param_sec[i].y_step_q4 == 16)];
-
-    src = pred_param_sec[i].psrc;
-    dst = new_buffer + pred_param_sec[i].dst_mv;
-
-    filter_x = pred_param_sec[i].filter_x;
-    filter_y = pred_param_sec[i].filter_y;
-
-    switch_convolve_t[pred_param_sec[i].pred_mode + mode_num + 1](
-                      src, pred_param_sec[i].src_stride,
-                      dst, pred_param_sec[i].dst_stride,
-                      filter_x, pred_param_sec[i].x_step_q4,
-                      filter_y, pred_param_sec[i].y_step_q4,
-                      pred_param_sec[i].w, pred_param_sec[i].h);
-  }
-}
-
 void build_inter_pred_calcu_ocl_c(int tile_num, uint8_t *new_buffer) {
   int i;
   int mode_num;
@@ -116,8 +58,8 @@ void build_inter_pred_calcu_ocl_c(int tile_num, uint8_t *new_buffer) {
   const int16_t *filter_x;
   const int16_t *filter_y;
 
-  const int fri_block_count = inter_ocl_obj.cpu_fri_count[tile_num];
-  const int sec_block_count = inter_ocl_obj.cpu_sec_count[tile_num];
+  const int fri_block_count = *inter_ocl_obj.cpu_fri_count[tile_num];
+  const int sec_block_count = *inter_ocl_obj.cpu_sec_count[tile_num];
   const INTER_PRED_PARAM_CPU *pred_param_fri =
             inter_ocl_obj.pred_param_cpu_fri[tile_num];
   const INTER_PRED_PARAM_CPU *pred_param_sec =
@@ -133,6 +75,17 @@ void build_inter_pred_calcu_ocl_c(int tile_num, uint8_t *new_buffer) {
 
     filter_x = pred_param_fri[i].filter_x;
     filter_y = pred_param_fri[i].filter_y;
+
+    if (pred_param_fri[i].reset_src_buffer)
+      build_mc_border_ocl(pred_param_fri[i].buf_ptr1,
+                          pred_param_fri[i].pre_stride,
+                          pred_param_fri[i].pref,
+                          pred_param_fri[i].x1 - pred_param_fri[i].x0,
+                          pred_param_fri[i].x0, pred_param_fri[i].y0,
+                          pred_param_fri[i].x1 - pred_param_fri[i].x0,
+                          pred_param_fri[i].y1 - pred_param_fri[i].y0,
+                          pred_param_fri[i].frame_width,
+                          pred_param_fri[i].frame_height);
 
     switch_convolve_t[pred_param_fri[i].pred_mode + mode_num](
                       src, pred_param_fri[i].src_stride,
@@ -151,6 +104,17 @@ void build_inter_pred_calcu_ocl_c(int tile_num, uint8_t *new_buffer) {
 
     filter_x = pred_param_sec[i].filter_x;
     filter_y = pred_param_sec[i].filter_y;
+
+    if (pred_param_sec[i].reset_src_buffer)
+      build_mc_border_ocl(pred_param_sec[i].buf_ptr1,
+                          pred_param_sec[i].pre_stride,
+                          pred_param_sec[i].pref,
+                          pred_param_sec[i].x1 - pred_param_sec[i].x0,
+                          pred_param_sec[i].x0, pred_param_sec[i].y0,
+                          pred_param_sec[i].x1 - pred_param_sec[i].x0,
+                          pred_param_sec[i].y1 - pred_param_sec[i].y0,
+                          pred_param_sec[i].frame_width,
+                          pred_param_sec[i].frame_height);
 
     switch_convolve_t[pred_param_sec[i].pred_mode + mode_num + 1](
                       src, pred_param_sec[i].src_stride,

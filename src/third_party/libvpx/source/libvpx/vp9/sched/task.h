@@ -22,6 +22,7 @@ struct task_cache;
 struct task {
   const char *name;
   int prio;
+  int dev_type;
 
   pthread_mutex_t finish_mutex;
   pthread_cond_t finish_cond;
@@ -89,6 +90,10 @@ static INLINE void task_set_prio(struct task *tsk, int prio) {
 }
 
 struct task *task_create_sub(struct task *tsk);
+
+static INLINE void task_force_dev(struct task *tsk, int dev) {
+  tsk->dev_type = dev;
+}
 
 void task_delete_sub(struct task *sub_tsk);
 

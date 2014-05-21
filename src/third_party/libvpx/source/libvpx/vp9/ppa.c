@@ -47,7 +47,7 @@
 
 #define PPA_REGISTER_CPU_EVENT2GROUP(x,y) #x,#y,
 #define PPA_REGISTER_CPU_EVENT(x) PPA_REGISTER_CPU_EVENT2GROUP(x,NoGroup)
-const char* PPACpuAndGroup[] = {
+char* PPACpuAndGroup[] = {
 #include "ppaCPUEvents.h"
 	""
 };

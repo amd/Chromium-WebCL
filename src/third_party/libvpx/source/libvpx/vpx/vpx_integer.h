@@ -33,20 +33,10 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #ifndef _UINTPTR_T_DEFINED
-typedef size_t uintptr_t;st
+typedef size_t uintptr_t;
 #endif
 
 #else
-/*typedef signed char  int8_t;
-typedef signed short int16_t;
-typedef signed int   int32_t;
-
-typedef unsigned char  uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned int   uint32_t;
-
-//typedef intptr_t int64_w;
-//typedef uintptr_t uint64_w;*/
 
 /* Most platforms have the C99 standard integer types. */
 

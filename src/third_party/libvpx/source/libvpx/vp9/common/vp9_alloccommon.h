@@ -21,9 +21,18 @@ void vp9_update_mode_info_border(VP9_COMMON *cm, MODE_INFO *mi);
 void vp9_create_common(VP9_COMMON *cm);
 void vp9_remove_common(VP9_COMMON *cm);
 
+void vp9_remove_common_recon(VP9_COMMON *cm);
+
 int vp9_resize_frame_buffers(VP9_COMMON *cm, int width, int height);
+
+int vp9_resize_frame_buffers_recon(VP9_COMMON *cm,
+                                             VP9_COMMON **cm_new,
+                                             int width, int height);
+
 int vp9_alloc_frame_buffers(VP9_COMMON *cm, int width, int height);
 void vp9_free_frame_buffers(VP9_COMMON *cm);
+
+void vp9_free_frame_buffers_recon(VP9_COMMON *cm);
 
 
 void vp9_update_frame_size(VP9_COMMON *cm);

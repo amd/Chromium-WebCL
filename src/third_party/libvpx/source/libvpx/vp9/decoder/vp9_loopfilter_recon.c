@@ -1294,7 +1294,7 @@ void vp9_loop_filter_rows_wpp(VP9D_COMP *pbi,
 
 #if 1
 
-  dev = scheduler_get_dev(pbi->sched, DEV_CPU);
+  dev = scheduler_get_dev_tail(pbi->sched, DEV_CPU);
   assert(dev);
   cpu_count = dev->threads_count;
   assert(cpu_count <= MAX_CPU);
@@ -1322,7 +1322,8 @@ void vp9_loop_filter_rows_wpp(VP9D_COMP *pbi,
     last_tsk = tsks[i];
   }
 
-  params[0]->upper = last_tsk;
+  if (params[0])
+    params[0]->upper = last_tsk;
  
   for (i = 0; i < cpu_count; i++) {
     scheduler_sched_task(pbi->sched, tsks[i]);
@@ -1351,6 +1352,7 @@ void vp9_loop_filter_frame_wpp(VP9D_COMP *pbi, VP9_COMMON *cm,
                                MACROBLOCKD *xd, int frame_filter_level,
                                int y_only, int partial) {
   int start_mi_row, end_mi_row, mi_rows_to_filter;
+  struct device *cpu0, *cpu1;
   if (!frame_filter_level) return;
   start_mi_row = 0;
   mi_rows_to_filter = cm->mi_rows;
@@ -1362,7 +1364,13 @@ void vp9_loop_filter_frame_wpp(VP9D_COMP *pbi, VP9_COMMON *cm,
   end_mi_row = start_mi_row + mi_rows_to_filter;
 
   vp9_loop_filter_frame_init_wpp(cm, frame_filter_level);
+  cpu0 = scheduler_get_dev(pbi->sched, DEV_CPU);
+  cpu1 = scheduler_get_dev_tail(pbi->sched, DEV_CPU);
+  device_disable(cpu0);
+  device_enable(cpu1);
   vp9_loop_filter_rows_wpp(pbi, cm->frame_to_show, cm, xd,
                            start_mi_row, end_mi_row, y_only);
+  device_disable(cpu1);
+  device_enable(cpu0);
 }
 

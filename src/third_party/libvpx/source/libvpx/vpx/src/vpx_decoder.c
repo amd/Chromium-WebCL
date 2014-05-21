@@ -16,6 +16,9 @@
 #include <string.h>
 #include "vpx/internal/vpx_codec_internal.h"
 
+#include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
+#include "vpx_ports/vpx_timer.h"
+
 
 #define SAVE_STATUS(ctx,var) (ctx?(ctx->err = var):var)
 
@@ -105,6 +108,8 @@ vpx_codec_err_t vpx_codec_dec_init_ver_ex(vpx_codec_ctx_t_ex     *ctx,
     ctx->config.dec = cfg;
     res = VPX_CODEC_OK;
 
+	pLog = fopen("Interop_log.txt", "w"); 
+
     if (!(flags & VPX_CODEC_USE_XMA)) {
       res = ctx->iface->init(ctx, NULL, id3d9_device);
 
@@ -181,6 +186,24 @@ vpx_codec_err_t vpx_codec_get_stream_info(vpx_codec_ctx_t         *ctx,
   return SAVE_STATUS(ctx, res);
 }
 
+vpx_codec_err_t vpx_codec_get_stream_info_ex(vpx_codec_ctx_t_ex         *ctx,
+                                          vpx_codec_stream_info_t *si) {
+  vpx_codec_err_t res;
+
+  if (!ctx || !si || si->sz < sizeof(vpx_codec_stream_info_t))
+    res = VPX_CODEC_INVALID_PARAM;
+  else if (!ctx->iface || !ctx->priv)
+    res = VPX_CODEC_ERROR;
+  else {
+    /* Set default/unknown values */
+    si->w = 0;
+    si->h = 0;
+
+    res = ctx->iface->dec.get_si(ctx->priv->alg_priv, si);
+  }
+
+  return SAVE_STATUS(ctx, res);
+}
 
 vpx_codec_err_t vpx_codec_decode(vpx_codec_ctx_t    *ctx,
                                  const uint8_t        *data,
@@ -210,6 +233,8 @@ vpx_codec_err_t vpx_codec_decode_ex(vpx_codec_ctx_t_ex    *ctx,
                                  long        deadline,
                                  void *texture) {
   vpx_codec_err_t res;
+  struct vpx_usec_timer timer;
+  unsigned long dx_time = 0;
 
   /* Sanity checks */
   /* NULL data ptr allowed if data_sz is 0 too */
@@ -218,8 +243,13 @@ vpx_codec_err_t vpx_codec_decode_ex(vpx_codec_ctx_t_ex    *ctx,
   else if (!ctx->iface || !ctx->priv)
     res = VPX_CODEC_ERROR;
   else {
+	vpx_usec_timer_start(&timer);
     res = ctx->iface->dec.decode(ctx->priv->alg_priv, data, data_sz,
                                  user_priv, deadline, texture);
+	vpx_usec_timer_mark(&timer);
+    dx_time = (unsigned int)vpx_usec_timer_elapsed(&timer);
+	fprintf(pLog, "the whole time of decode one frame: %lu us\n"
+		    "------------------------------------------\n", dx_time);
   }
 
   return SAVE_STATUS(ctx, res);

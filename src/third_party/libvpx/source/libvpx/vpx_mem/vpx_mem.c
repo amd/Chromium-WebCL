@@ -173,6 +173,8 @@ void *vpx_realloc(void *memblk, size_t size) {
 #if CONFIG_MEM_MANAGER
     new_addr = vpx_mm_realloc(addr, size + align + ADDRESS_STORAGE_SIZE);
 #else
+    /*FIXME  just work around memory bug */
+    addr = NULL;
     new_addr = VPX_REALLOC_L(addr, size + align + ADDRESS_STORAGE_SIZE);
 #endif
 

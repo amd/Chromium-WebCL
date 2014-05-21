@@ -66,14 +66,11 @@ int arg_match(struct arg *arg_, const struct arg_def *def, char **argv) {
     }
   }
 
-  if (arg.name && !arg.val && def->has_val) {
-  
+  if (arg.name && !arg.val && def->has_val)
     die("Error: option %s requires argument.\n", arg.name);
-  }
 
-  if (arg.name && arg.val && !def->has_val) {
+  if (arg.name && arg.val && !def->has_val)
     die("Error: option %s requires no argument.\n", arg.name);
-  }
 
   if (arg.name
       && (arg.val || !def->has_val)) {
@@ -95,7 +92,7 @@ const char *arg_next(struct arg *arg) {
 
 
 char **argv_dup(int argc, const char **argv) {
-  char **new_argv = (char **)malloc((argc + 1) * sizeof(*argv));
+  char **new_argv = (char**)malloc((argc + 1) * sizeof(*argv));
 
   memcpy(new_argv, argv, argc * sizeof(*argv));
   new_argv[argc] = NULL;

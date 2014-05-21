@@ -37,13 +37,30 @@ typedef struct inter_pred_param_cpu {
   int dst_mv;
   int dst_stride;
 
-  short *filter_x;
+  const short *filter_y;
+  const short *filter_x;
+
   int x_step_q4;
-  short *filter_y;
   int y_step_q4;
 
   int w;
   int h;
+
+  int reset_src_buffer;
+
+  uint8_t *pref;
+  uint8_t *buf_ptr1;
+
+  int pre_stride;
+
+  int x0;
+  int x1;
+
+  int y0;
+  int y1;
+
+  int frame_width;
+  int frame_height;
 }INTER_PRED_PARAM_CPU;
 
 typedef struct inter_pred_args {
@@ -72,10 +89,11 @@ typedef struct inter_mt_attr {
 typedef struct inter_ocl_obj {
   int inter_ocl_init;
   int previous_f;
+  int before_previous_f;
+  int previous_f_show;
   int tile_count;
   int release_max;
   int buffer_size;
-  int buffer_size_align;
   int pred_param_size;
   int pred_param_size_all;
   int buffer_pool_size;
@@ -94,6 +112,7 @@ typedef struct inter_ocl_obj {
   size_t source_len;
   size_t globalThreads[3];
   size_t localThreads[3];
+
   convolve_fn_t switch_convolve_t[32];
 
   cl_program program;
@@ -105,40 +124,85 @@ typedef struct inter_ocl_obj {
   uint8_t  *buffer_pool_map_ptr;
 
   cl_mem new_buffer_kernel[MAX_TILE_COUNT_OCL];
-  cl_mem pred_param_kernel;
 
-  cl_mem index_param_num_kernel;
-  cl_mem index_xmv_kernel;
-  cl_mem dst_index_xmv_kernel;
-  cl_mem case_count_kernel;
+  cl_mem pred_param_kernel_td0;
+  cl_mem pred_param_kernel_td1;
+  cl_mem *pred_param_kernel_pre;
+  cl_mem *pred_param_kernel;
+
+  cl_mem index_param_num_kernel_td0;
+  cl_mem index_param_num_kernel_td1;
+  cl_mem *index_param_num_kernel_pre;
+  cl_mem *index_param_num_kernel;
+
+  cl_mem index_xmv_kernel_td0;
+  cl_mem index_xmv_kernel_td1;
+  cl_mem *index_xmv_kernel_pre;
+  cl_mem *index_xmv_kernel;
+
+  cl_mem dst_index_xmv_kernel_td0;
+  cl_mem dst_index_xmv_kernel_td1;
+  cl_mem *dst_index_xmv_kernel_pre;
+  cl_mem *dst_index_xmv_kernel;
+
+  cl_mem case_count_kernel_td0;
+  cl_mem case_count_kernel_td1;
+  cl_mem *case_count_kernel_pre;
+  cl_mem *case_count_kernel;
+
+  int *case_count_gpu;
+  int *case_count_gpu_td0;
+  int *case_count_gpu_td1;
+
   cl_mem one_case_interval_count_kernel;
-  cl_mem all_of_block_count_kernel;
 
-  int gpu_block_count[MAX_TILE_COUNT_OCL];
-  int gpu_index_count[MAX_TILE_COUNT_OCL];
+  int switch_td_param;
+  int switch_td_calcu_gpu;
+  int switch_td_calcu_cpu[MAX_TILE_COUNT_OCL];
 
-  int cpu_fri_count[MAX_TILE_COUNT_OCL];
-  int cpu_sec_count[MAX_TILE_COUNT_OCL];
+  int index_count_td0[MAX_TILE_COUNT_OCL];
+  int index_count_td1[MAX_TILE_COUNT_OCL];
+  int cpu_fri_count_td0[MAX_TILE_COUNT_OCL];
+  int cpu_fri_count_td1[MAX_TILE_COUNT_OCL];
+  int cpu_sec_count_td0[MAX_TILE_COUNT_OCL];
+  int cpu_sec_count_td1[MAX_TILE_COUNT_OCL];
 
+  int *all_b_count_gpu;
+  int *gpu_block_count;
+
+  int *index_count;
+  int *index_count_pre;
+
+  int *cpu_fri_count_pre;
+  int *cpu_sec_count_pre;
+  int *cpu_fri_count[MAX_TILE_COUNT_OCL];
+  int *cpu_sec_count[MAX_TILE_COUNT_OCL];
+
+  int all_of_block_count_gpu;
   int param_count_gpu_all;
   int tile_param_count_gpu;
-  atomic_t atomic_case_num[4];
 
-  int case_count_gpu[4];
   int *index_case_gpu;
-  int *all_of_block_count_gpu;
   int *one_case_interval_count_gpu;
 
   int tile_param_count_gpu_offset[MAX_TILE_COUNT_OCL];
   int index_case_mode_offset[4];
 
   INTER_PRED_PARAM_GPU *pred_param_gpu[MAX_TILE_COUNT_OCL];
+  INTER_PRED_PARAM_GPU *pred_param_gpu_td0[MAX_TILE_COUNT_OCL];
+  INTER_PRED_PARAM_GPU *pred_param_gpu_td1[MAX_TILE_COUNT_OCL];
   INTER_PRED_PARAM_GPU *pred_param_gpu_pre[MAX_TILE_COUNT_OCL];
+
+  INTER_PRED_PARAM_CPU *pred_param_cpu_fri_td0[MAX_TILE_COUNT_OCL];
+  INTER_PRED_PARAM_CPU *pred_param_cpu_fri_td1[MAX_TILE_COUNT_OCL];
+  INTER_PRED_PARAM_CPU *pred_param_cpu_sec_td0[MAX_TILE_COUNT_OCL];
+  INTER_PRED_PARAM_CPU *pred_param_cpu_sec_td1[MAX_TILE_COUNT_OCL];
 
   INTER_PRED_PARAM_CPU *pred_param_cpu_fri[MAX_TILE_COUNT_OCL];
   INTER_PRED_PARAM_CPU *pred_param_cpu_sec[MAX_TILE_COUNT_OCL];
   INTER_PRED_PARAM_CPU *pred_param_cpu_fri_pre[MAX_TILE_COUNT_OCL];
   INTER_PRED_PARAM_CPU *pred_param_cpu_sec_pre[MAX_TILE_COUNT_OCL];
+
   uint8_t *ref_buffer[MAX_TILE_COUNT_OCL];
   uint8_t *pref[MAX_TILE_COUNT_OCL];
 
@@ -188,6 +252,14 @@ void build_inter_pred_param_fri_ref_ocl(const int plane,
                                         const int filter_num,
                                         const int tile_num);
 
+
+void build_mc_border_ocl(const uint8_t *src,
+                         int src_stride,
+                         uint8_t *dst,
+                         int dst_stride,
+                         int x, int y,
+                         int b_w, int b_h,
+                         int w, int h);
 
 extern int CpuFlag;
 extern OCL_CONTEXT ocl_context;

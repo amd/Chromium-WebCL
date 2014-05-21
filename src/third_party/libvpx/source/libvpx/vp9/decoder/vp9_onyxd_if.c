@@ -29,7 +29,6 @@
 #include "vp9/decoder/vp9_detokenize.h"
 #include "./vpx_scale_rtcd.h"
 #include "vp9/common/inter_ocl/vp9_inter_ocl_init.h"
-#include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
 
 #include "vp9/decoder/vp9_append.h"
 #include "vp9/decoder/vp9_decodeframe_recon.h"
@@ -38,6 +37,8 @@
 #include "vp9/decoder/vp9_device.h"
 #include "vp9/decoder/vp9_loopfilter_recon.h"
 #include  "vp9/ppa.h"
+#include "vp9/decoder/vp9_entropy_step.h"
+#include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
 
 #define WRITE_RECON_BUFFER 0
 #if WRITE_RECON_BUFFER == 1
@@ -143,9 +144,14 @@ static void vp9_sched_init(VP9D_COMP *const pbi) {
   scheduler_set_strategy(pbi->sched, SCHED_PERF_FIRST);
 
   pbi->lf_steps_pool = lf_steps_pool_get();
-  assert(pbi->steps_pool);
+  assert(pbi->lf_steps_pool);
   pbi->lf_tsk_cache = task_cache_create(MAX_TASKS, pbi->lf_steps_pool);
   assert(pbi->lf_tsk_cache);
+
+  pbi->entropy_steps_pool = entropy_steps_pool_get();
+  assert(pbi->entropy_steps_pool);
+  pbi->entropy_tsk_cache = task_cache_create(MAX_TASKS, pbi->entropy_steps_pool);
+  assert(pbi->entropy_tsk_cache);
 
   vp9_register_devices(pbi->sched);
 }
@@ -154,8 +160,10 @@ static void vp9_sched_fini(VP9D_COMP *const pbi) {
   scheduler_delete(pbi->sched);
   task_cache_delete(pbi->tsk_cache);
   task_cache_delete(pbi->lf_tsk_cache);
+  task_cache_delete(pbi->entropy_tsk_cache);
   task_steps_pool_delete(pbi->steps_pool);
   task_steps_pool_delete(pbi->lf_steps_pool);
+  task_steps_pool_delete(pbi->entropy_steps_pool);
 }
 
 
@@ -205,6 +213,57 @@ VP9D_PTR vp9_create_decompressor(VP9D_CONFIG *oxcf) {
   return pbi;
 }
 
+VP9D_PTR vp9_create_decompressor_recon(VP9D_CONFIG *oxcf) {
+  VP9D_COMP *const pbi = vpx_memalign(32, sizeof(VP9D_COMP));
+  VP9_COMMON *const cm = pbi ? &pbi->common : NULL;
+
+  if (!cm)
+    return NULL;
+
+  vp9_zero(*pbi);
+
+  // Initialize the references to not point to any frame buffers.
+  memset(&cm->ref_frame_map, -1, sizeof(cm->ref_frame_map));
+
+  if (setjmp(cm->error.jmp)) {
+    cm->error.setjmp = 0;
+    vp9_remove_decompressor(pbi);
+    return NULL;
+  }
+
+  cm->error.setjmp = 1;
+  vp9_initialize_dec();
+
+  vp9_create_common(cm);
+
+  pbi->oxcf = *oxcf;
+  pbi->ready_for_new_data = 1;
+  cm->current_video_frame = 0;
+
+  // vp9_init_dequantizer() is first called here. Add check in
+  // frame_init_dequantizer() to avoid unnecessary calling of
+  // vp9_init_dequantizer() for every frame.
+  vp9_init_dequantizer(cm);
+
+  vp9_loop_filter_init_wpp(cm);
+
+  cm->error.setjmp = 0;
+  pbi->decoded_key_frame = 0;
+
+  init_macroblockd(pbi);
+
+  vp9_worker_init(&pbi->lf_worker);
+
+  vp9_worker_init(&pbi->entropy_worker_frame);
+  vp9_worker_reset(&pbi->entropy_worker_frame);
+  vp9_worker_init(&pbi->copy_worker_frame);
+  vp9_worker_reset(&pbi->copy_worker_frame);
+
+  vp9_sched_init(pbi);
+
+  return pbi;
+}
+
 void vp9_remove_decompressor(VP9D_PTR ptr) {
   int i;
   VP9D_COMP *const pbi = (VP9D_COMP *)ptr;
@@ -235,11 +294,81 @@ void vp9_remove_decompressor(VP9D_PTR ptr) {
   vpx_free(pbi->above_seg_context);
   vpx_free(pbi);
 
+}
+
+void vp9_remove_decompressor_recon(VP9D_PTR ptr, VP9D_PTR *ptr2) {
+  int i, j;
+  VP9D_COMP *const pbi = (VP9D_COMP *)ptr;
+  VP9_DECODER_RECON *decoder_recon;
+
+  VP9D_COMP *store_pbi[2];
+  VP9_DECODER_RECON *decoder_recon_recon;
+
+  for(j = 0; j < 2; j++) {
+    store_pbi[0] = (VP9D_COMP *)ptr2[0];  
+    store_pbi[1] = (VP9D_COMP *)ptr2[1];
+  }
+
+  if (!pbi)
+    return;
+
+  vp9_sched_fini(pbi);
+  vp9_remove_common(&pbi->common);
+  vp9_worker_end(&pbi->lf_worker);
+  vpx_free(pbi->lf_worker.data1);
+
+  vp9_worker_end(&pbi->entropy_worker_frame);
+  vp9_worker_end(&pbi->copy_worker_frame);
+  vpx_free(pbi->entropy_worker_frame.data1);
+  // vpx_free(pbi->entropy_worker_frame.data2);
+
+  //vp9_remove_common_recon(&store_pbi[0]->common);
+  //vp9_remove_common_recon(&store_pbi[1]->common);
+
+  for (i = 0; i < MAX_TILES; i++) {
+    decoder_recon = &pbi->decoder_recon[i];
+    free_buffers_recon(decoder_recon);
+  }
+
+  for (i = 0; i < MAX_TILES; i++) {
+    decoder_recon_recon = &store_pbi[0]->decoder_recon[i];
+    free_buffers_recon(decoder_recon_recon);
+  }
+
+  for (i = 0; i < MAX_TILES; i++) {
+    decoder_recon_recon = &store_pbi[1]->decoder_recon[i];
+    free_buffers_recon(decoder_recon_recon);
+  }
+
+  for (i = 0; i < pbi->num_tile_workers; ++i) {
+    VP9Worker *const worker = &pbi->tile_workers[i];
+    vp9_worker_end(worker);
+    vpx_free(worker->data1);
+    vpx_free(worker->data2);
+  }
+  vpx_free(pbi->tile_workers);
+  vpx_free(pbi->mi_streams);
+  vpx_free(pbi->above_context[0]);
+  vpx_free(pbi->above_seg_context);
+  vpx_free(store_pbi[0]);
+  vpx_free(store_pbi[1]);
+  vpx_free(pbi);
+
 #if USE_INTER_PREDICT_OCL
   // Release opencl for vp9
-  release_yuv2rgba_ocl_obj();
   vp9_release_ocl();
+#if DO_PROFILING
+  printf("\n***********kernels avg time**************\n");
+  printf("index_param_kernel_time : %f ms\n", 
+  inter_ocl_obj.param_index_kernel_time / inter_ocl_obj.index_run_times);
+  printf("inter_pred_kernel_time : %f ms\n", 
+  inter_ocl_obj.inter_pred_kernel_time/ inter_ocl_obj.inter_pred_run_tmes);
+  printf("cpy_mip_kernel_time : %f ms\n", 
+  ocl_cpy_mip_obj.cpy_mip_kernel_time/ ocl_cpy_mip_obj.cpy_mip_run_times);
+
+#endif
 #endif // USE_INTER_PREDICT_OCL
+
 }
 
 static int equal_dimensions(YV12_BUFFER_CONFIG *a, YV12_BUFFER_CONFIG *b) {
@@ -364,6 +493,10 @@ int vp9_receive_compressed_data(VP9D_PTR ptr,
   if (ptr == 0)
     return -1;
 
+#if USE_PPA
+  PPAStartCpuEventFunc(all_of_frame_time);
+#endif
+
   cm->error.error_code = VPX_CODEC_OK;
 
   pbi->source = source;
@@ -440,7 +573,7 @@ int vp9_receive_compressed_data(VP9D_PTR ptr,
   PPAStopCpuEventFunc(loop_filter_wpp_time);
 #endif
   }
- vp9_update_gpu_buffer_pool(cm);
+
 #if WRITE_RECON_BUFFER == 2
   if (cm->show_frame)
     write_dx_frame_to_file(cm->frame_to_show,
@@ -488,17 +621,25 @@ int vp9_receive_compressed_data(VP9D_PTR ptr,
 
   cm->error.setjmp = 0;
 
+#if USE_PPA
+  PPAStopCpuEventFunc(all_of_frame_time);
+#endif
+
   return retcode;
 }
 
-int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
+int vp9_receive_compressed_data_recon(VP9D_PTR ptr,
+                                VP9D_PTR *storage_pbi,
                                 size_t size, const uint8_t **psource,
-                                int64_t time_stamp,
-                                void *texture) {
+                                int64_t time_stamp, int i_is_last_frame) {
   VP9D_COMP *pbi = (VP9D_COMP *) ptr;
   VP9_COMMON *cm = &pbi->common;
   const uint8_t *source = *psource;
   int retcode = 0;
+
+  VP9_COMMON *cm_new = NULL;
+  VP9D_COMP *store_pbi[2];
+  int tile_cols = 0;
 
   /*if(pbi->ready_for_new_data == 0)
       return -1;*/
@@ -506,10 +647,19 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
   if (ptr == 0)
     return -1;
 
+#if USE_PPA
+  PPAStartCpuEventFunc(all_of_frame_time);
+#endif
+
   cm->error.error_code = VPX_CODEC_OK;
 
   pbi->source = source;
   pbi->source_sz = size;
+
+  store_pbi[0] = (VP9D_COMP *)storage_pbi[0];
+  store_pbi[1] = (VP9D_COMP *)storage_pbi[1];
+
+  vp9_worker_sync(&pbi->copy_worker_frame);
 
   if (pbi->source_sz == 0) {
     /* This is used to signal that we are missing frames.
@@ -549,11 +699,23 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
 
   cm->error.setjmp = 1;
 
-//mcw mt
-  //retcode = vp9_decode_frame(pbi, psource);
-  //retcode = vp9_decode_frame_recon(pbi, psource);
-  retcode = vp9_decode_frame_mt(pbi, psource);
+// mcw mt
+  // retcode = vp9_decode_frame(pbi, psource);
+  // retcode = vp9_decode_frame_recon(pbi, psource);
+  // retcode = vp9_decode_frame_mt(pbi, psource);
 
+  if (0 == i_is_last_frame) {
+    retcode = vp9_decode_frame_mt_entropy_recon(pbi, store_pbi, psource);
+  } else {
+    retcode = vp9_decode_frame_mt_entropy_recon_last_frame(pbi, store_pbi, psource);
+  }
+
+  if(pbi->l_bufpool_flag_output == 0)
+    cm_new = &store_pbi[1]->common;
+  else
+    cm_new = &store_pbi[(pbi->l_bufpool_flag_output)& 1]->common;
+
+#if 0
   if (retcode < 0) {
     cm->error.error_code = VPX_CODEC_ERROR;
     cm->error.setjmp = 0;
@@ -561,8 +723,20 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
       cm->fb_idx_ref_cnt[cm->new_fb_idx]--;
     return retcode;
   }
+#endif
 
-  swap_frame_buffers(pbi);
+  if (retcode < 0) {
+    cm_new->error.error_code = VPX_CODEC_ERROR;
+    cm_new->error.setjmp = 0;
+    if (cm_new->fb_idx_ref_cnt[cm_new->new_fb_idx] > 0)
+      cm_new->fb_idx_ref_cnt[cm_new->new_fb_idx]--;
+    return retcode;
+  }
+
+  //swap_frame_buffers(pbi);
+
+  if(pbi->l_bufpool_flag_output == 0)
+    swap_frame_buffers(store_pbi[1]);
 
 #if WRITE_RECON_BUFFER == 2
   if (cm->show_frame)
@@ -573,21 +747,50 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
                            cm->current_video_frame + 1000);
 #endif
 
+#if 0
   if (!pbi->do_loopfilter_inline) {
 #if USE_PPA
-  PPAStartCpuEventFunc(loop_filter_wpp_time);
+    PPAStartCpuEventFunc(loop_filter_wpp_time);
 #endif
     vp9_loop_filter_frame_wpp(pbi, cm, &pbi->mb, pbi->common.lf.filter_level, 0, 0);
+    //vp9_loop_filter_frame(cm, &pbi->mb, pbi->common.lf.filter_level, 0, 0);
 #if USE_PPA
-  PPAStopCpuEventFunc(loop_filter_wpp_time);
+    PPAStopCpuEventFunc(loop_filter_wpp_time);
 #endif
   }
-  //add 
-  if (texture != NULL)
-   vp9_i420_to_rgba_ocl(cm, &yuv2rgba_ocl_obj, texture);
-  else
-   vp9_update_gpu_buffer_pool(cm);
-  //end
+#endif
+
+  tile_cols = 1 << cm->log2_tile_cols;
+  if (tile_cols == 1) {
+    swap_frame_buffers(store_pbi[pbi->l_bufpool_flag_output & 1]);
+    if (pbi->l_bufpool_flag_output == 0) {
+      if (!store_pbi[1]->do_loopfilter_inline) {
+#if USE_PPA
+        PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+        vp9_loop_filter_frame_wpp(store_pbi[1],
+          cm_new, &store_pbi[1]->mb,
+          store_pbi[1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+        PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+      }
+    } else {
+      if (!store_pbi[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+#if USE_PPA
+        PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+        vp9_loop_filter_frame_wpp(store_pbi[pbi->l_bufpool_flag_output & 1],
+          cm_new, &store_pbi[pbi->l_bufpool_flag_output & 1]->mb,
+          store_pbi[pbi->l_bufpool_flag_output & 1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+        PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+      }
+    }
+    //vp9_worker_sync(&pbi->entropy_worker_frame);
+  }
+
 #if WRITE_RECON_BUFFER == 2
   if (cm->show_frame)
     write_dx_frame_to_file(cm->frame_to_show,
@@ -605,6 +808,7 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
 
   vp9_clear_system_state();
 
+#if 0
   cm->last_show_frame = cm->show_frame;
   if (cm->show_frame) {
     if (!cm->show_existing_frame) {
@@ -628,15 +832,33 @@ int vp9_receive_compressed_data_ex(VP9D_PTR ptr,
     }
     cm->current_video_frame++;
   }
+#endif
 
-  pbi->ready_for_new_data = 0;
-  pbi->last_time_stamp = time_stamp;
-  pbi->source_sz = 0;
+  // pbi->ready_for_new_data = 0;
+  // pbi->last_time_stamp = time_stamp;
+  // pbi->source_sz = 0;
 
-  cm->error.setjmp = 0;
+  // cm->error.setjmp = 0;
+
+  if (pbi->l_bufpool_flag_output == 0) {
+    store_pbi[1]->ready_for_new_data = 0;
+    store_pbi[1]->last_time_stamp = time_stamp;
+    store_pbi[1]->source_sz = 0;
+  } else {
+    store_pbi[pbi->l_bufpool_flag_output & 1]->ready_for_new_data = 0;
+    store_pbi[pbi->l_bufpool_flag_output & 1]->last_time_stamp = time_stamp;
+    store_pbi[pbi->l_bufpool_flag_output & 1]->source_sz = 0;
+  }
+
+  cm_new->error.setjmp = 0;
+
+#if USE_PPA
+  PPAStopCpuEventFunc(all_of_frame_time);
+#endif
 
   return retcode;
 }
+
 
 int vp9_get_raw_frame(VP9D_PTR ptr, YV12_BUFFER_CONFIG *sd,
                       int64_t *time_stamp, int64_t *time_end_stamp,

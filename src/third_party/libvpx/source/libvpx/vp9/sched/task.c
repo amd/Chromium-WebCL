@@ -45,6 +45,7 @@ void task_cache_delete(struct task_cache *cache) {
 static INLINE void task_init(struct task *tsk, const char *name,
                              int prio, struct task_cache *cache) {
   tsk->name = name;
+  tsk->dev_type = 0;
   tsk->parent = tsk;
   tsk->root = tsk;
   tsk->prio = prio;

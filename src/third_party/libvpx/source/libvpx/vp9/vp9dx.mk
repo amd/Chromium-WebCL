@@ -36,6 +36,10 @@ VP9_DX_SRCS-yes += decoder/vp9_decodeframe_recon.c
 VP9_DX_SRCS-yes += decoder/vp9_decodeframe_recon.h
 VP9_DX_SRCS-yes += decoder/vp9_append.c
 VP9_DX_SRCS-yes += decoder/vp9_append.h
+
+#VP9_DX_SRCS-yes += decoder/vp9_copy_mip_ocl.c
+#VP9_DX_SRCS-yes += decoder/vp9_copy_mip_ocl.h
+
 VP9_DX_SRCS-yes += decoder/vp9_intra_predict.c
 VP9_DX_SRCS-yes += decoder/vp9_intra_predict.h
 VP9_DX_SRCS-yes += decoder/vp9_detokenize_recon.c
@@ -59,6 +63,8 @@ VP9_DX_SRCS-yes += decoder/vp9_device.h
 VP9_DX_SRCS-yes += decoder/vp9_device.c
 VP9_DX_SRCS-yes += decoder/vp9_step.h
 VP9_DX_SRCS-yes += decoder/vp9_step.c
+VP9_DX_SRCS-yes += decoder/vp9_entropy_step.h
+VP9_DX_SRCS-yes += decoder/vp9_entropy_step.c
 
 VP9_DX_SRCS-yes += decoder/vp9_loopfilter_recon.c
 VP9_DX_SRCS-yes += decoder/vp9_loopfilter_recon.h

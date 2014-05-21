@@ -203,6 +203,8 @@ extern "C" {
    */
   vpx_codec_err_t vpx_codec_get_stream_info(vpx_codec_ctx_t         *ctx,
                                             vpx_codec_stream_info_t *si);
+  vpx_codec_err_t vpx_codec_get_stream_info_ex(vpx_codec_ctx_t_ex         *ctx,
+                                            vpx_codec_stream_info_t *si);
 
 
   /*!\brief Decode data

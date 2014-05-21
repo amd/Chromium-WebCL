@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -105,6 +105,7 @@
     <ClCompile Include=".\vpx_scale\vpx_scale_rtcd.c">
       <ObjectFileName>$(IntDir)vpx_scale_vpx_scale_rtcd.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="vp9\decoder\vp9_entropy_step.c" />
     <CustomBuild Include=".\vpx_ports\emms.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Assembling %(Filename)%(Extension)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">yasm -Xvc -g cv8 -f $(PlatformName)  -I. -I. "%(FullPath)" -o $(IntDir)vpx_ports_emms.obj</Command>

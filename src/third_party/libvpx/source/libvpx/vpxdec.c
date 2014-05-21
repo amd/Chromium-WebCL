@@ -16,6 +16,7 @@
 #include <limits.h>
 
 #include "third_party/libyuv/include/libyuv/scale.h"
+#include "vpx/internal/vpx_codec_internal.h"
 
 #include "./args.h"
 #include "./ivfdec.h"
@@ -34,8 +35,10 @@
 #include "./tools_common.h"
 #include "./webmdec.h"
 #include "./y4menc.h"
-#include "vp9/ppa.h"
 
+#include "vp9/decoder/vp9_thread.h"
+#include "vp9/ppa.h"
+#include "vp9/common/inter_ocl/opencl/ocl_wrapper.h"
 /******************************************************************************
  * Direct3D9 module
  *****************************************************************************/
@@ -52,6 +55,10 @@ LPDIRECT3DSURFACE9 pSurface;
 LPDIRECT3DSURFACE9 pSurface_cache[CACHE_NUMBER];
 unsigned int surface_cache_index = 0;
 HMODULE hInstance;
+HANDLE pSharedHandle_tmp = NULL;
+HANDLE pSharedHandle[CACHE_NUMBER]; 
+
+Interop_Context *interop_ctx;
 
 bool Init3DLib(HWND hWnd, int width, int height);
 int DrawPixel(int x,int y, DWORD color);
@@ -61,14 +68,21 @@ void Release3DLib();
 bool Init3DLib(HWND hWnd, int width, int height)
 {
 	LPDIRECT3D9EX d3d9;
-	D3DPRESENT_PARAMETERS d3dpp;
-	LPDIRECT3DSURFACE9 tempSurf;
-	HRESULT hr;
-	int i;
-	IDirect3DDevice9 * ppDevice = NULL;
-	
+D3DPRESENT_PARAMETERS d3dpp;
+	LPDIRECT3DSURFACE9 tempSurf = NULL;
 	typedef HRESULT (WINAPI *PFNDirect3DCreate9Ex)(UINT SDKVersion, IDirect3D9Ex **ppD3D);
-	PFNDirect3DCreate9Ex pfnDirect3DCreate9Ex = NULL;
+	PFNDirect3DCreate9Ex pfnDirect3DCreate9Ex;
+	
+	struct IDirect3DDevice9 * ppDevice;
+   HRESULT hr;
+	int i;
+
+	interop_ctx = (Interop_Context*)malloc(sizeof(Interop_Context));
+	
+	 ppDevice = NULL;
+	
+	
+    pfnDirect3DCreate9Ex = NULL;
 	hInstance = LoadLibrary(TEXT("D3D9.DLL"));
 	if (!hInstance)
 		return false;
@@ -96,26 +110,35 @@ bool Init3DLib(HWND hWnd, int width, int height)
 
 
 	//hr = IDirect3D9Ex_CreateDeviceEx(d3d9, D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, 
-				//hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, NULL, &pDevice);
+	//			hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, NULL, &pDevice);
 	
 	if (FAILED(hr))
 		return false;
 	pDevice = (IDirect3DDevice9Ex *)ppDevice;
 
 	IDirect3D9Ex_Release(d3d9);
-	
 	//hr = IDirect3DDevice9Ex_CreateOffscreenPlainSurfaceEx(pDevice, width, height, 
 	//			D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &pSurface, NULL, 0);
 
 	for (i = 0; i < CACHE_NUMBER; i++)
 	{
-
-		hr = IDirect3DDevice9Ex_CreateOffscreenPlainSurfaceEx(pDevice, width, height, 
-				D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &tempSurf, NULL, 0);
-		//hr = IDirect3DDevice9Ex_CreateOffscreenPlainSurface(pDevice, width, height, 
-		//		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &tempSurf, NULL);
+		//hr = IDirect3DDevice9Ex_CreateOffscreenPlainSurfaceEx(pDevice, width, height, 
+		//		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &tempSurf, &pSharedHandle_tmp, 0);
+		//if(FAILED(hr)) 
+		//{
+		//	printf("fail to create surfaces and shared handle\n");
+		//}
+		hr = IDirect3DDevice9Ex_CreateOffscreenPlainSurface(pDevice, width, height, 
+				D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &tempSurf, &pSharedHandle_tmp);
+		if(FAILED(hr)) 
+		{
+			printf("fail to create surfaces and shared handle\n");
+		}
 		pSurface_cache[i] = tempSurf;
+		pSharedHandle[i] = pSharedHandle_tmp;
 	}
+
+	interop_ctx->pDevice = pDevice;
 	return true;
 }
 
@@ -146,20 +169,26 @@ void Release3DLib()
 
 /****************************D3D9 END*****************************************/
 
-static const char *exec_name;
+VP9Worker g_output_worker;
 
+static const char *exec_name;
+#if 1
 static const struct {
   char const *name;
   const vpx_codec_iface_t_ex *(*iface)(void);
   uint32_t fourcc;
 } ifaces[] = {
 #if CONFIG_VP8_DECODER
-  //{"vp8",  vpx_codec_vp8_dx,   VP8_FOURCC},
+ // {"vp8",  vpx_codec_vp8_dx,   VP8_FOURCC},
 #endif
 #if CONFIG_VP9_DECODER
   {"vp9",  vpx_codec_vp9_dx,   VP9_FOURCC},
 #endif
 };
+#endif
+
+
+
 
 struct VpxDecInputContext {
   struct VpxInputContext *vpx_input_ctx;
@@ -286,9 +315,11 @@ void usage_exit() {
   fprintf(stderr, "\nIncluded decoders:\n\n");
 
   for (i = 0; i < sizeof(ifaces) / sizeof(ifaces[0]); i++)
-    fprintf(stderr, "    %-6s - %s\n",
+
+      fprintf(stderr, "    %-6s - %s\n",
             ifaces[i].name,
             vpx_codec_iface_name_ex(ifaces[i].iface()));
+
 
   exit(EXIT_FAILURE);
 }
@@ -317,7 +348,7 @@ static int raw_read_frame(FILE *infile, uint8_t **buffer,
     }
 
     if (frame_size > *buffer_size) {
-      uint8_t *new_buf = (uint8_t *)realloc(*buffer, 2 * frame_size);
+      uint8_t *new_buf = (uint8_t*)realloc(*buffer, 2 * frame_size);
       if (new_buf) {
         *buffer = new_buf;
         *buffer_size = 2 * frame_size;
@@ -357,24 +388,24 @@ static int read_frame(struct VpxDecInputContext *input, uint8_t **buf,
 }
 
 void *out_open(const char *out_fn, int do_md5) {
- // void  *out = NULL;
+	// void  *out = NULL;
 
-  if (do_md5) {
-    MD5Context *out;
-    MD5Context *md5_ctx = out = ( MD5Context *)malloc(sizeof(MD5Context));
-    (void)out_fn;
-    MD5Init(md5_ctx);
-	return (void *)out;
-  } else {
-	FILE *out;
-    FILE *outfile = out = strcmp("-", out_fn) ? fopen(out_fn, "wb")
-                          : set_binary_mode(stdout);
+	if (do_md5) {
+		MD5Context *out;
+		MD5Context *md5_ctx = out = ( MD5Context *)malloc(sizeof(MD5Context));
+		(void)out_fn;
+		MD5Init(md5_ctx);
+		return (void *)out;
+	} else {
+		FILE *out;
+		FILE *outfile = out = strcmp("-", out_fn) ? fopen(out_fn, "wb")
+			: set_binary_mode(stdout);
 
-    if (!outfile) {
-      fatal("Failed to output file");
-    }
-	return (void *)out;
-  }
+		if (!outfile) {
+			fatal("Failed to output file");
+		}
+		return (void *)out;
+	}
 
 }
 
@@ -427,20 +458,20 @@ static void write_image_file(const vpx_image_t *img, const int planes[3],
 }
 
 void out_close(void *out, const char *out_fn, int do_md5) {
-  if (do_md5) {
-    uint8_t md5[16];
-    int i;
+	if (do_md5) {
+		uint8_t md5[16];
+		int i;
 
-    MD5Final(md5, (MD5Context*)out);
-    free(out);
+		MD5Final(md5, (MD5Context*)out);
+		free(out);
 
-    for (i = 0; i < 16; i++)
-      printf("%02x", md5[i]);
+		for (i = 0; i < 16; i++)
+			printf("%02x", md5[i]);
 
-    printf("  %s\n", out_fn);
-  } else {
-    fclose((FILE*)out);
-  }
+		printf("  %s\n", out_fn);
+	} else {
+		fclose((FILE*)out);
+	}
 }
 
 int file_is_raw(struct VpxInputContext *input) {
@@ -511,7 +542,7 @@ void generate_filename(const char *pattern, char *out, size_t q_len,
   char *q = out;
 
   do {
-    char *next_pat = strchr((char*)p, '%');
+    char *next_pat = (char*)strchr(p, '%');
 
     if (p == next_pat) {
       size_t pat_len;
@@ -583,20 +614,149 @@ void generate_filename(const char *pattern, char *out, size_t q_len,
   } while (*p);
 }
 
+typedef struct OutputWorkerData {
+  int noblit;
+  int frame_out;
+  vpx_image_t *img;
+  int use_y4m;
+  void *out;
+  int do_md5;
+  int do_scale;
+  vpx_codec_ctx_t_ex *decoder;
+  vpx_image_t *scaled_img;
+  int single_file;
+  const char *outfile_pattern;
+  int frame_in_recon;
+  int flipuv;
+  struct VpxInputContext vpx_input_ctx;
+
+} OutputWorkerData;
+
+static int output_worker_hook(void *arg1, void *arg2) {
+  OutputWorkerData *const data = (OutputWorkerData*)arg1;
+  int noblit;
+  int frame_out;
+  vpx_image_t *img;
+  int use_y4m;
+  void *out;
+  int do_md5;
+  int do_scale;
+  vpx_codec_ctx_t_ex *decoder;
+  vpx_image_t *scaled_img;
+  int single_file;
+  const char *outfile_pattern;
+  int frame_in_recon;
+  int flipuv;
+  struct VpxInputContext vpx_input_ctx = {0};
+
+#if USE_PPA
+  PPAStartCpuEventFunc(vp9_output_file_time);
+#endif
+
+  noblit = data->noblit;
+  frame_out = data->frame_out;
+  img = data->img;
+  use_y4m = data->use_y4m;
+  out = data->out;
+  do_md5 = data->do_md5;
+  do_scale = data->do_scale;
+  decoder = data->decoder;
+  scaled_img = data->scaled_img;
+  single_file = data->single_file;
+  outfile_pattern = data->outfile_pattern;
+  frame_in_recon = data->frame_in_recon;
+  flipuv = data->flipuv;
+  vpx_input_ctx.width = data->vpx_input_ctx.width;
+  vpx_input_ctx.height = data->vpx_input_ctx.height;
+  vpx_input_ctx.framerate = data->vpx_input_ctx.framerate;
+
+  if (!noblit) {
+    if (frame_out == 1 && img && use_y4m) {
+      y4m_write_file_header((FILE*)out, vpx_input_ctx.width, vpx_input_ctx.height,
+                            &vpx_input_ctx.framerate, img->fmt);
+    }
+
+    if (img && do_scale) {
+      if (frame_out == 1) {
+        // If the output frames are to be scaled to a fixed display size then
+        // use the width and height specified in the container. If either of
+        // these is set to 0, use the display size set in the first frame
+        // header.
+        int display_width = vpx_input_ctx.width;
+        int display_height = vpx_input_ctx.height;
+        if (!display_width || !display_height) {
+          int display_size[2];
+          //if (vpx_codec_control(&decoder, VP9D_GET_DISPLAY_SIZE,
+          if (vpx_codec_control_ex(decoder, VP9D_GET_DISPLAY_SIZE,
+                                display_size)) {
+            // As last resort use size of first frame as display size.
+            display_width = img->d_w;
+            display_height = img->d_h;
+          } else {
+            display_width = display_size[0];
+            display_height = display_size[1];
+          }
+        }
+        scaled_img = vpx_img_alloc(NULL, VPX_IMG_FMT_I420, display_width,
+                                   display_height, 16);
+      }
+
+      if (img->d_w != scaled_img->d_w || img->d_h != scaled_img->d_h) {
+        vpx_image_scale(img, scaled_img, libyuv::kFilterBox);
+        img = scaled_img;
+      }
+    }
+
+    if (img) {
+      const int PLANES_YUV[] = {VPX_PLANE_Y, VPX_PLANE_U, VPX_PLANE_V};
+      const int PLANES_YVU[] = {VPX_PLANE_Y, VPX_PLANE_V, VPX_PLANE_U};
+
+      const int *planes = flipuv ? PLANES_YVU : PLANES_YUV;
+      char out_fn[PATH_MAX];
+
+      if (!single_file) {
+        generate_filename(outfile_pattern, out_fn, PATH_MAX,
+                          //img->d_w, img->d_h, frame_in);
+                          img->d_w, img->d_h, frame_in_recon - 1);
+        out = out_open(out_fn, do_md5);
+      } else {
+        if (use_y4m)
+          y4m_write_frame_header((FILE*)out);
+      }
+
+      if (do_md5)
+        update_image_md5(img, planes, (MD5Context*)out);
+      else
+        write_image_file(img, planes, (FILE*)out);
+
+      if (!single_file)
+        out_close(out, out_fn, do_md5);
+    }
+  }
+
+#if USE_PPA
+  PPAStopCpuEventFunc(vp9_output_file_time);
+#endif
+
+  return 0;
+}
+
 int main_loop(int argc, const char **argv_) {
-  vpx_codec_ctx_t_ex       decoder;
+  
   char                  *fn = NULL;
   int                    i;
   uint8_t               *buf = NULL;
   size_t                 bytes_in_buffer = 0, buffer_size = 0;
   FILE                  *infile;
-  int                    frame_in = 0, frame_out = 0, flipuv = 0, noblit = 0;
+  int                    frame_in = 0, frame_in_recon = 0, frame_out = 0, flipuv = 0, noblit = 0;
   int                    do_md5 = 0, progress = 0;
   int                    stop_after = 0, postproc = 0, summary = 0, quiet = 1;
   int                    arg_skip = 0;
   int                    ec_enabled = 0;
- // vpx_codec_iface_t       *iface = NULL;
+#if CONFIG_VP9_DECODER
+  vpx_codec_ctx_t_ex       decoder;
   vpx_codec_iface_t_ex       *iface = NULL;
+#endif
   unsigned long          dx_time = 0;
   struct arg               arg;
   char                   **argv, **argi, **argj;
@@ -607,6 +767,8 @@ int main_loop(int argc, const char **argv_) {
   void                   *out = NULL;
   vpx_codec_dec_cfg_t     cfg = {0};
 #if CONFIG_VP8_DECODER
+  vpx_codec_ctx_t       decoder_vp8;
+  vpx_codec_iface_t       *iface_vp8 = NULL;
   vp8_postproc_cfg_t      vp8_pp_cfg = {0};
   int                     vp8_dbg_color_ref_frame = 0;
   int                     vp8_dbg_color_mb_modes = 0;
@@ -621,6 +783,12 @@ int main_loop(int argc, const char **argv_) {
   int                     num_external_frame_buffers = 0;
   int                     fb_lru_cache = 0;
   vpx_codec_frame_buffer_t *frame_buffers = NULL;
+
+  OutputWorkerData *data;
+  VP9Worker *worker;
+  vpx_image_t img_output;
+  int i_output_malloc = 0;
+  unsigned char *output_planes[4] = {NULL, NULL, NULL, NULL};
 
   struct VpxDecInputContext input = {0};
   struct VpxInputContext vpx_input_ctx = {0};
@@ -637,17 +805,16 @@ int main_loop(int argc, const char **argv_) {
     arg.argv_step = 1;
 
     if (arg_match(&arg, &codecarg, argi)) {
-      int j, k = -1;
+	  int j, k = -1;
+	  for (j = 0; j < sizeof(ifaces) / sizeof(ifaces[0]); j++)
+	    if (!strcmp(ifaces[j].name, arg.val))
+		  k = j;
 
-      for (j = 0; j < sizeof(ifaces) / sizeof(ifaces[0]); j++)
-        if (!strcmp(ifaces[j].name, arg.val))
-          k = j;
-
-      if (k >= 0)
-        iface = ifaces[k].iface();
-      else
-        die("Error: Unrecognized argument (%s) to --codec\n",
-            arg.val);
+		if (k >= 0)
+			iface = ifaces[k].iface();
+		else
+			die("Error: Unrecognized argument (%s) to --codec\n",
+			arg.val);
     } else if (arg_match(&arg, &looparg, argi)) {
       // no-op
     } else if (arg_match(&arg, &outputfile, argi))
@@ -754,7 +921,6 @@ int main_loop(int argc, const char **argv_) {
 
   /* Open file */
   infile = strcmp(fn, "-") ? fopen(fn, "rb") : set_binary_mode(stdin);
-//   infile = fopen(fn, "rb");
 
   if (!infile) {
     fprintf(stderr, "Failed to open file '%s'",
@@ -825,23 +991,24 @@ int main_loop(int argc, const char **argv_) {
 
   /* Try to determine the codec from the fourcc. */
   for (i = 0; i < sizeof(ifaces) / sizeof(ifaces[0]); i++)
-    if (vpx_input_ctx.fourcc == ifaces[i].fourcc) {
-      vpx_codec_iface_t_ex *vpx_iface = ifaces[i].iface();
+	  if (vpx_input_ctx.fourcc == ifaces[i].fourcc) {
+		  vpx_codec_iface_t_ex *vpx_iface = ifaces[i].iface();
 
-      if (iface && iface != vpx_iface)
-        warn("Header indicates codec: %s\n", ifaces[i].name);
-      else
-        iface = vpx_iface;
+		  if (iface && iface != vpx_iface)
+			  warn("Header indicates codec: %s\n", ifaces[i].name);
+		  else
+			  iface = vpx_iface;
 
-      break;
-    }
+		  break;
+	  }
 
+  Init3DLib(GetConsoleWindow(),input.vpx_input_ctx->width, input.vpx_input_ctx->height);
   dec_flags = (postproc ? VPX_CODEC_USE_POSTPROC : 0) |
               (ec_enabled ? VPX_CODEC_USE_ERROR_CONCEALMENT : 0);
   //if (vpx_codec_dec_init(&decoder, iface ? iface :  ifaces[0].iface(), &cfg,
   //                       dec_flags)) {
   if (vpx_codec_dec_init_ex(&decoder, iface ? iface :  ifaces[0].iface(), &cfg,
-                         dec_flags, pDevice)) {
+                         dec_flags,interop_ctx/*pDevice*/)) {
     fprintf(stderr, "Failed to initialize decoder: %s\n", vpx_codec_error_ex(&decoder));
     return EXIT_FAILURE;
   }
@@ -849,35 +1016,35 @@ int main_loop(int argc, const char **argv_) {
   if (!quiet)
     fprintf(stderr, "%s\n", decoder.name);
 
-#if CONFIG_VP8_DECODER
+#if 0//CONFIG_VP8_DECODER
 
   if (vp8_pp_cfg.post_proc_flag
-      && vpx_codec_control_ex(&decoder, VP8_SET_POSTPROC, &vp8_pp_cfg)) {
-    fprintf(stderr, "Failed to configure postproc: %s\n", vpx_codec_error_ex(&decoder));
+      && vpx_codec_control(&decoder_vp8, VP8_SET_POSTPROC, &vp8_pp_cfg)) {
+    fprintf(stderr, "Failed to configure postproc: %s\n", vpx_codec_error(&decoder_vp8));
     return EXIT_FAILURE;
   }
 
   if (vp8_dbg_color_ref_frame
-      && vpx_codec_control_ex(&decoder, VP8_SET_DBG_COLOR_REF_FRAME, vp8_dbg_color_ref_frame)) {
-    fprintf(stderr, "Failed to configure reference block visualizer: %s\n", vpx_codec_error_ex(&decoder));
+      && vpx_codec_control(&decoder_vp8, VP8_SET_DBG_COLOR_REF_FRAME, vp8_dbg_color_ref_frame)) {
+    fprintf(stderr, "Failed to configure reference block visualizer: %s\n", vpx_codec_error(&decoder_vp8));
     return EXIT_FAILURE;
   }
 
   if (vp8_dbg_color_mb_modes
-      && vpx_codec_control_ex(&decoder, VP8_SET_DBG_COLOR_MB_MODES, vp8_dbg_color_mb_modes)) {
-    fprintf(stderr, "Failed to configure macro block visualizer: %s\n", vpx_codec_error_ex(&decoder));
+      && vpx_codec_control(&decoder_vp8, VP8_SET_DBG_COLOR_MB_MODES, vp8_dbg_color_mb_modes)) {
+    fprintf(stderr, "Failed to configure macro block visualizer: %s\n", vpx_codec_error(&decoder));
     return EXIT_FAILURE;
   }
 
   if (vp8_dbg_color_b_modes
-      && vpx_codec_control_ex(&decoder, VP8_SET_DBG_COLOR_B_MODES, vp8_dbg_color_b_modes)) {
-    fprintf(stderr, "Failed to configure block visualizer: %s\n", (&decoder));
+      && vpx_codec_control(&decoder_vp8, VP8_SET_DBG_COLOR_B_MODES, vp8_dbg_color_b_modes)) {
+    fprintf(stderr, "Failed to configure block visualizer: %s\n", vpx_codec_error(&decoder));
     return EXIT_FAILURE;
   }
 
   if (vp8_dbg_display_mv
-      && vpx_codec_control_ex(&decoder, VP8_SET_DBG_DISPLAY_MV, vp8_dbg_display_mv)) {
-    fprintf(stderr, "Failed to configure motion vector visualizer: %s\n", (&decoder));
+      && vpx_codec_control(&decoder_vp8, VP8_SET_DBG_DISPLAY_MV, vp8_dbg_display_mv)) {
+    fprintf(stderr, "Failed to configure motion vector visualizer: %s\n", vpx_codec_error(&decoder));
     return EXIT_FAILURE;
   }
 #endif
@@ -902,7 +1069,7 @@ int main_loop(int argc, const char **argv_) {
                                     realloc_vp9_frame_buffer,
                                     NULL)) {
       fprintf(stderr, "Failed to configure external frame buffers: %s\n",
-              (&decoder));
+              vpx_codec_error_ex(&decoder));
       return EXIT_FAILURE;
     }
   }
@@ -911,7 +1078,7 @@ int main_loop(int argc, const char **argv_) {
       vpx_codec_control_ex(&decoder, VP9D_SET_FRAME_BUFFER_LRU_CACHE,
                         fb_lru_cache)) {
     fprintf(stderr, "Failed to set frame buffer lru cache: %s\n",
-            (&decoder));
+            vpx_codec_error_ex(&decoder));
     return EXIT_FAILURE;
   }
 
@@ -925,19 +1092,47 @@ int main_loop(int argc, const char **argv_) {
     struct vpx_usec_timer timer;
     int                   corrupted;
     int current_surface = surface_cache_index;
+	vpx_codec_stream_info_t si;
 
     frame_avail = 0;
     if (!stop_after || frame_in < stop_after) {
       if (!read_frame(&input, &buf, &bytes_in_buffer, &buffer_size)) {
         frame_avail = 1;
         frame_in++;
+        frame_in_recon++;
+
+        vpx_usec_timer_start(&timer);
+        surface_cache_index++;
+        surface_cache_index = surface_cache_index % CACHE_NUMBER;
+        interop_ctx->pSurface = pSurface_cache[current_surface];
+        interop_ctx->pSharedHandle = pSharedHandle[current_surface];
+#if USE_PPA
+  PPAStartCpuEventFunc(decode_fps_calcu_time);
+#endif
+        if (vpx_codec_decode_ex(&decoder, buf, bytes_in_buffer, NULL, 0, interop_ctx)) {
+          const char *detail = vpx_codec_error_detail_ex(&decoder);
+          warn("Failed to decode frame %d: %s",
+               frame_in, vpx_codec_error_ex(&decoder));
+
+          if (detail)
+            warn("Additional information: %s", detail);
+          goto fail;
+        }
+#if USE_PPA
+  PPAStopCpuEventFunc(decode_fps_calcu_time);
+#endif
+
+        vpx_usec_timer_mark(&timer);
+        dx_time += (unsigned int)vpx_usec_timer_elapsed(&timer);
+      } else {
+        frame_in_recon++;
+        bytes_in_buffer = 0;
 
         vpx_usec_timer_start(&timer);
 
-		surface_cache_index++;
-		surface_cache_index = surface_cache_index % CACHE_NUMBER;
-        //if (vpx_codec_decode(&decoder, buf, bytes_in_buffer, NULL, 0)) {
-		if (vpx_codec_decode_ex(&decoder, buf, bytes_in_buffer, NULL, 0, pSurface_cache[current_surface])) {
+     
+
+        if (vpx_codec_decode_ex(&decoder, buf, bytes_in_buffer, NULL, 0, interop_ctx)) {
           const char *detail = vpx_codec_error_detail_ex(&decoder);
           warn("Failed to decode frame %d: %s",
                frame_in, vpx_codec_error_ex(&decoder));
@@ -947,18 +1142,37 @@ int main_loop(int argc, const char **argv_) {
           goto fail;
         }
 
-		pSurface = pSurface_cache[current_surface];
-		FlipSurface();
-	
         vpx_usec_timer_mark(&timer);
         dx_time += (unsigned int)vpx_usec_timer_elapsed(&timer);
       }
+    } else {
+      frame_in_recon++;
+      bytes_in_buffer = 0;
+
+      vpx_usec_timer_start(&timer);
+  
+      if (vpx_codec_decode_ex(&decoder, buf, bytes_in_buffer, NULL, 0, interop_ctx)) {
+        const char *detail = vpx_codec_error_detail_ex(&decoder);
+        warn("Failed to decode frame %d: %s",
+             frame_in, vpx_codec_error_ex(&decoder));
+
+        if (detail)
+          warn("Additional information: %s", detail);
+        goto fail;
+      }
+
+      vpx_usec_timer_mark(&timer);
+      dx_time += (unsigned int)vpx_usec_timer_elapsed(&timer);
     }
 
+    worker = &g_output_worker;
+    vp9_worker_sync(worker);
     vpx_usec_timer_start(&timer);
 
     got_data = 0;
     if ((img = vpx_codec_get_frame_ex(&decoder, &iter))) {
+      pSurface = pSurface_cache[current_surface];
+      FlipSurface();
       ++frame_out;
       got_data = 1;
     }
@@ -974,6 +1188,84 @@ int main_loop(int argc, const char **argv_) {
 
     if (progress)
       show_progress(frame_in, frame_out, dx_time);
+
+// output thread
+#if 0
+  // worker = &g_output_worker;
+  // vp9_worker_sync(worker);
+
+  data = (OutputWorkerData*)worker->data1;
+
+  data->noblit = noblit;
+  data->frame_out = frame_out;
+  if (got_data) {
+    int y;
+    uint8_t *buf;
+    uint8_t *buf_out;
+    unsigned int c_h =
+        img->y_chroma_shift ? (1 + img->d_h) >> img->y_chroma_shift
+                            : img->d_h;
+    if (!i_output_malloc) {
+      output_planes[VPX_PLANE_Y] =
+        malloc(sizeof(unsigned char)*img->stride[VPX_PLANE_Y]*img->d_h);
+      output_planes[VPX_PLANE_U] =
+        malloc(sizeof(unsigned char)*img->stride[VPX_PLANE_U]*c_h);
+      output_planes[VPX_PLANE_V] =
+        malloc(sizeof(unsigned char)*img->stride[VPX_PLANE_V]*c_h);
+      i_output_malloc = 1;
+    }
+
+    buf = img->planes[VPX_PLANE_Y];
+    buf_out = output_planes[VPX_PLANE_Y];
+    for (y = 0; y < img->d_h; y++) {
+      memcpy(buf_out, buf, img->stride[VPX_PLANE_Y]);
+      buf += img->stride[VPX_PLANE_Y];
+      buf_out += img->stride[VPX_PLANE_Y];
+    }
+
+    buf = img->planes[VPX_PLANE_U];
+    buf_out = output_planes[VPX_PLANE_U];
+    for (y = 0; y < c_h; y++) {
+      memcpy(buf_out, buf, img->stride[VPX_PLANE_U]);
+      buf += img->stride[VPX_PLANE_U];
+      buf_out += img->stride[VPX_PLANE_U];
+    }
+
+    buf = img->planes[VPX_PLANE_V];
+    buf_out = output_planes[VPX_PLANE_V];
+    for (y = 0; y < c_h; y++) {
+      memcpy(buf_out, buf, img->stride[VPX_PLANE_V]);
+      buf += img->stride[VPX_PLANE_V];
+      buf_out += img->stride[VPX_PLANE_V];
+    }
+
+    memcpy(&img_output, img, sizeof(vpx_image_t));
+    img_output.planes[VPX_PLANE_Y] = output_planes[VPX_PLANE_Y];
+    img_output.planes[VPX_PLANE_U] = output_planes[VPX_PLANE_U];
+    img_output.planes[VPX_PLANE_V] = output_planes[VPX_PLANE_V];
+
+    data->img = &img_output;
+  } else {
+    data->img = img;
+  }
+  data->use_y4m = use_y4m;
+  data->out = out;
+  data->do_md5 = do_md5;
+  data->do_scale = do_scale;
+  data->decoder = &decoder;
+  data->scaled_img = scaled_img;
+  data->single_file = single_file;
+  data->outfile_pattern = outfile_pattern;
+  data->frame_in_recon = frame_in_recon;
+  data->flipuv = flipuv;
+  data->vpx_input_ctx.width = vpx_input_ctx.width;
+  data->vpx_input_ctx.height = vpx_input_ctx.height;
+  data->vpx_input_ctx.framerate = vpx_input_ctx.framerate;
+
+  vp9_worker_launch(worker);
+  // output_worker_hook(data, NULL);
+  // vp9_worker_sync(worker);
+#else
 
     if (!noblit) {
       if (frame_out == 1 && img && use_y4m) {
@@ -1006,7 +1298,7 @@ int main_loop(int argc, const char **argv_) {
         }
 
         if (img->d_w != scaled_img->d_w || img->d_h != scaled_img->d_h) {
-          vpx_image_scale(img, scaled_img, libyuv::FilterMode::kFilterBox);
+          vpx_image_scale(img, scaled_img, libyuv::kFilterBox);
           img = scaled_img;
         }
       }
@@ -1028,7 +1320,7 @@ int main_loop(int argc, const char **argv_) {
         }
 
         if (do_md5)
-          update_image_md5(img, planes, (MD5Context*)out);
+          update_image_md5(img, planes,(MD5Context*) out);
         else
           write_image_file(img, planes, (FILE*)out);
 
@@ -1036,8 +1328,10 @@ int main_loop(int argc, const char **argv_) {
           out_close(out, out_fn, do_md5);
       }
     }
+#endif
 
-    if (stop_after && frame_in >= stop_after)
+    // if (stop_after && frame_in >= stop_after)
+    if (stop_after && frame_out >= stop_after)
       break;
   }
 
@@ -1050,6 +1344,18 @@ int main_loop(int argc, const char **argv_) {
     fprintf(stderr, "WARNING: %d frames corrupted.\n", frames_corrupted);
 
 fail:
+
+  vp9_worker_sync(worker);
+
+  if (i_output_malloc) {
+    free(output_planes[VPX_PLANE_Y]);
+    free(output_planes[VPX_PLANE_U]);
+    free(output_planes[VPX_PLANE_V]);
+    output_planes[VPX_PLANE_Y] = NULL;
+    output_planes[VPX_PLANE_U] = NULL;
+    output_planes[VPX_PLANE_V] = NULL;
+
+  }
 
   if (vpx_codec_destroy_ex(&decoder)) {
     fprintf(stderr, "Failed to destroy decoder: %s\n",
@@ -1078,20 +1384,17 @@ fail:
 }
 
 int main(int argc, const char **argv_) {
-  unsigned int loops, i;
+  unsigned int loops = 1, i;
   char **argv, **argi, **argj;
   struct arg arg;
   int error = 0;
-  HWND hwnd;
-  
-  loops = 1;  
+
+  VP9Worker *worker;
 
 #if USE_PPA
- // PPA_INIT();
+  PPA_INIT();
 #endif
 
-  hwnd= GetConsoleWindow();
-  Init3DLib(hwnd,SCREEN_WIDTH, SCREEN_HEIGHT);
   argv = argv_dup(argc - 1, argv_ + 1);
   for (argi = argj = argv; (*argj = *argi); argi += arg.argv_step) {
     memset(&arg, 0, sizeof(arg));
@@ -1103,12 +1406,26 @@ int main(int argc, const char **argv_) {
     }
   }
   free(argv);
+
+  // Output thread
+  worker = &g_output_worker;
+
+  vp9_worker_init(worker);
+  worker->hook = (VP9WorkerHook)output_worker_hook;
+  worker->data1 = malloc(sizeof(OutputWorkerData));
+  if (!vp9_worker_reset(worker)) {
+    printf("output thread creation failed\n");
+  }
+
   for (i = 0; !error && i < loops; i++)
     error = main_loop(argc, argv_);
 
+  vp9_worker_end(worker);
+  free(worker->data1);
+
   Release3DLib();
 #if USE_PPA
- // PPA_END();
+  PPA_END();
 #endif
 
   return error;

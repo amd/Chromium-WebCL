@@ -14,6 +14,10 @@
 #include "vp9/common/vp9_common.h"
 #include "vp9/common/vp9_onyxc_int.h"
 
-int inter_pred_calcu_ocl_whole_frame(VP9_COMMON *const cm);
+int get_second_ref_count_ocl();
+
+int inter_pred_index_ocl_whole_frame(VP9_COMMON *const cm);
+
+int inter_pred_calcu_ocl(VP9_COMMON *const cm, int tile_num, int dev_gpu);
 
 #endif // VP9_INTER_OCL_CALCU_H_

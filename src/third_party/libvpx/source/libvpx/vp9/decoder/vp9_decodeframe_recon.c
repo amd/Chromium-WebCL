@@ -45,8 +45,17 @@
 #include "vp9/decoder/vp9_append.h"
 #include "vp9/decoder/vp9_intra_predict.h"
 #include "vp9/decoder/vp9_step.h"
+#include "vp9/decoder/vp9_entropy_step.h"
 #include "vp9/decoder/vp9_tile_info.h"
+#include "vp9/decoder/vp9_loopfilter_recon.h"
+#include "vp9/decoder/vp9_copy_mip_ocl.h"
+#include "vp9/sched/sleep.h"
+#include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
+
 #include "vp9/ppa.h"
+
+static struct task *g_tsk;
+extern int CpuFlag;
 
 typedef struct TileWorkerData {
   VP9_COMMON *cm;
@@ -247,6 +256,47 @@ static void alloc_tile_storage(VP9D_COMP *pbi, int tile_rows, int tile_cols) {
                   vpx_realloc(pbi->above_seg_context,
                               sizeof(*pbi->above_seg_context) *
                               aligned_mi_cols));
+}
+
+// Allocate storage for each tile column.
+// TODO(jzern): when max_threads <= 1 the same storage could be used for each
+// tile.
+static void alloc_tile_storage_recon(VP9D_COMP *pbi, int tile_rows, int tile_cols) {
+  VP9_COMMON *const cm = &pbi->common;
+  const int aligned_mi_cols = mi_cols_aligned_to_sb(cm->mi_cols);
+  int i, tile_row, tile_col;
+
+  CHECK_MEM_ERROR(cm, pbi->mi_streams,
+                  vpx_realloc(pbi->mi_streams, tile_rows * tile_cols *
+                              sizeof(*pbi->mi_streams)));
+  for (tile_row = 0; tile_row < tile_rows; ++tile_row) {
+    for (tile_col = 0; tile_col < tile_cols; ++tile_col) {
+      TileInfo tile;
+      vp9_tile_init(&tile, cm, tile_row, tile_col);
+      pbi->mi_streams[tile_row * tile_cols + tile_col] =
+          &cm->mi[tile.mi_row_start * cm->mode_info_stride
+                  + tile.mi_col_start];
+    }
+  }
+
+  // 2 contexts per 'mi unit', so that we have one context per 4x4 txfm
+  // block where mi unit size is 8x8.
+  CHECK_MEM_ERROR(cm, pbi->above_context[0],
+                  vpx_realloc(pbi->above_context[0],
+                              sizeof(*pbi->above_context[0]) * MAX_MB_PLANE *
+                              2 * aligned_mi_cols));
+  for (i = 1; i < MAX_MB_PLANE; ++i) {
+    pbi->above_context[i] = pbi->above_context[0] +
+                            i * sizeof(*pbi->above_context[0]) *
+                            2 * aligned_mi_cols;
+  }
+
+  // This is sized based on the entire frame. Each tile operates within its
+  // column bounds.
+  CHECK_MEM_ERROR(cm, pbi->above_seg_context,
+                  vpx_realloc(pbi->above_seg_context,
+                              sizeof(*pbi->above_seg_context) *
+                              aligned_mi_cols*2));
 }
 
 static void inverse_transform_block(MACROBLOCKD* xd, int plane, int block,
@@ -753,7 +803,7 @@ static void apply_frame_size(VP9D_COMP *pbi, int width, int height) {
                              cm->subsampling_x, cm->subsampling_y,
                              VP9BORDERINPIXELS, NULL, NULL, NULL);*/
 #if USE_INTER_PREDICT_OCL
-    if (CpuFlag) {
+    if(CpuFlag) {
       vp9_realloc_frame_buffer(get_frame_new_buffer(cm), cm->width, cm->height,
                                cm->subsampling_x, cm->subsampling_y,
                                VP9BORDERINPIXELS, NULL, NULL, NULL);
@@ -770,11 +820,86 @@ static void apply_frame_size(VP9D_COMP *pbi, int width, int height) {
   }
 }
 
+static void apply_frame_size_recon(VP9D_COMP *pbi,
+                                           VP9D_COMP **pbi_new,
+                                           int width, int height) {
+  VP9_COMMON *cm = &pbi->common;
+  VP9_COMMON *cm_new[2];
+  cm_new[0] = &pbi_new[0]->common;
+  cm_new[1] = &pbi_new[1]->common;
+
+  if (cm->width != width || cm->height != height) {
+    // Change in frame size.
+    if (cm->width == 0 || cm->height == 0) {
+      // Assign new frame buffer on first call.
+      cm->new_fb_idx = FRAME_BUFFERS - 1;
+      cm->fb_idx_ref_cnt[cm->new_fb_idx] = 1;
+    }
+
+    // TODO(agrange) Don't test width/height, check overall size.
+    if (width > cm->width || height > cm->height) {
+      //alloc opencl buffer for mips
+      // Rescale frame buffers only if they're not big enough already.
+      //if (vp9_resize_frame_buffers(cm, width, height))
+      if (vp9_resize_frame_buffers_recon(cm, cm_new, width, height))
+        vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
+                           "Failed to allocate frame buffers");
+    }
+
+    cm->width = width;
+    cm->height = height;
+
+    vp9_update_frame_size(cm);
+  }
+
+  if (cm->fb_list != NULL) {
+    vpx_codec_frame_buffer_t *const ext_fb = &cm->fb_list[cm->new_fb_idx];
+    if (vp9_realloc_frame_buffer(get_frame_new_buffer(cm),
+                                 cm->width, cm->height,
+                                 cm->subsampling_x, cm->subsampling_y,
+                                 VP9BORDERINPIXELS, ext_fb,
+                                 cm->realloc_fb_cb, cm->user_priv)) {
+      vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
+                         "Failed to allocate external frame buffer");
+    }
+  } else {
+    /*vp9_realloc_frame_buffer(get_frame_new_buffer(cm), cm->width, cm->height,
+                             cm->subsampling_x, cm->subsampling_y,
+                             VP9BORDERINPIXELS, NULL, NULL, NULL);*/
+#if USE_INTER_PREDICT_OCL
+    if(CpuFlag) {
+      vp9_realloc_frame_buffer(get_frame_new_buffer(cm), cm->width, cm->height,
+                               cm->subsampling_x, cm->subsampling_y,
+                               VP9BORDERINPIXELS, NULL, NULL, NULL);
+    } else {
+       vp9_realloc_frame_buffer_ocl(get_frame_new_buffer(cm), cm->width, cm->height,
+                                   cm->subsampling_x, cm->subsampling_y,
+                                   VP9BORDERINPIXELS, NULL, NULL, NULL, cm->new_fb_idx);
+    }
+#else
+    vp9_realloc_frame_buffer(get_frame_new_buffer(cm), cm->width, cm->height,
+                             cm->subsampling_x, cm->subsampling_y,
+                             VP9BORDERINPIXELS, NULL, NULL, NULL);
+#endif
+
+  }
+}
+
 static void setup_frame_size(VP9D_COMP *pbi,
                              struct vp9_read_bit_buffer *rb) {
   int width, height;
   read_frame_size(rb, &width, &height);
   apply_frame_size(pbi, width, height);
+  setup_display_size(&pbi->common, rb);
+}
+
+static void setup_frame_size_recon(VP9D_COMP *pbi,
+                             VP9D_COMP **pbi_new,
+                             struct vp9_read_bit_buffer *rb) {
+  int width, height;
+  read_frame_size(rb, &width, &height);
+  // apply_frame_size(pbi, width, height);
+  apply_frame_size_recon(pbi, pbi_new, width, height);
   setup_display_size(&pbi->common, rb);
 }
 
@@ -890,6 +1015,34 @@ static void setup_tile_size_recon(VP9D_COMP *pbi, int width, int height) {
         if (alloc_buffers_recon(cm, decoder_recon))
           vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
             "Failed to allocate recon buffers");
+      }
+    }
+  }
+}
+
+static void setup_tile_size_recon_for_entropy(VP9D_COMP *pbi, VP9D_COMP **pbi_new, int width, int height) {
+  // VP9_DECODER_RECON *decoder_recon;
+  VP9_DECODER_RECON *decoder_recon_recon;
+  VP9_DECODER_RECON *decoder_recon_recon_again;
+  VP9_COMMON *cm = &pbi->common;
+  int i = 0;
+  int tile_cols = 1 << cm->log2_tile_cols;
+
+  if (cm->width != width || cm->height != height) {
+    if (cm->width > width || cm->height > height) {
+      for (i = 0; i < tile_cols; i++) {
+        // decoder_recon = &pbi->decoder_recon[i];
+        decoder_recon_recon = &pbi_new[0]->decoder_recon[i];
+        decoder_recon_recon_again = &pbi_new[1]->decoder_recon[i];
+        // if (alloc_buffers_recon(cm, decoder_recon))
+         // vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
+         // "Failed to allocate recon buffers");
+        if (alloc_buffers_recon(cm, decoder_recon_recon))
+          vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
+            "Failed to allocate recon buffers");
+        if (alloc_buffers_recon(cm, decoder_recon_recon_again))
+          vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
+           "Failed to allocate recon buffers");
       }
     }
   }
@@ -1314,6 +1467,151 @@ static size_t read_uncompressed_header(VP9D_COMP *pbi,
     if (cm->intra_only)
       setup_tile_size_recon(pbi, width, height);
 #endif
+  sz = vp9_rb_read_literal(rb, 16);
+
+  if (sz == 0)
+    vpx_internal_error(&cm->error, VPX_CODEC_CORRUPT_FRAME,
+                       "Invalid header size");
+
+  return sz;
+}
+
+static size_t read_uncompressed_header_recon(VP9D_COMP *pbi,
+                                       VP9D_COMP **pbi_new,
+                                       struct vp9_read_bit_buffer *rb) {
+  VP9_COMMON *const cm = &pbi->common;
+  size_t sz;
+  int i;
+  int width = 0;
+  int height = 0;
+
+  cm->last_frame_type = cm->frame_type;
+
+  if (vp9_rb_read_literal(rb, 2) != VP9_FRAME_MARKER)
+      vpx_internal_error(&cm->error, VPX_CODEC_UNSUP_BITSTREAM,
+                         "Invalid frame marker");
+
+  cm->version = vp9_rb_read_bit(rb);
+  RESERVED;
+
+  cm->show_existing_frame = vp9_rb_read_bit(rb);
+  if (cm->show_existing_frame) {
+    // show an existing frame directly
+    int frame_to_show = cm->ref_frame_map[vp9_rb_read_literal(rb, 3)];
+    ref_cnt_fb(cm->fb_idx_ref_cnt, &cm->new_fb_idx, frame_to_show);
+    pbi->refresh_frame_flags = 0;
+    cm->lf.filter_level = 0;
+    return 0;
+  }
+
+  cm->frame_type = (FRAME_TYPE) vp9_rb_read_bit(rb);
+  cm->show_frame = vp9_rb_read_bit(rb);
+  cm->error_resilient_mode = vp9_rb_read_bit(rb);
+
+  if (cm->frame_type == KEY_FRAME) {
+    check_sync_code(cm, rb);
+
+    cm->color_space = vp9_rb_read_literal(rb, 3);  // colorspace
+    if (cm->color_space != SRGB) {
+      vp9_rb_read_bit(rb);  // [16,235] (including xvycc) vs [0,255] range
+      if (cm->version == 1) {
+        cm->subsampling_x = vp9_rb_read_bit(rb);
+        cm->subsampling_y = vp9_rb_read_bit(rb);
+        vp9_rb_read_bit(rb);  // has extra plane
+      } else {
+        cm->subsampling_y = cm->subsampling_x = 1;
+      }
+    } else {
+      if (cm->version == 1) {
+        cm->subsampling_y = cm->subsampling_x = 0;
+        vp9_rb_read_bit(rb);  // has extra plane
+      } else {
+        vpx_internal_error(&cm->error, VPX_CODEC_UNSUP_BITSTREAM,
+                           "RGB not supported in profile 0");
+      }
+    }
+
+    pbi->refresh_frame_flags = (1 << REF_FRAMES) - 1;
+
+    for (i = 0; i < REFS_PER_FRAME; ++i) {
+      cm->frame_refs[i].idx = cm->new_fb_idx;
+      cm->frame_refs[i].buf = get_frame_new_buffer(cm);
+    }
+
+    store_frame_size(pbi, &width, &height);
+    // setup_frame_size(pbi, rb);
+    setup_frame_size_recon(pbi, pbi_new, rb);
+  } else {
+    cm->intra_only = cm->show_frame ? 0 : vp9_rb_read_bit(rb);
+
+    cm->reset_frame_context = cm->error_resilient_mode ?
+        0 : vp9_rb_read_literal(rb, 2);
+
+    if (cm->intra_only) {
+      check_sync_code(cm, rb);
+
+      pbi->refresh_frame_flags = vp9_rb_read_literal(rb, REF_FRAMES);
+      store_frame_size(pbi, &width, &height);
+      // setup_frame_size(pbi, rb);
+      setup_frame_size_recon(pbi, pbi_new, rb);
+    } else {
+      pbi->refresh_frame_flags = vp9_rb_read_literal(rb, REF_FRAMES);
+
+      for (i = 0; i < REFS_PER_FRAME; ++i) {
+        const int ref = vp9_rb_read_literal(rb, REF_FRAMES_LOG2);
+        const int idx = cm->ref_frame_map[ref];
+        cm->frame_refs[i].idx = idx;
+        cm->frame_refs[i].buf = &cm->yv12_fb[idx];
+        cm->ref_frame_sign_bias[LAST_FRAME + i] = vp9_rb_read_bit(rb);
+      }
+
+      setup_frame_size_with_refs(pbi, rb);
+
+      cm->allow_high_precision_mv = vp9_rb_read_bit(rb);
+      cm->mcomp_filter_type = read_interp_filter_type(rb);
+
+      for (i = 0; i < REFS_PER_FRAME; ++i) {
+        RefBuffer *const ref_buf = &cm->frame_refs[i];
+        vp9_setup_scale_factors_for_frame(&ref_buf->sf,
+                                          ref_buf->buf->y_crop_width,
+                                          ref_buf->buf->y_crop_height,
+                                          cm->width, cm->height);
+        if (vp9_is_scaled(&ref_buf->sf))
+          vp9_extend_frame_borders(ref_buf->buf,
+                                   cm->subsampling_x, cm->subsampling_y);
+      }
+    }
+  }
+
+  if (!cm->error_resilient_mode) {
+    cm->refresh_frame_context = vp9_rb_read_bit(rb);
+    cm->frame_parallel_decoding_mode = vp9_rb_read_bit(rb);
+  } else {
+    cm->refresh_frame_context = 0;
+    cm->frame_parallel_decoding_mode = 1;
+  }
+
+  // This flag will be overridden by the call to vp9_setup_past_independence
+  // below, forcing the use of context 0 for those frame types.
+  cm->frame_context_idx = vp9_rb_read_literal(rb, FRAME_CONTEXTS_LOG2);
+
+  if (frame_is_intra_only(cm) || cm->error_resilient_mode)
+    vp9_setup_past_independence(cm);
+
+  setup_loopfilter(&cm->lf, rb);
+  setup_quantization(cm, &pbi->mb, rb);
+  setup_segmentation(&cm->seg, rb);
+
+  setup_tile_info(cm, rb);
+
+  if (cm->frame_type == KEY_FRAME)
+    // setup_tile_size_recon(pbi, width, height);
+    setup_tile_size_recon_for_entropy(pbi, pbi_new, width, height);
+  else
+    if (cm->intra_only)
+      // setup_tile_size_recon(pbi, width, height);
+      setup_tile_size_recon_for_entropy(pbi, pbi_new, width, height);
+
   sz = vp9_rb_read_literal(rb, 16);
 
   if (sz == 0)
@@ -1844,7 +2142,6 @@ static void inter_pred_parameter_fri_ref_ocl(VP9_DECODER_RECON *const decoder_re
                                        cm, ref_idx, ref_num,
                                        filter_num, tile_num);
   }
-
   build_inter_pred_param_fri_ref_ocl(1, 0, bsize, &args,
                                      cm, ref_idx, ref_num,
                                      filter_num, tile_num);
@@ -1853,11 +2150,12 @@ static void inter_pred_parameter_fri_ref_ocl(VP9_DECODER_RECON *const decoder_re
                                      filter_num, tile_num);
 }
 
-static void inter_pred_parameter_fri_ref_ocl_y(VP9_DECODER_RECON *const decoder_recon,
-                                            const int inter_blocks_num,
-                                            const int ref_idx,
-                                            const int tile_num,
-                                            const int plane) {
+static void inter_pred_parameter_fri_ref_ocl_y(
+                VP9_DECODER_RECON *const decoder_recon,
+                const int inter_blocks_num,
+                const int ref_idx,
+                const int tile_num,
+                const int plane) {
   BLOCK_SIZE bsize;
   MB_MODE_INFO *mbmi;
   int mi_row, mi_col, i;
@@ -1893,20 +2191,20 @@ static void inter_pred_parameter_fri_ref_ocl_y(VP9_DECODER_RECON *const decoder_
   }
 
   if(plane == 0) {
-    for (i = 0; i <= luma_block_count; ++i) {
-      build_inter_pred_param_fri_ref_ocl(0, i, bsize, &args,
-                                         cm, ref_idx, ref_num,
-                                         filter_num, tile_num);
-    }
-  } else if(plane == 1){
-    build_inter_pred_param_fri_ref_ocl(1, 0, bsize, &args,
-                                       cm, ref_idx, ref_num,
-                                       filter_num, tile_num);
-  } else {
-    build_inter_pred_param_fri_ref_ocl(2, 0, bsize, &args,
+  for (i = 0; i <= luma_block_count; ++i) {
+    build_inter_pred_param_fri_ref_ocl(0, i, bsize, &args,
                                        cm, ref_idx, ref_num,
                                        filter_num, tile_num);
   }
+    } else if(plane == 1){
+  build_inter_pred_param_fri_ref_ocl(1, 0, bsize, &args,
+                                     cm, ref_idx, ref_num,
+                                     filter_num, tile_num);
+      } else {
+  build_inter_pred_param_fri_ref_ocl(2, 0, bsize, &args,
+                                     cm, ref_idx, ref_num,
+                                     filter_num, tile_num);
+      }
 
 }
 
@@ -1920,6 +2218,8 @@ static void inter_pred_param_ocl(VP9_DECODER_RECON *const decoder_recon,
 #if USE_PPA
   PPAStartCpuEventFunc(para_prepare_time);
 #endif
+
+  reset_inter_ocl_param_buffer(tile_num);
 
   for (i = blocks_start; i < blocks_end; ++i) {
     ref_idx =
@@ -1940,7 +2240,7 @@ static void inter_pred_param_ocl(VP9_DECODER_RECON *const decoder_recon,
 #endif
 
 #if USE_PPA
-  PPAStopCpuEventFunc(para_prepare_time);
+   PPAStopCpuEventFunc(para_prepare_time);
 #endif
 }
 
@@ -1950,13 +2250,17 @@ static void inter_pred_ocl(VP9_DECODER_RECON *const decoder_recon,
                            const int tile_num) {
   VP9_COMMON *const cm = decoder_recon->cm;
 
-  if (blocks_start == blocks_end)
-    return ;
   inter_pred_param_ocl(decoder_recon, blocks_start, blocks_end, tile_num);
+
 #if USE_PPA
   PPAStartCpuEventFunc(inter_pred_calcu_ocl_time);
 #endif
-  inter_pred_calcu_ocl_whole_frame(cm);
+  inter_pred_index_ocl_whole_frame(cm);
+
+  // Calculation CPU part
+  inter_pred_calcu_ocl(cm, tile_num, 0);
+  // Calculation GPU part
+  inter_pred_calcu_ocl(cm, tile_num, 1);
 #if USE_PPA
   PPAStopCpuEventFunc(inter_pred_calcu_ocl_time);
 #endif
@@ -1977,8 +2281,7 @@ void decode_tile_recon_inter_ocl(VP9D_COMP *pbi, const TileInfo *const tile,
 }
 
 static void inter_pred_recon(VP9_DECODER_RECON *const decoder_recon,
-                                  int i_inter_blocks_count) {
-  // VP9_COMMON *const cm = &decoder_recon->common;
+                             int i_inter_blocks_count) {
   VP9_COMMON *const cm = decoder_recon->cm;
   MACROBLOCKD *const xd = &decoder_recon->mb;
 
@@ -2032,7 +2335,6 @@ static void reconstruct_inter_block_recon(int plane, int block,
 
 static void inter_transform_recon(VP9_DECODER_RECON *const decoder_recon,
                                   int i_inter_blocks_count) {
-  //VP9_COMMON *const cm = &decoder_recon->common;
   VP9_COMMON *const cm = decoder_recon->cm;
   MACROBLOCKD *const xd = &decoder_recon->mb;
   int eobtotal = 0;
@@ -2127,7 +2429,6 @@ void decode_tile_recon_entropy(VP9D_COMP *pbi,
   decoder_recon->inter_blocks_count = 0;
   decoder_recon->intra_blocks_count = 0;
   decoder_recon->dequant_count = 0;
-
 #if USE_PPA
   PPAStartCpuEventFunc(entropy_decode_time);
 #endif
@@ -2146,6 +2447,40 @@ void decode_tile_recon_entropy(VP9D_COMP *pbi,
 #if USE_PPA
   PPAStopCpuEventFunc(entropy_decode_time);
 #endif
+}
+
+void decode_tile_recon_entropy_for_entropy(VP9D_COMP *pbi,
+                               const TileInfo *const tile,
+                               vp9_reader *r, int tile_col) {
+  // VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_recon[tile_col];
+  VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_for_entropy[tile_col];
+  VP9_COMMON *const cm = decoder_recon->cm;
+  MACROBLOCKD *const xd = &decoder_recon->mb;
+  int mi_row = 0, mi_col = 0;
+#if USE_PPA
+  PPAStartCpuEventFunc(entropy_decode_time);
+#endif
+
+  decoder_recon->inter_blocks_count = 0;
+  decoder_recon->intra_blocks_count = 0;
+  decoder_recon->dequant_count = 0;
+
+  for (mi_row = tile->mi_row_start; mi_row < tile->mi_row_end;
+       mi_row += MI_BLOCK_SIZE) {
+    // For a SB there are 2 left contexts, each pertaining to a MB row within
+    vp9_zero(xd->left_context);
+    vp9_zero(xd->left_seg_context);
+    for (mi_col = tile->mi_col_start; mi_col < tile->mi_col_end;
+         mi_col += MI_BLOCK_SIZE) {
+      decode_modes_sb_recon(decoder_recon, cm, xd, tile, mi_row, mi_col, r,
+          BLOCK_64X64, 0, decoder_recon->token_cache);
+      decoder_recon->dequant_count++;
+    }
+  }
+#if USE_PPA
+  PPAStopCpuEventFunc(entropy_decode_time);
+#endif
+
 }
 
 void decode_tile_recon_inter(VP9D_COMP *pbi, const TileInfo *const tile,
@@ -2358,48 +2693,6 @@ static const uint8_t *decode_tiles_mt_recon_for_mt(VP9D_COMP *pbi,
   return end;
 }
 
-static void apply_frame_size_recon(VP9D_COMP *pbi, int width, int height) {
-  VP9_COMMON *cm = &pbi->common;
-
-  if (cm->width != width || cm->height != height) {
-    // Change in frame size.
-    if (cm->width == 0 || cm->height == 0) {
-      // Assign new frame buffer on first call.
-      cm->new_fb_idx = FRAME_BUFFERS - 1;
-      cm->fb_idx_ref_cnt[cm->new_fb_idx] = 1;
-    }
-
-    // TODO(agrange) Don't test width/height, check overall size.
-    if (width > cm->width || height > cm->height) {
-      // Rescale frame buffers only if they're not big enough already.
-      if (vp9_resize_frame_buffers(cm, width, height))
-        vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
-                           "Failed to allocate frame buffers");
-    }
-
-    cm->width = width;
-    cm->height = height;
-
-    vp9_update_frame_size(cm);
-  }
-
-  if (cm->fb_list != NULL) {
-    vpx_codec_frame_buffer_t *const ext_fb = &cm->fb_list[cm->new_fb_idx];
-    if (vp9_realloc_frame_buffer(get_frame_new_buffer(cm),
-                                 cm->width, cm->height,
-                                 cm->subsampling_x, cm->subsampling_y,
-                                 VP9BORDERINPIXELS, ext_fb,
-                                 cm->realloc_fb_cb, cm->user_priv)) {
-      vpx_internal_error(&cm->error, VPX_CODEC_MEM_ERROR,
-                         "Failed to allocate external frame buffer");
-    }
-  } else {
-    vp9_realloc_frame_buffer(get_frame_new_buffer(cm), cm->width, cm->height,
-                             cm->subsampling_x, cm->subsampling_y,
-                             VP9BORDERINPIXELS, NULL, NULL, NULL);
-  }
-}
-
 int vp9_decode_frame_recon(VP9D_COMP *pbi, const uint8_t **p_data_end) {
   int i;
   VP9_COMMON *const cm = &pbi->common;
@@ -2466,6 +2759,8 @@ int vp9_decode_frame_recon(VP9D_COMP *pbi, const uint8_t **p_data_end) {
   // single-frame tile decoding.
   //if (pbi->oxcf.max_threads > 1 && tile_rows == 1 && tile_cols > 1) {
   if (pbi->oxcf.max_threads > 1 && tile_rows == 1) {
+    //printf("cm->frame_parallel_decoding_mode = %d\n", cm->frame_parallel_decoding_mode);
+    //*p_data_end = decode_tiles_mt_recon(pbi, data + first_partition_size);
     *p_data_end = decode_tiles_mt_recon_for_mt(pbi, data + first_partition_size);
   } else {
     *p_data_end = decode_tiles(pbi, data + first_partition_size);
@@ -2546,6 +2841,76 @@ int vp9_decode_frame_head(VP9D_COMP *pbi,
   }
 
   alloc_tile_storage(pbi, tile_rows, tile_cols);
+
+  xd->mode_info_stride = cm->mode_info_stride;
+  set_prev_mi(cm);
+
+  setup_plane_dequants(cm, xd, cm->base_qindex);
+  setup_block_dptrs(xd, cm->subsampling_x, cm->subsampling_y);
+
+  cm->fc = cm->frame_contexts[cm->frame_context_idx];
+  vp9_zero(cm->counts);
+  for (i = 0; i < MAX_MB_PLANE; ++i)
+    vpx_memset(xd->plane[i].dqcoeff, 0, 64 * 64 * sizeof(int16_t));
+
+  xd->corrupted = 0;
+  new_fb->corrupted = read_compressed_header(pbi, data, first_partition_size);
+
+  *p_data = data;
+  *p_first_partition_size = first_partition_size;
+
+  return 0;
+}
+
+static int vp9_decode_frame_head_recon(VP9D_COMP *pbi,
+                          VP9D_COMP **pbi_new,
+                          const uint8_t **p_data_end,
+                          size_t *p_first_partition_size,
+                          const uint8_t **p_data) {
+  int i;
+  VP9_COMMON *const cm = &pbi->common;
+  MACROBLOCKD *const xd = &pbi->mb;
+
+  const uint8_t *data = pbi->source;
+  const uint8_t *const data_end = pbi->source + pbi->source_sz;
+
+  struct vp9_read_bit_buffer rb = { data, data_end, 0, cm, error_handler };
+  //const size_t first_partition_size = read_uncompressed_header(pbi, &rb);
+  const size_t first_partition_size = read_uncompressed_header_recon(pbi, pbi_new, &rb);
+  const int keyframe = cm->frame_type == KEY_FRAME;
+  const int tile_rows = 1 << cm->log2_tile_rows;
+  const int tile_cols = 1 << cm->log2_tile_cols;
+  YV12_BUFFER_CONFIG *const new_fb = get_frame_new_buffer(cm);
+  xd->cur_buf = new_fb;
+
+  if (!first_partition_size) {
+      // showing a frame directly
+      *p_data_end = data + 1;
+      return 0;
+  }
+
+  if (!pbi->decoded_key_frame && !keyframe)
+    return -1;
+
+  data += vp9_rb_bytes_read(&rb);
+  if (!read_is_valid(data, first_partition_size, data_end))
+    vpx_internal_error(&cm->error, VPX_CODEC_CORRUPT_FRAME,
+                       "Truncated packet or corrupt header length");
+
+  pbi->do_loopfilter_inline =
+      (cm->log2_tile_rows | cm->log2_tile_cols) == 0 && cm->lf.filter_level;
+  if (pbi->do_loopfilter_inline && pbi->lf_worker.data1 == NULL) {
+    CHECK_MEM_ERROR(cm, pbi->lf_worker.data1, vpx_malloc(sizeof(LFWorkerData)));
+    pbi->lf_worker.hook = (VP9WorkerHook)vp9_loop_filter_worker;
+    if (pbi->oxcf.max_threads > 1 && !vp9_worker_reset(&pbi->lf_worker)) {
+      vpx_internal_error(&cm->error, VPX_CODEC_ERROR,
+                         "Loop filter thread creation failed");
+    }
+  }
+
+  // alloc_tile_storage(pbi, tile_rows, tile_cols);
+  alloc_tile_storage_recon(pbi, tile_rows, tile_cols);
+  xd->mi_8x8 = cm->mi_grid_visible;
 
   xd->mode_info_stride = cm->mode_info_stride;
   set_prev_mi(cm);
@@ -2665,25 +3030,212 @@ void vp9_tiles_entropy_dec(VP9D_COMP *pbi, const uint8_t *data) {
   }
 }
 
+void vp9_tiles_entropy_dec_recon(VP9D_COMP *pbi, const uint8_t *data) {
+  VP9_COMMON *const cm = &pbi->common;
+  VP9_DECODER_RECON *decoder_recon;
+  const int aligned_cols = mi_cols_aligned_to_sb(cm->mi_cols);
+  const int tile_cols = 1 << cm->log2_tile_cols;
+  const int tile_rows = 1 << cm->log2_tile_rows;
+  int tile_row, tile_col;
+  const uint8_t *const data_end = pbi->source + pbi->source_sz;
+
+  assert(tile_rows <= 4);
+  assert(tile_cols <= (1 << 6));
+
+  // Note: this memset assumes above_context[0], [1] and [2]
+  // are allocated as part of the same buffer.
+  vpx_memset(pbi->above_context[0], 0,
+             sizeof(*pbi->above_context[0]) * MAX_MB_PLANE * 2 * aligned_cols);
+
+  vpx_memset(pbi->above_seg_context, 0,
+             sizeof(*pbi->above_seg_context) * aligned_cols);
+
+  // Load tile data into tile_buffers
+  for (tile_row = 0; tile_row < tile_rows; ++tile_row) {
+    for (tile_col = 0; tile_col < tile_cols; ++tile_col) {
+      const int last_tile = tile_row == tile_rows - 1 &&
+                            tile_col == tile_cols - 1;
+      const size_t size = get_tile(data_end, last_tile, &cm->error, &data);
+      TileBuffer *const buf = &pbi->tile_buffers[tile_row][tile_col];
+      buf->data = data;
+      buf->size = size;
+      data += size;
+    }
+  }
+
+  // Decode tiles using data from tile_buffers
+  for (tile_row = 0; tile_row < tile_rows; ++tile_row) {
+    for (tile_col = tile_cols - 1; tile_col >= 0; tile_col--) {
+      const int col = pbi->oxcf.inv_tile_order ? tile_cols - tile_col - 1
+                                               : tile_col;
+      const int last_tile = tile_row == tile_rows - 1 &&
+                                 col == tile_cols - 1;
+      const TileBuffer *const buf = &pbi->tile_buffers[tile_row][col];
+
+      //decoder_recon = &pbi->decoder_recon[tile_col];
+      decoder_recon = &pbi->decoder_for_entropy[tile_col];
+      decoder_recon->cm = cm;
+      decoder_recon->mb = pbi->mb;
+      vp9_tile_init(&decoder_recon->tile, decoder_recon->cm, tile_row, col);
+      setup_token_decoder(buf->data, data_end, buf->size,
+                          &cm->error, &decoder_recon->r);
+      setup_tile_context(pbi, &decoder_recon->mb, tile_row, col);
+      setup_tile_macroblockd_recon(decoder_recon);
+
+      if (tile_cols == 1 || !cm->frame_parallel_decoding_mode) {
+        decode_tile_recon_entropy_for_entropy(pbi, &decoder_recon->tile,
+                                  &decoder_recon->r, tile_col);
+      }
+
+      if (last_tile)
+        pbi->last_reader = &decoder_recon->r;
+    }
+  }
+}
+
+void vp9_tiles_entropy_dec_thread(VP9D_COMP *pbi, const uint8_t *data,
+                             const uint8_t **p_data_end, VP9D_COMP *pbi_new) {
+  VP9_COMMON *const cm = &pbi->common;
+  VP9_DECODER_RECON *decoder_recon;
+  const int aligned_cols = mi_cols_aligned_to_sb(cm->mi_cols);
+  const int tile_cols = 1 << cm->log2_tile_cols;
+  const int tile_rows = 1 << cm->log2_tile_rows;
+  int tile_row, tile_col;
+  const uint8_t *const data_end = pbi->source + pbi->source_sz;
+
+  assert(tile_rows <= 4);
+  assert(tile_cols <= (1 << 6));
+
+  // Note: this memset assumes above_context[0], [1] and [2]
+  // are allocated as part of the same buffer.
+  vpx_memset(pbi->above_context[0], 0,
+             sizeof(*pbi->above_context[0]) * MAX_MB_PLANE * 2 * aligned_cols);
+
+  vpx_memset(pbi->above_seg_context, 0,
+             sizeof(*pbi->above_seg_context) * aligned_cols);
+
+  // Load tile data into tile_buffers
+  for (tile_row = 0; tile_row < tile_rows; ++tile_row) {
+    for (tile_col = 0; tile_col < tile_cols; ++tile_col) {
+      const int last_tile = tile_row == tile_rows - 1 &&
+                            tile_col == tile_cols - 1;
+      const size_t size = get_tile(data_end, last_tile, &cm->error, &data);
+      TileBuffer *const buf = &pbi->tile_buffers[tile_row][tile_col];
+      buf->data = data;
+      buf->size = size;
+      data += size;
+    }
+  }
+
+  // Decode tiles using data from tile_buffers
+  for (tile_row = 0; tile_row < tile_rows; ++tile_row) {
+    for (tile_col = tile_cols - 1; tile_col >= 0; tile_col--) {
+      const int col = pbi->oxcf.inv_tile_order ? tile_cols - tile_col - 1
+                                               : tile_col;
+      const int last_tile = tile_row == tile_rows - 1 &&
+                                 col == tile_cols - 1;
+      const TileBuffer *const buf = &pbi->tile_buffers[tile_row][col];
+
+      //decoder_recon = &pbi->decoder_recon[tile_col];
+      decoder_recon = &pbi->decoder_for_entropy[tile_col];
+      decoder_recon->cm = cm;
+      decoder_recon->mb = pbi->mb;
+      vp9_tile_init(&decoder_recon->tile, decoder_recon->cm, tile_row, col);
+      setup_token_decoder(buf->data, data_end, buf->size,
+                          &cm->error, &decoder_recon->r);
+      setup_tile_context(pbi, &decoder_recon->mb, tile_row, col);
+      setup_tile_macroblockd_recon(decoder_recon);
+
+      if (tile_cols == 1 || !cm->frame_parallel_decoding_mode) {
+        decode_tile_recon_entropy_for_entropy(pbi, &decoder_recon->tile,
+                                  &decoder_recon->r, tile_col);
+      }
+
+      if (last_tile)
+        pbi->last_reader = &decoder_recon->r;
+    }
+  }
+
+  *p_data_end = vp9_reader_find_end(pbi->last_reader);
+  pbi_queue(pbi, pbi_new);
+  vp9_decode_frame_tail(pbi_new);
+  pbi_queue_recon(pbi_new, pbi);
+  swap_frame_buffers_recon(pbi);
+
+  cm->last_show_frame = cm->show_frame;
+  if (1) { //cm->show_frame) {
+    if (!cm->show_existing_frame) {
+      // current mip will be the prev_mip for the next frame
+      MODE_INFO *temp = cm->prev_mip;
+      MODE_INFO **temp2 = cm->prev_mi_grid_base;
+      cm->prev_mip = cm->mip;
+      cm->mip = cm->trip_mip;
+      cm->trip_mip = temp;
+
+      cm->prev_mi_grid_base = cm->mi_grid_base;
+      cm->mi_grid_base = cm->trip_mi_grid_base;
+      cm->trip_mi_grid_base = temp2;
+
+      // update the upper left visible macroblock ptrs
+      cm->mi = cm->mip + cm->mode_info_stride + 1;
+      cm->prev_mi = cm->prev_mip + cm->mode_info_stride + 1;
+      cm->mi_grid_visible = cm->mi_grid_base + cm->mode_info_stride + 1;
+      cm->prev_mi_grid_visible = cm->prev_mi_grid_base +
+                                 cm->mode_info_stride + 1;
+
+      pbi->mb.mi_8x8 = cm->mi_grid_visible;
+      pbi->mb.mi_8x8[0] = cm->mi;
+    }
+    cm->current_video_frame++;
+  }
+
+}
+
+int entropy_hook(void *data1, void *data2) {
+  struct entropy_param *param = data1;
+  VP9D_COMP *pbi = param->pbi;
+  const uint8_t *data = param->data;
+  VP9D_COMP *pbi_new = param->pbi_new;
+  const uint8_t **p_data_end = data2;
+  vp9_tiles_entropy_dec_thread(pbi, data, p_data_end, pbi_new);
+  return 0;
+}
+
+int copy_hook(void *data1, void *data2) {
+  struct entropy_param *param = data1;
+  VP9D_COMP *pbi = param->pbi;
+  VP9D_COMP *pbi_new = param->pbi_new;
+  pbi_copy(pbi, pbi_new);
+  return 0;
+}
+
 void decode_tile_recon_inter_prepare_ocl(VP9D_COMP *pbi,
                                          const TileInfo *const tile,
                                          vp9_reader *r, int tile_col) {
-  VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_recon[tile_col];
+  VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_for_entropy[tile_col];
 
-  if(decoder_recon->inter_blocks_count == 0)
-    return;
   inter_pred_param_ocl(decoder_recon, 0,
-                         decoder_recon->inter_blocks_count,
-                         tile_col);
+                       decoder_recon->inter_blocks_count,
+                       tile_col);
+}
+
+void decode_tile_recon_inter_index_ocl(VP9D_COMP *pbi,
+                                       const TileInfo *const tile,
+                                       vp9_reader *r, int tile_col) {
+  VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_for_entropy[0];
+  VP9_COMMON *const cm = decoder_recon->cm;
+
+  inter_pred_index_ocl_whole_frame(cm);
 }
 
 void decode_tile_recon_inter_calcu_ocl(VP9D_COMP *pbi,
                                        const TileInfo *const tile,
-                                       vp9_reader *r, int tile_col) {
+                                       vp9_reader *r, int tile_col,
+                                       int dev_gpu) {
   VP9_DECODER_RECON *const decoder_recon = &pbi->decoder_recon[0];
   VP9_COMMON *const cm = decoder_recon->cm;
 
-  inter_pred_calcu_ocl_whole_frame(cm);
+  inter_pred_calcu_ocl(cm, tile_col, dev_gpu);
 }
 
 void vp9_tiles_inter_pred(VP9D_COMP *pbi) {
@@ -2707,7 +3259,7 @@ PPAStartCpuEventFunc(INTER_TIME_OCL);
 PPAStopCpuEventFunc(INTER_TIME_OCL);
 #endif
 
-#else
+#else // USE_INTER_PREDICT_OCL
 
 #if USE_PPA
 PPAStartCpuEventFunc(INTER_TIME_CPU);
@@ -2719,6 +3271,7 @@ PPAStopCpuEventFunc(INTER_TIME_CPU);
 #endif
 
 #endif // USE_INTER_PREDICT_OCL
+
       decode_tile_recon_inter_transform(pbi, &decoder_recon->tile,
                                         &decoder_recon->r, tile_col);
     }
@@ -2774,6 +3327,701 @@ int vp9_single_thread_decode(VP9D_COMP *pbi,
   return vp9_decode_frame_tail(pbi);
 }
 
+static int vp9_single_thread_decode_entropy_recon(VP9D_COMP *pbi,
+                             VP9D_COMP **pbi_new,
+                             const uint8_t **p_data_end,
+                             size_t first_partition_size,
+                             const uint8_t *data) {
+  int ret;
+  VP9_COMMON *cm_new;
+  VP9_COMMON *const cm = &pbi->common;
+  VP9Worker *worker = &pbi->entropy_worker_frame;
+  int tile_cols;
+
+
+  if (pbi->l_bufpool_flag_output == 0) {
+    ret_pbi_queue(pbi, pbi_new[1]);
+  
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+    
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi_queue(pbi, pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    ret = vp9_decode_frame_tail(pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    pbi_queue_recon(pbi_new[(pbi->l_bufpool_flag_output + 1) & 1], pbi);
+    swap_frame_buffers_recon(pbi);
+    
+    cm->last_show_frame = cm->show_frame;
+    if (cm->show_frame) {
+      if (!cm->show_existing_frame) {
+        // current mip will be the prev_mip for the next frame
+        MODE_INFO *temp = cm->prev_mip;
+        MODE_INFO **temp2 = cm->prev_mi_grid_base;
+        cm->prev_mip = cm->mip;
+        cm->mip = temp;
+        cm->prev_mi_grid_base = cm->mi_grid_base;
+        cm->mi_grid_base = temp2;
+
+        // update the upper left visible macroblock ptrs
+        cm->mi = cm->mip + cm->mode_info_stride + 1;
+        cm->prev_mi = cm->prev_mip + cm->mode_info_stride + 1;
+        cm->mi_grid_visible = cm->mi_grid_base + cm->mode_info_stride + 1;
+        cm->prev_mi_grid_visible = cm->prev_mi_grid_base +
+                                   cm->mode_info_stride + 1;
+
+        pbi->mb.mi_8x8 = cm->mi_grid_visible;
+        pbi->mb.mi_8x8[0] = cm->mi;
+      }
+      cm->current_video_frame++;
+    }
+
+    return ret;
+  } else {
+    ret_pbi_queue(pbi, pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    pbi->entropy_param.pbi = pbi;
+    pbi->entropy_param.data = data + first_partition_size;
+    pbi->entropy_param.pbi_new = pbi_new[(pbi->l_bufpool_flag_output + 1) & 1];
+    worker->data1 = &pbi->entropy_param;
+    worker->data2 = p_data_end;
+    worker->hook = entropy_hook;
+    vp9_worker_launch(&pbi->entropy_worker_frame);
+    vp9_worker_sync(&pbi->entropy_worker_frame);
+  }
+
+  cm_new = &pbi_new[pbi->l_bufpool_flag_output & 1]->common;
+  tile_cols = 1 << cm_new->log2_tile_cols;
+ #if USE_INTER_PREDICT_OCL
+  // Initialize opencl buffer parameter for inter prediction
+  // Copy cpu previous frame data to gpu memory
+
+#if USE_PPA
+  PPAStartCpuEventFunc(update_gpu_buffer_pool);
+#endif
+    vp9_update_gpu_buffer_pool(cm_new);
+#if USE_PPA
+  PPAStopCpuEventFunc(update_gpu_buffer_pool);
+#endif
+  
+#endif // USE_INTER_PREDICT_OCL
+#if 0
+#if USE_INTER_PREDICT_OCL
+  // Initialize opencl buffer parameter for inter prediction
+  // Copy cpu previous frame data to gpu memory
+  if (inter_ocl_obj.inter_ocl_init) {
+    inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm_new, tile_cols);
+    assert(inter_ocl_obj.inter_ocl_init == 0);
+  } else {
+#if USE_PPA
+  PPAStartCpuEventFunc(update_gpu_buffer_pool);
+#endif
+    vp9_update_gpu_buffer_pool(cm_new);
+#if USE_PPA
+  PPAStopCpuEventFunc(update_gpu_buffer_pool);
+#endif
+  }
+#endif
+#endif // USE_INTER_PREDICT_OCL
+
+  vp9_tiles_inter_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+  vp9_tiles_intra_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+    lf_data->frame_buffer = get_frame_new_buffer(cm_new);
+    lf_data->cm = cm_new;
+    lf_data->xd = pbi_new[pbi->l_bufpool_flag_output & 1]->mb;
+    lf_data->stop = 0;
+    lf_data->y_only = 0;
+    vp9_loop_filter_frame_init(cm_new, cm_new->lf.filter_level);
+  }
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+
+    vp9_worker_sync(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+    lf_data->start = lf_data->stop;
+    lf_data->stop = cm_new->mi_rows;
+    vp9_worker_execute(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+  }
+
+  return vp9_decode_frame_tail(pbi_new[pbi->l_bufpool_flag_output & 1]);
+}
+
+static int vp9_single_thread_decode_entropy_recon_ex(VP9D_COMP *pbi,
+                             VP9D_COMP **pbi_new,
+                             const uint8_t **p_data_end,
+                             size_t first_partition_size,
+                             const uint8_t *data,
+                             void *texture) {
+  int ret;
+  VP9_COMMON *cm_new;
+  VP9_COMMON *const cm = &pbi->common;
+  VP9Worker *worker = &pbi->entropy_worker_frame;
+  int tile_cols;
+
+
+  if (pbi->l_bufpool_flag_output == 0) {
+    ret_pbi_queue(pbi, pbi_new[1]);
+  
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+    
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi_queue(pbi, pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    ret = vp9_decode_frame_tail(pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    pbi_queue_recon(pbi_new[(pbi->l_bufpool_flag_output + 1) & 1], pbi);
+    swap_frame_buffers_recon(pbi);
+    
+    cm->last_show_frame = cm->show_frame;
+    if (cm->show_frame) {
+      if (!cm->show_existing_frame) {
+        // current mip will be the prev_mip for the next frame
+        MODE_INFO *temp = cm->prev_mip;
+        MODE_INFO **temp2 = cm->prev_mi_grid_base;
+        cm->prev_mip = cm->mip;
+        cm->mip = temp;
+        cm->prev_mi_grid_base = cm->mi_grid_base;
+        cm->mi_grid_base = temp2;
+
+        // update the upper left visible macroblock ptrs
+        cm->mi = cm->mip + cm->mode_info_stride + 1;
+        cm->prev_mi = cm->prev_mip + cm->mode_info_stride + 1;
+        cm->mi_grid_visible = cm->mi_grid_base + cm->mode_info_stride + 1;
+        cm->prev_mi_grid_visible = cm->prev_mi_grid_base +
+                                   cm->mode_info_stride + 1;
+
+        pbi->mb.mi_8x8 = cm->mi_grid_visible;
+        pbi->mb.mi_8x8[0] = cm->mi;
+      }
+      cm->current_video_frame++;
+    }
+
+    return ret;
+  } else {
+    ret_pbi_queue(pbi, pbi_new[(pbi->l_bufpool_flag_output + 1) & 1]);
+    pbi->entropy_param.pbi = pbi;
+    pbi->entropy_param.data = data + first_partition_size;
+    pbi->entropy_param.pbi_new = pbi_new[(pbi->l_bufpool_flag_output + 1) & 1];
+    worker->data1 = &pbi->entropy_param;
+    worker->data2 = p_data_end;
+    worker->hook = entropy_hook;
+    vp9_worker_launch(&pbi->entropy_worker_frame);
+    vp9_worker_sync(&pbi->entropy_worker_frame);
+  }
+
+  cm_new = &pbi_new[pbi->l_bufpool_flag_output & 1]->common;
+  tile_cols = 1 << cm_new->log2_tile_cols;
+
+  vp9_tiles_inter_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+  vp9_tiles_intra_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+    lf_data->frame_buffer = get_frame_new_buffer(cm_new);
+    lf_data->cm = cm_new;
+    lf_data->xd = pbi_new[pbi->l_bufpool_flag_output & 1]->mb;
+    lf_data->stop = 0;
+    lf_data->y_only = 0;
+    vp9_loop_filter_frame_init(cm_new, cm_new->lf.filter_level);
+  }
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+
+    vp9_worker_sync(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+    lf_data->start = lf_data->stop;
+    lf_data->stop = cm_new->mi_rows;
+    vp9_worker_execute(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);    
+  }
+  // do interop and update buffer pool
+  //interop and update buffer pool
+#if USE_INTER_PREDICT_OCL
+  ///vp9_yuv2rgba_and_update_buffer_Pool(cm_new, &yuv2rgba_ocl_obj, texture);
+ vp9_update_gpu_buffer_pool(cm_new);
+#endif
+  return vp9_decode_frame_tail(pbi_new[pbi->l_bufpool_flag_output & 1]);
+}
+
+static int vp9_single_thread_decode_entropy_recon_last_frame(VP9D_COMP *pbi,
+                             VP9D_COMP **pbi_new,
+                             const uint8_t **p_data_end,
+                             size_t first_partition_size,
+                             const uint8_t *data) {
+  VP9_COMMON *cm_new;
+  int tile_cols;
+
+  cm_new = &pbi_new[pbi->l_bufpool_flag_output & 1]->common;
+  tile_cols = 1 << cm_new->log2_tile_cols;
+  vp9_update_gpu_buffer_pool(cm_new);
+
+/*#if USE_INTER_PREDICT_OCL
+  // Initialize opencl buffer parameter for inter prediction
+  // Copy cpu previous frame data to gpu memory
+  if (inter_ocl_obj.inter_ocl_init) {
+    inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm_new, tile_cols);
+    assert(inter_ocl_obj.inter_ocl_init == 0);
+  } else {
+#if USE_PPA
+  PPAStartCpuEventFunc(update_gpu_buffer_pool);
+#endif
+    vp9_update_gpu_buffer_pool(cm_new);
+#if USE_PPA
+  PPAStopCpuEventFunc(update_gpu_buffer_pool);
+#endif
+  }
+#endif // USE_INTER_PREDICT_OCL*/
+
+  vp9_tiles_inter_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+  vp9_tiles_intra_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+    lf_data->frame_buffer = get_frame_new_buffer(cm_new);
+    lf_data->cm = cm_new;
+    lf_data->xd = pbi_new[pbi->l_bufpool_flag_output & 1]->mb;
+    lf_data->stop = 0;
+    lf_data->y_only = 0;
+    vp9_loop_filter_frame_init(cm_new, cm_new->lf.filter_level);
+  }
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+
+    vp9_worker_sync(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+    lf_data->start = lf_data->stop;
+    lf_data->stop = cm_new->mi_rows;
+    vp9_worker_execute(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+  }
+  return vp9_decode_frame_tail(pbi_new[pbi->l_bufpool_flag_output & 1]);
+}
+
+static int vp9_single_thread_decode_entropy_recon_last_frame_ex(VP9D_COMP *pbi,
+                             VP9D_COMP **pbi_new,
+                             const uint8_t **p_data_end,
+                             size_t first_partition_size,
+                             const uint8_t *data,
+                             void *texture) {
+  VP9_COMMON *cm_new;
+  int tile_cols;
+
+  cm_new = &pbi_new[pbi->l_bufpool_flag_output & 1]->common;
+  tile_cols = 1 << cm_new->log2_tile_cols;
+
+  vp9_tiles_inter_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+  vp9_tiles_intra_pred(pbi_new[pbi->l_bufpool_flag_output & 1]);
+
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+    lf_data->frame_buffer = get_frame_new_buffer(cm_new);
+    lf_data->cm = cm_new;
+    lf_data->xd = pbi_new[pbi->l_bufpool_flag_output & 1]->mb;
+    lf_data->stop = 0;
+    lf_data->y_only = 0;
+    vp9_loop_filter_frame_init(cm_new, cm_new->lf.filter_level);
+  }
+  if (pbi_new[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+    LFWorkerData *const lf_data =
+        (LFWorkerData*)pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker.data1;
+
+    vp9_worker_sync(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+    lf_data->start = lf_data->stop;
+    lf_data->stop = cm_new->mi_rows;
+    vp9_worker_execute(&pbi_new[pbi->l_bufpool_flag_output & 1]->lf_worker);
+  }
+  
+  return vp9_decode_frame_tail(pbi_new[pbi->l_bufpool_flag_output & 1]);
+}
+
+static int vp9_sched_frame_entrop_dec_entropy_recon(VP9D_COMP *pbi,
+                                      VP9D_COMP **storage_pbi,
+                                      const uint8_t **p_data_end) {                                   
+  struct task *tsk;
+  struct frame_entropy_dec_param *param;
+  struct frame_entropy_dec_param *entropy_param;
+  VP9Worker *worker = &pbi->copy_worker_frame;
+  const uint8_t *data = pbi->source;
+  size_t first_partition_size = 0;
+  VP9_COMMON *const cm = &pbi->common;
+  int tile_cols;
+
+
+  vp9_decode_frame_head_recon(pbi, storage_pbi, p_data_end, &first_partition_size, &data);
+  tile_cols = 1 << cm->log2_tile_cols;
+
+#if USE_INTER_PREDICT_OCL
+  // Initialize opencl buffer parameter for inter prediction
+  // Copy cpu previous frame data to gpu memory
+  if (inter_ocl_obj.inter_ocl_init) {
+    inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm, tile_cols);
+    assert(inter_ocl_obj.inter_ocl_init == 0);
+  }
+#endif // USE_INTER_PREDICT_OCL
+
+  //cm->mip = (MODE_INFO *)ocl_cpy_mip_obj.src_mip_map;
+  if (tile_cols == 1) {
+    return vp9_single_thread_decode_entropy_recon(pbi, storage_pbi, p_data_end,
+                                    first_partition_size, data);
+  }
+
+  if (pbi->l_bufpool_flag_output == 0) {
+    ret_pbi_queue(pbi, storage_pbi[1]);
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+
+    tsk = task_cache_get_task(pbi->entropy_tsk_cache, NULL, 1);
+    assert(tsk);
+    entropy_param = frame_entropy_dec_param_get(tsk);
+    assert(entropy_param);
+    entropy_param->pbi = pbi;
+    entropy_param->p_data_end = p_data_end;
+    scheduler_sched_task(pbi->sched, tsk);
+
+    task_sync(tsk);
+    task_cache_put_task(tsk->cache, tsk);
+    task_param_free(tsk);
+
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi_queue(pbi, storage_pbi[1]);
+    vp9_decode_frame_tail(storage_pbi[1]);
+    pbi_queue_recon(storage_pbi[1], pbi);
+    swap_frame_buffers_recon(pbi);
+
+    cm->last_show_frame = cm->show_frame;
+    if (cm->show_frame) {
+      if (!cm->show_existing_frame) {
+        // current mip will be the prev_mip for the next frame
+        MODE_INFO *temp = cm->prev_mip;
+        MODE_INFO **temp2 = cm->prev_mi_grid_base;
+        cm->prev_mip = cm->mip;
+        cm->mip = temp;
+        cm->prev_mi_grid_base = cm->mi_grid_base;
+        cm->mi_grid_base = temp2;
+
+        // update the upper left visible macroblock ptrs
+        cm->mi = cm->mip + cm->mode_info_stride + 1;
+        cm->prev_mi = cm->prev_mip + cm->mode_info_stride + 1;
+        cm->mi_grid_visible = cm->mi_grid_base + cm->mode_info_stride + 1;
+        cm->prev_mi_grid_visible = cm->prev_mi_grid_base +
+                                   cm->mode_info_stride + 1;
+
+        pbi->mb.mi_8x8 = cm->mi_grid_visible;
+        pbi->mb.mi_8x8[0] = cm->mi;
+      }
+      cm->current_video_frame++;
+    }
+
+//    return 0;
+  } else {
+//    VP9_COMMON *cm_new;
+
+//    cm_new = &storage_pbi[(pbi->l_bufpool_flag_output)& 1]->common;
+
+
+    g_tsk = (struct task *) task_cache_get_task(pbi->tsk_cache, NULL, 1);
+    assert(g_tsk);
+    param = (struct frame_entropy_dec_param *) frame_dec_param_get(g_tsk);
+    assert(param);
+    param->pbi =storage_pbi[(pbi->l_bufpool_flag_output)& 1];
+    param->p_data_end = p_data_end;
+    scheduler_sched_task(pbi->sched, g_tsk);
+
+    ret_pbi_queue(pbi, storage_pbi[(pbi->l_bufpool_flag_output + 1) & 1]);
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+
+
+    tsk = task_cache_get_task(pbi->entropy_tsk_cache, NULL, 0);
+    assert(tsk);
+    entropy_param = frame_entropy_dec_param_get(tsk);
+    assert(entropy_param);
+    entropy_param->pbi = pbi;
+    entropy_param->p_data_end = p_data_end;
+    // msleep(3);
+    scheduler_sched_task(pbi->sched, tsk);
+
+    task_sync(tsk);
+    task_cache_put_task(tsk->cache, tsk);
+    task_param_free(tsk);
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi->entropy_param.pbi = pbi;
+    pbi->entropy_param.pbi_new = storage_pbi[(pbi->l_bufpool_flag_output + 1) & 1];
+    worker->data1 = &pbi->entropy_param;
+    worker->hook = copy_hook;
+    vp9_worker_launch(worker);
+
+    task_sync(g_tsk);
+    task_cache_put_task(g_tsk->cache, g_tsk);
+    task_param_free(g_tsk);
+
+     
+    swap_frame_buffers_recon(storage_pbi[(pbi->l_bufpool_flag_output)& 1]);
+    if (!storage_pbi[(pbi->l_bufpool_flag_output) & 1]->do_loopfilter_inline) {
+#if USE_PPA
+      PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+      vp9_loop_filter_frame_wpp(storage_pbi[pbi->l_bufpool_flag_output & 1],
+        &storage_pbi[pbi->l_bufpool_flag_output & 1]->common,
+        &storage_pbi[pbi->l_bufpool_flag_output & 1]->mb,
+        storage_pbi[pbi->l_bufpool_flag_output  & 1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+      PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+    }
+// update buffer pool
+    #if USE_INTER_PREDICT_OCL
+    // Copy cpu previous frame data to gpu memory
+    if (!inter_ocl_obj.inter_ocl_init) {
+#if USE_PPA
+    PPAStartCpuEventFunc(update_gpu_buffer_pool);
+#endif
+      vp9_update_gpu_buffer_pool(cm);
+#if USE_PPA
+    PPAStopCpuEventFunc(update_gpu_buffer_pool);
+#endif
+    }
+#endif // USE_INTER_PREDICT_OCL
+  }
+  return 0;
+}
+
+static int vp9_sched_frame_entrop_dec_entropy_recon_ex(VP9D_COMP *pbi,
+                                      VP9D_COMP **storage_pbi,
+                                      const uint8_t **p_data_end,
+                                      void *texture) {
+                                      
+  struct task *tsk;
+  struct frame_entropy_dec_param *param;
+  struct frame_entropy_dec_param *entropy_param;
+  VP9Worker *worker = &pbi->copy_worker_frame;
+  const uint8_t *data = pbi->source;
+  size_t first_partition_size = 0;
+  VP9_COMMON *const cm = &pbi->common;
+  int tile_cols;
+
+
+  vp9_decode_frame_head_recon(pbi, storage_pbi, p_data_end, &first_partition_size, &data);
+  tile_cols = 1 << cm->log2_tile_cols;
+
+ 
+#if USE_INTER_PREDICT_OCL
+  // Initialize opencl buffer parameter for inter prediction
+  // Copy cpu previous frame data to gpu memory
+  if (inter_ocl_obj.inter_ocl_init) {
+    inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm, tile_cols);
+    assert(inter_ocl_obj.inter_ocl_init == 0);
+  }
+#endif // USE_INTER_PREDICT_OCL
+
+  //cm->mip = (MODE_INFO *)ocl_cpy_mip_obj.src_mip_map;
+  if (tile_cols == 1) {
+    return vp9_single_thread_decode_entropy_recon_ex(pbi, storage_pbi, p_data_end,
+                                    first_partition_size, data, texture);
+  }
+
+  if (pbi->l_bufpool_flag_output == 0) {
+    //yuv2rgba_ocl_obj.prev_fb_idx = cm->new_fb_idx;
+    ret_pbi_queue(pbi, storage_pbi[1]);
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+
+    tsk = task_cache_get_task(pbi->entropy_tsk_cache, NULL, 1);
+    assert(tsk);
+    entropy_param = frame_entropy_dec_param_get(tsk);
+    assert(entropy_param);
+    entropy_param->pbi = pbi;
+    entropy_param->p_data_end = p_data_end;
+    scheduler_sched_task(pbi->sched, tsk);
+
+    task_sync(tsk);
+    task_cache_put_task(tsk->cache, tsk);
+    task_param_free(tsk);
+
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi_queue(pbi, storage_pbi[1]);
+    vp9_decode_frame_tail(storage_pbi[1]);
+    pbi_queue_recon(storage_pbi[1], pbi);
+    swap_frame_buffers_recon(pbi);
+
+    cm->last_show_frame = cm->show_frame;
+    if (cm->show_frame) {
+      if (!cm->show_existing_frame) {
+        // current mip will be the prev_mip for the next frame
+        MODE_INFO *temp = cm->prev_mip;
+        MODE_INFO **temp2 = cm->prev_mi_grid_base;
+        cm->prev_mip = cm->mip;
+        cm->mip = temp;
+        cm->prev_mi_grid_base = cm->mi_grid_base;
+        cm->mi_grid_base = temp2;
+
+        // update the upper left visible macroblock ptrs
+        cm->mi = cm->mip + cm->mode_info_stride + 1;
+        cm->prev_mi = cm->prev_mip + cm->mode_info_stride + 1;
+        cm->mi_grid_visible = cm->mi_grid_base + cm->mode_info_stride + 1;
+        cm->prev_mi_grid_visible = cm->prev_mi_grid_base +
+                                   cm->mode_info_stride + 1;
+
+        pbi->mb.mi_8x8 = cm->mi_grid_visible;
+        pbi->mb.mi_8x8[0] = cm->mi;
+      }
+      cm->current_video_frame++;
+    }
+
+//    return 0;
+  } else {
+//    VP9_COMMON *cm_new;
+
+//    cm_new = &storage_pbi[(pbi->l_bufpool_flag_output)& 1]->common;
+
+
+    g_tsk = (struct task *) task_cache_get_task(pbi->tsk_cache, NULL, 1);
+    assert(g_tsk);
+    param = (struct frame_entropy_dec_param *) frame_dec_param_get(g_tsk);
+    assert(param);
+    param->pbi =storage_pbi[(pbi->l_bufpool_flag_output)& 1];
+    param->p_data_end = p_data_end;
+    scheduler_sched_task(pbi->sched, g_tsk);
+
+    ret_pbi_queue(pbi, storage_pbi[(pbi->l_bufpool_flag_output + 1) & 1]);
+    vp9_tiles_entropy_dec_recon(pbi, data + first_partition_size);
+
+
+    tsk = task_cache_get_task(pbi->entropy_tsk_cache, NULL, 0);
+    assert(tsk);
+    entropy_param = frame_entropy_dec_param_get(tsk);
+    assert(entropy_param);
+    entropy_param->pbi = pbi;
+    entropy_param->p_data_end = p_data_end;
+    // msleep(3);
+    scheduler_sched_task(pbi->sched, tsk);
+
+    task_sync(tsk);
+    task_cache_put_task(tsk->cache, tsk);
+    task_param_free(tsk);
+    *p_data_end = vp9_reader_find_end(pbi->last_reader);
+    pbi->entropy_param.pbi = pbi;
+    pbi->entropy_param.pbi_new = storage_pbi[(pbi->l_bufpool_flag_output + 1) & 1];
+    worker->data1 = &pbi->entropy_param;
+    worker->hook = copy_hook;
+    vp9_worker_launch(worker);
+
+    task_sync(g_tsk);
+    task_cache_put_task(g_tsk->cache, g_tsk);
+    task_param_free(g_tsk);
+
+    swap_frame_buffers_recon(storage_pbi[(pbi->l_bufpool_flag_output)& 1]);
+    if (!storage_pbi[(pbi->l_bufpool_flag_output) & 1]->do_loopfilter_inline) {
+#if USE_PPA
+      PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+      vp9_loop_filter_frame_wpp(storage_pbi[pbi->l_bufpool_flag_output & 1],
+        &storage_pbi[pbi->l_bufpool_flag_output & 1]->common,
+        &storage_pbi[pbi->l_bufpool_flag_output & 1]->mb,
+        storage_pbi[pbi->l_bufpool_flag_output  & 1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+      PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+    }
+      //interop and update buffer pool
+#if USE_INTER_PREDICT_OCL
+   // vp9_yuv2rgba_and_update_buffer_Pool(&storage_pbi[pbi->l_bufpool_flag_output & 1]->common, &yuv2rgba_ocl_obj, texture);
+    //yuv2rgba_ocl_obj.prev_fb_idx = cm->new_fb_idx;
+    vp9_update_gpu_buffer_pool(cm);
+#endif
+  }
+
+  return 0;
+}
+
+static int vp9_sched_frame_entrop_dec_entropy_recon_last_frame(VP9D_COMP *pbi,
+                                      VP9D_COMP **storage_pbi,
+                                      const uint8_t **p_data_end) {  
+  struct frame_entropy_dec_param *param;
+  const uint8_t *data = pbi->source;
+  size_t first_partition_size = 0;
+  VP9_COMMON *const cm = &pbi->common;
+  int tile_cols;
+
+  tile_cols = 1 << cm->log2_tile_cols;
+
+  if (tile_cols == 1) {
+    return vp9_single_thread_decode_entropy_recon_last_frame(pbi, storage_pbi, p_data_end,
+                                    first_partition_size, data);
+  }
+
+  g_tsk = task_cache_get_task(pbi->tsk_cache, NULL, 0);
+  assert(g_tsk);
+  param = (struct frame_entropy_dec_param *)frame_dec_param_get(g_tsk);
+  assert(param);
+  param->pbi =storage_pbi[(pbi->l_bufpool_flag_output)& 1];
+  param->p_data_end = p_data_end;
+  scheduler_sched_task(pbi->sched, g_tsk);
+
+  task_sync(g_tsk);
+  task_cache_put_task(g_tsk->cache, g_tsk);
+  task_param_free(g_tsk);
+
+  swap_frame_buffers_recon(storage_pbi[(pbi->l_bufpool_flag_output)& 1]);
+  if (!storage_pbi[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+#if USE_PPA
+    PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+    vp9_loop_filter_frame_wpp(storage_pbi[pbi->l_bufpool_flag_output & 1],
+      &storage_pbi[pbi->l_bufpool_flag_output & 1]->common,
+      &storage_pbi[pbi->l_bufpool_flag_output & 1]->mb,
+      storage_pbi[pbi->l_bufpool_flag_output  & 1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+    PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+  }
+  return 0;
+}
+
+static int vp9_sched_frame_entrop_dec_entropy_recon_last_frame_ex(VP9D_COMP *pbi,
+                                      VP9D_COMP **storage_pbi,
+                                      const uint8_t **p_data_end,
+                                      void *texture) {
+                                      
+  struct frame_entropy_dec_param *param;
+  const uint8_t *data = pbi->source;
+  size_t first_partition_size = 0;
+  VP9_COMMON *const cm = &pbi->common;
+  int tile_cols;
+
+  tile_cols = 1 << cm->log2_tile_cols;
+
+  if (tile_cols == 1) {
+    return vp9_single_thread_decode_entropy_recon_last_frame_ex(pbi, storage_pbi, p_data_end,
+                                    first_partition_size, data, texture);
+  }
+
+  g_tsk = task_cache_get_task(pbi->tsk_cache, NULL, 0);
+  assert(g_tsk);
+  param = (struct frame_entropy_dec_param *)frame_dec_param_get(g_tsk);
+  assert(param);
+  param->pbi =storage_pbi[(pbi->l_bufpool_flag_output)& 1];
+  param->p_data_end = p_data_end;
+  scheduler_sched_task(pbi->sched, g_tsk);
+
+  task_sync(g_tsk);
+  task_cache_put_task(g_tsk->cache, g_tsk);
+  task_param_free(g_tsk);
+
+  swap_frame_buffers_recon(storage_pbi[(pbi->l_bufpool_flag_output)& 1]);
+  if (!storage_pbi[pbi->l_bufpool_flag_output & 1]->do_loopfilter_inline) {
+#if USE_PPA
+    PPAStartCpuEventFunc(loop_filter_wpp_time);
+#endif
+    vp9_loop_filter_frame_wpp(storage_pbi[pbi->l_bufpool_flag_output & 1],
+      &storage_pbi[pbi->l_bufpool_flag_output & 1]->common,
+      &storage_pbi[pbi->l_bufpool_flag_output & 1]->mb,
+      storage_pbi[pbi->l_bufpool_flag_output  & 1]->common.lf.filter_level, 0, 0);
+#if USE_PPA
+    PPAStopCpuEventFunc(loop_filter_wpp_time);
+#endif
+  }
+
+  return 0;
+}
+
 static int vp9_sched_frame_entrop_dec(VP9D_COMP *pbi,
                                       const uint8_t **p_data_end) {
   struct task *tsk;
@@ -2790,14 +4038,22 @@ static int vp9_sched_frame_entrop_dec(VP9D_COMP *pbi,
   // Initialize opencl buffer parameter for inter prediction
   // Copy cpu previous frame data to gpu memory
   if (inter_ocl_obj.inter_ocl_init) {
-   inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm, tile_cols);
+    inter_ocl_obj.inter_ocl_init = vp9_init_inter_ocl(cm, tile_cols);
     assert(inter_ocl_obj.inter_ocl_init == 0);
+  } else {
+#if USE_PPA
+  PPAStartCpuEventFunc(update_gpu_buffer_pool);
+#endif
+    vp9_update_gpu_buffer_pool(cm);
+#if USE_PPA
+  PPAStopCpuEventFunc(update_gpu_buffer_pool);
+#endif
   }
 #endif // USE_INTER_PREDICT_OCL
 
   if (tile_cols == 1) {
      return vp9_single_thread_decode(pbi, p_data_end,
-                                     first_partition_size, data);
+                                 first_partition_size, data);
  }
 
   vp9_tiles_entropy_dec(pbi, data + first_partition_size);
@@ -2817,6 +4073,67 @@ static int vp9_sched_frame_entrop_dec(VP9D_COMP *pbi,
   return 0;
 }
 
+static int vp9_sched_frame_entrop_dec_entropy(VP9D_COMP *pbi,
+                                      const uint8_t **p_data_end) {
+  struct task *tsk;
+  struct frame_dec_param *param;
+  struct frame_entropy_dec_param *entropy_param;
+  const uint8_t *data = pbi->source;
+  size_t first_partition_size;
+  VP9_COMMON *const cm = &pbi->common;
+  int tile_cols;
+
+  vp9_decode_frame_head(pbi, p_data_end, &first_partition_size, &data);
+  tile_cols = 1 << cm->log2_tile_cols;
+
+  if (tile_cols == 1) {
+    return vp9_single_thread_decode(pbi,p_data_end,
+                                    first_partition_size, data);
+  }
+
+  vp9_tiles_entropy_dec(pbi, data + first_partition_size);
+
+  tsk = task_cache_get_task(pbi->entropy_tsk_cache, NULL, 1);
+  assert(tsk);
+  entropy_param = frame_entropy_dec_param_get(tsk);
+  assert(entropy_param);
+  entropy_param->pbi = pbi;
+  entropy_param->p_data_end = p_data_end;
+  scheduler_sched_task(pbi->sched, tsk);
+
+  task_sync(tsk);
+  task_cache_put_task(tsk->cache, tsk);
+  task_param_free(tsk);
+
+  tsk = task_cache_get_task(pbi->tsk_cache, NULL, 0);
+  assert(tsk);
+  param = frame_dec_param_get(tsk);
+  assert(param);
+  param->pbi = pbi;
+  param->p_data_end = p_data_end;
+  scheduler_sched_task(pbi->sched, tsk);
+  //cpu_device_exec(scheduler_get_dev(pbi->sched, DEV_CPU));
+
+  task_sync(tsk);
+  task_cache_put_task(tsk->cache, tsk);
+  task_param_free(tsk);
+
+  return 0;
+}
+
 int vp9_decode_frame_mt(VP9D_COMP *pbi, const uint8_t **p_data_end) {
   return vp9_sched_frame_entrop_dec(pbi, p_data_end);
 }
+
+int vp9_decode_frame_mt_entropy_recon(VP9D_COMP *pbi, VP9D_COMP **storage_pbi,
+                                                    const uint8_t **p_data_end) {
+  return vp9_sched_frame_entrop_dec_entropy_recon(pbi, storage_pbi, p_data_end);
+}
+
+int vp9_decode_frame_mt_entropy_recon_last_frame(VP9D_COMP *pbi,
+                                                 VP9D_COMP **storage_pbi,
+                                                 const uint8_t **p_data_end) {
+  return vp9_sched_frame_entrop_dec_entropy_recon_last_frame(pbi, storage_pbi, p_data_end);
+}
+
+

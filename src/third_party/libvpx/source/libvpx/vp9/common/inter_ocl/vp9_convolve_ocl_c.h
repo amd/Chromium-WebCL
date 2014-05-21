@@ -15,8 +15,6 @@
 #include "vp9/common/vp9_onyxc_int.h"
 #include "vp9/common/inter_ocl/vp9_inter_ocl_param.h"
 
-void *build_inter_pred_calcu_ocl_mt(void *pred_param);
-
 void build_inter_pred_calcu_ocl_c(int tile_num, uint8_t *new_buffer);
 
 #endif  // VP9_ONVOLVE_OCL_C_H_

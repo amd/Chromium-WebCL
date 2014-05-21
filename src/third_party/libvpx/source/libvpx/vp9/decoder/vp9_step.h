@@ -16,22 +16,13 @@
 
 struct task_steps_pool *steps_pool_get(void);
 
-struct frame_entropy_dec_param {
+struct frame_dec_param {
   VP9D_COMP *pbi;
   const uint8_t **p_data_end;
   vp9_reader reader;
   int tid;
 };
 
-struct frame_entropy_dec_param *frame_entropy_dec_param_get(struct task *tsk);
-
-struct entropy_dec_param {
-  VP9D_COMP *pbi;
-  int tile_col;
-  const uint8_t **p_data_end;
-  int tid;
-};
-
-struct entropy_dec_param *entropy_dec_param_get(struct task *tsk);
+struct frame_dec_param *frame_dec_param_get(struct task *tsk);
 
 #endif  // VP9_DECODER_VP9_STEP_H_

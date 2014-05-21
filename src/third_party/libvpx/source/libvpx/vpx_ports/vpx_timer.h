@@ -43,7 +43,6 @@
 #endif
 #endif
 
-
 struct vpx_usec_timer {
 #if defined(_WIN32)
   LARGE_INTEGER  begin, end;

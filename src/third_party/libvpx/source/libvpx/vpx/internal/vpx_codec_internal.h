@@ -336,6 +336,16 @@ typedef const struct vpx_codec_enc_cfg_map {
 
 #define NOT_IMPLEMENTED 0
 
+typedef struct vpx_codec_enc_iface {
+	vpx_codec_enc_cfg_map_t           *cfg_maps;      /**< \copydoc ::vpx_codec_enc_cfg_map_t */
+	vpx_codec_encode_fn_t              encode;        /**< \copydoc ::vpx_codec_encode_fn_t */
+	vpx_codec_get_cx_data_fn_t         get_cx_data;   /**< \copydoc ::vpx_codec_get_cx_data_fn_t */
+	vpx_codec_enc_config_set_fn_t      cfg_set;       /**< \copydoc ::vpx_codec_enc_config_set_fn_t */
+	vpx_codec_get_global_headers_fn_t  get_glob_hdrs; /**< \copydoc ::vpx_codec_get_global_headers_fn_t */
+	vpx_codec_get_preview_frame_fn_t   get_preview;   /**< \copydoc ::vpx_codec_get_preview_frame_fn_t */
+	vpx_codec_enc_mr_get_mem_loc_fn_t  mr_get_mem_loc;   /**< \copydoc ::vpx_codec_enc_mr_get_mem_loc_fn_t */
+} VPX_CODEC_ENC;
+
 /*!\brief Decoder algorithm interface interface
  *
  * All decoders \ref MUST expose a variable of this type.
@@ -356,15 +366,7 @@ struct vpx_codec_iface {
     vpx_codec_get_frame_fn_t  get_frame;   /**< \copydoc ::vpx_codec_get_frame_fn_t */
     vpx_codec_set_frame_buffers_fn_t set_fb; /**< \copydoc ::vpx_codec_set_frame_buffers_fn_t */
   } dec;
-  struct vpx_codec_enc_iface {
-    vpx_codec_enc_cfg_map_t           *cfg_maps;      /**< \copydoc ::vpx_codec_enc_cfg_map_t */
-    vpx_codec_encode_fn_t              encode;        /**< \copydoc ::vpx_codec_encode_fn_t */
-    vpx_codec_get_cx_data_fn_t         get_cx_data;   /**< \copydoc ::vpx_codec_get_cx_data_fn_t */
-    vpx_codec_enc_config_set_fn_t      cfg_set;       /**< \copydoc ::vpx_codec_enc_config_set_fn_t */
-    vpx_codec_get_global_headers_fn_t  get_glob_hdrs; /**< \copydoc ::vpx_codec_get_global_headers_fn_t */
-    vpx_codec_get_preview_frame_fn_t   get_preview;   /**< \copydoc ::vpx_codec_get_preview_frame_fn_t */
-    vpx_codec_enc_mr_get_mem_loc_fn_t  mr_get_mem_loc;   /**< \copydoc ::vpx_codec_enc_mr_get_mem_loc_fn_t */
-  } enc;
+   VPX_CODEC_ENC enc;
 };
 
 struct vpx_codec_iface_ex {
@@ -383,7 +385,7 @@ struct vpx_codec_iface_ex {
     vpx_codec_get_frame_fn_t  get_frame;   /**< \copydoc ::vpx_codec_get_frame_fn_t */
     vpx_codec_set_frame_buffers_fn_t set_fb; /**< \copydoc ::vpx_codec_set_frame_buffers_fn_t */
   } dec;
-  struct vpx_codec_enc_iface enc;
+	 VPX_CODEC_ENC enc;
 };
 
 /*!\brief Callback function pointer / user data pair storage */

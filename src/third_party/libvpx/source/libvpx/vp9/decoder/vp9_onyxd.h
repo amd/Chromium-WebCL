@@ -43,14 +43,13 @@ int vp9_receive_compressed_data(VP9D_PTR comp,
                                 size_t size, const uint8_t **dest,
                                 int64_t time_stamp);
 
-int vp9_receive_compressed_data_ex(VP9D_PTR comp,
-                                size_t size, const uint8_t **dest,
-                                int64_t time_stamp,
-                                void *texture);
+int vp9_receive_compressed_data_recon(VP9D_PTR ptr,
+                                                   VP9D_PTR *storage_pbi,
+                                                   size_t size,
+                                                   const uint8_t **psource,
+                                                   int64_t time_stamp,
+                                                   int i_is_last_frame);
 
-int vp9_receive_compressed_data_mt(VP9D_PTR comp,
-                                uint64_t size, const uint8_t **dest,
-                                int64_t time_stamp);
 
 int vp9_get_raw_frame(VP9D_PTR comp, YV12_BUFFER_CONFIG *sd,
                       int64_t *time_stamp, int64_t *time_end_stamp,
@@ -69,7 +68,11 @@ int vp9_get_reference_dec(VP9D_PTR ptr, int index, YV12_BUFFER_CONFIG **fb);
 
 VP9D_PTR vp9_create_decompressor(VP9D_CONFIG *oxcf);
 
+VP9D_PTR vp9_create_decompressor_recon(VP9D_CONFIG *oxcf);
+
 void vp9_remove_decompressor(VP9D_PTR comp);
+
+void vp9_remove_decompressor_recon(VP9D_PTR ptr, VP9D_PTR *ptr2);
 
 #ifdef __cplusplus
 }

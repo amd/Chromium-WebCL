@@ -130,7 +130,6 @@ static void clewExit(void)
     {                                       \
         CLCC_DYNLIB_CLOSE(module);          \
         module = NULL;                      \
-        printf("#######\n");\
         return CLEW_ERROR_IMPORT_FAILED;    \
     }                                       \
 

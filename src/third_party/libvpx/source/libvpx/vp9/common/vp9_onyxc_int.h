@@ -177,6 +177,9 @@ typedef struct VP9Common {
   MODE_INFO **prev_mi_grid_base;
   MODE_INFO **prev_mi_grid_visible;
 
+  MODE_INFO *trip_mip;
+  MODE_INFO *trip_mi_grid_base;
+
   // Persistent mb segment id map used in prediction.
   unsigned char *last_frame_seg_map;
 

@@ -131,7 +131,6 @@ static void clewExit(void)
     {                                       \
         CLCC_DYNLIB_CLOSE(module);          \
         module = NULL;                      \
-        printf("######\n");\
         return CLEW_ERROR_IMPORT_FAILED;    \
     }                                       \
 
@@ -150,13 +149,15 @@ int clewInit(const char* path)
     }
 
     //  Load library
-   // module = CLCC_DYNLIB_OPEN(path);
-	module = LoadLibrary(L"OpenCL.dll");
+#ifdef _WIN32
+    module = CLCC_DYNLIB_OPEN(L"OpenCL.dll");
+#else
+	module = CLCC_DYNLIB_OPEN(path);
+#endif
 
     //  Check for errors
     if (module == NULL)
     {
-        printf("^^^^^^^\n");
         return CLEW_ERROR_OPEN_FAILED;
     }
 

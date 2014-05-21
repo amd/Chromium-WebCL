@@ -72,7 +72,7 @@ void * halloc(void * ptr, size_t len)
 		if (! len)
 			return NULL;
 
-		p = (hblock_t*)allocator(0, len + sizeof_hblock);
+		p = (hblock_t *)allocator(0, len + sizeof_hblock);
 		if (! p)
 			return NULL;
 #ifndef NDEBUG
@@ -165,8 +165,8 @@ void   h_free(void * ptr)
 char * h_strdup(const char * str)
 {
 	size_t len = strlen(str);
-	char * ptr = (char*)halloc(0, len + 1);
-	return ptr ? (char*)(ptr[len] = 0, memcpy(ptr, str, len)) : NULL;
+	char * ptr = (char *)halloc(0, len + 1);
+	return ptr ? (char *)(ptr[len] = 0, memcpy(ptr, str, len)) : NULL;
 }
 
 /*

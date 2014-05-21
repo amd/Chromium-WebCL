@@ -18,7 +18,7 @@
 
 #ifdef __cplusplus
 namespace libyuv {
-//extern "C" {
+extern "C" {
 #endif
 
 /*
@@ -3879,6 +3879,6 @@ int ScaleOffset(const uint8* src, int src_width, int src_height,
 }
 
 #ifdef __cplusplus
-//}  // extern "C"
+}  // extern "C"
 }  // namespace libyuv
 #endif

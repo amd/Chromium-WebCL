@@ -39,6 +39,7 @@
 #ifndef VPX_VPX_CODEC_H_
 #define VPX_VPX_CODEC_H_
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -183,7 +184,9 @@ extern "C" {
    * to the application.
    */
   typedef       struct vpx_codec_priv  vpx_codec_priv_t;
-  typedef       struct vpx_codec_priv_ex  vpx_codec_priv_t_ex;
+
+  typedef       struct vpx_codec_priv_ex  vpx_codec_priv_ex_t;
+
 
   /*!\brief Iterator
    *
@@ -225,7 +228,7 @@ extern "C" {
       struct vpx_codec_enc_cfg  *enc;   /**< Encoder Configuration Pointer */
       void                      *raw;
     }                        config;      /**< Configuration pointer aliasing union */
-    vpx_codec_priv_t_ex        *priv;        /**< Algorithm private storage */
+    vpx_codec_priv_ex_t        *priv;        /**< Algorithm private storage */
   } vpx_codec_ctx_t_ex;
   /*
    * Library Version Number Interface
@@ -295,8 +298,8 @@ extern "C" {
    *
    */
   const char *vpx_codec_iface_name(vpx_codec_iface_t *iface);
-
   const char *vpx_codec_iface_name_ex(vpx_codec_iface_t_ex *iface);
+   //const char *vpx_codec_iface_name(void *iface);
 
 
   /*!\brief Convert error number to printable string
@@ -323,9 +326,7 @@ extern "C" {
    *
    */
   const char *vpx_codec_error(vpx_codec_ctx_t  *ctx);
-
   const char *vpx_codec_error_ex(vpx_codec_ctx_t_ex  *ctx);
-
 
   /*!\brief Retrieve detailed error information for codec context
    *
@@ -339,7 +340,6 @@ extern "C" {
    */
   const char *vpx_codec_error_detail(vpx_codec_ctx_t  *ctx);
   const char *vpx_codec_error_detail_ex(vpx_codec_ctx_t_ex  *ctx);
-
 
   /* REQUIRED FUNCTIONS
    *
@@ -361,7 +361,6 @@ extern "C" {
   vpx_codec_err_t vpx_codec_destroy(vpx_codec_ctx_t *ctx);
   vpx_codec_err_t vpx_codec_destroy_ex(vpx_codec_ctx_t_ex *ctx);
 
-
   /*!\brief Get the capabilities of an algorithm.
    *
    * Retrieves the capabilities bitfield from the algorithm's interface.
@@ -370,7 +369,6 @@ extern "C" {
    *
    */
   vpx_codec_caps_t vpx_codec_get_caps(vpx_codec_iface_t *iface);
-  vpx_codec_caps_t vpx_codec_get_caps_ex(vpx_codec_iface_t_ex *iface);
 
 
   /*!\brief Control algorithm
@@ -401,7 +399,7 @@ extern "C" {
                                      int               ctrl_id,
                                      ...);
 
-   vpx_codec_err_t vpx_codec_control_ex(vpx_codec_ctx_t_ex  *ctx,
+   vpx_codec_err_t vpx_codec_control_ex(vpx_codec_ctx_t_ex *ctx,
                                      int               ctrl_id,
                                      ...);
 #if defined(VPX_DISABLE_CTRL_TYPECHECKS) && VPX_DISABLE_CTRL_TYPECHECKS
@@ -420,7 +418,7 @@ extern "C" {
    * It works by dispatching the call to the control function through a wrapper
    * function named with the id parameter.
    */
-#    define vpx_codec_control(ctx,id,data) vpx_codec_control_##id(ctx,id,data)\
+#define vpx_codec_control(ctx,id,data) vpx_codec_control_##id(ctx,id,data)\
   /**<\hideinitializer*/
 
 

@@ -113,22 +113,22 @@ __constant const int16_t vp9_sub_pel_filters[512] = {
 void vp9_convolve_copy_4x4(__global const uchar *src,
                            int src_stride,
                            __global uchar4 *dst) {
-   uchar4 d[4];
-   int s2 = src_stride << 1;
-   int s3 = s2 + src_stride;
-   int d1 = src_stride >> 2;
-   int d2 = src_stride >> 1;
-   int d3 = s3 >> 2;
+  uchar4 d[4];
+  int s2 = src_stride << 1;
+  int s3 = s2 + src_stride;
+  int d1 = src_stride >> 2;
+  int d2 = src_stride >> 1;
+  int d3 = s3 >> 2;
 
-   d[0] = vload4(0, src);
-   d[1] = vload4(0, (src + src_stride));
-   d[2] = vload4(0, (src + s2));
-   d[3] = vload4(0, (src + s3));
+  d[0] = vload4(0, src);
+  d[1] = vload4(0, (src + src_stride));
+  d[2] = vload4(0, (src + s2));
+  d[3] = vload4(0, (src + s3));
 
-   dst[0] = d[0];
-   dst[d1] = d[1];
-   dst[d2] = d[2];
-   dst[d3] = d[3];
+  dst[0] = d[0];
+  dst[d1] = d[1];
+  dst[d2] = d[2];
+  dst[d3] = d[3];
 }
 
 void vp9_convolve_horiz_4x4_only(__global const uchar *src,
@@ -435,7 +435,7 @@ void vp9_convolve_vert_ocl_4x4_avg(__private const float4 *src,
  * @counts_8x8 [in] the real number of thread
  * @return void
  */
-__kernel 
+__kernel
 __attribute__((reqd_work_group_size(64, 1, 1)))
 void inter_pred_calcu(
                   __global uint8_t *buffer_pool_write,
@@ -445,10 +445,10 @@ void inter_pred_calcu(
                   __global const int *x_mv,
                   __constant const int *case_count,
                   __constant const int *one_case_interval_count,
-                  __constant const int *all_of_block_count,
+                  const uint all_of_block_count,
                   __global uint8_t *buffer_pool_read) {
   uint gIdx = get_global_id(0);
-  if (gIdx >= all_of_block_count[0])
+  if (gIdx >= all_of_block_count)
     return ;
 
   int real_position;

@@ -58,12 +58,7 @@ int ocl_context_init(OCL_CONTEXT *ctx, int use_gpu) {
     free(ctx->platforms);
     return -1;
   }
-  //debug
-  CLEW_CHECK_FUNCTION(__clewGetDeviceIDsFromDX9MediaAdapterKHR   = (PFNCLGETDEVICEIDSFROMDX9MEDIAADAPTERKHR )clGetExtensionFunctionAddressForPlatform(ctx->platforms[0], "clGetDeviceIDsFromDX9MediaAdapterKHR"));
-  CLEW_CHECK_FUNCTION(__clewCreateFromDX9MediaSurfaceKHR   = (PFNCLCREATEFROMDX9MEDIASURFACEKHR )clGetExtensionFunctionAddressForPlatform(ctx->platforms[0], "clCreateFromDX9MediaSurfaceKHR"));
-  CLEW_CHECK_FUNCTION(__clewEnqueueAcquireDX9MediaSurfacesKHR   = (PFNCLENQUEUEACQUIREDX9MEDIASURFACESKHR )clGetExtensionFunctionAddressForPlatform(ctx->platforms[0], "clEnqueueAcquireDX9MediaSurfacesKHR"));
-  CLEW_CHECK_FUNCTION(__clewEnqueueReleaseDX9MediaSurfacesKHR   = (PFNCLENQUEUERELEASEDX9MEDIASURFACESKHR )clGetExtensionFunctionAddressForPlatform(ctx->platforms[0], "clEnqueueReleaseDX9MediaSurfacesKHR"));
-  printf("\nclGetDeviceIDsFromDX9MediaAdapterKHR = %d",clGetDeviceIDsFromDX9MediaAdapterKHR);
+ 
   //end
  
   status = clGetPlatformInfo(

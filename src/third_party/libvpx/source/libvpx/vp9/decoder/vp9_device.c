@@ -15,9 +15,15 @@
 static struct device devs[] = {
   {
     DEV_CPU,            // type
-    4,                  // threads_count
+    3,                  // threads_count
     6,                  // max_queue_tasks
     DEV_STAT_ENABLED,   //
+  },
+  {
+    DEV_CPU,             // type
+    4,                   // threads_count
+    6,                   // max_queue_tasks
+    DEV_STAT_DISABLED,   //
   },
   {
     DEV_GPU,            // type
@@ -36,9 +42,9 @@ static struct device devs[] = {
 void vp9_register_devices(struct scheduler *sched) {
   // For now, we can chose CPU and GPU dev
 #if USE_INTER_PREDICT_OCL
-  int devices_count = 2;
+  int devices_count = 3;
 #else
-  int devices_count = 1;
+  int devices_count = 2;
 #endif // USE_INTER_PREDICT_OCL
 
   scheduler_add_devices(sched, devs, devices_count);

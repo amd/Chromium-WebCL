@@ -15,9 +15,12 @@
 #include "vp9/common/vp9_onyxc_int.h"
 
 #define USE_INTER_PREDICT_OCL 1
-#define USE_INTER_CALCU_CPU_MT 0
-#define USE_KERNEL_UPDATE_BUFFER_POOL 1
 
+#define USE_INTER_PARAM_ZERO_COPY 1
+
+#define USE_KERNEL_UPDATE_BUFFER_POOL 0
+
+#define DO_PROFILING 0
 
 int vp9_init_ocl();
 
@@ -27,9 +30,7 @@ int vp9_release_ocl();
 
 int vp9_init_inter_ocl(VP9_COMMON *const cm, int tile_count);
 
-int vp9_init_d3d_interOp(VP9_COMMON *const cm);
-
-int reset_inter_ocl_buffer();
+int reset_inter_ocl_param_buffer(int tile_num);
 
 int vp9_inter_write_param_to_gpu(int tile_num);
 

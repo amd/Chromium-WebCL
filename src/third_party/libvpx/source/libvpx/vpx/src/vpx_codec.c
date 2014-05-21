@@ -19,6 +19,8 @@
 #include "vpx/internal/vpx_codec_internal.h"
 #include "vpx_version.h"
 
+#include "vp9/common/inter_ocl/vp9_yuv2rgba.h"
+
 #define SAVE_STATUS(ctx,var) (ctx?(ctx->err = var):var)
 
 int vpx_codec_version(void) {
@@ -43,6 +45,8 @@ const char *vpx_codec_iface_name(vpx_codec_iface_t *iface) {
 const char *vpx_codec_iface_name_ex(vpx_codec_iface_t_ex *iface) {
   return iface ? iface->name : "<invalid interface>";
 }
+
+
 
 const char *vpx_codec_err_to_string(vpx_codec_err_t  err) {
   switch (err) {
@@ -76,6 +80,11 @@ const char *vpx_codec_error(vpx_codec_ctx_t  *ctx) {
          : vpx_codec_err_to_string(VPX_CODEC_INVALID_PARAM);
 }
 
+const char *vpx_codec_error_ex(vpx_codec_ctx_t_ex  *ctx) {
+  return (ctx) ? vpx_codec_err_to_string(ctx->err)
+         : vpx_codec_err_to_string(VPX_CODEC_INVALID_PARAM);
+}
+
 const char *vpx_codec_error_detail(vpx_codec_ctx_t  *ctx) {
   if (ctx && ctx->err)
     return ctx->priv ? ctx->priv->err_detail : ctx->err_detail;
@@ -83,10 +92,34 @@ const char *vpx_codec_error_detail(vpx_codec_ctx_t  *ctx) {
   return NULL;
 }
 
+const char *vpx_codec_error_detail_ex(vpx_codec_ctx_t_ex  *ctx) {
+  if (ctx && ctx->err)
+    return ctx->priv ? ctx->priv->err_detail : ctx->err_detail;
 
-
+  return NULL;
+}
 
 vpx_codec_err_t vpx_codec_destroy(vpx_codec_ctx_t *ctx) {
+  vpx_codec_err_t res;
+
+  if (!ctx)
+    res = VPX_CODEC_INVALID_PARAM;
+  else if (!ctx->iface || !ctx->priv)
+    res = VPX_CODEC_ERROR;
+  else {
+    if (ctx->priv->alg_priv)
+      ctx->iface->destroy(ctx->priv->alg_priv);
+
+    ctx->iface = NULL;
+    ctx->name = NULL;
+    ctx->priv = NULL;
+    res = VPX_CODEC_OK;
+  }
+  fclose(pLog);
+  return SAVE_STATUS(ctx, res);
+}
+
+vpx_codec_err_t vpx_codec_destroy_ex(vpx_codec_ctx_t_ex *ctx) {
   vpx_codec_err_t res;
 
   if (!ctx)
@@ -105,7 +138,6 @@ vpx_codec_err_t vpx_codec_destroy(vpx_codec_ctx_t *ctx) {
 
   return SAVE_STATUS(ctx, res);
 }
-
 
 vpx_codec_caps_t vpx_codec_get_caps(vpx_codec_iface_t *iface) {
   return (iface) ? iface->caps : 0;
@@ -141,46 +173,7 @@ vpx_codec_err_t vpx_codec_control_(vpx_codec_ctx_t  *ctx,
   return SAVE_STATUS(ctx, res);
 }
 
-const char *vpx_codec_error_ex(vpx_codec_ctx_t_ex  *ctx) {
-  return (ctx) ? vpx_codec_err_to_string(ctx->err)
-         : vpx_codec_err_to_string(VPX_CODEC_INVALID_PARAM);
-}
-
-const char *vpx_codec_error_detail_ex(vpx_codec_ctx_t_ex  *ctx) {
-  if (ctx && ctx->err)
-    return ctx->priv ? ctx->priv->err_detail : ctx->err_detail;
-
-  return NULL;
-}
-
-
-vpx_codec_err_t vpx_codec_destroy_ex(vpx_codec_ctx_t_ex *ctx) {
-  vpx_codec_err_t res;
-
-  if (!ctx)
-    res = VPX_CODEC_INVALID_PARAM;
-  else if (!ctx->iface || !ctx->priv)
-    res = VPX_CODEC_ERROR;
-  else {
-    if (ctx->priv->alg_priv)
-      ctx->iface->destroy(ctx->priv->alg_priv);
-
-    ctx->iface = NULL;
-    ctx->name = NULL;
-    ctx->priv = NULL;
-    res = VPX_CODEC_OK;
-  }
-
-  return SAVE_STATUS(ctx, res);
-}
-
-
-vpx_codec_caps_t vpx_codec_get_caps_ex(vpx_codec_iface_t_ex *iface) {
-  return (iface) ? iface->caps : 0;
-}
-
-
-vpx_codec_err_t vpx_codec_control_ex(vpx_codec_ctx_t_ex  *ctx,
+vpx_codec_err_t vpx_codec_control_ex(vpx_codec_ctx_t_ex *ctx,
                                    int               ctrl_id,
                                    ...) {
   vpx_codec_err_t res;

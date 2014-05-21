@@ -278,11 +278,11 @@ void *vpx_memalign_ocl(size_t align, size_t size, YV12_BUFFER_CONFIG *ybf) {
   int status;
   if(inter_ocl_obj.buffer_pool_flag == 0) {
     inter_ocl_obj.buffer_pool_kernel = clCreateBuffer(
-                                           ocl_context.context,
-                                           CL_MEM_ALLOC_HOST_PTR |
-                                           CL_MEM_WRITE_ONLY,
-                                           size * FRAME_BUFFERS,
-                                           NULL, &status);
+                                         ocl_context.context,
+                                         CL_MEM_ALLOC_HOST_PTR |
+                                         CL_MEM_WRITE_ONLY,
+                                         size * FRAME_BUFFERS,
+                                         NULL, &status);
     if (status != CL_SUCCESS) {
       printf("Failed to clCreateBuffe buffer_pool_kernel, error: %d \n", status);
       return NULL;
@@ -290,11 +290,7 @@ void *vpx_memalign_ocl(size_t align, size_t size, YV12_BUFFER_CONFIG *ybf) {
 
     inter_ocl_obj.buffer_pool_read_only_kernel = clCreateBuffer(
                                                      ocl_context.context,
-#if USE_KERNEL_UPDATE_BUFFER_POOL
-                                                     CL_MEM_READ_WRITE,
-#else
                                                      CL_MEM_READ_ONLY,
-#endif // USE_KERNEL_UPDATE_BUFFER_POOL
                                                      size * FRAME_BUFFERS,
                                                      NULL, &status);
     if (status != CL_SUCCESS) {
@@ -304,23 +300,23 @@ void *vpx_memalign_ocl(size_t align, size_t size, YV12_BUFFER_CONFIG *ybf) {
     }
 
     //map buffer pool ptr
-    inter_ocl_obj.buffer_pool_map_ptr = (uint8_t *) clEnqueueMapBuffer(
-                                           ocl_context.command_queue,
-                                           inter_ocl_obj.buffer_pool_kernel,
-                                           CL_TRUE, CL_MAP_WRITE, 0,
-                                           size * FRAME_BUFFERS,
-                                           0, NULL, NULL, &status);
+    inter_ocl_obj.buffer_pool_map_ptr= (uint8_t *) clEnqueueMapBuffer(
+                                                ocl_context.command_queue,
+                                                inter_ocl_obj.buffer_pool_kernel,
+                                                CL_TRUE, CL_MAP_WRITE, 0,
+                                                size * FRAME_BUFFERS,
+                                                0, NULL, NULL, &status);
     if (status != CL_SUCCESS) {
-      printf("Failed to clEnqueueMapBuffer buffer_pool_kernel, error: %d \n",
-             status);
+      printf("Failed to clEnqueueMapBuffer buffer_pool_kernel, error: %d \n", status);
       return NULL;
     }
+
    inter_ocl_obj.buffer_pool_flag = 1;
  }
 
   assert(inter_ocl_obj.buffer_pool_map_ptr != NULL);
   addr = inter_ocl_obj.buffer_pool_map_ptr +
-         ( ybf->nFrameNum *  size );
+         (ybf->nFrameNum *  size );
 
   return (void*)addr;
 }
@@ -331,7 +327,6 @@ int vp9_realloc_frame_buffer_ocl(YV12_BUFFER_CONFIG *ybf,
                              vpx_codec_frame_buffer_t *ext_fb,
                              vpx_realloc_frame_buffer_cb_fn_t cb,
                              void *user_priv, int new_fb_idx) {
-                           
   if (ybf) {
     const int aligned_width = (width + 7) & ~7;
     const int aligned_height = (height + 7) & ~7;
@@ -385,7 +380,7 @@ int vp9_realloc_frame_buffer_ocl(YV12_BUFFER_CONFIG *ybf,
           vp9_free_frame_buffer_ocl(new_fb_idx);
 #endif
         }
-	 ybf->nFrameNum =  new_fb_idx;
+        ybf->nFrameNum =  new_fb_idx;
         ybf->buffer_alloc = (uint8_t *)vpx_memalign_ocl(32, frame_size, ybf);
         if (!ybf->buffer_alloc)
           return -1;
