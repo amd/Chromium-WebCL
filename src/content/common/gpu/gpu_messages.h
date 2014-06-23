@@ -787,7 +787,7 @@ IPC_MESSAGE_ROUTED1(AcceleratedVideoEncoderHostMsg_NotifyError,
 // OpenCL Channel Messages
 // These are messages from a renderer process to the OpenCL/GPU process.
 // Calling OpenCL API from a renderer process, then run in OpenCL/GPU process.
-
+#if 0
 // Call and respond OpenCL API clGetPlatformIDs using Sync IPC Message
 IPC_SYNC_MESSAGE_CONTROL2_3(OpenCLChannelMsg_GetPlatformIDs,
                             cl_uint,
@@ -1786,6 +1786,8 @@ IPC_SYNC_MESSAGE_CONTROL4_3(OpenCLChannelMsg_GetEventProfilingInfo_cl_ulong,
                             size_t,
                             cl_int)
 
+#endif
+
 //ScalableVision	
 
 IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLChannelMsg_CreateFromGLBuffer,
@@ -1817,3 +1819,6 @@ IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLChannelMsg_EnqueueReleaseGLObjects,
 	std::vector<cl_point>, // event_wait_list
 	cl_point, // event ret
 	cl_int) // func ret
+
+
+#include "content/common/gpu/ocl_msg.h"

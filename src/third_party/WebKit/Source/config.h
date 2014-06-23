@@ -173,4 +173,5 @@
 
 #define ENABLE_WEBCL 1
 #define ENABLE_WEBGL 1
+#define LANGUAGE_JAVASCRIPT 1
 #pragma warning( disable : 4996)

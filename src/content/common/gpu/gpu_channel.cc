@@ -6,6 +6,8 @@
 #include <windows.h>
 #endif
 
+#pragma warning(disable: 4996)
+
 #include "content/common/gpu/gpu_channel.h"
 #include "third_party/angle_dx11/include/sv_cl_gl.h"
 
@@ -43,6 +45,7 @@
 #if defined(OS_ANDROID)
 #include "content/common/gpu/stream_texture_manager_android.h"
 #endif
+
 
 namespace content {
 namespace {
@@ -759,7 +762,7 @@ bool GpuChannel::OnControlMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(GpuChannelMsg_CreateVideoEncoder, OnCreateVideoEncoder)
     IPC_MESSAGE_HANDLER(GpuChannelMsg_DestroyVideoEncoder,
                         OnDestroyVideoEncoder)
-
+#if 0
     // Adding OpenCL API calling handle.
     IPC_MESSAGE_HANDLER(OpenCLChannelMsg_GetPlatformIDs,
                                     OnCallclGetPlatformIDs)
@@ -950,11 +953,14 @@ bool GpuChannel::OnControlMessageReceived(const IPC::Message& msg) {
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueReadBuffer,
                                     OnCallclEnqueueReadBuffer)
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueNDRangeKernel, OnCallclEnqueueNDRangeKernel);
+#endif
 
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_CreateFromGLBuffer, OnCallclCreateFromGLBuffer);
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_CreateFromGLTexture, OnCallclCreateFromGLTexture);
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueAcquireGLObjects, OnCallclEnqueueAcquireGLObjects);
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueReleaseGLObjects, OnCallclEnqueueReleaseGLObjects);
+
+#include "content/common/gpu/ocl_msg_map.h"
 
 
 
@@ -4603,5 +4609,7 @@ void GpuChannel::OnCallclEnqueueBarrierWithWaitList(
 		  (cl_event*)event_ret);
   }
 
+#include "content/common/gpu/ocl_service.h"
 
 }  // namespace content
+

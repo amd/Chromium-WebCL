@@ -29,6 +29,7 @@
 
 #if ENABLE(WEBCL)
 
+#include "Document.h"
 #include "DOMWindowWebCLEnvironment.h"
 #include "DOMWindow.h"
 #include "WebCL.h"
@@ -57,6 +58,11 @@ DOMWindowWebCLEnvironment* DOMWindowWebCLEnvironment::from(DOMWindow* window)
 WebCL* DOMWindowWebCLEnvironment::webcl(DOMWindow* window)
 {
     return DOMWindowWebCLEnvironment::from(window)->webcl();
+}
+
+WebCL* DOMWindowWebCLEnvironment::webcl(Document* doc)
+{
+    return webcl(doc->domWindow());
 }
 
 WebCL* DOMWindowWebCLEnvironment::webcl() const

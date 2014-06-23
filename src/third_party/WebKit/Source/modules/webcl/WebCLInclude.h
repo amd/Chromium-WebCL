@@ -1,103 +1,106 @@
+//#ifndef __WEBCL_INCLUDE_H__
+//#define __WEBCL_INCLUDE_H__
+
 #include <CL/opencl.h>
 
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetPlatformIDs                 ) (content::GpuChannelHost*, cl_uint, cl_platform_id*, cl_uint*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetPlatformInfo                ) (content::GpuChannelHost*, cl_platform_id, cl_platform_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetDeviceIDs                   ) (content::GpuChannelHost*, cl_platform_id, cl_device_type, cl_uint, cl_device_id*, cl_uint*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetDeviceInfo                  ) (content::GpuChannelHost*, cl_device_id, cl_device_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clCreateSubDevices               ) (content::GpuChannelHost*, cl_device_id, const cl_device_partition_property*, cl_uint, cl_device_id*, cl_uint*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainDevice                   ) (content::GpuChannelHost*, cl_device_id);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseDevice                  ) (content::GpuChannelHost*, cl_device_id);
-typedef CL_API_ENTRY cl_context       (__cdecl *h_clCreateContext                  ) (content::GpuChannelHost*, const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
-typedef CL_API_ENTRY cl_context       (__cdecl *h_clCreateContextFromType          ) (content::GpuChannelHost*, const cl_context_properties*, cl_device_type, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainContext                  ) (content::GpuChannelHost*, cl_context);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseContext                 ) (content::GpuChannelHost*, cl_context);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetContextInfo                 ) (content::GpuChannelHost*, cl_context, cl_context_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_command_queue (__cdecl *h_clCreateCommandQueue             ) (content::GpuChannelHost*, cl_context, cl_device_id, cl_command_queue_properties, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainCommandQueue             ) (content::GpuChannelHost*, cl_command_queue);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseCommandQueue            ) (content::GpuChannelHost*, cl_command_queue);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetCommandQueueInfo            ) (content::GpuChannelHost*, cl_command_queue, cl_command_queue_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateBuffer                   ) (content::GpuChannelHost*, cl_context, cl_mem_flags, size_t, void*, cl_int*);
-typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateSubBuffer                ) (content::GpuChannelHost*, cl_mem, cl_mem_flags, cl_buffer_create_type, const void*, cl_int*);
-typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateImage                    ) (content::GpuChannelHost*, cl_context, cl_mem_flags, const cl_image_format*, const cl_image_desc*, void*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainMemObject                ) (content::GpuChannelHost*, cl_mem);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseMemObject               ) (content::GpuChannelHost*, cl_mem);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetSupportedImageFormats       ) (content::GpuChannelHost*, cl_context, cl_mem_flags, cl_mem_object_type, cl_uint, cl_image_format*, cl_uint*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetMemObjectInfo               ) (content::GpuChannelHost*, cl_mem, cl_mem_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetImageInfo                   ) (content::GpuChannelHost*, cl_mem, cl_image_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetMemObjectDestructorCallback ) (content::GpuChannelHost*, cl_mem, void (CL_CALLBACK*)(cl_mem,void*), void*);
-typedef CL_API_ENTRY cl_sampler       (__cdecl *h_clCreateSampler                  ) (content::GpuChannelHost*, cl_context, cl_bool, cl_addressing_mode, cl_filter_mode, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainSampler                  ) (content::GpuChannelHost*, cl_sampler);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseSampler                 ) (content::GpuChannelHost*, cl_sampler);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetSamplerInfo                 ) (content::GpuChannelHost*, cl_sampler, cl_sampler_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithSource        ) (content::GpuChannelHost*, cl_context, cl_uint, const char**, const size_t*, cl_int*);
-typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithBinary        ) (content::GpuChannelHost*, cl_context, cl_uint, const cl_device_id*, const size_t*, const unsigned char**, cl_int*, cl_int*);
-typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithBuiltInKernels) (content::GpuChannelHost*, cl_context, cl_uint, const cl_device_id*, const char*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainProgram                  ) (content::GpuChannelHost*, cl_program);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseProgram                 ) (content::GpuChannelHost*, cl_program);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clBuildProgram                   ) (content::GpuChannelHost*, cl_program, cl_uint, const cl_device_id*, const char*, void (CL_CALLBACK*)(cl_program, void*), void*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clCompileProgram                 ) (content::GpuChannelHost*, cl_program, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, const char**, void (CL_CALLBACK*)(cl_program, void*), void*);
-typedef CL_API_ENTRY cl_program       (__cdecl *h_clLinkProgram                    ) (content::GpuChannelHost*, cl_context, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, void (CL_CALLBACK*)(cl_program, void*), void*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clUnloadPlatformCompiler         ) (content::GpuChannelHost*, cl_platform_id);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetProgramInfo                 ) (content::GpuChannelHost*, cl_program, cl_program_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetProgramBuildInfo            ) (content::GpuChannelHost*, cl_program, cl_device_id, cl_program_build_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_kernel        (__cdecl *h_clCreateKernel                   ) (content::GpuChannelHost*, cl_program, const char*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clCreateKernelsInProgram         ) (content::GpuChannelHost*, cl_program, cl_uint, cl_kernel*, cl_uint*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainKernel                   ) (content::GpuChannelHost*, cl_kernel);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseKernel                  ) (content::GpuChannelHost*, cl_kernel);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetKernelArg                   ) (content::GpuChannelHost*, cl_kernel, cl_uint, size_t, const void*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetKernelArg_vector                   ) (content::GpuChannelHost*, cl_kernel, cl_uint, size_t, const void*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelInfo                  ) (content::GpuChannelHost*, cl_kernel, cl_kernel_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelArgInfo               ) (content::GpuChannelHost*, cl_kernel, cl_uint, cl_kernel_arg_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelWorkGroupInfo         ) (content::GpuChannelHost*, cl_kernel, cl_device_id, cl_kernel_work_group_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clWaitForEvents                  ) (content::GpuChannelHost*, cl_uint, const cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetEventInfo                   ) (content::GpuChannelHost*, cl_event, cl_event_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_event         (__cdecl *h_clCreateUserEvent                ) (content::GpuChannelHost*, cl_context, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainEvent                    ) (content::GpuChannelHost*, cl_event);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseEvent                   ) (content::GpuChannelHost*, cl_event);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetUserEventStatus             ) (content::GpuChannelHost*, cl_event, cl_int);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetEventCallback               ) (content::GpuChannelHost*, cl_event, cl_int, void (CL_CALLBACK*)(cl_event, cl_int, void*), void*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetEventProfilingInfo          ) (content::GpuChannelHost*, cl_event, cl_profiling_info, size_t, void*, size_t*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clFlush                          ) (content::GpuChannelHost*, cl_command_queue);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clFinish                         ) (content::GpuChannelHost*, cl_command_queue);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadBuffer              ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadBufferRect          ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteBuffer             ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteBufferRect         ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueFillBuffer              ) (content::GpuChannelHost*, cl_command_queue, cl_mem, const void*, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBuffer              ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_mem, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBufferRect          ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadImage               ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteImage              ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueFillImage               ) (content::GpuChannelHost*, cl_command_queue, cl_mem, const void*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyImage               ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyImageToBuffer       ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, size_t, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBufferToImage       ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_mem, size_t, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY void *           (__cdecl *h_clEnqueueMapBuffer               ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, cl_map_flags, size_t, size_t, cl_uint, const cl_event*, cl_event*, cl_int*);
-typedef CL_API_ENTRY void *           (__cdecl *h_clEnqueueMapImage                ) (content::GpuChannelHost*, cl_command_queue, cl_mem, cl_bool, cl_map_flags, const size_t*, const size_t*, size_t*, size_t*, cl_uint, const cl_event*, cl_event*, cl_int*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueUnmapMemObject          ) (content::GpuChannelHost*, cl_command_queue, cl_mem, void*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueMigrateMemObjects       ) (content::GpuChannelHost*, cl_command_queue, cl_uint, const cl_mem*, cl_mem_migration_flags, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueNDRangeKernel           ) (content::GpuChannelHost*, cl_command_queue, cl_kernel, cl_uint, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueTask                    ) (content::GpuChannelHost*, cl_command_queue, cl_kernel, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueNativeKernel            ) (content::GpuChannelHost*, cl_command_queue, void (CL_CALLBACK*)(void*), void*, size_t, cl_uint, const cl_mem*, const void**, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueMarkerWithWaitList      ) (content::GpuChannelHost*, cl_command_queue, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueBarrierWithWaitList     ) (content::GpuChannelHost*, cl_command_queue, cl_uint, const cl_event*, cl_event*);
-typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetPrintfCallback              ) (content::GpuChannelHost*, cl_context, void (CL_CALLBACK*)(cl_context, cl_uint, char*, void*), void*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetPlatformIDs                 ) (/*content::GpuChannelHost*, */cl_uint, cl_platform_id*, cl_uint*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetPlatformInfo                ) (/*content::GpuChannelHost*, */cl_platform_id, cl_platform_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetDeviceIDs                   ) (/*content::GpuChannelHost*, */cl_platform_id, cl_device_type, cl_uint, cl_device_id*, cl_uint*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetDeviceInfo                  ) (/*content::GpuChannelHost*, */cl_device_id, cl_device_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clCreateSubDevices               ) (/*content::GpuChannelHost*, */cl_device_id, const cl_device_partition_property*, cl_uint, cl_device_id*, cl_uint*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainDevice                   ) (/*content::GpuChannelHost*, */cl_device_id);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseDevice                  ) (/*content::GpuChannelHost*, */cl_device_id);
+typedef CL_API_ENTRY cl_context       (__cdecl *h_clCreateContext                  ) (/*content::GpuChannelHost*, */const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
+typedef CL_API_ENTRY cl_context       (__cdecl *h_clCreateContextFromType          ) (/*content::GpuChannelHost*, */const cl_context_properties*, cl_device_type, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainContext                  ) (/*content::GpuChannelHost*, */cl_context);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseContext                 ) (/*content::GpuChannelHost*, */cl_context);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetContextInfo                 ) (/*content::GpuChannelHost*, */cl_context, cl_context_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_command_queue (__cdecl *h_clCreateCommandQueue             ) (/*content::GpuChannelHost*, */cl_context, cl_device_id, cl_command_queue_properties, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainCommandQueue             ) (/*content::GpuChannelHost*, */cl_command_queue);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseCommandQueue            ) (/*content::GpuChannelHost*, */cl_command_queue);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetCommandQueueInfo            ) (/*content::GpuChannelHost*, */cl_command_queue, cl_command_queue_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateBuffer                   ) (/*content::GpuChannelHost*, */cl_context, cl_mem_flags, size_t, void*, cl_int*);
+typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateSubBuffer                ) (/*content::GpuChannelHost*, */cl_mem, cl_mem_flags, cl_buffer_create_type, const void*, cl_int*);
+typedef CL_API_ENTRY cl_mem           (__cdecl *h_clCreateImage                    ) (/*content::GpuChannelHost*, */cl_context, cl_mem_flags, const cl_image_format*, const cl_image_desc*, void*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainMemObject                ) (/*content::GpuChannelHost*, */cl_mem);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseMemObject               ) (/*content::GpuChannelHost*, */cl_mem);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetSupportedImageFormats       ) (/*content::GpuChannelHost*, */cl_context, cl_mem_flags, cl_mem_object_type, cl_uint, cl_image_format*, cl_uint*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetMemObjectInfo               ) (/*content::GpuChannelHost*, */cl_mem, cl_mem_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetImageInfo                   ) (/*content::GpuChannelHost*, */cl_mem, cl_image_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetMemObjectDestructorCallback ) (/*content::GpuChannelHost*, */cl_mem, void (CL_CALLBACK*)(cl_mem,void*), void*);
+typedef CL_API_ENTRY cl_sampler       (__cdecl *h_clCreateSampler                  ) (/*content::GpuChannelHost*, */cl_context, cl_bool, cl_addressing_mode, cl_filter_mode, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainSampler                  ) (/*content::GpuChannelHost*, */cl_sampler);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseSampler                 ) (/*content::GpuChannelHost*, */cl_sampler);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetSamplerInfo                 ) (/*content::GpuChannelHost*, */cl_sampler, cl_sampler_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithSource        ) (/*content::GpuChannelHost*, */cl_context, cl_uint, const char**, const size_t*, cl_int*);
+typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithBinary        ) (/*content::GpuChannelHost*, */cl_context, cl_uint, const cl_device_id*, const size_t*, const unsigned char**, cl_int*, cl_int*);
+typedef CL_API_ENTRY cl_program       (__cdecl *h_clCreateProgramWithBuiltInKernels) (/*content::GpuChannelHost*, */cl_context, cl_uint, const cl_device_id*, const char*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainProgram                  ) (/*content::GpuChannelHost*, */cl_program);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseProgram                 ) (/*content::GpuChannelHost*, */cl_program);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clBuildProgram                   ) (/*content::GpuChannelHost*, */cl_program, cl_uint, const cl_device_id*, const char*, void (CL_CALLBACK*)(cl_program, void*), void*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clCompileProgram                 ) (/*content::GpuChannelHost*, */cl_program, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, const char**, void (CL_CALLBACK*)(cl_program, void*), void*);
+typedef CL_API_ENTRY cl_program       (__cdecl *h_clLinkProgram                    ) (/*content::GpuChannelHost*, */cl_context, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, void (CL_CALLBACK*)(cl_program, void*), void*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clUnloadPlatformCompiler         ) (/*content::GpuChannelHost*, */cl_platform_id);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetProgramInfo                 ) (/*content::GpuChannelHost*, */cl_program, cl_program_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetProgramBuildInfo            ) (/*content::GpuChannelHost*, */cl_program, cl_device_id, cl_program_build_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_kernel        (__cdecl *h_clCreateKernel                   ) (/*content::GpuChannelHost*, */cl_program, const char*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clCreateKernelsInProgram         ) (/*content::GpuChannelHost*, */cl_program, cl_uint, cl_kernel*, cl_uint*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainKernel                   ) (/*content::GpuChannelHost*, */cl_kernel);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseKernel                  ) (/*content::GpuChannelHost*, */cl_kernel);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetKernelArg                   ) (/*content::GpuChannelHost*, */cl_kernel, cl_uint, size_t, const void*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetKernelArg_vector                   ) (/*content::GpuChannelHost*, */cl_kernel, cl_uint, size_t, const void*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelInfo                  ) (/*content::GpuChannelHost*, */cl_kernel, cl_kernel_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelArgInfo               ) (/*content::GpuChannelHost*, */cl_kernel, cl_uint, cl_kernel_arg_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetKernelWorkGroupInfo         ) (/*content::GpuChannelHost*, */cl_kernel, cl_device_id, cl_kernel_work_group_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clWaitForEvents                  ) (/*content::GpuChannelHost*, */cl_uint, const cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetEventInfo                   ) (/*content::GpuChannelHost*, */cl_event, cl_event_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_event         (__cdecl *h_clCreateUserEvent                ) (/*content::GpuChannelHost*, */cl_context, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clRetainEvent                    ) (/*content::GpuChannelHost*, */cl_event);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clReleaseEvent                   ) (/*content::GpuChannelHost*, */cl_event);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetUserEventStatus             ) (/*content::GpuChannelHost*, */cl_event, cl_int);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetEventCallback               ) (/*content::GpuChannelHost*, */cl_event, cl_int, void (CL_CALLBACK*)(cl_event, cl_int, void*), void*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clGetEventProfilingInfo          ) (/*content::GpuChannelHost*, */cl_event, cl_profiling_info, size_t, void*, size_t*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clFlush                          ) (/*content::GpuChannelHost*, */cl_command_queue);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clFinish                         ) (/*content::GpuChannelHost*, */cl_command_queue);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadBuffer              ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadBufferRect          ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteBuffer             ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteBufferRect         ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueFillBuffer              ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, const void*, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBuffer              ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_mem, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBufferRect          ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueReadImage               ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueWriteImage              ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueFillImage               ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, const void*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyImage               ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyImageToBuffer       ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, size_t, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueCopyBufferToImage       ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_mem, size_t, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY void *           (__cdecl *h_clEnqueueMapBuffer               ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, cl_map_flags, size_t, size_t, cl_uint, const cl_event*, cl_event*, cl_int*);
+typedef CL_API_ENTRY void *           (__cdecl *h_clEnqueueMapImage                ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, cl_bool, cl_map_flags, const size_t*, const size_t*, size_t*, size_t*, cl_uint, const cl_event*, cl_event*, cl_int*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueUnmapMemObject          ) (/*content::GpuChannelHost*, */cl_command_queue, cl_mem, void*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueMigrateMemObjects       ) (/*content::GpuChannelHost*, */cl_command_queue, cl_uint, const cl_mem*, cl_mem_migration_flags, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueNDRangeKernel           ) (/*content::GpuChannelHost*, */cl_command_queue, cl_kernel, cl_uint, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueTask                    ) (/*content::GpuChannelHost*, */cl_command_queue, cl_kernel, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueNativeKernel            ) (/*content::GpuChannelHost*, */cl_command_queue, void (CL_CALLBACK*)(void*), void*, size_t, cl_uint, const cl_mem*, const void**, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueMarkerWithWaitList      ) (/*content::GpuChannelHost*, */cl_command_queue, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clEnqueueBarrierWithWaitList     ) (/*content::GpuChannelHost*, */cl_command_queue, cl_uint, const cl_event*, cl_event*);
+typedef CL_API_ENTRY cl_int           (__cdecl *h_clSetPrintfCallback              ) (/*content::GpuChannelHost*, */cl_context, void (CL_CALLBACK*)(cl_context, cl_uint, char*, void*), void*);
 
 typedef CL_API_ENTRY cl_mem 
-(__cdecl *h_clCreateFromGLBuffer)(content::GpuChannelHost*, cl_context     /* context */,
+(__cdecl *h_clCreateFromGLBuffer)(/*content::GpuChannelHost*, */cl_context     /* context */,
                      cl_mem_flags   /* flags */,
                      cl_GLuint      /* bufobj */,
                      int *          /* errcode_ret */) ;
 
 typedef CL_API_ENTRY cl_mem 
-(__cdecl *h_clCreateFromGLTexture)(content::GpuChannelHost*, cl_context      /* context */,
+(__cdecl *h_clCreateFromGLTexture)(/*content::GpuChannelHost*, */cl_context      /* context */,
                       cl_mem_flags    /* flags */,
                       cl_GLenum       /* target */,
                       cl_GLint        /* miplevel */,
                       cl_GLuint       /* texture */,
                       cl_int *        /* errcode_ret */) ;
 typedef CL_API_ENTRY cl_int 
-(__cdecl *h_clEnqueueAcquireGLObjects)(content::GpuChannelHost*, cl_command_queue      /* command_queue */,
+(__cdecl *h_clEnqueueAcquireGLObjects)(/*content::GpuChannelHost*, */cl_command_queue      /* command_queue */,
                           cl_uint               /* num_objects */,
                           const cl_mem *        /* mem_objects */,
                           cl_uint               /* num_events_in_wait_list */,
@@ -105,14 +108,22 @@ typedef CL_API_ENTRY cl_int
                           cl_event *            /* event */) ;
 
 typedef CL_API_ENTRY cl_int 
-(__cdecl *h_clEnqueueReleaseGLObjects)(content::GpuChannelHost*, cl_command_queue      /* command_queue */,
+(__cdecl *h_clEnqueueReleaseGLObjects)(/*content::GpuChannelHost*, */cl_command_queue      /* command_queue */,
                           cl_uint               /* num_objects */,
                           const cl_mem *        /* mem_objects */,
                           cl_uint               /* num_events_in_wait_list */,
                           const cl_event *      /* event_wait_list */,
                           cl_event *            /* event */) ;
 
-
+typedef CL_API_ENTRY cl_int
+(__cdecl *h_clEnqueueMarker)(cl_command_queue    /* command_queue */,
+                cl_event *          /* event */);
+typedef CL_API_ENTRY cl_int
+(__cdecl *h_clEnqueueWaitForEvents)(cl_command_queue /* command_queue */,
+                       cl_uint          /* num_events */,
+                       const cl_event * /* event_list */);
+typedef CL_API_ENTRY cl_int
+(__cdecl *h_clEnqueueBarrier)(cl_command_queue /* command_queue */);
 
 #ifdef __WEBCL_CL_INIT_MAIN__
 #define CL_LOADING_PREFIX
@@ -210,8 +221,14 @@ CL_LOADING_PREFIX h_clCreateFromGLTexture              webcl_clCreateFromGLTextu
 CL_LOADING_PREFIX h_clEnqueueAcquireGLObjects          webcl_clEnqueueAcquireGLObjects        CL_LOADING_SUFFIX;
 CL_LOADING_PREFIX h_clEnqueueReleaseGLObjects          webcl_clEnqueueReleaseGLObjects        CL_LOADING_SUFFIX;
 
+CL_LOADING_PREFIX h_clEnqueueMarker          webcl_clEnqueueMarker        CL_LOADING_SUFFIX;
+CL_LOADING_PREFIX h_clEnqueueWaitForEvents          webcl_clEnqueueWaitForEvents        CL_LOADING_SUFFIX;
+CL_LOADING_PREFIX h_clEnqueueBarrier          webcl_clEnqueueBarrier        CL_LOADING_SUFFIX;
+
 #undef CL_LOADING_PREFIX
 #undef CL_LOADING_SUFFIX
+
+#ifndef JUST_WEBCL_FUNC_DECLARATIONS
 
 #ifdef WEBCLEXPORT
 #define DLLPORTA __declspec(dllexport)
@@ -219,7 +236,7 @@ CL_LOADING_PREFIX h_clEnqueueReleaseGLObjects          webcl_clEnqueueReleaseGLO
 #define DLLPORTA __declspec(dllimport)
 #endif
 
-#define WEBCL_LOAD_FUN_DEF(func) extern "C" DLLPORTA void setWebCL##func(h_##func input);
+#define WEBCL_LOAD_FUN_DEF(func) extern "C" DLLPORTA void setWebCL##func(void* input); //h_##func input);
 
 WEBCL_LOAD_FUN_DEF(clGetPlatformIDs                 )
 WEBCL_LOAD_FUN_DEF(clGetPlatformInfo                )
@@ -308,3 +325,11 @@ WEBCL_LOAD_FUN_DEF(clCreateFromGLBuffer)
 WEBCL_LOAD_FUN_DEF(clCreateFromGLTexture)
 WEBCL_LOAD_FUN_DEF(clEnqueueAcquireGLObjects)
 WEBCL_LOAD_FUN_DEF(clEnqueueReleaseGLObjects)
+
+WEBCL_LOAD_FUN_DEF(clEnqueueMarker)
+WEBCL_LOAD_FUN_DEF(clEnqueueWaitForEvents)
+WEBCL_LOAD_FUN_DEF(clEnqueueBarrier)
+
+#endif // JUST_WEBCL_...
+
+//#endif

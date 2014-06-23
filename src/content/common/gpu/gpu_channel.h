@@ -1069,6 +1069,8 @@ class GpuChannel : public IPC::Listener,
 							cl_int* // func_ret
 							);
 
+#include "content/common/gpu/ocl_service_header.h"
+
 };
 
 }  // namespace content

@@ -30,8 +30,8 @@
 
 #if ENABLE(WEBCL)
 
-#include "DOMWindowProperty.h"
-#include "Supplementable.h"
+#include "core/frame/DOMWindowProperty.h"
+#include "platform/Supplementable.h"
 
 namespace WebCore {
 
@@ -42,6 +42,7 @@ public:
     virtual ~DOMWindowWebCLEnvironment();
     static DOMWindowWebCLEnvironment* from(DOMWindow*);
     static WebCL* webcl(DOMWindow*);
+	static WebCL* webcl(Document* doc);
     WebCL* webcl() const;
 
     static const char* supplementName();

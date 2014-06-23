@@ -6,8 +6,6 @@
 
 extern "C"__declspec(dllimport) void setWebCLChannelHost(content::GpuChannelHost* channel_webcl);
 
-
-
 #include <algorithm>
 
 #include "base/bind.h"
@@ -65,6 +63,9 @@ bool GpuChannelHost::IsValidGpuMemoryBuffer(
       return false;
   }
 }
+content::GpuChannelHost * __ocl_gpu_channel_host;
+
+#include "content/common/gpu/ocl_client.h"
 
 GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
                                int gpu_host_id,
@@ -78,7 +79,11 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   next_gpu_memory_buffer_id_.GetNext();
   
   setWebCLChannelHost(this);
+  __ocl_gpu_channel_host = this;
 
+#include "content/common/gpu/ocl_client_set_func.h"
+
+#if 0
   WEBCL_SET_FUNC(clGetPlatformIDs                 )
   WEBCL_SET_FUNC(clGetPlatformInfo                )
   WEBCL_SET_FUNC(clGetDeviceIDs                   )
@@ -165,6 +170,7 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   WEBCL_SET_FUNC(clCreateFromGLTexture)
   WEBCL_SET_FUNC(clEnqueueAcquireGLObjects)
   WEBCL_SET_FUNC(clEnqueueReleaseGLObjects)
+#endif
 
 }
 
@@ -600,6 +606,8 @@ void GpuChannelHost::MessageFilter::OnGenerateMailboxNamesReply(
                             names.begin(),
                             names.end());
 }
+
+#if 0
 
 // Adding the implement of OpenCL API calling.
 
@@ -5338,6 +5346,7 @@ cl_int CallclEnqueueBarrierWithWaitList(
       event_wait_list,
       clevent);
 }
+#endif
 
 // ScalableVision
 
@@ -5459,9 +5468,5 @@ cl_int CallclEnqueueReleaseGLObjects (	GpuChannelHost* channel_host_, cl_command
 			event_wait_list,
 			event);
 }
-
-
-
-
 
 }  // namespace content

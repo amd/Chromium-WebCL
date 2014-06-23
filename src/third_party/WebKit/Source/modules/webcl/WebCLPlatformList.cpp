@@ -45,8 +45,8 @@ void setWebCLChannelHost(content::GpuChannelHost* channel_webcl)
 //void setWebCLclGetPlatformIDs(h_clGetPlatformIDs input){webcl_clGetPlatformIDs = input;}
 
 #define WEBCL_LOAD_FUNCTION(func)                                            \
-  void setWebCL##func(h_##func input) {                                      \
-    webcl_##func = input;                                                    \
+  void setWebCL##func(void *input) /*h_##func input)*/ {                     \
+  webcl_##func = (h_##func)input;                                            \
   }
 
 //ScalableVision begin
@@ -54,7 +54,7 @@ WEBCL_LOAD_FUNCTION(clCreateFromGLBuffer)
 WEBCL_LOAD_FUNCTION(clCreateFromGLTexture)
 WEBCL_LOAD_FUNCTION(clEnqueueAcquireGLObjects)
 WEBCL_LOAD_FUNCTION(clEnqueueReleaseGLObjects)
-//ScalableVision end
+
 
 
 WEBCL_LOAD_FUNCTION(clGetPlatformIDs                 )
@@ -139,6 +139,10 @@ WEBCL_LOAD_FUNCTION(clEnqueueNativeKernel            )
 WEBCL_LOAD_FUNCTION(clEnqueueMarkerWithWaitList      )
 WEBCL_LOAD_FUNCTION(clEnqueueBarrierWithWaitList     )
 WEBCL_LOAD_FUNCTION(clSetPrintfCallback              )
+
+WEBCL_LOAD_FUNCTION(clEnqueueBarrier      )
+WEBCL_LOAD_FUNCTION(clEnqueueWaitForEvents     )
+WEBCL_LOAD_FUNCTION(clEnqueueMarker              )
 
 namespace WebCore {
 
