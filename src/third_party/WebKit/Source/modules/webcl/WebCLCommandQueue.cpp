@@ -1227,6 +1227,37 @@ void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryO
 }
 #endif
 
+
+    ////
+    void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView* arrayBuf, ExceptionObject& es) {
+	    enqueueWriteBuffer(buf, blockingWrite, bufferOffset, numBytes, arrayBuf, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+    void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, ImageData* data, ExceptionObject& es) {
+	    enqueueWriteBuffer(buf, blockingWrite, bufferOffset, data, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+    void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, HTMLCanvasElement* data, ExceptionObject& es) {
+	    enqueueWriteBuffer(buf, blockingWrite, bufferOffset, data, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+    void WebCLCommandQueue::enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, HTMLImageElement* data, ExceptionObject& es) {
+	    enqueueWriteBuffer(buf, blockingWrite, bufferOffset, data, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+
+    void WebCLCommandQueue::enqueueReadBuffer(WebCLBuffer*clbuf, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*abuf,
+        ExceptionObject&es) {
+			enqueueReadBuffer(clbuf, blockingWrite, bufferOffset, numBytes, abuf, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+	}
+    void WebCLCommandQueue::enqueueReadBuffer(WebCLBuffer*clbuf, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*elem,
+        ExceptionObject& es) {
+	    enqueueReadBuffer(clbuf, blockingWrite, bufferOffset, numBytes, elem, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+    void WebCLCommandQueue::enqueueNDRangeKernel(WebCLKernel*k, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
+        const Vector<unsigned>& localWorkSize, ExceptionObject&es) {
+	    enqueueNDRangeKernel(k, workDim, globalWorkOffsets, globalWorkSize, localWorkSize, Vector<RefPtr<WebCLEvent> >(), NULL, es);
+    }
+
+
+
+
 } // namespace WebCore
 
 #endif // ENABLE(WEBCL)

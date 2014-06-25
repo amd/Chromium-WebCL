@@ -33,6 +33,7 @@
 #include "ComputeCommandQueue.h"
 #include "WebCLObject.h"
 
+
 namespace WebCore {
 
 class ImageData;
@@ -56,6 +57,16 @@ public:
 
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    
+	//// ScalableVision: V8 code generator generates code that call these
+	//// The issue is that if there's [Default=Undefined] for the optional sequence<WebCLEvent>, 
+	//// the code gnerator generates code that does not show any optional-ness for this parameter,
+	//// and therefore the call will fail at runtime claiming "the 6th parameter is not an array or..."
+    void enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView* arrayBuf, ExceptionObject& es);
+    void enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, ImageData* data, ExceptionObject& es);
+    void enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, HTMLCanvasElement* data, ExceptionObject& es);
+    void enqueueWriteBuffer(WebCLBuffer* buf, CCbool blockingWrite, CCuint bufferOffset, HTMLImageElement* data, ExceptionObject& es);
+
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, ImageData*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
@@ -74,6 +85,13 @@ public:
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    ////
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
+        ExceptionObject&);
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
+        ExceptionObject&);
+    void enqueueNDRangeKernel(WebCLKernel*, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
+        const Vector<unsigned>& localWorkSize, ExceptionObject&);
 
 
     void enqueueReadBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,

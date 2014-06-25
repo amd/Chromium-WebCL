@@ -252,9 +252,10 @@ GpuChannel::service_clCreateProgramWithSource(
 	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
 	cl_pointer * func_ret) //! return cl_program
 {
+  const unsigned char *msg_str[] = {&msg_strings[0]};
   *func_ret = (cl_pointer)  clCreateProgramWithSource(	(cl_context)msg_context,
 	(cl_uint)msg_count,
-	msg_strings.size() ? (const char **)&(msg_strings)[0] : NULL,
+	msg_strings.size() ? (const char **)&(msg_str)[0] : NULL,
 	msg_lengths.size() ? (const size_t *)&(msg_lengths)[0] : NULL,
 	(cl_int *)msg_errcode_ret);
 }

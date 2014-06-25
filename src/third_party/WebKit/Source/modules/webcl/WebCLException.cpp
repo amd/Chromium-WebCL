@@ -280,6 +280,8 @@ WebCLException::WebCLExceptionCode WebCLException::computeContextErrorToWebCLExc
 }
 
 void setExceptionFromComputeErrorCode(int computeContextError, ExceptionState& es /* ExceptionCode& ec */) {
+	if (computeContextError == ComputeContext::SUCCESS)
+		return;
     int errorCode = WebCLException::computeContextErrorToWebCLExceptionCode(computeContextError);
 	es.throwDOMException(errorCode, "");
 }

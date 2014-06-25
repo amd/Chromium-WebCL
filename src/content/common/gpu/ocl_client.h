@@ -136,8 +136,9 @@ client_clCreateContext(
   cl_pointer msg_callback;
   cl_pointer msg_user_data;
   cl_int msg_errcode_ret;
-{const cl_context_properties *tmp = properties; int n=0; if (tmp) { while (*tmp != 0) n++; }
-  if (n) { msg_properties.resize(n*4); memcpy(&msg_properties[0], properties, n*4); } else { msg_properties.push_back(0); } }
+  {const cl_context_properties *tmp = properties; int n=0; if (tmp) { while (*tmp++ != 0) n++; }
+  if (n) { msg_properties.resize((n+1)*4); memcpy(&msg_properties[0], properties, (n+1)*4); }
+  }
   msg_num_devices = num_devices;
   if (devices && num_devices*4) { msg_devices.resize(num_devices*4); memcpy(&msg_devices[0], devices, num_devices*4); }
   msg_callback = (cl_pointer)callback;
