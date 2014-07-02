@@ -348,6 +348,8 @@ static void setUpComputeContextProperties(ComputePlatform* platform, GraphicsCon
 
 ComputeContext::ComputeContext(const Vector<ComputeDevice*>& devices, ComputePlatform* platform, GraphicsContext3D* context3D, CCerror& error)
 {
+	this->m_graphicsContext3D = context3D;
+
     Vector<CCDeviceID> clDevices;
     for (size_t i = 0; i < devices.size(); ++i)
         clDevices.append(devices[i]->device());

@@ -954,7 +954,7 @@ cl_int CallclRetainDevice (GpuChannelHost*,cl_device_id);
 cl_int CallclReleaseDevice (GpuChannelHost*,cl_device_id);
 
 cl_context CallclCreateContext(
-    GpuChannelHost*,
+    /*GpuChannelHost*,*/
     const cl_context_properties*,
     cl_uint,
     const cl_device_id*,

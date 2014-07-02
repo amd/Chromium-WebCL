@@ -364,8 +364,10 @@ public:
     // The source pixel format is treated as 32-bit RGBA (8-bits per component) with non-premultiplied alpha, regardless of the source
     static CCerror CCPackImageData(Image*, GraphicsContext3D::ImageHtmlDomSource, unsigned width, unsigned height, Vector<uint8_t>&);
 
+	GraphicsContext3D* graphicsContext3D() { return m_graphicsContext3D; }
 private:
     CCContext m_clContext;
+	GraphicsContext3D* m_graphicsContext3D;
 };
 
 }

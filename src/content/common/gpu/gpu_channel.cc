@@ -960,6 +960,9 @@ bool GpuChannel::OnControlMessageReceived(const IPC::Message& msg) {
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueAcquireGLObjects, OnCallclEnqueueAcquireGLObjects);
 	IPC_MESSAGE_HANDLER(OpenCLChannelMsg_EnqueueReleaseGLObjects, OnCallclEnqueueReleaseGLObjects);
 
+    IPC_MESSAGE_HANDLER(OpenCLChannelMsg_CreateContext,
+                                    OnCallclCreateContext);
+
 #include "content/common/gpu/ocl_msg_map.h"
 
 
@@ -1460,6 +1463,13 @@ void GpuChannel::OnCallclReleaseDevice(
   *errcode_ret = clReleaseDevice(device);
 }
 
+LONG WINAPI first_chance_handler(EXCEPTION_POINTERS * /*ExceptionInfo*/)
+{
+    //std::cout << "Gotcha!" << std::endl;
+
+    return EXCEPTION_CONTINUE_EXECUTION;
+}
+
 void GpuChannel::OnCallclCreateContext(
     const std::vector<cl_context_properties>& property_list,
     const cl_uint& num_devices,
@@ -1468,6 +1478,9 @@ void GpuChannel::OnCallclCreateContext(
     const std::vector<bool>& return_variable_null_status,
     cl_int* errcode_ret,
     cl_point* point_context_ret) {
+
+  ::SetUnhandledExceptionFilter(first_chance_handler);
+
   // Receiving and responding the Sync IPC Message from another process
   // and return the results of clCreateContext OpenCL API calling.
   cl_context_properties* properties = NULL;

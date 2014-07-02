@@ -42,6 +42,9 @@
 
 #include "modules/webcl/WebCLCommandQueue.h"
 //#include "..\..\core\platform\NotImplemented.h"
+
+#include "V8Uint32ArrayCustom.h"
+
 namespace v8 {
 	typedef FunctionCallbackInfo<v8::Value> Arguments;
 }
@@ -86,8 +89,34 @@ static v8::Handle<v8::Value> toV8Object(const WebCLGetInfo& info,v8::Handle<v8::
             //return v8::Interger::NewFromUnsigned(info.getUnsignedInt());
         /*case WebCLGetInfo::kTypeWebCLFloatArray:
             return toV8(info.getWebCLFloatArray(),creationContext, isolate);*/
-        case WebCLGetInfo::kTypeWebCLIntArray: //TODO
-            return v8::Undefined();//return toV8(info.getWebCLUintArray(),creationContext, isolate);
+        case WebCLGetInfo::kTypeWebCLIntArray:
+			{
+
+				Vector<CCuint> uint_arr = info.getWebCLUintArray();
+				/*
+				PassRefPtr<Uint32Array> v8arr = Uint32Array::create(&uint_arr[0], uint_arr.size());
+
+				return toV8(v8arr,creationContext, isolate);
+				*/
+				// We will be creating temporary handles so we use a handle scope
+				v8::Isolate* isolate = v8::Isolate::GetCurrent();
+				v8::HandleScope handle_scope(isolate);
+
+				// Create a new empty array.
+				v8::Handle<v8::Array> array = v8::Array::New(uint_arr.size());
+
+				// Return an empty result if there was an error creating the array.
+				if (array.IsEmpty())
+					return v8::Handle<v8::Array>();
+
+				// Fill out the values
+				for (int i=0; i<(int)uint_arr.size(); i++)
+					array->Set(i, v8::Integer::New(uint_arr[i]));
+
+				// Return the value through Close.
+				return handle_scope.Close(array);
+
+			}
 
     case WebCLGetInfo::kTypeWebCLImageDescriptor: //TODO
         return v8::Undefined();//return toV8(info.getWebCLImageDescriptor(), creationContext, isolate);

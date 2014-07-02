@@ -67,6 +67,133 @@ content::GpuChannelHost * __ocl_gpu_channel_host;
 
 #include "content/common/gpu/ocl_client.h"
 
+cl_mem client_clCreateFromGLBuffer(cl_context      context ,
+	cl_mem_flags    flags ,
+	cl_GLuint       bufobj ,
+	int *           errcode_ret )  {
+		cl_mem ret;
+		if (!__ocl_gpu_channel_host->Send(new OpenCLChannelMsg_CreateFromGLBuffer((cl_point)context, (cl_uint)flags, (cl_uint)bufobj, errcode_ret, (cl_point*)&ret)))
+			return NULL;
+
+		return ret;
+}
+
+cl_mem 
+client_clCreateFromGLTexture(cl_context       context ,
+                      cl_mem_flags     flags ,
+                      cl_GLenum        target ,
+                      cl_GLint         miplevel ,
+                      cl_GLuint        texture ,
+                      cl_int *         errcode_ret ) {
+	cl_mem ret;
+	if (!__ocl_gpu_channel_host->Send(new OpenCLChannelMsg_CreateFromGLTexture((cl_point)context, (cl_uint)flags, (cl_uint)target, miplevel, (cl_uint)texture, errcode_ret, (cl_point*)&ret)))
+		return NULL;
+
+	return ret;
+}
+
+cl_int
+client_clEnqueueAcquireGLObjects(cl_command_queue       command_queue ,
+                          cl_uint                num_objects ,
+                          const cl_mem *         mem_objects ,
+                          cl_uint                num_events_in_wait_list ,
+                          const cl_event *       event_wait_list ,
+                          cl_event *             ret_event ) {
+	std::vector<cl_point> memobjs;
+	std::vector<cl_point> ewl;
+	cl_event ev;
+	cl_uint i; 
+	cl_int ret;
+	for (i=0; i<num_objects; i++) memobjs.push_back((cl_point)mem_objects[i]);
+	for (i=0; i<num_events_in_wait_list; i++) ewl.push_back((cl_point)event_wait_list[i]);
+	if (!__ocl_gpu_channel_host->Send(new OpenCLChannelMsg_EnqueueAcquireGLObjects((cl_point)command_queue, memobjs, ewl, (cl_point*)&ev, &ret)))
+		return CL_SEND_IPC_MESSAGE_FAILURE;
+	if (ret_event) *ret_event = ev;
+
+	return ret;
+}
+
+cl_int
+client_clEnqueueReleaseGLObjects(cl_command_queue       command_queue ,
+                          cl_uint                num_objects ,
+                          const cl_mem *         mem_objects ,
+                          cl_uint                num_events_in_wait_list ,
+                          const cl_event *       event_wait_list ,
+                          cl_event *             ret_event ) {
+	std::vector<cl_point> memobjs;
+	std::vector<cl_point> ewl;
+	cl_uint i;
+	cl_int ret;
+	cl_event ev;
+	for (i=0; i<num_objects; i++) memobjs.push_back((cl_point)mem_objects[i]);
+	for (i=0; i<num_events_in_wait_list; i++) ewl.push_back((cl_point)event_wait_list[i]);
+	if (!__ocl_gpu_channel_host->Send(new OpenCLChannelMsg_EnqueueReleaseGLObjects((cl_point)command_queue, memobjs, ewl, (cl_point*)&ev, &ret)))
+		return CL_SEND_IPC_MESSAGE_FAILURE;
+	if (ret_event) *ret_event = ev;
+
+	return ret;
+}
+
+
+cl_context GpuChannelHost::CallclCreateContext(
+    const cl_context_properties* properties,
+    cl_uint num_devices,
+    const cl_device_id* devices,
+    void (CL_CALLBACK* pfn_notify)(const char*, const void*, size_t, void*),
+    void* user_data,
+    cl_int* errcode_ret) {
+  // Sending a Sync IPC Message, to call a CallclCreateContext API
+  // in other process, and getting the results of the API.
+  cl_int errcode_ret_inter;
+  cl_point point_context_ret;
+  std::vector<cl_device_partition_property> property_list;
+  std::vector<cl_point> point_device_list;
+  std::vector<cl_point> point_pfn_list;
+  std::vector<bool> return_variable_null_status;
+
+  return_variable_null_status.resize(1);
+  return_variable_null_status[0] = false;
+
+  // The Sync Message can't get value back by NULL ptr, so if a
+  // return back ptr is NULL, we must instead it using another
+  // no-NULL ptr.
+  if (NULL == errcode_ret) {
+    errcode_ret = &errcode_ret_inter;
+    return_variable_null_status[0] = true;
+  }
+
+  // Dump the inputs of the Sync IPC Message calling.
+  point_pfn_list.push_back((cl_point) pfn_notify);
+  point_pfn_list.push_back((cl_point) user_data);
+
+  property_list.clear();
+  if (NULL != properties) {
+    while (0 != *properties)
+      property_list.push_back(*properties++);
+    property_list.push_back(0);
+  }
+
+  point_device_list.clear();
+  for (cl_uint index = 0; devices && index < num_devices; ++index)
+    point_device_list.push_back((cl_point) devices[index]);
+
+  // Send a Sync IPC Message and wait for the results.
+  if (!Send(new OpenCLChannelMsg_CreateContext(
+            property_list,
+            num_devices,
+            point_device_list,
+            point_pfn_list,
+            return_variable_null_status,
+            errcode_ret,
+            &point_context_ret))) {
+    return NULL;
+  }
+  return (cl_context) point_context_ret;
+}
+
+
+
+
 GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
                                int gpu_host_id,
                                int client_id,
@@ -82,6 +209,12 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   __ocl_gpu_channel_host = this;
 
 #include "content/common/gpu/ocl_client_set_func.h"
+  setWebCLclCreateFromGLBuffer(client_clCreateFromGLBuffer);
+  setWebCLclCreateFromGLTexture(client_clCreateFromGLTexture);
+  setWebCLclEnqueueAcquireGLObjects(client_clEnqueueAcquireGLObjects);
+  setWebCLclEnqueueReleaseGLObjects(client_clEnqueueReleaseGLObjects);
+  WEBCL_SET_FUNC(clCreateContext                  )
+
 
 #if 0
   WEBCL_SET_FUNC(clGetPlatformIDs                 )
@@ -91,7 +224,6 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   WEBCL_SET_FUNC(clCreateSubDevices               )
   WEBCL_SET_FUNC(clRetainDevice                   )
   WEBCL_SET_FUNC(clReleaseDevice                  )
-  WEBCL_SET_FUNC(clCreateContext                  )
   WEBCL_SET_FUNC(clCreateContextFromType          )
   WEBCL_SET_FUNC(clRetainContext                  )
   WEBCL_SET_FUNC(clReleaseContext                 )
@@ -784,62 +916,6 @@ cl_int GpuChannelHost::CallclReleaseDevice(cl_device_id device) {
     return CL_SEND_IPC_MESSAGE_FAILURE;
   }
   return errcode_ret;
-}
-
-cl_context GpuChannelHost::CallclCreateContext(
-    const cl_context_properties* properties,
-    cl_uint num_devices,
-    const cl_device_id* devices,
-    void (CL_CALLBACK* pfn_notify)(const char*, const void*, size_t, void*),
-    void* user_data,
-    cl_int* errcode_ret) {
-  // Sending a Sync IPC Message, to call a CallclCreateContext API
-  // in other process, and getting the results of the API.
-  cl_int errcode_ret_inter;
-  cl_point point_context_ret;
-  std::vector<cl_device_partition_property> property_list;
-  std::vector<cl_point> point_device_list;
-  std::vector<cl_point> point_pfn_list;
-  std::vector<bool> return_variable_null_status;
-
-  return_variable_null_status.resize(1);
-  return_variable_null_status[0] = false;
-
-  // The Sync Message can't get value back by NULL ptr, so if a
-  // return back ptr is NULL, we must instead it using another
-  // no-NULL ptr.
-  if (NULL == errcode_ret) {
-    errcode_ret = &errcode_ret_inter;
-    return_variable_null_status[0] = true;
-  }
-
-  // Dump the inputs of the Sync IPC Message calling.
-  point_pfn_list.push_back((cl_point) pfn_notify);
-  point_pfn_list.push_back((cl_point) user_data);
-
-  property_list.clear();
-  if (NULL != properties) {
-    while (0 != *properties)
-      property_list.push_back(*properties++);
-    property_list.push_back(0);
-  }
-
-  point_device_list.clear();
-  for (cl_uint index = 0; devices && index < num_devices; ++index)
-    point_device_list.push_back((cl_point) devices[index]);
-
-  // Send a Sync IPC Message and wait for the results.
-  if (!Send(new OpenCLChannelMsg_CreateContext(
-            property_list,
-            num_devices,
-            point_device_list,
-            point_pfn_list,
-            return_variable_null_status,
-            errcode_ret,
-            &point_context_ret))) {
-    return NULL;
-  }
-  return (cl_context) point_context_ret;
 }
 
 cl_context GpuChannelHost::CallclCreateContextFromType(
@@ -4230,23 +4306,6 @@ cl_int CallclCreateSubDevices(
       num_devices_ret);
 }
 
-cl_context CallclCreateContext(
-  GpuChannelHost* channel_host_,
-  const cl_context_properties* properties,
-  cl_uint num_devices,
-  const cl_device_id* devices,
-  void (CL_CALLBACK* pfn_notify)(const char*, const void*, size_t, void*),
-  void* user_data,
-  cl_int* errcode_ret) {
-    return channel_host_ ->CallclCreateContext(
-      properties,
-      num_devices,
-      devices,
-      pfn_notify,
-      user_data, 
-      errcode_ret );
-}
-
 cl_context CallclCreateContextFromType(
   GpuChannelHost* channel_host_,
   const cl_context_properties *properties,
@@ -5347,6 +5406,25 @@ cl_int CallclEnqueueBarrierWithWaitList(
       clevent);
 }
 #endif
+
+cl_context CallclCreateContext(
+  /*GpuChannelHost* channel_host_,*/
+  const cl_context_properties* properties,
+  cl_uint num_devices,
+  const cl_device_id* devices,
+  void (CL_CALLBACK* pfn_notify)(const char*, const void*, size_t, void*),
+  void* user_data,
+  cl_int* errcode_ret) {
+    return __ocl_gpu_channel_host->CallclCreateContext(
+      properties,
+      num_devices,
+      devices,
+      pfn_notify,
+      user_data, 
+      errcode_ret );
+}
+
+
 
 // ScalableVision
 

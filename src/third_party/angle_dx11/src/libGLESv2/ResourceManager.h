@@ -129,6 +129,7 @@ class ResourceManager
 			if (! bufferObject->second)
 				return NULL;
 			void * ptr = bufferObject->second->getStorage()->getUltimatePointer();
+
 			return ptr;
 		} else
 			return NULL;

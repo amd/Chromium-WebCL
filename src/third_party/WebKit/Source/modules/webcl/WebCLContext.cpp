@@ -149,7 +149,8 @@ WebCLGetInfo WebCLContext::getInfo(CCenum paramName, ExceptionObject& exception)
 
 bool WebCLContext::isExtensionEnabled(const String& name) const
 {
-    return m_enabledExtensions.contains(name);
+    return true;
+    //return m_enabledExtensions.contains(name);
 }
 
 PassRefPtr<WebCLCommandQueue> WebCLContext::createCommandQueue(WebCLDevice* device, CCenum properties, ExceptionObject& exception)
@@ -669,6 +670,7 @@ void WebCLContext::releaseAll()
 #if ENABLE(WEBGL)
 PassRefPtr<WebCLBuffer> WebCLContext::createFromGLBuffer(CCenum flags, WebGLBuffer* webGLBuffer, ExceptionObject& exception)
 {
+	this->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled("KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return 0;
@@ -689,6 +691,7 @@ PassRefPtr<WebCLBuffer> WebCLContext::createFromGLBuffer(CCenum flags, WebGLBuff
 
 PassRefPtr<WebCLImage> WebCLContext::createFromGLRenderbuffer(CCenum flags, WebGLRenderbuffer* renderbuffer, ExceptionObject& exception)
 {
+	this->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled("KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return 0;
@@ -709,6 +712,7 @@ PassRefPtr<WebCLImage> WebCLContext::createFromGLRenderbuffer(CCenum flags, WebG
 
 PassRefPtr<WebCLImage> WebCLContext::createFromGLTexture(CCenum flags, CCenum textureTarget, GC3Dint miplevel, WebGLTexture* texture, ExceptionObject& exception)
 {
+	this->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled("KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return 0;

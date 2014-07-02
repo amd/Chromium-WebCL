@@ -660,12 +660,14 @@ void GpuCommandBufferStub::OnRescheduled() {
 }
 
 void GpuCommandBufferStub::sv_flush() { //ScalableVision
+	/*
   gpu::CommandBuffer::State pre_state = command_buffer_->GetLastState();
-  command_buffer_->Flush(pre_state.put_offset);
+  command_buffer_->FlushSync(pre_state.put_offset, 0);
   gpu::CommandBuffer::State post_state = command_buffer_->GetLastState();
 
   if (pre_state.get_offset != post_state.get_offset)
     ReportState();
+	*/
 }
 
 void GpuCommandBufferStub::OnRegisterTransferBuffer(

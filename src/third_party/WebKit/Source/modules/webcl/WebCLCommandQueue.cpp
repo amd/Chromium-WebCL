@@ -156,6 +156,9 @@ ComputeEvent* WebCLCommandQueue::computeEventFromWebCLEventIfApplicable(WebCLEve
 void WebCLCommandQueue::enqueueWriteBufferBase(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, CCuint numBytes, void* hostPtr, size_t hostPtrLength,
     const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+	if (!numBytes) // to be robust
+		return;
+
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
         return;
@@ -1160,6 +1163,7 @@ bool WebCLCommandQueue::isExtensionEnabled(WebCLContext* context, const String& 
 #if ENABLE(WEBGL)
 void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+	this->context()->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return;
@@ -1194,6 +1198,7 @@ void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryO
 
 void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+	this->context()->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return;
@@ -1224,6 +1229,14 @@ void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryO
 
     CCerror err = platformObject()->enqueueReleaseGLObjects(computeMemoryObjects, computeEvents, computeEvent);
     setExceptionFromComputeErrorCode(err, exception);
+}
+
+////
+void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& objs, ExceptionObject& es) {
+	enqueueAcquireGLObjects(objs,  Vector<RefPtr<WebCLEvent> >(), NULL, es);
+}
+void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& objs, ExceptionObject& es) {
+	enqueueReleaseGLObjects(objs,  Vector<RefPtr<WebCLEvent> >(), NULL, es);
 }
 #endif
 

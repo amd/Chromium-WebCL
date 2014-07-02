@@ -43,9 +43,9 @@ inline bool WebCLExtensionsAccessor<T>::enableExtension(const String& name)
     }
     if (equalIgnoringCase(name, "KHR_gl_sharing")) {
 #if ENABLE(WEBGL)
-        bool khrGLSharing = m_accessor ? ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor)
-                                    : ComputeExtensions::get().supports("cl_khr_gl_sharing");
-        if (khrGLSharing)
+        bool khrGLSharing = true; //m_accessor ? ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor)
+        //                            : ComputeExtensions::get().supports("cl_khr_gl_sharing");
+        //if (khrGLSharing)
             m_enabledExtensions.add("KHR_gl_sharing");
         return khrGLSharing;
 #endif
@@ -62,12 +62,12 @@ Vector<String> WebCLExtensionsAccessor<T>::getSupportedExtensions()
 
     if (m_accessor) {
 #if ENABLE(WEBGL)
-        if (ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor))
+        //if (ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor))
             result.append("KHR_GL_SHARING");
 #endif
     } else {
 #if ENABLE(WEBGL)
-        if (ComputeExtensions::get().supports("cl_khr_gl_sharing"))
+        //if (ComputeExtensions::get().supports("cl_khr_gl_sharing"))
             result.append("KHR_GL_SHARING");
 #endif
     }

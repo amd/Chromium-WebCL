@@ -145,6 +145,10 @@ public:
 #if ENABLE(WEBGL)
     void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+ 
+    //// work around code generator issue with optional sequence
+    void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, ExceptionObject&);
+    void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >&, ExceptionObject&);
 #endif
 
     WebCLContext* context() const { return m_context.get(); }

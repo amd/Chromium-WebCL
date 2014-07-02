@@ -826,15 +826,6 @@ IPC_SYNC_MESSAGE_CONTROL1_1(OpenCLChannelMsg_ReleaseDevice,
                             cl_point,
                             cl_int)
 
-// Call and respond OpenCL API clCreateContext using Sync IPC Message
-IPC_SYNC_MESSAGE_CONTROL5_2(OpenCLChannelMsg_CreateContext,
-                            std::vector<cl_context_properties>,
-                            cl_uint,
-                            std::vector<cl_point>,
-                            std::vector<cl_point>,
-                            std::vector<bool>,
-                            cl_int,
-                            cl_point)
 
 // Call and respond OpenCL API clCreateContextFromType using Sync IPC Message
 IPC_SYNC_MESSAGE_CONTROL5_2(OpenCLChannelMsg_CreateContextFromType,
@@ -1789,6 +1780,18 @@ IPC_SYNC_MESSAGE_CONTROL4_3(OpenCLChannelMsg_GetEventProfilingInfo_cl_ulong,
 #endif
 
 //ScalableVision	
+
+// manual instead of generated for interop
+// Call and respond OpenCL API clCreateContext using Sync IPC Message
+IPC_SYNC_MESSAGE_CONTROL5_2(OpenCLChannelMsg_CreateContext,
+                            std::vector<cl_context_properties>,
+                            cl_uint,
+                            std::vector<cl_point>,
+                            std::vector<cl_point>,
+                            std::vector<bool>,
+                            cl_int,
+                            cl_point)
+
 
 IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLChannelMsg_CreateFromGLBuffer,
                             cl_point, // context
