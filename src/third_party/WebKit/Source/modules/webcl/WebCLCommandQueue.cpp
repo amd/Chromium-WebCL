@@ -1269,8 +1269,51 @@ void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryO
     }
 
 
+    void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, CCuint h, CCuint i, ArrayBufferView*j, ExceptionObject&k)
+	{ enqueueWriteBufferRect(a,b,c,d,e,f,g,h,i,j, Vector<RefPtr<WebCLEvent> >(), NULL, k); }
+    void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, ImageData*h, ExceptionObject&i)
+	{ enqueueWriteBufferRect(a,b,c,d,e,f,g,h, Vector<RefPtr<WebCLEvent> >(), NULL, i); }
+    void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, HTMLCanvasElement*h, ExceptionObject&i)
+	{ enqueueWriteBufferRect(a,b,c,d,e,f,g,h, Vector<RefPtr<WebCLEvent> >(), NULL, i); }
+    void WebCLCommandQueue::enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, HTMLImageElement*h, ExceptionObject&i)
+	{ enqueueWriteBufferRect(a,b,c,d,e,f,g,h, Vector<RefPtr<WebCLEvent> >(), NULL, i); }
+
+    void WebCLCommandQueue::enqueueReadBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>& c, const Vector<CCuint>& d,
+        const Vector<CCuint>& e, CCuint f, CCuint g, CCuint h, CCuint i, ArrayBufferView*j, ExceptionObject&k) { enqueueReadBufferRect(a,b,c,d,e,f,g,h,i,j,Vector<RefPtr<WebCLEvent> >(), NULL, k); }
+    void WebCLCommandQueue::enqueueReadBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>& c, const Vector<CCuint>& d,
+        const Vector<CCuint>& e, CCuint f, CCuint g, HTMLCanvasElement*h, ExceptionObject&i) { enqueueReadBufferRect(a,b,c,d,e,f,g,h,Vector<RefPtr<WebCLEvent> >(), NULL,i); }
+
+    void WebCLCommandQueue::enqueueReadImage(WebCLImage*a, CCbool b,  const Vector<CCuint>& c, const Vector<CCuint>& d, CCuint e,
+        ArrayBufferView*f, ExceptionObject&g) { enqueueReadImage(a,b,c,d,e,f,Vector<RefPtr<WebCLEvent> >(), NULL,g); }
+    void WebCLCommandQueue::enqueueReadImage(WebCLImage*a, CCbool b,  const Vector<CCuint>& c, const Vector<CCuint>& d, HTMLCanvasElement*e,
+        ExceptionObject&f) { enqueueReadImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
 
 
+
+    void WebCLCommandQueue::enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d, CCuint e,
+        ArrayBufferView*f, ExceptionObject&g) { enqueueWriteImage(a,b,c,d,e,f,Vector<RefPtr<WebCLEvent> >(), NULL,g); }
+    void WebCLCommandQueue::enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        ImageData*e, ExceptionObject&f) { enqueueWriteImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+    void WebCLCommandQueue::enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        HTMLCanvasElement*e, ExceptionObject&f) { enqueueWriteImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+    void WebCLCommandQueue::enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        HTMLImageElement*e, ExceptionObject&f) { enqueueWriteImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+
+    void WebCLCommandQueue::enqueueCopyBuffer(WebCLBuffer*a, WebCLBuffer*b, CCuint c, CCuint d, CCuint e,
+        ExceptionObject&f) { enqueueCopyBuffer(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+    void WebCLCommandQueue::enqueueCopyBufferRect(WebCLBuffer*a, WebCLBuffer*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        const Vector<unsigned>& e, CCuint f, CCuint g, CCuint h, CCuint i,
+        ExceptionObject&j) { enqueueCopyBufferRect(a,b,c,d,e,f,g,h,i,Vector<RefPtr<WebCLEvent> >(), NULL,j); }
+    void WebCLCommandQueue::enqueueCopyImage(WebCLImage*a, WebCLImage*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        const Vector<unsigned>& e, ExceptionObject&f) { enqueueCopyImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+    void WebCLCommandQueue::enqueueCopyImageToBuffer(WebCLImage*a, WebCLBuffer*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        CCuint e, ExceptionObject&f) { enqueueCopyImageToBuffer(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
+    void WebCLCommandQueue::enqueueCopyBufferToImage(WebCLBuffer*a, WebCLImage*b, CCuint c, const Vector<unsigned>& d, const Vector<unsigned>& e,
+        ExceptionObject&f) { enqueueCopyBufferToImage(a,b,c,d,e,Vector<RefPtr<WebCLEvent> >(), NULL,f); }
 } // namespace WebCore
 
 #endif // ENABLE(WEBCL)

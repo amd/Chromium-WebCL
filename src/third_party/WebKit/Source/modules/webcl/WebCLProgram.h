@@ -53,6 +53,7 @@ public:
     WebCLGetInfo getBuildInfo(WebCLDevice*, CCenum flag, ExceptionObject&);
 
     void build(const Vector<RefPtr<WebCLDevice> >&, const String* buildOptions, PassRefPtr<WebCLCallback>, ExceptionObject&);
+    void build(ExceptionObject&);
 
     PassRefPtr<WebCLKernel> createKernel(const String& kernelName, ExceptionObject&);
     Vector<RefPtr<WebCLKernel> > createKernelsInProgram(ExceptionObject&);

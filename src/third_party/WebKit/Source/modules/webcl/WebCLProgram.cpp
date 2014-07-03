@@ -185,6 +185,9 @@ void WebCLProgram::callbackProxy(CCProgram, void* userData)
     callbackProxyOnMainThread(userData);
 }
 
+void WebCLProgram::build(ExceptionObject& exception) {
+	build( Vector<RefPtr<WebCLDevice> >(), NULL, NULL, exception);
+}
 void WebCLProgram::build(const Vector<RefPtr<WebCLDevice> >& devices, const String* _buildOptions, PassRefPtr<WebCLCallback> callback, ExceptionObject& exception)
 {
 	const String &buildOptions = *_buildOptions;

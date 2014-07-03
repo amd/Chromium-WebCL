@@ -71,6 +71,19 @@ public:
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueWriteBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
+
+
+    ////
+    void enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, CCuint h, CCuint i, ArrayBufferView*j, ExceptionObject&k);
+    void enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, ImageData*h, ExceptionObject&i);
+    void enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, HTMLCanvasElement*h, ExceptionObject&i);
+    void enqueueWriteBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>&c, const Vector<CCuint>&d, const Vector<CCuint>&e,
+        CCuint f, CCuint g, HTMLImageElement*h, ExceptionObject&i);
+
+
     void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
         CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch, ArrayBufferView*,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
@@ -81,18 +94,22 @@ public:
     void enqueueWriteBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>&, const Vector<CCuint>&, const Vector<CCuint>&,
         CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
-    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
-        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
-    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
-        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     ////
     void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
         ExceptionObject&);
     void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
         ExceptionObject&);
-    void enqueueNDRangeKernel(WebCLKernel*, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
-        const Vector<unsigned>& localWorkSize, ExceptionObject&);
 
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, ArrayBufferView*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+    void enqueueReadBuffer(WebCLBuffer*, CCbool blockingWrite, CCuint bufferOffset, CCuint numBytes, HTMLCanvasElement*,
+        const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    ////
+    void enqueueReadBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>& c, const Vector<CCuint>& d,
+        const Vector<CCuint>& e, CCuint f, CCuint g, CCuint h, CCuint i, ArrayBufferView*j, ExceptionObject&k);
+    void enqueueReadBufferRect(WebCLBuffer*a, CCbool b, const Vector<CCuint>& c, const Vector<CCuint>& d,
+        const Vector<CCuint>& e, CCuint f, CCuint g, HTMLCanvasElement*h, ExceptionObject&i);
 
     void enqueueReadBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
         const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
@@ -100,10 +117,26 @@ public:
     void enqueueReadBufferRect(WebCLBuffer*, CCbool blockingWrite, const Vector<CCuint>& bufferOrigin, const Vector<CCuint>& hostOrigin,
         const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
 
+    ////
+    void enqueueReadImage(WebCLImage*a, CCbool b,  const Vector<CCuint>& c, const Vector<CCuint>& d, CCuint e,
+        ArrayBufferView*f, ExceptionObject&g);
+    void enqueueReadImage(WebCLImage*a, CCbool b,  const Vector<CCuint>& c, const Vector<CCuint>& d, HTMLCanvasElement*e,
+        ExceptionObject&f);
+    
     void enqueueReadImage(WebCLImage*, CCbool blockingWrite,  const Vector<CCuint>& origin, const Vector<CCuint>& region, CCuint rowPitch,
         ArrayBufferView*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueReadImage(WebCLImage*, CCbool blockingWrite,  const Vector<CCuint>& origin, const Vector<CCuint>& region, HTMLCanvasElement*,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    ////
+    void enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d, CCuint e,
+        ArrayBufferView*f, ExceptionObject&g);
+    void enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        ImageData*e, ExceptionObject&f);
+    void enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        HTMLCanvasElement*e, ExceptionObject&f);
+    void enqueueWriteImage(WebCLImage*a, CCbool b,  const Vector<unsigned>& c, const Vector<unsigned>& d,
+        HTMLImageElement*e, ExceptionObject&f);
 
     void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region, CCuint hostRowPitch,
         ArrayBufferView*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
@@ -113,6 +146,22 @@ public:
         HTMLCanvasElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
     void enqueueWriteImage(WebCLImage*, CCbool blockingWrite,  const Vector<unsigned>& origin, const Vector<unsigned>& region,
         HTMLImageElement*, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+
+
+    ////
+    void enqueueCopyBuffer(WebCLBuffer*a, WebCLBuffer*b, CCuint c, CCuint d, CCuint e,
+        ExceptionObject&f);
+    void enqueueCopyBufferRect(WebCLBuffer*a, WebCLBuffer*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        const Vector<unsigned>& e, CCuint f, CCuint g, CCuint h, CCuint i,
+        ExceptionObject&j);
+    void enqueueCopyImage(WebCLImage*a, WebCLImage*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        const Vector<unsigned>& e, ExceptionObject&f);
+    void enqueueCopyImageToBuffer(WebCLImage*a, WebCLBuffer*b, const Vector<unsigned>& c, const Vector<unsigned>& d,
+        CCuint e, ExceptionObject&f);
+    void enqueueCopyBufferToImage(WebCLBuffer*a, WebCLImage*b, CCuint c, const Vector<unsigned>& d, const Vector<unsigned>& e,
+        ExceptionObject&f);
+
 
     void enqueueCopyBuffer(WebCLBuffer*, WebCLBuffer*, CCuint sourceOffset, CCuint targetOffset, CCuint sizeInBytes,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
@@ -129,6 +178,10 @@ public:
 
     void enqueueCopyBufferToImage(WebCLBuffer*, WebCLImage*, CCuint sourceOffset, const Vector<unsigned>& sourceOrigin, const Vector<unsigned>& region,
         const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
+
+    ////
+    void enqueueNDRangeKernel(WebCLKernel*, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
+        const Vector<unsigned>& localWorkSize, ExceptionObject&);
 
     void enqueueNDRangeKernel(WebCLKernel*, CCuint workDim, const Vector<unsigned>& globalWorkOffsets, const Vector<unsigned>& globalWorkSize,
         const Vector<unsigned>& localWorkSize, const Vector<RefPtr<WebCLEvent> >&, WebCLEvent*, ExceptionObject&);
