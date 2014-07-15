@@ -59,23 +59,6 @@ GpuChannel::service_clGetDeviceInfo(
 	(size_t *)msg_param_value_size_ret);
 }
 void
-GpuChannel::service_clCreateContext(
-	const std::vector<unsigned char>& msg_properties, //[I] const cl_context_properties * properties
-	const cl_uint& msg_num_devices, //[I] cl_uint num_devices
-	const std::vector<unsigned char>& msg_devices, //[I] const cl_device_id * devices
-	const cl_pointer& msg_callback, //[I] callback callback
-	const cl_pointer& msg_user_data, //[I] void * user_data
-	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
-	cl_pointer * func_ret) //! return cl_context
-{
-  *func_ret = (cl_pointer)  clCreateContext(	msg_properties.size() ? (const cl_context_properties *)&(msg_properties)[0] : NULL,
-	(cl_uint)msg_num_devices,
-	msg_devices.size() ? (const cl_device_id *)&(msg_devices)[0] : NULL,
-	NULL, //callback
-	(void *)msg_user_data,
-	(cl_int *)msg_errcode_ret);
-}
-void
 GpuChannel::service_clReleaseContext(
 	const cl_pointer& msg_context, //[I] cl_context context
 	cl_pointer * func_ret) //! return cl_int
@@ -123,14 +106,14 @@ GpuChannel::service_clCreateBuffer(
 	const cl_pointer& msg_context, //[I] cl_context context
 	const cl_mem_flags& msg_flags, //[I] cl_mem_flags flags
 	const size_t& msg_size, //[I] size_t size
-	const cl_pointer& msg_host_ptr, //[I] void * host_ptr
+	const std::vector<unsigned char>& msg_host_ptr, //[I] void * host_ptr
 	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
 	cl_pointer * func_ret) //! return cl_mem
 {
   *func_ret = (cl_pointer)  clCreateBuffer(	(cl_context)msg_context,
 	(cl_mem_flags)msg_flags,
 	(size_t)msg_size,
-	(void *)msg_host_ptr,
+	msg_host_ptr.size() ? (void *)&(msg_host_ptr)[0] : NULL,
 	(cl_int *)msg_errcode_ret);
 }
 void
@@ -146,6 +129,23 @@ GpuChannel::service_clCreateSubBuffer(
 	(cl_mem_flags)msg_flags,
 	(cl_buffer_create_type)msg_buffer_create_type,
 	msg_buffer_create_info.size() ? (const void *)&(msg_buffer_create_info)[0] : NULL,
+	(cl_int *)msg_errcode_ret);
+}
+void
+GpuChannel::service_clCreateImage(
+	const cl_pointer& msg_context, //[I] cl_context context
+	const cl_mem_flags& msg_flags, //[I] cl_mem_flags flags
+	const std::vector<unsigned char>& msg_image_format, //[I] const cl_image_format * image_format
+	const std::vector<unsigned char>& msg_image_desc, //[I] const cl_image_desc * image_desc
+	const std::vector<unsigned char>& msg_host_ptr, //[I] void * host_ptr
+	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
+	cl_pointer * func_ret) //! return cl_mem
+{
+  *func_ret = (cl_pointer)  clCreateImage(	(cl_context)msg_context,
+	(cl_mem_flags)msg_flags,
+	msg_image_format.size() ? (const cl_image_format *)&(msg_image_format)[0] : NULL,
+	msg_image_desc.size() ? (const cl_image_desc *)&(msg_image_desc)[0] : NULL,
+	msg_host_ptr.size() ? (void *)&(msg_host_ptr)[0] : NULL,
 	(cl_int *)msg_errcode_ret);
 }
 void
@@ -495,19 +495,19 @@ GpuChannel::service_clEnqueueReadBuffer(
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_read, //[I] cl_bool blocking_read
 	const size_t& msg_offset, //[I] size_t offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
 	std::vector<unsigned char> * msg_ptr, //[O] void * ptr
 	cl_pointer * msg_event, //[O] cl_event * event
 	cl_pointer * func_ret) //! return cl_int
 {
-  msg_ptr->resize(msg_cb * sizeof(unsigned char)); //WATCH2
+  msg_ptr->resize(msg_size * sizeof(unsigned char)); //WATCH2
   *func_ret = (cl_pointer)  clEnqueueReadBuffer(	(cl_command_queue)msg_command_queue,
 	(cl_mem)msg_buffer,
 	(cl_bool)msg_blocking_read,
 	(size_t)msg_offset,
-	(size_t)msg_cb,
+	(size_t)msg_size,
 	msg_ptr->size() ? (void *)&(*msg_ptr)[0] : NULL,
 	(cl_uint)msg_num_events_in_wait_list,
 	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
@@ -518,8 +518,8 @@ GpuChannel::service_clEnqueueReadBufferRect(
 	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_read, //[I] cl_bool blocking_read
-	const std::vector<unsigned char>& msg_buffer_origin, //[I] const size_t * buffer_origin
-	const std::vector<unsigned char>& msg_host_origin, //[I] const size_t * host_origin
+	const std::vector<unsigned char>& msg_buffer_offset, //[I] const size_t * buffer_offset
+	const std::vector<unsigned char>& msg_host_offset, //[I] const size_t * host_offset
 	const std::vector<unsigned char>& msg_region, //[I] const size_t * region
 	const size_t& msg_buffer_row_pitch, //[I] size_t buffer_row_pitch
 	const size_t& msg_buffer_slice_pitch, //[I] size_t buffer_slice_pitch
@@ -535,8 +535,8 @@ GpuChannel::service_clEnqueueReadBufferRect(
   *func_ret = (cl_pointer)  clEnqueueReadBufferRect(	(cl_command_queue)msg_command_queue,
 	(cl_mem)msg_buffer,
 	(cl_bool)msg_blocking_read,
-	msg_buffer_origin.size() ? (const size_t *)&(msg_buffer_origin)[0] : NULL,
-	msg_host_origin.size() ? (const size_t *)&(msg_host_origin)[0] : NULL,
+	msg_buffer_offset.size() ? (const size_t *)&(msg_buffer_offset)[0] : NULL,
+	msg_host_offset.size() ? (const size_t *)&(msg_host_offset)[0] : NULL,
 	msg_region.size() ? (const size_t *)&(msg_region)[0] : NULL,
 	(size_t)msg_buffer_row_pitch,
 	(size_t)msg_buffer_slice_pitch,
@@ -553,7 +553,7 @@ GpuChannel::service_clEnqueueWriteBuffer(
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_write, //[I] cl_bool blocking_write
 	const size_t& msg_offset, //[I] size_t offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const std::vector<unsigned char>& msg_ptr, //[I] const void * ptr
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
@@ -564,7 +564,7 @@ GpuChannel::service_clEnqueueWriteBuffer(
 	(cl_mem)msg_buffer,
 	(cl_bool)msg_blocking_write,
 	(size_t)msg_offset,
-	(size_t)msg_cb,
+	(size_t)msg_size,
 	msg_ptr.size() ? (const void *)&(msg_ptr)[0] : NULL,
 	(cl_uint)msg_num_events_in_wait_list,
 	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
@@ -575,8 +575,8 @@ GpuChannel::service_clEnqueueWriteBufferRect(
 	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_write, //[I] cl_bool blocking_write
-	const std::vector<unsigned char>& msg_buffer_origin, //[I] const size_t * buffer_origin
-	const std::vector<unsigned char>& msg_host_origin, //[I] const size_t * host_origin
+	const std::vector<unsigned char>& msg_buffer_offset, //[I] const size_t * buffer_offset
+	const std::vector<unsigned char>& msg_host_offset, //[I] const size_t * host_offset
 	const std::vector<unsigned char>& msg_region, //[I] const size_t * region
 	const size_t& msg_buffer_row_pitch, //[I] size_t buffer_row_pitch
 	const size_t& msg_buffer_slice_pitch, //[I] size_t buffer_slice_pitch
@@ -591,8 +591,8 @@ GpuChannel::service_clEnqueueWriteBufferRect(
   *func_ret = (cl_pointer)  clEnqueueWriteBufferRect(	(cl_command_queue)msg_command_queue,
 	(cl_mem)msg_buffer,
 	(cl_bool)msg_blocking_write,
-	msg_buffer_origin.size() ? (const size_t *)&(msg_buffer_origin)[0] : NULL,
-	msg_host_origin.size() ? (const size_t *)&(msg_host_origin)[0] : NULL,
+	msg_buffer_offset.size() ? (const size_t *)&(msg_buffer_offset)[0] : NULL,
+	msg_host_offset.size() ? (const size_t *)&(msg_host_offset)[0] : NULL,
 	msg_region.size() ? (const size_t *)&(msg_region)[0] : NULL,
 	(size_t)msg_buffer_row_pitch,
 	(size_t)msg_buffer_slice_pitch,
@@ -610,7 +610,7 @@ GpuChannel::service_clEnqueueCopyBuffer(
 	const cl_pointer& msg_dst_buffer, //[I] cl_mem dst_buffer
 	const size_t& msg_src_offset, //[I] size_t src_offset
 	const size_t& msg_dst_offset, //[I] size_t dst_offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
 	cl_pointer * msg_event, //[O] cl_event * event
@@ -621,7 +621,7 @@ GpuChannel::service_clEnqueueCopyBuffer(
 	(cl_mem)msg_dst_buffer,
 	(size_t)msg_src_offset,
 	(size_t)msg_dst_offset,
-	(size_t)msg_cb,
+	(size_t)msg_size,
 	(cl_uint)msg_num_events_in_wait_list,
 	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
 	(cl_event *)msg_event);
@@ -815,6 +815,32 @@ GpuChannel::service_clEnqueueTask(
 {
   *func_ret = (cl_pointer)  clEnqueueTask(	(cl_command_queue)msg_command_queue,
 	(cl_kernel)msg_kernel,
+	(cl_uint)msg_num_events_in_wait_list,
+	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
+	(cl_event *)msg_event);
+}
+void
+GpuChannel::service_clEnqueueMarkerWithWaitList(
+	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
+	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
+	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
+	cl_pointer * msg_event, //[O] cl_event * event
+	cl_pointer * func_ret) //! return cl_int
+{
+  *func_ret = (cl_pointer)  clEnqueueMarkerWithWaitList(	(cl_command_queue)msg_command_queue,
+	(cl_uint)msg_num_events_in_wait_list,
+	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
+	(cl_event *)msg_event);
+}
+void
+GpuChannel::service_clEnqueueBarrierWithWaitList(
+	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
+	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
+	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
+	cl_pointer * msg_event, //[O] cl_event * event
+	cl_pointer * func_ret) //! return cl_int
+{
+  *func_ret = (cl_pointer)  clEnqueueBarrierWithWaitList(	(cl_command_queue)msg_command_queue,
 	(cl_uint)msg_num_events_in_wait_list,
 	msg_event_wait_list.size() ? (const cl_event *)&(msg_event_wait_list)[0] : NULL,
 	(cl_event *)msg_event);

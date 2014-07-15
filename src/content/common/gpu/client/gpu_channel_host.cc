@@ -22,7 +22,9 @@ extern "C"__declspec(dllimport) void setWebCLChannelHost(content::GpuChannelHost
 #include "url/gurl.h"
 
 #include "third_party/WebKit/Source/modules/webcl/WebCLInclude.h"
-
+namespace WebCore {
+extern __declspec(dllimport) long long g_clCreateImage_size;
+}
 
 #if defined(OS_WIN)
 #include "content/public/common/sandbox_init.h"
@@ -135,6 +137,49 @@ client_clEnqueueReleaseGLObjects(cl_command_queue       command_queue ,
 }
 
 
+cl_mem
+manual_client_clCreateImage(
+    cl_context context,
+    cl_mem_flags flags,
+    const cl_image_format * image_format,
+    const cl_image_desc * image_desc,
+    void * host_ptr,
+    cl_int * errcode_ret) {
+  cl_pointer msg_context;
+  cl_mem_flags msg_flags;
+  std::vector<unsigned char> msg_image_format;
+  std::vector<unsigned char> msg_image_desc;
+  std::vector<unsigned char> msg_host_ptr;
+  cl_int msg_errcode_ret;
+  msg_context = (cl_pointer)context;
+  msg_flags = flags;
+if (image_format) { msg_image_format.resize(sizeof( cl_image_format)); memcpy(&msg_image_format[0], image_format, sizeof( cl_image_format)); }
+if (image_desc) { msg_image_desc.resize(sizeof( cl_image_desc)); memcpy(&msg_image_desc[0], image_desc, sizeof( cl_image_desc)); }
+
+if (WebCore::g_clCreateImage_size) msg_host_ptr.resize(WebCore::g_clCreateImage_size);
+else msg_host_ptr.resize(0);
+
+  cl_pointer msg_func_ret;
+  if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clCreateImage(
+		msg_context,
+		msg_flags,
+		msg_image_format,
+		msg_image_desc,
+		msg_host_ptr,
+		&msg_errcode_ret,
+		 &msg_func_ret
+  ))) {
+	*errcode_ret = CL_SEND_IPC_MESSAGE_FAILURE;
+	return NULL;
+  }
+  if (errcode_ret) *errcode_ret = *(cl_int *)&msg_errcode_ret;
+  return (cl_mem)msg_func_ret;
+}
+
+
+
+
+
 cl_context GpuChannelHost::CallclCreateContext(
     const cl_context_properties* properties,
     cl_uint num_devices,
@@ -213,6 +258,9 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   setWebCLclCreateFromGLTexture(client_clCreateFromGLTexture);
   setWebCLclEnqueueAcquireGLObjects(client_clEnqueueAcquireGLObjects);
   setWebCLclEnqueueReleaseGLObjects(client_clEnqueueReleaseGLObjects);
+  
+  setWebCLclCreateImage(manual_client_clCreateImage);
+
   WEBCL_SET_FUNC(clCreateContext                  )
 
 
@@ -5423,8 +5471,6 @@ cl_context CallclCreateContext(
       user_data, 
       errcode_ret );
 }
-
-
 
 // ScalableVision
 

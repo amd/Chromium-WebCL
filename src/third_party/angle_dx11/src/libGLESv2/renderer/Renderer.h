@@ -103,7 +103,7 @@ class Renderer
     virtual ~Renderer();
 
 
-virtual	cl_int createSharedCLContext(cl_platform_id platform, cl_context *context) {
+virtual	cl_int createSharedCLContext(cl_platform_id platform, cl_context *context, int num_devices, cl_device_id *devices) {
 	return CL_INVALID_PLATFORM;
 }
 

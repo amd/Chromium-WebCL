@@ -122,45 +122,6 @@ if (param_value)  memcpy(param_value, &msg_param_value[0], msg_param_value.size(
 }
 
 
-cl_context
-client_clCreateContext(
-    const cl_context_properties * properties,
-    cl_uint num_devices,
-    const cl_device_id * devices,
-    const void* callback,
-    void * user_data,
-    cl_int * errcode_ret) {
-  std::vector<unsigned char> msg_properties;
-  cl_uint msg_num_devices;
-  std::vector<unsigned char> msg_devices;
-  cl_pointer msg_callback;
-  cl_pointer msg_user_data;
-  cl_int msg_errcode_ret;
-  {const cl_context_properties *tmp = properties; int n=0; if (tmp) { while (*tmp++ != 0) n++; }
-  if (n) { msg_properties.resize((n+1)*4); memcpy(&msg_properties[0], properties, (n+1)*4); }
-  }
-  msg_num_devices = num_devices;
-  if (devices && num_devices*4) { msg_devices.resize(num_devices*4); memcpy(&msg_devices[0], devices, num_devices*4); }
-  msg_callback = (cl_pointer)callback;
-  msg_user_data = (cl_pointer)user_data;
-  cl_pointer msg_func_ret;
-  if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clCreateContext(
-		msg_properties,
-		msg_num_devices,
-		msg_devices,
-		msg_callback,
-		msg_user_data,
-		&msg_errcode_ret,
-		 &msg_func_ret
-  ))) {
-	*errcode_ret = CL_SEND_IPC_MESSAGE_FAILURE;
-	return NULL;
-  }
-  if (errcode_ret) *errcode_ret = *(cl_int *)&msg_errcode_ret;
-  return (cl_context)msg_func_ret;
-}
-
-
 cl_int
 client_clReleaseContext(
     cl_context context) {
@@ -264,12 +225,12 @@ client_clCreateBuffer(
   cl_pointer msg_context;
   cl_mem_flags msg_flags;
   size_t msg_size;
-  cl_pointer msg_host_ptr;
+  std::vector<unsigned char> msg_host_ptr;
   cl_int msg_errcode_ret;
   msg_context = (cl_pointer)context;
   msg_flags = flags;
   msg_size = size;
-  msg_host_ptr = (cl_pointer)host_ptr;
+  if (host_ptr && size) { msg_host_ptr.resize(size); memcpy(&msg_host_ptr[0], host_ptr, size); }
   cl_pointer msg_func_ret;
   if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clCreateBuffer(
 		msg_context,
@@ -1047,7 +1008,7 @@ client_clEnqueueReadBuffer(
     cl_mem buffer,
     cl_bool blocking_read,
     size_t offset,
-    size_t cb,
+    size_t size,
     void * ptr,
     cl_uint num_events_in_wait_list,
     const cl_event * event_wait_list,
@@ -1056,7 +1017,7 @@ client_clEnqueueReadBuffer(
   cl_pointer msg_buffer;
   cl_bool msg_blocking_read;
   size_t msg_offset;
-  size_t msg_cb;
+  size_t msg_size;
   std::vector<unsigned char> msg_ptr;
   cl_uint msg_num_events_in_wait_list;
   std::vector<unsigned char> msg_event_wait_list;
@@ -1065,7 +1026,7 @@ client_clEnqueueReadBuffer(
   msg_buffer = (cl_pointer)buffer;
   msg_blocking_read = blocking_read;
   msg_offset = offset;
-  msg_cb = cb;
+  msg_size = size;
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
@@ -1074,7 +1035,7 @@ client_clEnqueueReadBuffer(
 		msg_buffer,
 		msg_blocking_read,
 		msg_offset,
-		msg_cb,
+		msg_size,
 		msg_num_events_in_wait_list,
 		msg_event_wait_list,
 		&msg_ptr,
@@ -1094,8 +1055,8 @@ client_clEnqueueReadBufferRect(
     cl_command_queue command_queue,
     cl_mem buffer,
     cl_bool blocking_read,
-    const size_t * buffer_origin,
-    const size_t * host_origin,
+    const size_t * buffer_offset,
+    const size_t * host_offset,
     const size_t * region,
     size_t buffer_row_pitch,
     size_t buffer_slice_pitch,
@@ -1108,8 +1069,8 @@ client_clEnqueueReadBufferRect(
   cl_pointer msg_command_queue;
   cl_pointer msg_buffer;
   cl_bool msg_blocking_read;
-  std::vector<unsigned char> msg_buffer_origin;
-  std::vector<unsigned char> msg_host_origin;
+  std::vector<unsigned char> msg_buffer_offset;
+  std::vector<unsigned char> msg_host_offset;
   std::vector<unsigned char> msg_region;
   size_t msg_buffer_row_pitch;
   size_t msg_buffer_slice_pitch;
@@ -1122,8 +1083,8 @@ client_clEnqueueReadBufferRect(
   msg_command_queue = (cl_pointer)command_queue;
   msg_buffer = (cl_pointer)buffer;
   msg_blocking_read = blocking_read;
-  if (buffer_origin) {msg_buffer_origin.resize(3*4); memcpy(&msg_buffer_origin[0], buffer_origin, 3*4);}
-  if (host_origin) {msg_host_origin.resize(3*4); memcpy(&msg_host_origin[0], host_origin, 3*4);}
+  if (buffer_offset) {msg_buffer_offset.resize(3*4); memcpy(&msg_buffer_offset[0], buffer_offset, 3*4);}
+  if (host_offset) {msg_host_offset.resize(3*4); memcpy(&msg_host_offset[0], host_offset, 3*4);}
   if (region) {msg_region.resize(3*4); memcpy(&msg_region[0], region, 3*4);}
   msg_buffer_row_pitch = buffer_row_pitch;
   msg_buffer_slice_pitch = buffer_slice_pitch;
@@ -1136,8 +1097,8 @@ client_clEnqueueReadBufferRect(
 		msg_command_queue,
 		msg_buffer,
 		msg_blocking_read,
-		msg_buffer_origin,
-		msg_host_origin,
+		msg_buffer_offset,
+		msg_host_offset,
 		msg_region,
 		msg_buffer_row_pitch,
 		msg_buffer_slice_pitch,
@@ -1163,7 +1124,7 @@ client_clEnqueueWriteBuffer(
     cl_mem buffer,
     cl_bool blocking_write,
     size_t offset,
-    size_t cb,
+    size_t size,
     const void * ptr,
     cl_uint num_events_in_wait_list,
     const cl_event * event_wait_list,
@@ -1172,7 +1133,7 @@ client_clEnqueueWriteBuffer(
   cl_pointer msg_buffer;
   cl_bool msg_blocking_write;
   size_t msg_offset;
-  size_t msg_cb;
+  size_t msg_size;
   std::vector<unsigned char> msg_ptr;
   cl_uint msg_num_events_in_wait_list;
   std::vector<unsigned char> msg_event_wait_list;
@@ -1181,8 +1142,8 @@ client_clEnqueueWriteBuffer(
   msg_buffer = (cl_pointer)buffer;
   msg_blocking_write = blocking_write;
   msg_offset = offset;
-  msg_cb = cb;
-  if (ptr && cb) { msg_ptr.resize(cb); memcpy(&msg_ptr[0], ptr, cb); }
+  msg_size = size;
+  if (ptr && size) { msg_ptr.resize(size); memcpy(&msg_ptr[0], ptr, size); }
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
@@ -1191,7 +1152,7 @@ client_clEnqueueWriteBuffer(
 		msg_buffer,
 		msg_blocking_write,
 		msg_offset,
-		msg_cb,
+		msg_size,
 		msg_ptr,
 		msg_num_events_in_wait_list,
 		msg_event_wait_list,
@@ -1210,8 +1171,8 @@ client_clEnqueueWriteBufferRect(
     cl_command_queue command_queue,
     cl_mem buffer,
     cl_bool blocking_write,
-    const size_t * buffer_origin,
-    const size_t * host_origin,
+    const size_t * buffer_offset,
+    const size_t * host_offset,
     const size_t * region,
     size_t buffer_row_pitch,
     size_t buffer_slice_pitch,
@@ -1224,8 +1185,8 @@ client_clEnqueueWriteBufferRect(
   cl_pointer msg_command_queue;
   cl_pointer msg_buffer;
   cl_bool msg_blocking_write;
-  std::vector<unsigned char> msg_buffer_origin;
-  std::vector<unsigned char> msg_host_origin;
+  std::vector<unsigned char> msg_buffer_offset;
+  std::vector<unsigned char> msg_host_offset;
   std::vector<unsigned char> msg_region;
   size_t msg_buffer_row_pitch;
   size_t msg_buffer_slice_pitch;
@@ -1238,8 +1199,8 @@ client_clEnqueueWriteBufferRect(
   msg_command_queue = (cl_pointer)command_queue;
   msg_buffer = (cl_pointer)buffer;
   msg_blocking_write = blocking_write;
-  if (buffer_origin) {msg_buffer_origin.resize(3*4); memcpy(&msg_buffer_origin[0], buffer_origin, 3*4);}
-  if (host_origin) {msg_host_origin.resize(3*4); memcpy(&msg_host_origin[0], host_origin, 3*4);}
+  if (buffer_offset) {msg_buffer_offset.resize(3*4); memcpy(&msg_buffer_offset[0], buffer_offset, 3*4);}
+  if (host_offset) {msg_host_offset.resize(3*4); memcpy(&msg_host_offset[0], host_offset, 3*4);}
   if (region) {msg_region.resize(3*4); memcpy(&msg_region[0], region, 3*4);}
   msg_buffer_row_pitch = buffer_row_pitch;
   msg_buffer_slice_pitch = buffer_slice_pitch;
@@ -1253,8 +1214,8 @@ client_clEnqueueWriteBufferRect(
 		msg_command_queue,
 		msg_buffer,
 		msg_blocking_write,
-		msg_buffer_origin,
-		msg_host_origin,
+		msg_buffer_offset,
+		msg_host_offset,
 		msg_region,
 		msg_buffer_row_pitch,
 		msg_buffer_slice_pitch,
@@ -1280,7 +1241,7 @@ client_clEnqueueCopyBuffer(
     cl_mem dst_buffer,
     size_t src_offset,
     size_t dst_offset,
-    size_t cb,
+    size_t size,
     cl_uint num_events_in_wait_list,
     const cl_event * event_wait_list,
     cl_event * event) {
@@ -1289,7 +1250,7 @@ client_clEnqueueCopyBuffer(
   cl_pointer msg_dst_buffer;
   size_t msg_src_offset;
   size_t msg_dst_offset;
-  size_t msg_cb;
+  size_t msg_size;
   cl_uint msg_num_events_in_wait_list;
   std::vector<unsigned char> msg_event_wait_list;
   cl_pointer msg_event;
@@ -1298,7 +1259,7 @@ client_clEnqueueCopyBuffer(
   msg_dst_buffer = (cl_pointer)dst_buffer;
   msg_src_offset = src_offset;
   msg_dst_offset = dst_offset;
-  msg_cb = cb;
+  msg_size = size;
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
@@ -1308,7 +1269,7 @@ client_clEnqueueCopyBuffer(
 		msg_dst_buffer,
 		msg_src_offset,
 		msg_dst_offset,
-		msg_cb,
+		msg_size,
 		msg_num_events_in_wait_list,
 		msg_event_wait_list,
 		&msg_event,
@@ -1709,6 +1670,62 @@ client_clEnqueueTask(
   if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clEnqueueTask(
 		msg_command_queue,
 		msg_kernel,
+		msg_num_events_in_wait_list,
+		msg_event_wait_list,
+		&msg_event,
+		 &msg_func_ret
+  ))) {
+	return CL_SEND_IPC_MESSAGE_FAILURE;
+  }
+  if (event) *event = *(cl_event *)&msg_event;
+  return (cl_int)msg_func_ret;
+}
+
+
+cl_int
+client_clEnqueueMarkerWithWaitList(
+    cl_command_queue command_queue,
+    cl_uint num_events_in_wait_list,
+    const cl_event * event_wait_list,
+    cl_event * event) {
+  cl_pointer msg_command_queue;
+  cl_uint msg_num_events_in_wait_list;
+  std::vector<unsigned char> msg_event_wait_list;
+  cl_pointer msg_event;
+  msg_command_queue = (cl_pointer)command_queue;
+  msg_num_events_in_wait_list = num_events_in_wait_list;
+  if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
+  cl_pointer msg_func_ret;
+  if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clEnqueueMarkerWithWaitList(
+		msg_command_queue,
+		msg_num_events_in_wait_list,
+		msg_event_wait_list,
+		&msg_event,
+		 &msg_func_ret
+  ))) {
+	return CL_SEND_IPC_MESSAGE_FAILURE;
+  }
+  if (event) *event = *(cl_event *)&msg_event;
+  return (cl_int)msg_func_ret;
+}
+
+
+cl_int
+client_clEnqueueBarrierWithWaitList(
+    cl_command_queue command_queue,
+    cl_uint num_events_in_wait_list,
+    const cl_event * event_wait_list,
+    cl_event * event) {
+  cl_pointer msg_command_queue;
+  cl_uint msg_num_events_in_wait_list;
+  std::vector<unsigned char> msg_event_wait_list;
+  cl_pointer msg_event;
+  msg_command_queue = (cl_pointer)command_queue;
+  msg_num_events_in_wait_list = num_events_in_wait_list;
+  if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
+  cl_pointer msg_func_ret;
+  if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clEnqueueBarrierWithWaitList(
+		msg_command_queue,
 		msg_num_events_in_wait_list,
 		msg_event_wait_list,
 		&msg_event,

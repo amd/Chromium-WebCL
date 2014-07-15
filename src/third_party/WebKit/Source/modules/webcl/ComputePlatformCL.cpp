@@ -84,6 +84,9 @@ CCerror ComputePlatform::getDeviceIDs(CCDeviceType deviceType, Vector<RefPtr<Com
 {
     CCuint numberOfDevices = 0;
     CCint clError = clGetDeviceIDs(m_platform, deviceType, 0, 0, &numberOfDevices);
+	// If this type of device is not found, it's not an error
+	if (CL_DEVICE_NOT_FOUND == clError && numberOfDevices == 0)
+		return CL_SUCCESS;
     if (clError != CL_SUCCESS)
         return clError;
 

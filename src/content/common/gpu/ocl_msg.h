@@ -40,15 +40,6 @@ IPC_SYNC_MESSAGE_CONTROL3_3(OpenCLIPCMsg_clGetDeviceInfo,
 	size_t, //! size_t * param_value_size_ret
 	cl_pointer) //! return cl_int
 
-IPC_SYNC_MESSAGE_CONTROL5_2(OpenCLIPCMsg_clCreateContext, 
-	std::vector<unsigned char>, //! const cl_context_properties * properties
-	cl_uint, //! cl_uint num_devices
-	std::vector<unsigned char>, //! const cl_device_id * devices
-	cl_pointer, //! callback callback
-	cl_pointer, //! void * user_data
-	cl_int, //! cl_int * errcode_ret
-	cl_pointer) //! return cl_context
-
 IPC_SYNC_MESSAGE_CONTROL1_1(OpenCLIPCMsg_clReleaseContext, 
 	cl_pointer, //! cl_context context
 	cl_pointer) //! return cl_int
@@ -76,7 +67,7 @@ IPC_SYNC_MESSAGE_CONTROL4_2(OpenCLIPCMsg_clCreateBuffer,
 	cl_pointer, //! cl_context context
 	cl_mem_flags, //! cl_mem_flags flags
 	size_t, //! size_t size
-	cl_pointer, //! void * host_ptr
+	std::vector<unsigned char>, //! void * host_ptr
 	cl_int, //! cl_int * errcode_ret
 	cl_pointer) //! return cl_mem
 
@@ -85,6 +76,15 @@ IPC_SYNC_MESSAGE_CONTROL4_2(OpenCLIPCMsg_clCreateSubBuffer,
 	cl_mem_flags, //! cl_mem_flags flags
 	cl_buffer_create_type, //! cl_buffer_create_type buffer_create_type
 	std::vector<unsigned char>, //! const void * buffer_create_info
+	cl_int, //! cl_int * errcode_ret
+	cl_pointer) //! return cl_mem
+
+IPC_SYNC_MESSAGE_CONTROL5_2(OpenCLIPCMsg_clCreateImage, 
+	cl_pointer, //! cl_context context
+	cl_mem_flags, //! cl_mem_flags flags
+	std::vector<unsigned char>, //! const cl_image_format * image_format
+	std::vector<unsigned char>, //! const cl_image_desc * image_desc
+	std::vector<unsigned char>, //! void * host_ptr
 	cl_int, //! cl_int * errcode_ret
 	cl_pointer) //! return cl_mem
 
@@ -345,7 +345,7 @@ IPC_SYNC_MESSAGE_CONTROL7_3(OpenCLIPCMsg_clEnqueueReadBuffer,
 	cl_pointer, //! cl_mem buffer
 	cl_bool, //! cl_bool blocking_read
 	size_t, //! size_t offset
-	size_t, //! size_t cb
+	size_t, //! size_t size
 	cl_uint, //! cl_uint num_events_in_wait_list
 	std::vector<unsigned char>, //! const cl_event * event_wait_list
 	std::vector<unsigned char>, //! void * ptr
@@ -460,8 +460,8 @@ IPC_SYNC_MESSAGE_CONTROL12_3(OpenCLIPCMsg_clEnqueueReadBufferRect,
 	cl_pointer, //! cl_command_queue command_queue
 	cl_pointer, //! cl_mem buffer
 	cl_bool, //! cl_bool blocking_read
-	std::vector<unsigned char>, //! const size_t * buffer_origin
-	std::vector<unsigned char>, //! const size_t * host_origin
+	std::vector<unsigned char>, //! const size_t * buffer_offset
+	std::vector<unsigned char>, //! const size_t * host_offset
 	std::vector<unsigned char>, //! const size_t * region
 	size_t, //! size_t buffer_row_pitch
 	size_t, //! size_t buffer_slice_pitch
@@ -521,7 +521,7 @@ IPC_SYNC_MESSAGE_CONTROL8_2(OpenCLIPCMsg_clEnqueueWriteBuffer,
 	cl_pointer, //! cl_mem buffer
 	cl_bool, //! cl_bool blocking_write
 	size_t, //! size_t offset
-	size_t, //! size_t cb
+	size_t, //! size_t size
 	std::vector<unsigned char>, //! const void * ptr
 	cl_uint, //! cl_uint num_events_in_wait_list
 	std::vector<unsigned char>, //! const cl_event * event_wait_list
@@ -641,8 +641,8 @@ IPC_SYNC_MESSAGE_CONTROL13_2(OpenCLIPCMsg_clEnqueueWriteBufferRect,
 	cl_pointer, //! cl_command_queue command_queue
 	cl_pointer, //! cl_mem buffer
 	cl_bool, //! cl_bool blocking_write
-	std::vector<unsigned char>, //! const size_t * buffer_origin
-	std::vector<unsigned char>, //! const size_t * host_origin
+	std::vector<unsigned char>, //! const size_t * buffer_offset
+	std::vector<unsigned char>, //! const size_t * host_offset
 	std::vector<unsigned char>, //! const size_t * region
 	size_t, //! size_t buffer_row_pitch
 	size_t, //! size_t buffer_slice_pitch
@@ -660,7 +660,7 @@ IPC_SYNC_MESSAGE_CONTROL8_2(OpenCLIPCMsg_clEnqueueCopyBuffer,
 	cl_pointer, //! cl_mem dst_buffer
 	size_t, //! size_t src_offset
 	size_t, //! size_t dst_offset
-	size_t, //! size_t cb
+	size_t, //! size_t size
 	cl_uint, //! cl_uint num_events_in_wait_list
 	std::vector<unsigned char>, //! const cl_event * event_wait_list
 	cl_pointer, //! cl_event * event
@@ -954,6 +954,20 @@ IPC_SYNC_MESSAGE_CONTROL8_2(OpenCLIPCMsg_clEnqueueNDRangeKernel,
 IPC_SYNC_MESSAGE_CONTROL4_2(OpenCLIPCMsg_clEnqueueTask, 
 	cl_pointer, //! cl_command_queue command_queue
 	cl_pointer, //! cl_kernel kernel
+	cl_uint, //! cl_uint num_events_in_wait_list
+	std::vector<unsigned char>, //! const cl_event * event_wait_list
+	cl_pointer, //! cl_event * event
+	cl_pointer) //! return cl_int
+
+IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLIPCMsg_clEnqueueMarkerWithWaitList, 
+	cl_pointer, //! cl_command_queue command_queue
+	cl_uint, //! cl_uint num_events_in_wait_list
+	std::vector<unsigned char>, //! const cl_event * event_wait_list
+	cl_pointer, //! cl_event * event
+	cl_pointer) //! return cl_int
+
+IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLIPCMsg_clEnqueueBarrierWithWaitList, 
+	cl_pointer, //! cl_command_queue command_queue
 	cl_uint, //! cl_uint num_events_in_wait_list
 	std::vector<unsigned char>, //! const cl_event * event_wait_list
 	cl_pointer, //! cl_event * event

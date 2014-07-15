@@ -7114,9 +7114,10 @@ void* __stdcall svGetBufferUltimatePointer(GLuint tex)
 	return context->getBufferUltimatePointer(tex);
 }
 
-cl_int __stdcall sv_createSharedCLContext(cl_platform_id platform, cl_context *context) {
+cl_int __stdcall sv_createSharedCLContext(cl_platform_id platform, cl_context *context,
+	int num_devices, cl_device_id *devices) {
 	gl::Context *glc = gl::getNonLostContext();
-	return glc->createSharedCLContext(platform, context);
+	return glc->createSharedCLContext(platform, context, num_devices, devices);
 }
 
 cl_mem __stdcall sv_clCreateFromGLBuffer (	cl_context context,
@@ -7124,7 +7125,10 @@ cl_mem __stdcall sv_clCreateFromGLBuffer (	cl_context context,
  	GLuint bufobj,
  	cl_int * errcode_ret) {
 	gl::Context *glc = gl::getNonLostContext();
-	return glc->clCreateFromGLBuffer(context, flags, bufobj, errcode_ret);
+	cl_mem ret = glc->clCreateFromGLBuffer(context, flags, bufobj, errcode_ret);
+	if (*errcode_ret != 0)
+		printf("bad\n");
+	return ret;
 }
 
 cl_mem __stdcall sv_clCreateFromGLTexture (	cl_context context,

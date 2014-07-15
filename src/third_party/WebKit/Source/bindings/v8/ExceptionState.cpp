@@ -53,6 +53,17 @@ void ExceptionState::throwDOMException(const ExceptionCode& ec, const String& me
     m_code = ec;
     setException(V8ThrowException::createDOMException(ec, message, m_isolate));
 }
+void ExceptionState::throwWebCLException(const ExceptionCode& ec, const String& message)
+{
+    ASSERT(ec);
+    ASSERT(m_isolate);
+
+    // SecurityError is thrown via ::throwSecurityError, and _careful_ consideration must be given to the data exposed to JavaScript via the 'sanitizedMessage'.
+    //ASSERT(ec != SecurityError); //ScalableVision
+
+    m_code = ec;
+    setException(V8ThrowException::createWebCLException(ec, message, "", m_isolate));
+}
 
 void ExceptionState::throwSecurityError(const String& sanitizedMessage, const String& unsanitizedMessage)
 {

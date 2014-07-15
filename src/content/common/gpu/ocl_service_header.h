@@ -35,16 +35,6 @@ service_clGetDeviceInfo(
 	cl_pointer * func_ret) //! return cl_int
 ;
 void
-service_clCreateContext(
-	const std::vector<unsigned char>& msg_properties, //[I] const cl_context_properties * properties
-	const cl_uint& msg_num_devices, //[I] cl_uint num_devices
-	const std::vector<unsigned char>& msg_devices, //[I] const cl_device_id * devices
-	const cl_pointer& msg_callback, //[I] callback callback
-	const cl_pointer& msg_user_data, //[I] void * user_data
-	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
-	cl_pointer * func_ret) //! return cl_context
-;
-void
 service_clReleaseContext(
 	const cl_pointer& msg_context, //[I] cl_context context
 	cl_pointer * func_ret) //! return cl_int
@@ -76,7 +66,7 @@ service_clCreateBuffer(
 	const cl_pointer& msg_context, //[I] cl_context context
 	const cl_mem_flags& msg_flags, //[I] cl_mem_flags flags
 	const size_t& msg_size, //[I] size_t size
-	const cl_pointer& msg_host_ptr, //[I] void * host_ptr
+	const std::vector<unsigned char>& msg_host_ptr, //[I] void * host_ptr
 	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
 	cl_pointer * func_ret) //! return cl_mem
 ;
@@ -86,6 +76,16 @@ service_clCreateSubBuffer(
 	const cl_mem_flags& msg_flags, //[I] cl_mem_flags flags
 	const cl_buffer_create_type& msg_buffer_create_type, //[I] cl_buffer_create_type buffer_create_type
 	const std::vector<unsigned char>& msg_buffer_create_info, //[I] const void * buffer_create_info
+	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
+	cl_pointer * func_ret) //! return cl_mem
+;
+void
+service_clCreateImage(
+	const cl_pointer& msg_context, //[I] cl_context context
+	const cl_mem_flags& msg_flags, //[I] cl_mem_flags flags
+	const std::vector<unsigned char>& msg_image_format, //[I] const cl_image_format * image_format
+	const std::vector<unsigned char>& msg_image_desc, //[I] const cl_image_desc * image_desc
+	const std::vector<unsigned char>& msg_host_ptr, //[I] void * host_ptr
 	cl_int * msg_errcode_ret, //[O] cl_int * errcode_ret
 	cl_pointer * func_ret) //! return cl_mem
 ;
@@ -300,7 +300,7 @@ service_clEnqueueReadBuffer(
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_read, //[I] cl_bool blocking_read
 	const size_t& msg_offset, //[I] size_t offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
 	std::vector<unsigned char> * msg_ptr, //[O] void * ptr
@@ -312,8 +312,8 @@ service_clEnqueueReadBufferRect(
 	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_read, //[I] cl_bool blocking_read
-	const std::vector<unsigned char>& msg_buffer_origin, //[I] const size_t * buffer_origin
-	const std::vector<unsigned char>& msg_host_origin, //[I] const size_t * host_origin
+	const std::vector<unsigned char>& msg_buffer_offset, //[I] const size_t * buffer_offset
+	const std::vector<unsigned char>& msg_host_offset, //[I] const size_t * host_offset
 	const std::vector<unsigned char>& msg_region, //[I] const size_t * region
 	const size_t& msg_buffer_row_pitch, //[I] size_t buffer_row_pitch
 	const size_t& msg_buffer_slice_pitch, //[I] size_t buffer_slice_pitch
@@ -331,7 +331,7 @@ service_clEnqueueWriteBuffer(
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_write, //[I] cl_bool blocking_write
 	const size_t& msg_offset, //[I] size_t offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const std::vector<unsigned char>& msg_ptr, //[I] const void * ptr
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
@@ -343,8 +343,8 @@ service_clEnqueueWriteBufferRect(
 	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_pointer& msg_buffer, //[I] cl_mem buffer
 	const cl_bool& msg_blocking_write, //[I] cl_bool blocking_write
-	const std::vector<unsigned char>& msg_buffer_origin, //[I] const size_t * buffer_origin
-	const std::vector<unsigned char>& msg_host_origin, //[I] const size_t * host_origin
+	const std::vector<unsigned char>& msg_buffer_offset, //[I] const size_t * buffer_offset
+	const std::vector<unsigned char>& msg_host_offset, //[I] const size_t * host_offset
 	const std::vector<unsigned char>& msg_region, //[I] const size_t * region
 	const size_t& msg_buffer_row_pitch, //[I] size_t buffer_row_pitch
 	const size_t& msg_buffer_slice_pitch, //[I] size_t buffer_slice_pitch
@@ -363,7 +363,7 @@ service_clEnqueueCopyBuffer(
 	const cl_pointer& msg_dst_buffer, //[I] cl_mem dst_buffer
 	const size_t& msg_src_offset, //[I] size_t src_offset
 	const size_t& msg_dst_offset, //[I] size_t dst_offset
-	const size_t& msg_cb, //[I] size_t cb
+	const size_t& msg_size, //[I] size_t size
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
 	cl_pointer * msg_event, //[O] cl_event * event
@@ -472,6 +472,22 @@ void
 service_clEnqueueTask(
 	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_pointer& msg_kernel, //[I] cl_kernel kernel
+	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
+	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
+	cl_pointer * msg_event, //[O] cl_event * event
+	cl_pointer * func_ret) //! return cl_int
+;
+void
+service_clEnqueueMarkerWithWaitList(
+	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
+	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
+	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
+	cl_pointer * msg_event, //[O] cl_event * event
+	cl_pointer * func_ret) //! return cl_int
+;
+void
+service_clEnqueueBarrierWithWaitList(
+	const cl_pointer& msg_command_queue, //[I] cl_command_queue command_queue
 	const cl_uint& msg_num_events_in_wait_list, //[I] cl_uint num_events_in_wait_list
 	const std::vector<unsigned char>& msg_event_wait_list, //[I] const cl_event * event_wait_list
 	cl_pointer * msg_event, //[O] cl_event * event

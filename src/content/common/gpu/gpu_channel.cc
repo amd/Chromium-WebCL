@@ -1539,7 +1539,7 @@ void GpuChannel::OnCallclCreateContext(
 		free(platforms);
 	}
 
-  *errcode_ret = sv_createSharedCLContext(platform, &context_ret);
+  *errcode_ret = sv_createSharedCLContext(platform, &context_ret, num_devices, devices);
 
   if (!property_list.empty())
     delete[] properties;

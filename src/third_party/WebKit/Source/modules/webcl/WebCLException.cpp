@@ -148,6 +148,21 @@ static const char* const exceptionDescriptions[] = {
 
 COMPILE_ASSERT(WTF_ARRAY_LENGTH(exceptionNames) == WTF_ARRAY_LENGTH(exceptionDescriptions), WebCLExceptionTablesMustMatch);
 
+WebCLException::WebCLException(const ExceptionCodeDescription& desc) {
+    ASSERT(desc.name);
+    m_code = desc.code;
+    m_name = desc.name;
+	m_message = desc.description;
+
+    ScriptWrappable::init(this);
+}
+
+RefPtr<WebCLException> WebCLException::create(int errorCode)
+    {
+		ExceptionCodeDescription desc(errorCode);
+        return adoptRef(new WebCLException(desc));
+    }
+
 bool WebCLException::initializeDescription(ExceptionCode ec, ExceptionCodeDescription* description)
 {
     if (ec < WebCLExceptionOffset || ec > WebCLExceptionMax)
@@ -283,10 +298,12 @@ void setExceptionFromComputeErrorCode(int computeContextError, ExceptionState& e
 	if (computeContextError == ComputeContext::SUCCESS)
 		return;
     int errorCode = WebCLException::computeContextErrorToWebCLExceptionCode(computeContextError);
-	es.throwDOMException(errorCode, "");
+	ExceptionCodeDescription desc(errorCode);
+	
+	es.throwWebCLException(errorCode, WTF::String(desc.name)+"^"+desc.description);
 }
 void setExtensionsNotEnabledException(ExceptionState & es/*ExceptionCode& ec*/) {
-	/*ec = */es.throwDOMException(WebCLException::WEBCL_EXTENSION_NOT_ENABLED, "");
+	/*ec = */es.throwWebCLException(WebCLException::WEBCL_EXTENSION_NOT_ENABLED, "");
 }
 bool willThrowException(ExceptionState & es/*ExceptionCode& ec*/) {
     //return (ec != WebCLException::SUCCESS);

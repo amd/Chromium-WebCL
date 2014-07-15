@@ -77,7 +77,7 @@ WebCLGetInfo WebCLPlatform::getInfo(CCenum info, ExceptionObject& exception)
 Vector<RefPtr<WebCLDevice> > WebCLPlatform::getDevices(CCenum deviceType, ExceptionObject& exception)
 {
     if (deviceType && !WebCLInputChecker::isValidDeviceType(deviceType)) {
-        setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
+        setExceptionFromComputeErrorCode(ComputeContext::INVALID_DEVICE_TYPE, exception);
         return Vector<RefPtr<WebCLDevice> >();
     }
 

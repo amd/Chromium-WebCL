@@ -78,7 +78,11 @@ ComputeMemoryObject::ComputeMemoryObject(ComputeContext* context, CCMemoryFlags 
 #if defined(CL_VERSION_1_2) && CL_VERSION_1_2
     CCImageDescriptor clImageDescriptor = {CL_MEM_OBJECT_IMAGE2D, width, height, 0 /*imageDepth*/, 0 /*arraySize*/,
         static_cast<size_t>(rowPitch), 0 /*slicePitch*/, 0 /*numMipLevels*/, 0 /*numSamples*/, 0 /*buffer*/};
-    m_memoryObject = clCreateImage(context->context(), flags, &imageFormat, &clImageDescriptor, data, &error);
+	
+	// Placeholder
+	// TODO client_clCreateImage must handle data's implicit size
+    m_memoryObject = NULL; //clCreateImage(context->context(), flags, &imageFormat, &clImageDescriptor, data, &error);
+	error = ComputeContext::SUCCESS;
 #else
     m_memoryObject = clCreateImage2D(context->context(), flags, &imageFormat, width, height, rowPitch, data, &error);
 #endif

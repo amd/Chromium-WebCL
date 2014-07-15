@@ -38,6 +38,8 @@
 #include "WebCLInputChecker.h"
 #include "WebCLPlatform.h"
 
+#include "../../wtf/Int32Array.h"
+
 namespace WebCore {
 
 WebCLDevice::~WebCLDevice()
@@ -62,7 +64,7 @@ WebCLGetInfo WebCLDevice::getInfo(CCenum infoType, ExceptionObject& exception)
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_VALUE, exception);
         return WebCLGetInfo();
     }
-
+#if 0
     CCerror err = 0;
     switch (infoType) {
     case ComputeContext::DEVICE_PROFILE:
@@ -197,6 +199,332 @@ WebCLGetInfo WebCLDevice::getInfo(CCenum infoType, ExceptionObject& exception)
     ASSERT(err != ComputeContext::SUCCESS);
     setExceptionFromComputeErrorCode(err, exception);
     return WebCLGetInfo();
+#else
+	cl_int err = 0;
+	char device_string[1024];
+	cl_uint uint_units = 0;
+	size_t sizet_units = 0;
+	size_t sizet_array[1024] = {0};
+	cl_ulong  ulong_units = 0;
+	cl_bool bool_units = false;
+	cl_device_type type = 0;
+	cl_device_mem_cache_type global_type = 0;
+	cl_command_queue_properties queue_properties = 0;
+	cl_device_exec_capabilities exec = NULL;
+	cl_device_local_mem_type local_type = 0;
+
+	cl_device_id device_id = platformObject()->device();
+
+	switch(infoType)
+	{
+
+		case ComputeContext::DEVICE_EXTENSIONS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_EXTENSIONS, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));	
+			break;
+		case ComputeContext::DEVICE_NAME:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_NAME, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));	
+			break;
+		case ComputeContext::DEVICE_PROFILE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PROFILE, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));	
+			break;
+		case ComputeContext::DEVICE_VENDOR:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_VENDOR, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));
+			break;
+		case ComputeContext::DEVICE_VERSION:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_VERSION, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));
+			break;
+		case ComputeContext::DRIVER_VERSION:
+			err = clGetDeviceInfo(device_id, CL_DRIVER_VERSION, sizeof(device_string), &device_string, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(String(device_string));	
+			break;
+		case ComputeContext::DEVICE_ADDRESS_BITS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_ADDRESS_BITS , sizeof(cl_uint), &uint_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_GLOBAL_MEM_CACHELINE_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE,sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MAX_CLOCK_FREQUENCY:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));	
+			break;
+		case ComputeContext::DEVICE_MAX_CONSTANT_ARGS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_CONSTANT_ARGS, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MAX_READ_IMAGE_ARGS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_READ_IMAGE_ARGS, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));	
+			break;
+		case ComputeContext::DEVICE_MAX_SAMPLERS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_SAMPLERS, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MAX_WRITE_IMAGE_ARGS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WRITE_IMAGE_ARGS, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MEM_BASE_ADDR_ALIGN:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MEM_BASE_ADDR_ALIGN, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MIN_DATA_TYPE_ALIGN_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_VENDOR_ID:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_VENDOR_ID, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_CHAR:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_CHAR, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_SHORT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_INT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_INT, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_LONG:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_LONG, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE, sizeof(cl_uint), &uint_units,NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_MAX_COMPUTE_UNITS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_COMPUTE_UNITS , sizeof(cl_uint), &uint_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(uint_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE2D_MAX_HEIGHT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE2D_MAX_HEIGHT, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE2D_MAX_WIDTH:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE2D_MAX_WIDTH, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE3D_MAX_DEPTH:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE3D_MAX_DEPTH, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE3D_MAX_HEIGHT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE3D_MAX_HEIGHT, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE3D_MAX_WIDTH:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE3D_MAX_WIDTH, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_MAX_PARAMETER_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_MAX_WORK_GROUP_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_MAX_WORK_ITEM_SIZES:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(size_t), &sizet_units, NULL);
+			if(err == CL_SUCCESS) {
+				err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_SIZES, 1024, &sizet_array, NULL);
+				// TODO (siba samal) Check support for SizeTArray/Int16Array in WebCLGetInfo
+				if (err == CL_SUCCESS) {
+					int values[3] = {0,0,0};
+					for(int i=0; i<((int)sizet_units); i++)
+					{
+						printf("%d\n", values[i]);
+						values[i] = (int)sizet_array[i];
+					}
+					return WebCLGetInfo(Int32Array::create(values, 3));
+					
+						
+				}
+			}
+			break;
+		case ComputeContext::DEVICE_PROFILING_TIMER_RESOLUTION:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_PROFILING_TIMER_RESOLUTION, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_MAX_WORK_ITEM_DIMENSIONS:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(size_t), &sizet_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
+			break;
+		case ComputeContext::DEVICE_LOCAL_MEM_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(ulong_units));
+			break;
+		case ComputeContext::DEVICE_MAX_CONSTANT_BUFFER_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(ulong_units));
+			break;
+		case ComputeContext::DEVICE_MAX_MEM_ALLOC_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(ulong_units));
+			break;
+		case ComputeContext::DEVICE_GLOBAL_MEM_CACHE_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_GLOBAL_MEM_CACHE_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(ulong_units));
+			break;
+		case ComputeContext::DEVICE_GLOBAL_MEM_SIZE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(ulong_units));
+			break;
+		case ComputeContext::DEVICE_AVAILABLE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_AVAILABLE , sizeof(cl_bool), &bool_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<bool>(bool_units));
+			break;
+		case ComputeContext::DEVICE_COMPILER_AVAILABLE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_COMPILER_AVAILABLE , sizeof(cl_bool), &bool_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<bool>(bool_units));
+			break;
+		case ComputeContext::DEVICE_ENDIAN_LITTLE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_ENDIAN_LITTLE, sizeof(cl_bool), &bool_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<bool>(bool_units));
+			break;
+		case ComputeContext::DEVICE_ERROR_CORRECTION_SUPPORT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_ERROR_CORRECTION_SUPPORT, sizeof(cl_bool), &bool_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<bool>(bool_units));
+			break;
+		case ComputeContext::DEVICE_IMAGE_SUPPORT:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), &bool_units, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<bool>(bool_units));
+			break;
+		case ComputeContext::DEVICE_TYPE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_TYPE, sizeof(type), &type, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(type));
+			break;
+		case ComputeContext::DEVICE_QUEUE_PROPERTIES:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_QUEUE_PROPERTIES, 
+					sizeof(cl_command_queue_properties), &queue_properties, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(queue_properties));
+			break;
+
+			//cl_device_fp_config fp_config = 0;
+			// Part of cl_ext.h (which isn't available in Khronos)
+			//case ComputeContext::DEVICE_DOUBLE_FP_CONFIG:
+			//clGetDeviceInfo(device_id, CL_DEVICE_DOUBLE_FP_CONFIG, sizeof(cl_device_fp_config), &fp_config, NULL);
+			//case ComputeContext::DEVICE_HALF_FP_CONFIG:
+			//clGetDeviceInfo(device_id, CL_DEVICE_HALF_FP_CONFIG, sizeof(cl_device_fp_config), &fp_config, NULL);
+			//case vDEVICE_SINGLE_FP_CONFIG:
+			//clGetDeviceInfo(device_id, CL_DEVICE_SINGLE_FP_CONFIG, sizeof(cl_device_fp_config), &fp_config, NULL);
+			//return WebCLGetInfo(static_cast<unsigned int>(fp_config));
+
+
+			//Platform ID is not Supported
+			//case ComputeContext::DEVICE_PLATFORM:
+			//cl_platform_id platform_id = NULL;
+			//clGetDeviceInfo(device_id, CL_DEVICE_PLATFORM, sizeof(cl_platform_id), &platform_id, NULL);
+			//return WebCLGetInfo(static_cast<unsigned int>(platform_id));
+
+		case ComputeContext::DEVICE_EXECUTION_CAPABILITIES:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_EXECUTION_CAPABILITIES, sizeof(cl_device_exec_capabilities), &exec, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(exec));
+			break;
+		case ComputeContext::DEVICE_GLOBAL_MEM_CACHE_TYPE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_GLOBAL_MEM_CACHE_TYPE, sizeof(cl_device_mem_cache_type), &global_type, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(global_type));
+			break;
+		case ComputeContext::DEVICE_LOCAL_MEM_TYPE:
+			err = clGetDeviceInfo(device_id, CL_DEVICE_LOCAL_MEM_TYPE, sizeof(cl_device_local_mem_type), &local_type, NULL);
+			if (err == CL_SUCCESS)
+				return WebCLGetInfo(static_cast<unsigned int>(local_type));
+			break;
+		default:
+			//ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
+			printf("Error:UNSUPPORTED DEVICE TYPE = %d ",infoType);
+			return WebCLGetInfo();
+	}
+
+	setExceptionFromComputeErrorCode(err, exception);
+
+	/*
+	switch (err) {
+		case CL_INVALID_DEVICE:
+			ec.throwDOMException(WebCLException::INVALID_DEVICE, "WebCLException::INVALID_DEVICE");
+			printf("Error: CL_INVALID_DEVICE \n");
+			break;
+		case CL_INVALID_VALUE:
+			ec.throwDOMException(WebCLException::INVALID_VALUE, "WebCLException::INVALID_VALUE");
+			printf("Error: CL_INVALID_VALUE\n");
+			break;
+		case CL_OUT_OF_RESOURCES:
+			ec.throwDOMException(WebCLException::OUT_OF_RESOURCES, "WebCLException::OUT_OF_RESOURCES");
+			printf("Error: CL_OUT_OF_RESOURCES \n");
+			break;
+		case CL_OUT_OF_HOST_MEMORY:
+			ec.throwDOMException(WebCLException::OUT_OF_HOST_MEMORY, "WebCLException::OUT_OF_HOST_MEMORY");
+			printf("Error: CL_OUT_OF_HOST_MEMORY  \n");
+			break;
+		default:
+			printf("Error: Invaild Error Type\n");
+			ec.throwDOMException(WebCLException::FAILURE, "WebCLException::FAILURE");
+			break;
+	}
+	*/
+	return WebCLGetInfo();
+
+#endif
 }
 
 void toWebCLDeviceArray(WebCLPlatform* platform, Vector<RefPtr<ComputeDevice> >& ccDevices, Vector<RefPtr<WebCLDevice> >& devices)

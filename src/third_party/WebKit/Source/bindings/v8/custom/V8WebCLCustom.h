@@ -37,8 +37,11 @@
 #include "V8WebCLCommandQueue.h"
 #include "V8WebCLContext.h"
 #include "V8WebCLDevice.h"
+#include "V8WebCLPlatform.h"
 //#include "V8WebCLDeviceList.h"
 #include "V8WebCLProgram.h"
+#include "V8WebCLMemoryObject.h"
+#include "V8WebCLImageDescriptor.h"
 
 #include "modules/webcl/WebCLCommandQueue.h"
 //#include "..\..\core\platform\NotImplemented.h"
@@ -132,11 +135,28 @@ static v8::Handle<v8::Value> toV8Object(const WebCLGetInfo& info,v8::Handle<v8::
         /*case WebCLGetInfo::kTypeWebCLDeviceList:
             return toV8(info.getWebCLDeviceList(),creationContext, isolate);*/
     case WebCLGetInfo::kTypeWebCLDevices: //TODO
-        return v8::Undefined();//return toV8(info.getWebCLDevices(), creationContext, isolate);
+        {
+			Vector<RefPtr<WebCLDevice> > devices = info.getWebCLDevices();
+				v8::Isolate* isolate = v8::Isolate::GetCurrent();
+				v8::HandleScope handle_scope(isolate);
+
+				// Create a new empty array.
+				v8::Handle<v8::Array> array = v8::Array::New(devices.size());
+
+				// Return an empty result if there was an error creating the array.
+				if (array.IsEmpty())
+					return v8::Handle<v8::Array>();
+
+				// Fill out the values
+				for (int i=0; i<(int)devices.size(); i++)
+					array->Set(i, toV8(devices[i], creationContext, isolate));
+				return handle_scope.Close(array);
+		}
+
     case WebCLGetInfo::kTypeWebCLMemoryObject: //TODO
-        return v8::Undefined();//return toV8(info.getWebCLMemoryObject(), creationContext, isolate);
+		return v8::Undefined(); //return toV8(info.getWebCLMemoryObject(), creationContext, isolate);
     case WebCLGetInfo::kTypeWebCLPlatform: //TODO
-        return v8::Undefined();//return toV8(info.getWebCLPlatform(), creationContext, isolate);
+        return toV8(info.getWebCLPlatform(), creationContext, isolate);
 
         default:
             // notImplemented(); //ScalableVision

@@ -35,16 +35,27 @@
 
 #include "../../bindings/v8/ExceptionState.h"
 
+#include "core/dom/DOMException.h"
+
 namespace WebCore {
 
 #define ExceptionObject ExceptionState //ExceptionCode
 
-class WebCLException : public ExceptionBase {
+class WebCLException : public RefCounted<WebCLException>, public ScriptWrappable {
 public:
+	int m_code;
+	WTF::String m_name;
+	WTF::String m_message;
+
+    unsigned short code() const { return m_code; }
+    String name() const { return m_name; }
+    String message() const { return m_message; }
+
     static PassRefPtr<WebCLException> create(const ExceptionCodeDescription& description)
     {
         return adoptRef(new WebCLException(description));
     }
+    static RefPtr<WebCLException> create(int errorCode);
 
     static const int WebCLExceptionOffset = 1300;
     static const int WebCLExceptionMax = WebCLExceptionOffset + 51;
@@ -110,10 +121,7 @@ public:
     static WebCLExceptionCode computeContextErrorToWebCLExceptionCode(int computeContextError);
 
 private:
-    WebCLException(const ExceptionCodeDescription& description)
-        : ExceptionBase(description)
-    {
-    }
+    WebCLException(const ExceptionCodeDescription& description);
 };
 
 

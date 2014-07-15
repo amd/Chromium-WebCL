@@ -30,6 +30,7 @@
 #include "core/dom/DOMException.h"
 
 #include "ExceptionCode.h"
+#include "modules/webcl/WebCLException.h"
 
 namespace WebCore {
 
@@ -105,11 +106,17 @@ PassRefPtr<DOMException> DOMException::create(ExceptionCode ec, const String& sa
         entry->name ? entry->name : "Error",
         sanitizedMessage.isNull() ? String(entry->message) : sanitizedMessage,
         unsanitizedMessage));
-	else
-	return adoptRef(new DOMException(ec,
-        "OpenCL exception",
-        "Unknown",
-        "Unknown"));
+	else {
+	  throw "shouldn't be here";
+	  /*
+	  Vector<String> info;
+	  sanitizedMessage.split('^',info);
+	  return adoptRef(new DOMException(ec,
+        info[0],
+        info[1],
+        "None"));
+	*/
+	}
 }
 
 String DOMException::toString() const

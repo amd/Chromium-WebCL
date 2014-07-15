@@ -6,7 +6,8 @@
 
 extern "C" {
 
-cl_int __stdcall sv_createSharedCLContext(cl_platform_id platform, cl_context *context);
+cl_int __stdcall sv_createSharedCLContext(cl_platform_id platform, cl_context *context, int num_devices, cl_device_id *devices);
+
 cl_mem __stdcall sv_clCreateFromGLBuffer (	cl_context context,
  	cl_mem_flags flags,
  	GLuint bufobj,

@@ -341,7 +341,6 @@ PassRefPtr<WebCLImage> WebCLContext::createImage2DBase(CCenum flags, CCuint widt
 
     ASSERT(data);
     flags |= ComputeContext::MEM_COPY_HOST_PTR;
-
     RefPtr<WebCLImageDescriptor> imageDescriptor = WebCLImageDescriptor::create(width, height, rowPitch, imageFormat);
     return WebCLImage::create(this, flags, imageDescriptor.release(), data, exception);
 }
@@ -485,6 +484,13 @@ unsigned WebCLContext::bytesPerChannelType(CCenum channelType)
     return 0;
 }
 
+////
+PassRefPtr<WebCLImage> WebCLContext::createImage(CCenum flags, WebCLImageDescriptor* descriptor, ExceptionObject& exception) {
+	return createImage(flags, descriptor, NULL, exception);
+}
+
+ __declspec(dllexport) long long g_clCreateImage_size = 0;
+
 PassRefPtr<WebCLImage> WebCLContext::createImage(CCenum flags, WebCLImageDescriptor* descriptor, ArrayBufferView* hostPtr, ExceptionObject& exception)
 {
     if (!descriptor) {
@@ -526,7 +532,7 @@ PassRefPtr<WebCLImage> WebCLContext::createImage(CCenum flags, WebCLImageDescrip
         // FIXME :: This is a slow initialization method. Need to verify against kernel init method.
         buffer = ArrayBuffer::create(width * height * numberOfChannels * bytesPerChannel, 1);
     }
-
+	g_clCreateImage_size = buffer->byteLength();
     CCImageFormat imageFormat = {channelOrder, channelType};
     return createImage2DBase(flags, width, height, rowPitch, imageFormat, buffer->data(), exception);
 }

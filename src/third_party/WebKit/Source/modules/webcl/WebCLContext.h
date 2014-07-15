@@ -77,6 +77,9 @@ public:
     PassRefPtr<WebCLCommandQueue> createCommandQueue(WebCLDevice*, CCenum commandQueueProperty, ExceptionObject&);
 
     PassRefPtr<WebCLImage> createImage(CCenum flag, WebCLImageDescriptor*, ArrayBufferView*, ExceptionObject&);
+    ////
+    PassRefPtr<WebCLImage> createImage(CCenum flag, WebCLImageDescriptor*, ExceptionObject&);
+
 
     PassRefPtr<WebCLProgram> createProgram(const String& programSource, ExceptionObject&);
 

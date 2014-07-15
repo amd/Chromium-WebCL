@@ -3577,7 +3577,8 @@ static PFN_clEnqueueAcquireD3D11ObjectsKHR  pfn_clEnqueueAcquireD3D11ObjectsKHR 
 static PFN_clEnqueueReleaseD3D11ObjectsKHR  pfn_clEnqueueReleaseD3D11ObjectsKHR = NULL;
 static PFN_clGetDeviceIDsFromD3D11KHR       pfn_clGetDeviceIDsFromD3D11KHR      = NULL;
 
-int Renderer11::createSharedCLContext(cl_platform_id platform, cl_context *context)
+int Renderer11::createSharedCLContext(cl_platform_id platform, cl_context *context,
+	int num_devices, cl_device_id *devices)
 {
 
     INIT_CL_EXT_FCN_PTR(clCreateFromD3D11BufferKHR);
@@ -3637,8 +3638,8 @@ int Renderer11::createSharedCLContext(cl_platform_id platform, cl_context *conte
     };
 
     *context = clCreateContext(cps, 
-                1,
-                &interopDeviceId,
+                num_devices? num_devices : 1,
+                devices? devices : &interopDeviceId,
                 0,
                 0,
                 &status);

@@ -198,7 +198,8 @@ class Renderer11 : public Renderer
     virtual bool getLUID(LUID *adapterLuid) const;
 
 	// ScalableVision
-	cl_int createSharedCLContext(cl_platform_id platform, cl_context *context);
+	cl_int createSharedCLContext(cl_platform_id platform, cl_context *context,
+		int num_devices, cl_device_id *devices);
 	
 cl_mem clCreateFromGLBuffer (	cl_context context,
  	cl_mem_flags flags,

@@ -49,7 +49,9 @@ void V8WebCLKernel::getInfoMethodCustom(const v8::Arguments& args)
 
 void V8WebCLKernel::getWorkGroupInfoMethodCustom(const v8::Arguments& args)
 {
-  
+// PLACEHOLDER
+	return;
+
     if (args.Length() != 2)
         { throwNotEnoughArgumentsError(args.GetIsolate()); return; }
 

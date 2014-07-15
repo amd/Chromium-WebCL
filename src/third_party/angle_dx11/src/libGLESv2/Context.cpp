@@ -251,8 +251,9 @@ void *Context::getBufferUltimatePointer(GLuint buf)
 	return mResourceManager->getBufferUltimatePointer(buf);
 }
 
-cl_int Context::createSharedCLContext(cl_platform_id platform, cl_context *context) {
-	return mRenderer->createSharedCLContext(platform, context);
+cl_int Context::createSharedCLContext(cl_platform_id platform, cl_context *context,
+	int num_devices, cl_device_id *devices) {
+	return mRenderer->createSharedCLContext(platform, context, num_devices, devices);
 }
 cl_mem Context::clCreateFromGLBuffer (	cl_context context,
  	cl_mem_flags flags,
