@@ -1,11 +1,3 @@
-                 if (typeof (WebCL) === "undefined") {
-                      console.error("WebCL is yet to be undefined");
-                      return null;
-                  }
-
-                  var webcl = new WebCL();
-
-
 function SCException(message, data) {
     this.message = message;
     this.data = data || null;
@@ -1267,8 +1259,6 @@ function CLDataWrapper(clr, hostBuffer, clBuffer) {
             var target = new hostBuffer.constructor(1);
             var itemOffset = hostBuffer.byteOffset + hostBuffer.BYTES_PER_ELEMENT * index;
             clr.queue.enqueueReadBuffer(clBuffer, true, itemOffset, target.byteLength, target);
-	    clr.queue.flush();
-	    clr.queue.finish();
             return target[0];
         };
         this.set = function(index, value) {
@@ -1308,7 +1298,8 @@ function CLRunner(glr, cfg) {
         if (this.devices.length === 0) {
             throw new SCException("No devices available");
         }
-        /*if (typeof this.cl.getExtension != "undefined") {
+	/*
+        if (typeof this.cl.getExtension != "undefined") {
             var extension = null;
             extension = this.cl.getExtension("KHR_GL_SHARING");
             if (extension === null) {
@@ -1327,21 +1318,14 @@ function CLRunner(glr, cfg) {
                 deviceType: this.cl.DEVICE_TYPE_GPU,
                 sharedContext: null
             });
-        }*/
-
-
-
-                  // Create a compute context - takes default device
-                  var properties = new WebCLContextProperties();
-                  properties.platform = platform;
-                  properties.devices = this.devices;
-                  properties.shareGroup = 1;
-                  this.context = this.cl.createContext(properties);
-	
+        }
+	*/
+	this.cl.enableExtension("KHR_GL_SHARING");
+	this.context = this.cl.createContext(glr.gl, this.devices);
         if (this.context == null) {
             throw new SCException("Could not create a shared WebCL context");
         }
-        this.queue = this.context.createCommandQueue(this.devices, null);
+        this.queue = this.context.createCommandQueue(this.devices[0], null);
         if (this.queue == null) {
             throw new SCException("Could not create a WebCL command queue");
         }
@@ -1632,15 +1616,22 @@ CLRunner.prototype.layoutAsync = function(cb) {
     });
 };
 
+var current_glVBO;
+
 CLRunner.prototype.setVBO = function(glVBO) {
     if (this.cfg.ignoreCL) throw new SCException("Function only for CL-enabled use");
     try {
+	    /* Why??!!
         if (this.clVBO != null) {
             if (typeof this.clVBO.release !== "undefined") {
                 this.clVBO.release();
             }
         }
-        this.clVBO = this.context.createFromGLBuffer(this.cl.MEM_WRITE_ONLY, glVBO);
+	    */
+	if (!(current_glVBO === glVBO)) {
+        	this.clVBO = this.context.createFromGLBuffer(this.cl.MEM_WRITE_ONLY, glVBO);
+		current_glVBO = glVBO;
+	}
     } catch (e) {
         console.error("Error creating a shared OpenCL buffer from a WebGL buffer: " + e.message);
     }
@@ -2182,7 +2173,7 @@ CLRunner.prototype.buildKernels = function() {
     }
     this.program = this.context.createProgram(kernels);
     try {
-        this.program.buildProgram(null, null, null); //this.devices);
+        this.program.build(this.devices);
     } catch (e) {
         console.error("Error loading WebCL kernels: " + e.message);
         console.error("Inputs:", {
@@ -2215,9 +2206,9 @@ CLRunner.prototype.runRenderTraversal = function() {
         this[renderTraversal]();
     } else {
         try {
-            this.queue.enqueueAcquireGLObjects(this.clVBO); //[ this.clVBO ]);
+            this.queue.enqueueAcquireGLObjects([ this.clVBO ]);
             this[renderTraversal](this.clVBO);
-            this.queue.enqueueReleaseGLObjects(this.clVBO); //[ this.clVBO ]);
+            this.queue.enqueueReleaseGLObjects([ this.clVBO ]);
             this.queue.finish();
         } catch (e) {
             console.error("Error running OpenCL render traversal: " + e.message);
@@ -2235,9 +2226,9 @@ CLRunner.prototype.runRenderTraversalAsync = function(cb) {
         this[renderTraversal](null, cb);
     } else {
         try {
-            this.queue.enqueueAcquireGLObjects(this.clVBO); //[ this.clVBO ]);
+            this.queue.enqueueAcquireGLObjects([ this.clVBO ]);
             this[renderTraversal](this.clVBO);
-            this.queue.enqueueReleaseGLObjects(this.clVBO); //[ this.clVBO ]);
+            this.queue.enqueueReleaseGLObjects([ this.clVBO ]);
             this.queue.finish();
             cb();
         } catch (e) {
@@ -2333,10 +2324,10 @@ CLRunner.prototype.topDownTraversal = function(kernel) {
     } else {
         //var types = WebCLKernelArgumentTypes;
         for (var i = 0; i < this.levels.length; i++) {
-            kernel.setKernelArg(0, this.levels[i]["start_idx"], this.cl.KERNEL_ARG_UINT); //types.UINT);
+            kernel.setArg(0, new Uint32Array( [this.levels[i]["start_idx"]]));
             var globalWorkSize = new Int32Array(1);
             globalWorkSize[0] = this.levels[i]["length"];
-            this.queue.enqueueNDRangeKernel(kernel, null, globalWorkSize, null);
+            this.queue.enqueueNDRangeKernel(kernel, globalWorkSize.length, [], globalWorkSize, []);
             this.queue.finish();
         }
     }
@@ -2356,10 +2347,10 @@ CLRunner.prototype.bottomUpTraversal = function(kernel) {
     } else {
         //var types = WebCLKernelArgumentTypes;
         for (var i = this.levels.length - 1; i >= 0; i--) {
-            kernel.setKernelArg(0, this.levels[i]["start_idx"], this.cl.KERNEL_ARG_UINT); //types.UINT);
+            kernel.setArg(0, new Uint32Array([this.levels[i]["start_idx"]]));
             var globalWorkSize = new Int32Array(1);
             globalWorkSize[0] = this.levels[i]["length"];
-            this.queue.enqueueNDRangeKernel(kernel, null, globalWorkSize, null);
+            this.queue.enqueueNDRangeKernel(kernel, globalWorkSize.length, [], globalWorkSize, []);
             this.queue.finish();
         }
     }
@@ -2860,12 +2851,12 @@ CLRunner.prototype.runSelectors = function() {
         this.selectors_buffer = new Int32Array(this.grammartokens_buffer_1.length);
         this.cl_selectors_buffer = this.context.createBuffer(this.cl.MEM_READ_WRITE, this.selectors_buffer.byteLength);
     }
-    kernel.setKernelArgGlobal(6, this.cl_selectors_buffer);
+    kernel.setArg(6, this.cl_selectors_buffer);
     var globalWorkSize = new Int32Array(1);
     globalWorkSize[0] = this.tree_size;
     var runStartT = new Date().getTime();
     try {
-        this.queue.enqueueNDRangeKernel(kernel, null, globalWorkSize, null);
+        this.queue.enqueueNDRangeKernel(kernel, globalWorkSize.length, [], globalWorkSize, []);
         this.queue.finish();
     } catch (e) {
         console.error("Error running WebCL selectors: " + e.message);

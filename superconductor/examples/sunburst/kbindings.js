@@ -30,9 +30,8 @@ this._gen_retrieveTree = function() {
 
 
 this._gen_setKernelArguments = function(kernel) {
-	var types = WebCLKernelArgumentTypes;
-	kernel.setArg(0, 0, types.UINT);	// start_idx (default to 0)
-	kernel.setArg(1, this.tree_size, types.UINT);
+	kernel.setArg(0, new Uint32Array([0]));	// start_idx (default to 0)
+	kernel.setArg(1, new Uint32Array([this.tree_size]));
 	kernel.setArg(2, this.cl_float_buffer_1);
 	kernel.setArg(3, this.cl_int_buffer_1);
 	kernel.setArg(4, this.cl_grammartokens_buffer_1);

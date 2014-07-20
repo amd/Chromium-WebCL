@@ -33,12 +33,12 @@ this._gen_retrieveTree = function() {
 
 this._gen_setKernelArguments = function(kernel) {
 	//var types = WebCLKernelArgumentTypes;
-	kernel.setKernelArg(0, 0, this.cl.KERNEL_ARG_UINT); //types.UINT);	// start_idx (default to 0)
-	kernel.setKernelArg(1, this.tree_size, this.cl.KERNEL_ARG_UINT); //types.UINT);
-	kernel.setKernelArgGlobal(2, this.cl_int_buffer_1);
-	kernel.setKernelArgGlobal(3, this.cl_float_buffer_1);
-	kernel.setKernelArgGlobal(4, this.cl_grammartokens_buffer_1);
-	kernel.setKernelArgGlobal(5, this.cl_nodeindex_buffer_1);
+	kernel.setArg(0, new Uint32Array([0]));	// start_idx (default to 0)
+	kernel.setArg(1, new Uint32Array([this.tree_size]));
+	kernel.setArg(2, this.cl_int_buffer_1);
+	kernel.setArg(3, this.cl_float_buffer_1);
+	kernel.setArg(4, this.cl_grammartokens_buffer_1);
+	kernel.setArg(5, this.cl_nodeindex_buffer_1);
 };
 
 
@@ -76,7 +76,7 @@ this._gen_run_visit_3 = function() {
 
 this._gen_run_visit_4 = function(clVBO) {
 	this._gen_setKernelArguments(this._gen_kernel_visit_4);
-	this._gen_kernel_visit_4.setKernelArgGlobal(6, clVBO);
+	this._gen_kernel_visit_4.setArg(6, clVBO);
 	this.topDownTraversal(this._gen_kernel_visit_4);
 };
 
