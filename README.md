@@ -69,10 +69,14 @@ For more information consult http://dev.chromium.org/developers/how-tos/get-the-
 Run Superconductor demos
 -----------------------------
 
-Point your web server at the *superconductor* directory, which is at the same level of *src*; use a port number of your choice, say 8888. If you use the server that came with python in depot_tools, the command to run (with *src* as the current directory) is "python -m SimpleHTTPServer 8888". Then, in the browser, load http://localhost:8888/examples/linegraph-3d or http://localhost:8888/examples/treemap to load the main Superconductor demos. To get a sense of how the demos should look, watch the screen-capture video at http://youtu.be/dGD9NpipcrE
+Point your web server at the *superconductor* directory, which is at the same level of *src* with port 8888. If you use the server that came with python in depot_tools, the command to run (with *src* as the current directory) is "python -m SimpleHTTPServer 8888". Then, in the browser, load http://localhost:8888/examples/linegraph-3d or http://localhost:8888/examples/treemap to load the main Superconductor demos. To get a sense of how the demos should look, watch the screen-capture video at http://youtu.be/dGD9NpipcrE
 
 Precompiled Binary
 ------------------------------
 
 If you need a pre-compiled binary of the browser, download it from https://app.box.com/s/u33oh8opeooek2wtsf8m
 
+WebCL Conformance Tests
+------------------------------
+
+To run webcl conformance tests, start a web server with WebCL-conformance as the root directory.  If you use the server that came with python in depot_tools, the command to run (with *WebCL-conformance* as the current directory) is "python -m SimpleHTTPServer 2222". Then, in chromium, load http://localhost:2222/webcl-conformance-tests.html. As of 7/20/2014, the status of conformance is "Results: (1629 of 1895 passed) (0 skipped)"
