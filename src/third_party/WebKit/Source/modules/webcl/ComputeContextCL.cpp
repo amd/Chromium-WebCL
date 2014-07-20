@@ -439,7 +439,7 @@ CCerror ComputeContext::supportedImageFormats(CCMemoryFlags type, CCMemoryObject
 
 void ComputeContext::populatePropertiesForInteroperabilityWithGL(Vector<CCContextProperties>& properties, PlatformGraphicsContext3D context3D)
 {
-	/*
+/*
 #if PLATFORM(MAC)
     CGLContextObj kCGLContext = context3D;
     CGLShareGroupObj kCGLShareGroup = CGLGetShareGroup(kCGLContext);
@@ -452,7 +452,9 @@ void ComputeContext::populatePropertiesForInteroperabilityWithGL(Vector<CCContex
     properties.append(CL_GLX_DISPLAY_KHR);
     properties.append(reinterpret_cast<CCContextProperties>(GLContext::getCurrent()->sharedX11Display()));
 #endif
-	*/
+*/
+    properties.append(CL_GL_CONTEXT_KHR);
+    properties.append(0xffee);
 }
 
 CCerror ComputeContext::CCPackImageData(Image* image, GraphicsContext3D::ImageHtmlDomSource domSource, unsigned width, unsigned height, Vector<uint8_t>& data)

@@ -48,6 +48,9 @@ void V8WebCLDevice::getInfoMethodCustom(const v8::Arguments& args)
     WebCLDevice* device = V8WebCLDevice::toNative(args.Holder()); 
     int device_index = toInt32(args[0]);
     WebCLGetInfo info = device->getInfo(device_index, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

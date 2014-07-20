@@ -1093,6 +1093,7 @@ client_clEnqueueReadBufferRect(
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
+__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_hostPtrSize(WebCore::g_hostPtrSize)); //WATCH3
   if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clEnqueueReadBufferRect(
 		msg_command_queue,
 		msg_buffer,
@@ -1206,7 +1207,7 @@ client_clEnqueueWriteBufferRect(
   msg_buffer_slice_pitch = buffer_slice_pitch;
   msg_host_row_pitch = host_row_pitch;
   msg_host_slice_pitch = host_slice_pitch;
-  msg_ptr.resize(region[0]*region[1]*region[2]);
+  msg_ptr.resize(WebCore::g_hostPtrSize); //WATCH
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
@@ -1380,6 +1381,7 @@ client_clEnqueueReadImage(
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;
+__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_hostPtrSize(WebCore::g_hostPtrSize)); //WATCH3
   if (!__ocl_gpu_channel_host->Send(new OpenCLIPCMsg_clEnqueueReadImage(
 		msg_command_queue,
 		msg_image,
@@ -1433,7 +1435,7 @@ client_clEnqueueWriteImage(
   if (region) {msg_region.resize(3*4); memcpy(&msg_region[0], region, 3*4);}
   msg_input_row_pitch = input_row_pitch;
   msg_input_slice_pitch = input_slice_pitch;
-  msg_ptr.resize(region[0]*region[1]*region[2]);
+  msg_ptr.resize(WebCore::g_hostPtrSize); //WATCH
   msg_num_events_in_wait_list = num_events_in_wait_list;
   if (event_wait_list && num_events_in_wait_list*4) { msg_event_wait_list.resize(num_events_in_wait_list*4); memcpy(&msg_event_wait_list[0], event_wait_list, num_events_in_wait_list*4); }
   cl_pointer msg_func_ret;

@@ -43,25 +43,34 @@ void V8WebCLKernel::getInfoMethodCustom(const v8::Arguments& args)
     WebCLKernel* kernel = V8WebCLKernel::toNative(args.Holder()); 
     int kernel_index = toInt32(args[0]);
     WebCLGetInfo info = kernel->getInfo(kernel_index, es);
+	if (es.throwIfNeeded())
+        return;
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }
 
 void V8WebCLKernel::getWorkGroupInfoMethodCustom(const v8::Arguments& args)
 {
-// PLACEHOLDER
-	return;
-
     if (args.Length() != 2)
         { throwNotEnoughArgumentsError(args.GetIsolate()); return; }
 
     ExceptionState es(args.GetIsolate());
     WebCLKernel* kernel = V8WebCLKernel::toNative(args.Holder());
-    WebCLDevice* device = V8WebCLDevice::toNative(v8::Handle<v8::Object>::Cast(args[0]));
-    int workgroup_index = toInt32(args[1]);
+	v8::Handle<v8::Value> val = args[0];
+
+	WebCLDevice *device;
+	if (val->IsObject())
+        device = V8WebCLDevice::toNative(v8::Handle<v8::Object>::Cast(args[0]));
+	else
+		device = NULL;
+	int workgroup_index = toInt32(args[1]);
     WebCLGetInfo info = kernel->getWorkGroupInfo(device, workgroup_index, es);
+	if (es.throwIfNeeded())
+        return;
+
     v8SetReturnValue(args, toV8Object(info,args.Holder(), args.GetIsolate()));
 }
+
 /*
 void V8WebCLKernel::setKernelArgMethodCustom(const v8::Arguments& args)
 {

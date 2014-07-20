@@ -44,6 +44,8 @@ void V8WebCLCommandQueue::getInfoMethodCustom(const v8::Arguments& args)
     WebCLCommandQueue* queue = V8WebCLCommandQueue::toNative(args.Holder()); 
     int queue_index = toInt32(args[0]);
     WebCLGetInfo info = queue->getInfo(queue_index, es);
+    if (es.throwIfNeeded())
+        return;
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

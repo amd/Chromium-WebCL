@@ -43,6 +43,9 @@ void V8WebCLPlatform::getInfoMethodCustom(const v8::Arguments& args)
     WebCLPlatform* platform = V8WebCLPlatform::toNative(args.Holder()); 
     int platform_index = toInt32(args[0]);
     WebCLGetInfo info = platform->getInfo(platform_index, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

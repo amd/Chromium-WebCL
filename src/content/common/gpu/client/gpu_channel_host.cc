@@ -24,6 +24,7 @@ extern "C"__declspec(dllimport) void setWebCLChannelHost(content::GpuChannelHost
 #include "third_party/WebKit/Source/modules/webcl/WebCLInclude.h"
 namespace WebCore {
 extern __declspec(dllimport) long long g_clCreateImage_size;
+extern __declspec(dllimport) long long g_hostPtrSize;
 }
 
 #if defined(OS_WIN)
@@ -134,6 +135,15 @@ client_clEnqueueReleaseGLObjects(cl_command_queue       command_queue ,
 	if (ret_event) *ret_event = ev;
 
 	return ret;
+}
+
+
+cl_mem client_clCreateFromGLRenderbuffer (	cl_context context,
+ 	cl_mem_flags flags,
+ 	cl_GLuint renderbuffer,
+ 	cl_int * errcode_ret) {
+		// Placeholder. ANGLE does not support renderbuffer interop yet
+		return NULL;
 }
 
 
@@ -258,6 +268,7 @@ GpuChannelHost::GpuChannelHost(GpuChannelHostFactory* factory,
   setWebCLclCreateFromGLTexture(client_clCreateFromGLTexture);
   setWebCLclEnqueueAcquireGLObjects(client_clEnqueueAcquireGLObjects);
   setWebCLclEnqueueReleaseGLObjects(client_clEnqueueReleaseGLObjects);
+  setWebCLclCreateFromGLRenderbuffer(client_clCreateFromGLRenderbuffer);
   
   setWebCLclCreateImage(manual_client_clCreateImage);
 

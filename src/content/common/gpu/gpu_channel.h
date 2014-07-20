@@ -1070,6 +1070,7 @@ class GpuChannel : public IPC::Listener,
 							);
 
 #include "content/common/gpu/ocl_service_header.h"
+  void OnCallhostPtrSize(cl_uint size);
 
 };
 

@@ -44,6 +44,9 @@ void V8WebCLEvent::getInfoMethodCustom(const v8::Arguments& args)
     WebCLEvent* event = V8WebCLEvent::toNative(args.Holder()); 
     int event_index = toInt32(args[0]);
     WebCLGetInfo info = event->getInfo(event_index, es);
+if (es.throwIfNeeded())
+        return;
+    
 
     v8SetReturnValue(args, toV8Object(info,args.Holder(), args.GetIsolate()));
 }
@@ -58,6 +61,9 @@ void V8WebCLEvent::getProfilingInfoMethodCustom(const v8::Arguments& args)
     WebCLEvent* event = V8WebCLEvent::toNative(args.Holder()); 
     int profiling_index = toInt32(args[0]);
     WebCLGetInfo info = event->getProfilingInfo(profiling_index, es);
+if (es.throwIfNeeded())
+        return;
+    
 
     v8SetReturnValue(args, toV8Object(info,args.Holder(), args.GetIsolate()));
 }

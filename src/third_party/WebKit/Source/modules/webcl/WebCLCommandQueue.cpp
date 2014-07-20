@@ -153,6 +153,8 @@ ComputeEvent* WebCLCommandQueue::computeEventFromWebCLEventIfApplicable(WebCLEve
     return event->platformObject();
 }
 
+ __declspec(dllexport) long long g_hostPtrSize = 0;
+
 void WebCLCommandQueue::enqueueWriteBufferBase(WebCLBuffer* buffer, CCbool blockingWrite, CCuint offset, CCuint numBytes, void* hostPtr, size_t hostPtrLength,
     const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
@@ -261,6 +263,8 @@ void WebCLCommandQueue::enqueueWriteBufferRectBase(WebCLBuffer* buffer, CCbool b
     const Vector<CCuint>& region, CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
     void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+    g_hostPtrSize= hostPtrLength;
+
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
         return;
@@ -453,6 +457,8 @@ void WebCLCommandQueue::enqueueReadBuffer(WebCLBuffer* buffer, CCbool blockingRe
 void WebCLCommandQueue::enqueueReadImageBase(WebCLImage* image, CCbool blockingRead, const Vector<CCuint>& origin, const Vector<CCuint>& region,
     CCuint hostRowPitch, void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+    g_hostPtrSize = hostPtrLength;
+
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
         return;
@@ -537,6 +543,8 @@ void WebCLCommandQueue::enqueueReadBufferRectBase(WebCLBuffer* buffer, CCbool bl
     CCuint bufferRowPitch, CCuint bufferSlicePitch, CCuint hostRowPitch, CCuint hostSlicePitch,
     void* hostPtr, size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+	g_hostPtrSize = hostPtrLength;
+
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
         return;
@@ -724,6 +732,8 @@ void WebCLCommandQueue::flush(ExceptionObject& exception)
 void WebCLCommandQueue::enqueueWriteImageBase(WebCLImage* image, CCbool blockingWrite, const Vector<unsigned>& origin, const Vector<unsigned>& region,
     CCuint hostRowPitch, void* hostPtr, const size_t hostPtrLength, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
+	g_hostPtrSize = hostPtrLength;
+
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_COMMAND_QUEUE, exception);
         return;
@@ -1163,7 +1173,7 @@ bool WebCLCommandQueue::isExtensionEnabled(WebCLContext* context, const String& 
 #if ENABLE(WEBGL)
 void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
-	this->context()->computeContext()->graphicsContext3D()->flush();
+	if (this->context()->computeContext()->graphicsContext3D()) this->context()->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return;
@@ -1198,7 +1208,7 @@ void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryO
 
 void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject> >& memoryObjects, const Vector<RefPtr<WebCLEvent> >& events, WebCLEvent* event, ExceptionObject& exception)
 {
-	this->context()->computeContext()->graphicsContext3D()->flush();
+	if (this->context()->computeContext()->graphicsContext3D()) this->context()->computeContext()->graphicsContext3D()->flush();
     if (!isExtensionEnabled(m_context.get(), "KHR_gl_sharing")) {
         setExtensionsNotEnabledException(exception);
         return;

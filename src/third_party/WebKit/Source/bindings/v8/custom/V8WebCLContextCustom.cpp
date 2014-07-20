@@ -43,6 +43,9 @@ void V8WebCLContext::getInfoMethodCustom(const v8::Arguments& args)
     WebCLContext* context = V8WebCLContext::toNative(args.Holder()); 
     int context_index = toInt32(args[0]);
     WebCLGetInfo info = context->getInfo(context_index, es);
+if (es.throwIfNeeded())
+        return;
+    
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

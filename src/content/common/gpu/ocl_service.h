@@ -531,7 +531,7 @@ GpuChannel::service_clEnqueueReadBufferRect(
 	cl_pointer * msg_event, //[O] cl_event * event
 	cl_pointer * func_ret) //! return cl_int
 {
-  msg_ptr->resize(msg_region[0]*msg_region[1]*msg_region[2]); //WATCH1
+msg_ptr->resize(g_hostPtrSize); //WATCH1
   *func_ret = (cl_pointer)  clEnqueueReadBufferRect(	(cl_command_queue)msg_command_queue,
 	(cl_mem)msg_buffer,
 	(cl_bool)msg_blocking_read,
@@ -672,7 +672,7 @@ GpuChannel::service_clEnqueueReadImage(
 	cl_pointer * msg_event, //[O] cl_event * event
 	cl_pointer * func_ret) //! return cl_int
 {
-  msg_ptr->resize(msg_region[0]*msg_region[1]*msg_region[2]); //WATCH1
+msg_ptr->resize(g_hostPtrSize); //WATCH1
   *func_ret = (cl_pointer)  clEnqueueReadImage(	(cl_command_queue)msg_command_queue,
 	(cl_mem)msg_image,
 	(cl_bool)msg_blocking_read,

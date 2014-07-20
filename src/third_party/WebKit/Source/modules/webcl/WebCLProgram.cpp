@@ -67,6 +67,7 @@ WebCLProgram::WebCLProgram(WebCLContext*context, ComputeProgram* program, const 
     : WebCLObjectImpl(program)
     , m_context(context)
     , m_programSource(programSource)
+    , m_isBuilt(false)
 {
     context->trackReleaseableWebCLObject(createWeakPtr());
 }
@@ -144,6 +145,11 @@ PassRefPtr<WebCLKernel> WebCLProgram::createKernel(const String& kernelName, Exc
         return 0;
     }
 
+    if (! m_isBuilt) {
+	setExceptionFromComputeErrorCode(ComputeContext::INVALID_PROGRAM_EXECUTABLE, exception);
+        return 0;
+    }
+
     return WebCLKernel::create(m_context.get(), this, kernelName, exception);
 }
 
@@ -151,6 +157,10 @@ Vector<RefPtr<WebCLKernel> > WebCLProgram::createKernelsInProgram(ExceptionObjec
 {
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_PROGRAM, exception);
+        return Vector<RefPtr<WebCLKernel> >();
+    }
+    if (! m_isBuilt) {
+	setExceptionFromComputeErrorCode(ComputeContext::INVALID_PROGRAM_EXECUTABLE, exception);
         return Vector<RefPtr<WebCLKernel> >();
     }
 
@@ -190,7 +200,8 @@ void WebCLProgram::build(ExceptionObject& exception) {
 }
 void WebCLProgram::build(const Vector<RefPtr<WebCLDevice> >& devices, const String* _buildOptions, PassRefPtr<WebCLCallback> callback, ExceptionObject& exception)
 {
-	const String &buildOptions = *_buildOptions;
+	String buildOptions;
+	if (_buildOptions) buildOptions = *_buildOptions;
     if (isPlatformObjectNeutralized()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_PROGRAM, exception);
         return;
@@ -255,6 +266,9 @@ void WebCLProgram::build(const Vector<RefPtr<WebCLDevice> >& devices, const Stri
 
     CCerror err = platformObject()->buildProgram(ccDevices, buildOptions, callbackProxyPtr, m_callback ? this : 0);
     setExceptionFromComputeErrorCode(err, exception);
+
+    if (err == ComputeContext::SUCCESS)
+	    m_isBuilt = true;
 }
 
 // FIXME: Guard this change under !VALIDATOR_INTEGRATION.

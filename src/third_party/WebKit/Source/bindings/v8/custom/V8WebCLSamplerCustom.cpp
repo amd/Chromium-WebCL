@@ -43,6 +43,9 @@ void V8WebCLSampler::getInfoMethodCustom(const v8::Arguments& args)
     WebCLSampler* sampler = V8WebCLSampler::toNative(args.Holder()); 
     int sampler_index = toInt32(args[0]);
     WebCLGetInfo info = sampler->getInfo(sampler_index, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

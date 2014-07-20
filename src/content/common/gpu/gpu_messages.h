@@ -1823,5 +1823,6 @@ IPC_SYNC_MESSAGE_CONTROL3_2(OpenCLChannelMsg_EnqueueReleaseGLObjects,
 	cl_point, // event ret
 	cl_int) // func ret
 
+IPC_SYNC_MESSAGE_CONTROL1_0(OpenCLIPCMsg_hostPtrSize, cl_uint)
 
 #include "content/common/gpu/ocl_msg.h"

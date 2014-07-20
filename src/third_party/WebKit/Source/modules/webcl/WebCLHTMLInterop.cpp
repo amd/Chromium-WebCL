@@ -103,7 +103,7 @@ void WebCLHTMLInterop::extractDataFromImage(HTMLImageElement* image, void*& host
 
 void WebCLHTMLInterop::extractDataFromImageData(ImageData* srcPixels, void*& hostPtr, size_t& pixelSize, ExceptionObject& exception)
 {
-    if (!srcPixels && !srcPixels->data() && !srcPixels->data()->data()) {
+    if (!srcPixels || !srcPixels->data() || !srcPixels->data()->data()) {
         setExceptionFromComputeErrorCode(ComputeContext::INVALID_HOST_PTR, exception);
         return;
     }

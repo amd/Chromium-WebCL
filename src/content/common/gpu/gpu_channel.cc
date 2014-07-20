@@ -32,6 +32,7 @@
 #include "gpu/command_buffer/service/image_manager.h"
 #include "gpu/command_buffer/service/mailbox_manager.h"
 #include "gpu/command_buffer/service/buffer_manager.h"
+#include "gpu/command_buffer/service/texture_manager.h"
 #include "ipc/ipc_channel.h"
 #include "ipc/ipc_channel_proxy.h"
 #include "ui/gl/gl_context.h"
@@ -46,6 +47,7 @@
 #include "content/common/gpu/stream_texture_manager_android.h"
 #endif
 
+cl_uint g_hostPtrSize = 0;
 
 namespace content {
 namespace {
@@ -962,6 +964,8 @@ bool GpuChannel::OnControlMessageReceived(const IPC::Message& msg) {
 
     IPC_MESSAGE_HANDLER(OpenCLChannelMsg_CreateContext,
                                     OnCallclCreateContext);
+	IPC_MESSAGE_HANDLER(OpenCLIPCMsg_hostPtrSize, OnCallhostPtrSize);
+
 
 #include "content/common/gpu/ocl_msg_map.h"
 
@@ -1497,49 +1501,54 @@ void GpuChannel::OnCallclCreateContext(
     errcode_ret_inter = NULL;
 
   // Dump the inputs of the Sync IPC Message calling.
+  bool gl_interop = false;
   if (!property_list.empty()) {
-    properties = new cl_context_properties[property_list.size()];
-    for (cl_uint index = 0; index < property_list.size(); ++index)
-      properties[index] = property_list[index];
+	  properties = new cl_context_properties[property_list.size()];
+	  for (cl_uint index = 0; index < property_list.size(); ++index) {
+		  properties[index] = property_list[index];
+		  if (property_list[index] == CL_GL_CONTEXT_KHR && property_list[index+1] == 0xffee)
+			  gl_interop = true;
+	  }
   }
 
   if (num_devices > 0 && !point_device_list.empty())
   {
-    devices = new cl_device_id[num_devices];
-    for (cl_uint index = 0; index < num_devices; ++index)
-      devices[index] = (cl_device_id) point_device_list[index];
+	  devices = new cl_device_id[num_devices];
+	  for (cl_uint index = 0; index < num_devices; ++index)
+		  devices[index] = (cl_device_id) point_device_list[index];
   }
 
   // Call the OpenCL API.
-  /*
-  context_ret = clCreateContext(
-                    properties,
-                    num_devices,
-                    devices,
-                    pfn_notify,
-                    user_data,
-                    errcode_ret_inter);
-  */
+  if (!gl_interop) {
+	  context_ret = clCreateContext(
+		  properties,
+		  num_devices,
+		  devices,
+		  pfn_notify,
+		  user_data,
+		  errcode_ret_inter);
+  } else {
 
-  	cl_uint numPlatforms;	//the NO. of platforms
-	cl_platform_id platform = NULL;	//the chosen platform
-	cl_int	status = clGetPlatformIDs(0, NULL, &numPlatforms);
-	if (status != CL_SUCCESS)
-	{
-		//cout << "Error: Getting platforms!" << endl;
-		return;
-	}
+	  cl_uint numPlatforms;	//the NO. of platforms
+	  cl_platform_id platform = NULL;	//the chosen platform
+	  cl_int	status = clGetPlatformIDs(0, NULL, &numPlatforms);
+	  if (status != CL_SUCCESS)
+	  {
+		  //cout << "Error: Getting platforms!" << endl;
+		  return;
+	  }
 
-	/*For clarity, choose the first available platform. */
-	if(numPlatforms > 0)
-	{
-		cl_platform_id* platforms = (cl_platform_id* )malloc(numPlatforms* sizeof(cl_platform_id));
-		status = clGetPlatformIDs(numPlatforms, platforms, NULL);
-		platform = platforms[0];
-		free(platforms);
-	}
+	  /*For clarity, choose the first available platform. */
+	  if(numPlatforms > 0)
+	  {
+		  cl_platform_id* platforms = (cl_platform_id* )malloc(numPlatforms* sizeof(cl_platform_id));
+		  status = clGetPlatformIDs(numPlatforms, platforms, NULL);
+		  platform = platforms[0];
+		  free(platforms);
+	  }
 
-  *errcode_ret = sv_createSharedCLContext(platform, &context_ret, num_devices, devices);
+	  *errcode_ret = sv_createSharedCLContext(platform, &context_ret, num_devices, devices);
+  }
 
   if (!property_list.empty())
     delete[] properties;
@@ -4587,7 +4596,15 @@ void GpuChannel::OnCallclEnqueueBarrierWithWaitList(
 							) 
   {
 	  this->current_stub_->sv_flush();
-	  *func_ret = (cl_point)sv_clCreateFromGLTexture((cl_context)context, (cl_mem_flags)flags, (cl_GLenum)target, miplevel, (cl_GLuint)texture, errcode_ret);
+		gpu::gles2::TextureRef *tex =
+			this->current_stub_->context_group()->texture_manager()->GetTexture(texture);
+		if (! tex) {
+			*errcode_ret = 9998;
+			*func_ret = NULL;
+		}
+		unsigned int server_id = tex->service_id();
+
+	  *func_ret = (cl_point)sv_clCreateFromGLTexture((cl_context)context, (cl_mem_flags)flags, (cl_GLenum)target, miplevel, (cl_GLuint)server_id, errcode_ret);
   }
 
   void GpuChannel::OnCallclEnqueueAcquireGLObjects(
@@ -4623,6 +4640,10 @@ void GpuChannel::OnCallclEnqueueBarrierWithWaitList(
   }
 
 #include "content/common/gpu/ocl_service.h"
+
+  void GpuChannel::OnCallhostPtrSize(cl_uint size) {
+	  g_hostPtrSize = size;
+  }
 
 }  // namespace content
 

@@ -51,6 +51,7 @@ void setWebCLChannelHost(content::GpuChannelHost* channel_webcl)
 
 //ScalableVision begin
 WEBCL_LOAD_FUNCTION(clCreateFromGLBuffer)
+WEBCL_LOAD_FUNCTION(clCreateFromGLRenderbuffer)
 WEBCL_LOAD_FUNCTION(clCreateFromGLTexture)
 WEBCL_LOAD_FUNCTION(clEnqueueAcquireGLObjects)
 WEBCL_LOAD_FUNCTION(clEnqueueReleaseGLObjects)

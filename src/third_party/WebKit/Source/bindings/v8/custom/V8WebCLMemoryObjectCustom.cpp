@@ -17,6 +17,9 @@ void V8WebCLMemoryObject::getInfoMethodCustom(const v8::Arguments& args)
     WebCLMemoryObject* memObj = V8WebCLMemoryObject::toNative(args.Holder()); 
     unsigned mem_info = toInt32(args[0]);
     WebCLGetInfo info = memObj->getInfo(mem_info, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
     v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

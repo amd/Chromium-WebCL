@@ -42,6 +42,9 @@ void V8WebCLProgram::getInfoMethodCustom(const v8::Arguments& args)
     WebCLProgram* program = V8WebCLProgram::toNative(args.Holder()); 
     int program_index = toInt32(args[0]);
     WebCLGetInfo info = program->getInfo(program_index, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }
@@ -57,6 +60,9 @@ void V8WebCLProgram::getBuildInfoMethodCustom(const v8::Arguments& args)
     WebCLDevice* device = V8WebCLDevice::toNative(v8::Handle<v8::Object>::Cast(args[0]));
     int build_index = toInt32(args[1]);
     WebCLGetInfo info = program->getBuildInfo(device, build_index, es);
+	if (es.throwIfNeeded())
+        return;
+    
 
 	v8SetReturnValue(args, toV8Object(info, args.Holder(),args.GetIsolate()));
 }

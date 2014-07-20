@@ -56,7 +56,8 @@ static cl_mem_flags computeMemoryTypeToCL(int memoryType)
         clMemoryType = CL_MEM_COPY_HOST_PTR;
         break;
     default:
-        ASSERT_NOT_REACHED();
+		// ScalableVision: This is definitely allowed: bad flag, just throw that exception
+        //ASSERT_NOT_REACHED();
         break;
     }
 
@@ -81,8 +82,8 @@ ComputeMemoryObject::ComputeMemoryObject(ComputeContext* context, CCMemoryFlags 
 	
 	// Placeholder
 	// TODO client_clCreateImage must handle data's implicit size
-    m_memoryObject = NULL; //clCreateImage(context->context(), flags, &imageFormat, &clImageDescriptor, data, &error);
-	error = ComputeContext::SUCCESS;
+    m_memoryObject = clCreateImage(context->context(), flags, &imageFormat, &clImageDescriptor, data, &error);
+	//error = ComputeContext::SUCCESS;
 #else
     m_memoryObject = clCreateImage2D(context->context(), flags, &imageFormat, width, height, rowPitch, data, &error);
 #endif

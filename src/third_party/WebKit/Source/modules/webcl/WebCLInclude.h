@@ -91,6 +91,11 @@ typedef CL_API_ENTRY cl_mem
                      cl_mem_flags   /* flags */,
                      cl_GLuint      /* bufobj */,
                      int *          /* errcode_ret */) ;
+typedef CL_API_ENTRY cl_mem 
+(__cdecl *h_clCreateFromGLRenderbuffer)(/*content::GpuChannelHost*, */cl_context     /* context */,
+                     cl_mem_flags   /* flags */,
+                     cl_GLuint      /* renderbuffer */,
+                     int *          /* errcode_ret */) ;
 
 typedef CL_API_ENTRY cl_mem 
 (__cdecl *h_clCreateFromGLTexture)(/*content::GpuChannelHost*, */cl_context      /* context */,
@@ -217,6 +222,7 @@ CL_LOADING_PREFIX h_clEnqueueBarrierWithWaitList      webcl_clEnqueueBarrierWith
 CL_LOADING_PREFIX h_clSetPrintfCallback               webcl_clSetPrintfCallback               CL_LOADING_SUFFIX;
 
 CL_LOADING_PREFIX h_clCreateFromGLBuffer               webcl_clCreateFromGLBuffer             CL_LOADING_SUFFIX;
+CL_LOADING_PREFIX h_clCreateFromGLRenderbuffer         webcl_clCreateFromGLRenderbuffer             CL_LOADING_SUFFIX;
 CL_LOADING_PREFIX h_clCreateFromGLTexture              webcl_clCreateFromGLTexture            CL_LOADING_SUFFIX;
 CL_LOADING_PREFIX h_clEnqueueAcquireGLObjects          webcl_clEnqueueAcquireGLObjects        CL_LOADING_SUFFIX;
 CL_LOADING_PREFIX h_clEnqueueReleaseGLObjects          webcl_clEnqueueReleaseGLObjects        CL_LOADING_SUFFIX;
@@ -322,6 +328,7 @@ WEBCL_LOAD_FUN_DEF(clEnqueueBarrierWithWaitList     )
 WEBCL_LOAD_FUN_DEF(clSetPrintfCallback              )
 
 WEBCL_LOAD_FUN_DEF(clCreateFromGLBuffer)
+WEBCL_LOAD_FUN_DEF(clCreateFromGLRenderbuffer)
 WEBCL_LOAD_FUN_DEF(clCreateFromGLTexture)
 WEBCL_LOAD_FUN_DEF(clEnqueueAcquireGLObjects)
 WEBCL_LOAD_FUN_DEF(clEnqueueReleaseGLObjects)
