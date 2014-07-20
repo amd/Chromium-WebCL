@@ -1,0 +1,187 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLKernel setArg() basic type testing.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<div id="description"></div>
+<div id="console"></div>
+<body>
+<script>
+var kernel_arg_values = [
+    [65, 127, 128, -128, -129], // Char
+    [72, 255, 256, 0, -1], // UChar
+    [128, 32767, 32768, -32768, -32769], // Short
+    [128, 65535, 65536, 0, -1], // UShort
+    [256, 2147483647, 2147483648, -2147483648, -2147483649], // Int
+    [256, 4294967295, 4294967296, 0, -1], // UInt
+    [[0, 5000], [50, 10], [2147483647, 2147483647], [2147483648, 2147483648], [-2147483648, -2147483648], [-2147483649, -2147483649]], // Long
+    [[0, 1898989], [90, 10], [4294967295, 4294967295], [4294967296, 4294967296], [0, 0], [-1, -1]], // ULong
+    [676767.69, 340282346638528859811704183484516925440, 340282300000000000000000000000000000010, 0, -1] // Float
+];
+
+var kernel_arg_expected_values = [
+    [65, 127, -128, -128, 127],
+    [72, 255, 0, 0, 255],
+    [128, 32767, -32768, -32768, 32767],
+    [128, 65535, 0, 0, 65535],
+    [256, 2147483647, -2147483648, -2147483648, 2147483647],
+    [256, 4294967295, 0, 0, 4294967295],
+    [[0, 5000], [50, 10], [2147483647, 2147483647], [-2147483648, -2147483648], [-2147483648, -2147483648], [2147483647, 2147483647]],
+    [[0, 1898989], [90, 10], [4294967295, 4294967295], [0, 0], [0, 0], [4294967295, 4294967295]],
+    [676767.69, 340282346638528859811704183484516925440, 340282300000000000000000000000000000000, 0, -1],
+];
+
+/* Generic function to run a "kernel" which copies the input values "inputArray" into a output buffer.
+   Later verify the values read from the output buffer into a "resultArray" against "expectedArray". */
+var runAndTest = function(commandqueue, kernel, inputArray, resultArray, expectedArray)
+{
+    try {
+        var kernelName = kernel.getInfo(webcl.KERNEL_FUNCTION_NAME);
+        if (inputArray.length != resultArray.length || expectedArray.length != resultArray.length) {
+            testFailed("WebCLKernel setArg() basic test for kernel[" + kernelName + "] failed due to Invalid Input. ");
+            return;
+        }
+
+        var input = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, inputArray.BYTES_PER_ELEMENT * inputArray.length, inputArray);
+        var output = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, inputArray.BYTES_PER_ELEMENT * resultArray.length);
+        wtu.setArg(kernel, 0, input);
+        wtu.setArg(kernel, 1, output);
+        wtu.setArg(kernel, 2, new Uint32Array([inputArray.length]));
+
+        var globalWorkSize = [1024];
+        wtu.enqueueNDRangeKernel(commandqueue, kernel, globalWorkSize.length, [], globalWorkSize, []);
+        wtu.enqueueReadBuffer(commandqueue, output, true, 0, resultArray.BYTES_PER_ELEMENT * resultArray.length, resultArray);
+
+        var flag = true, resultString = "";
+        for (y = 0; y < results.length; y++) {
+            resultString = resultString + results[y] + ", ";
+            if (results[y].toPrecision(2) != expectedArray[y].toPrecision(2)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag && y == expectedArray.length && y == inputArray.length)
+            testPassed("Test passed for kernel [" + kernelName + "]. Got expected value : " + resultString);
+        else
+            testFailed("Test failed. Expected value : " + expectedArray + " Obtained value: " + resultString);
+    } catch (e) {
+        testFailed("WebCLKernel setArg() basic test throws exception: " + e.description);
+    }
+}
+
+var webCLPlatform, webCLDevices, webCLContext, webCLCommandQueue, webCLProgram, webCLKernel;
+try {
+    debug("WebCLKernel setArg() basic type testing.");
+    var wtu = WebCLTestUtils;
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+
+    webCLContext = wtu.createContext();
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    var kernelSource = wtu.readKernel("../../../resources/kernels/setArg_basic_functionality.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+
+    webCLKernel = webCLProgram.createKernel("kernelChar");
+    var inputArray = new Int8Array(kernel_arg_values[0]);
+    var results = new Int8Array(kernel_arg_values[0].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[0]);
+
+    webCLKernel = webCLProgram.createKernel("kernelUChar");
+    inputArray = new Uint8Array(kernel_arg_values[1]);
+    results = new Uint8Array(kernel_arg_values[1].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[1]);
+
+    webCLKernel = webCLProgram.createKernel("kernelShort");
+    inputArray = new Int16Array(kernel_arg_values[2]);
+    results = new Int16Array(kernel_arg_values[2].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[2]);
+
+    webCLKernel = webCLProgram.createKernel("kernelUShort");
+    inputArray = new Uint16Array(kernel_arg_values[3]);
+    results = new Uint16Array(kernel_arg_values[3].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[3]);
+
+    webCLKernel = webCLProgram.createKernel("kernelInt");
+    inputArray = new Int32Array(kernel_arg_values[4]);
+    results = new Int32Array(kernel_arg_values[4].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[4]);
+
+    webCLKernel = webCLProgram.createKernel("kernelUInt");
+    inputArray = new Uint32Array(kernel_arg_values[5]);
+    results = new Uint32Array(kernel_arg_values[5].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[5]);
+
+    // Since Int64Aray is not supoprted by WebKit need to use 2 Int32 elements.
+    // So copy the input into a Int32Array of length * 2 size and pass it as input.
+    var x, y, values = kernel_arg_values[6];
+    var input = new Int32Array(values.length * 2);
+    var expectedValues = new Array();
+    for (x = 0, y = 0; x < values.length; x++) {
+        expectedValues.push(kernel_arg_expected_values[6][x][0]);
+        expectedValues.push(kernel_arg_expected_values[6][x][1]);
+        input[y++] = values[x][0];
+        input[y++] = values[x][1];
+    }
+    results = new Int32Array(values.length * 2);
+    webCLKernel = webCLProgram.createKernel("kernelLong");
+    runAndTest(webCLCommandQueue, webCLKernel, input, results, expectedValues);
+
+    values = kernel_arg_values[7];
+    input = new Uint32Array(values.length * 2);
+    expectedValues = new Array();
+    for (x = 0, y = 0; x < values.length; x++) {
+        expectedValues.push(kernel_arg_expected_values[7][x][0]);
+        expectedValues.push(kernel_arg_expected_values[7][x][1]);
+        input[y++] = values[x][0];
+        input[y++] = values[x][1];
+    }
+    results = new Uint32Array(values.length * 2);
+
+    webCLKernel = webCLProgram.createKernel("kernelULong");
+    runAndTest(webCLCommandQueue, webCLKernel, input, results, expectedValues);
+
+    webCLKernel = webCLProgram.createKernel("kernelFloat");
+    inputArray = new Float32Array(kernel_arg_values[8]);
+    results = new Float32Array(kernel_arg_values[8].length);
+    runAndTest(webCLCommandQueue, webCLKernel, inputArray, results, kernel_arg_expected_values[8]);
+
+} catch (e) {
+    testFailed("WebCLKernel setArg() basic type throws exception: " + e.message);
+}
+
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

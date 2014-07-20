@@ -1,0 +1,161 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLCommandQueue enqueueReadBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+
+try {
+    debug("WebCLCommandQueue :: enqueueReadBuffer() test case.");
+    debug("( WebCLBuffer buffer, CLboolean blockingRead, CLuint bufferOffset, CLuint numBytes, ArrayBufferView hostPtr, optional sequence<WebCLEvent>? eventWaitList, optional WebCLEvent? event)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var hostPtr = new Float32Array(SIZE);
+    var numberBytes = BUFFER_SIZE;
+    var bufferOffset = 0;
+
+    // MEM_READ_ONLY Buffers.
+    var webCLBufferRead = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferRead, true, bufferOffset, numberBytes, hostPtr)");
+    var webCLEvent = new WebCLEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferRead, false, bufferOffset, numberBytes, hostPtr, [], webCLEvent)");
+    wtu.waitForEvents([webCLEvent]);
+
+    // MEM_WRITE_ONLY Buffers.
+    var webCLBufferWrite = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferWrite, true, bufferOffset, numberBytes, hostPtr)");
+    webCLEvent = new WebCLEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferWrite, false, bufferOffset, numberBytes, hostPtr, [], webCLEvent)");
+    wtu.waitForEvents([webCLEvent]);
+
+    // MEM_READ_WRITE Buffers.
+    var webCLBufferReadWrite = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr)");
+    webCLEvent = new WebCLEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, [], webCLEvent)");
+    wtu.waitForEvents([webCLEvent]);
+
+    // Testing for nullable parameters.
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [])");
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [], null)");
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, null)");
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, null, null)");
+    var webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, null, webCLEvent)");
+
+    // Testing with events.
+    webCLEvent = wtu.createEvent();
+    wtu.enqueueReadBuffer(webCLCommandQueue, webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, [], webCLEvent);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, [webCLEvent]);");
+    var webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, [webCLUserEvent]);");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, [], webCLEvent);");
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [], webCLEvent);");
+
+    // Testing for exceptions.
+    var releasedEvent = wtu.createUserEvent(webCLContext);
+    wtu.release(releasedEvent);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [releasedEvent], webCLEvent);", "INVALID_EVENT_WAIT_LIST");
+
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [webCLUserEvent]);", "INVALID_EVENT_WAIT_LIST");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+    webCLEvent = wtu.createEvent();
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [webCLEvent]);", "INVALID_EVENT_WAIT_LIST");
+
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    wtu.setStatus(webCLUserEvent, -1);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtr, [webCLUserEvent]);", "EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
+
+    webCLEvent = wtu.createEvent();
+    wtu.enqueueReadBuffer(webCLCommandQueue, webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, null, webCLEvent);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, false, bufferOffset, numberBytes, hostPtr, null, webCLEvent);", "INVALID_EVENT");
+
+    var releasedBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    wtu.release(releasedBuffer);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(releasedBuffer, true, bufferOffset, numberBytes, hostPtr);", "INVALID_MEM_OBJECT");
+    var bufferOffsetInvalid = BUFFER_SIZE + 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffsetInvalid, numberBytes, hostPtr);", "INVALID_VALUE");
+    var numberBytesInvalid = BUFFER_SIZE + 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytesInvalid, hostPtr);", "INVALID_VALUE");
+    numberBytesInvalid = hostPtr.BYTES_PER_ELEMENT - 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytesInvalid, hostPtr);", "INVALID_VALUE");
+
+    var hostPtrInvalid = new Float32Array(numberBytes/Float32Array.BYTES_PER_ELEMENT - 1);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, bufferOffset, numberBytes, hostPtrInvalid);", "INVALID_VALUE");
+
+    var hostPtrValid = new Float32Array(100);
+    shouldBeUndefined("webCLCommandQueue.enqueueReadBuffer(webCLBufferReadWrite, true, 10 * 4, 100 * 4, hostPtrValid);");
+
+    // Testing for exception "INVALID_CONTEXT"
+    var webCLContext1 = wtu.createContext();
+    var webCLCommandQueue1 = wtu.createCommandQueue(webCLContext1);
+    var webCLBuffer1 = wtu.createBuffer(webCLContext1, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+
+    var webCLContext2 = wtu.createContext();
+    var webCLCommandQueue2 = wtu.createCommandQueue(webCLContext2);
+    var webCLBuffer2 = wtu.createBuffer(webCLContext2, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueReadBuffer(webCLBuffer2, true, bufferOffset, numberBytes, hostPtr);", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueReadBuffer(webCLBuffer1, true, bufferOffset, numberBytes, hostPtr);", "INVALID_CONTEXT");
+
+    var webCLUserEvent1 = wtu.createUserEvent(webCLContext1);
+    var webCLUserEvent2 = wtu.createUserEvent(webCLContext2);
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueReadBuffer(webCLBuffer1, false, bufferOffset, numberBytes, hostPtr, [webCLUserEvent2]);", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueReadBuffer(webCLBuffer2, false, bufferOffset, numberBytes, hostPtr, [webCLUserEvent1]);", "INVALID_CONTEXT");
+    wtu.setStatus(webCLUserEvent1, webcl.COMPLETE);
+    wtu.setStatus(webCLUserEvent2, webcl.COMPLETE);
+
+    var webCLEvent1 = wtu.createEvent();
+    wtu.enqueueReadBuffer(webCLCommandQueue1, webCLBuffer1, true, bufferOffset, numberBytes, hostPtr, [], webCLEvent1);
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueReadBuffer(webCLBuffer2, true, bufferOffset, numberBytes, hostPtr, [webCLEvent1]);", "INVALID_CONTEXT");
+    var webCLEvent2 = wtu.createEvent();
+    wtu.enqueueReadBuffer(webCLCommandQueue2, webCLBuffer2, true, bufferOffset, numberBytes, hostPtr, [], webCLEvent2);
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueReadBuffer(webCLBuffer1, true, bufferOffset, numberBytes, hostPtr, [webCLEvent2]);", "INVALID_CONTEXT");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

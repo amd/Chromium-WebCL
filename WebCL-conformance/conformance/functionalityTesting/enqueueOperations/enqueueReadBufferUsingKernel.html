@@ -1,0 +1,110 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueReadBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+
+<script>
+var executeKernel = function (webCLContext, kernelName, webCLDevices, webCLCommandQueue, resultDataType, numBytes, expectedResult) {
+    try {
+        webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, resultDataType.length * resultDataType.BYTES_PER_ELEMENT);
+        kernelName = kernelName.replace(/^\s+|\s+$/g, '');
+        var kernelPath = "../../../resources/kernels/" + kernelName + ".cl";
+        kernelSource = wtu.readKernel(kernelPath);
+        webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+        wtu.build(webCLProgram, webCLDevices);
+
+        webCLKernel = wtu.createKernel(webCLProgram, kernelName);
+        wtu.setArg(webCLKernel, 0, webCLBuffer);
+
+        var globalWorkSize = [SIZE];
+        var localWorkSize = [webCLKernel.getWorkGroupInfo(webCLDevices[0], webcl.KERNEL_WORK_GROUP_SIZE)];
+
+        wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, globalWorkSize.length, null, globalWorkSize, localWorkSize);
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, 0, resultDataType.length * resultDataType.BYTES_PER_ELEMENT, resultDataType);
+
+        // Long and ULong datatypes are represented as a pair of int32array elements.
+        if (resultDataType.length == 2) {
+            if (resultDataType[1] == expectedResult[1] && resultDataType[0] == expectedResult[0])
+                testPassed("Test passed for kernel: " + kernelName);
+        } else if (resultDataType.length == 1) {
+            if (resultDataType[0] == expectedResult || String.fromCharCode(resultDataType[0]) == expectedResult)
+                testPassed("Test passed for kernel: " + kernelName);
+        } else
+            testFailed("Test failed for kernel: " + kernelName);
+    } catch (e) {
+        testFailed(e.description);
+    }
+}
+
+try {
+    debug("enqueueReadBuffer functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var kernelSource, webCLKernel, webCLProgram;
+    var count = SIZE;
+    var webCLBuffer;
+    var resultInt = new Int32Array(1);
+    var resultUInt = new Uint32Array(1);
+    var resultLong = new Int32Array(2);
+    var resultULong = new Uint32Array(2);
+    var resultShort = new Int16Array(1);
+    var resultUShort = new Uint16Array(1);
+    var resultChar = new Int8Array(1);
+    var resultUChar = new Uint8Array(1);
+    var resultFloat = new Float32Array(1);
+
+    executeKernel(webCLContext, "test_stream_read_char", webCLDevices, webCLCommandQueue, resultChar, 1, 'w');
+    executeKernel(webCLContext, "test_stream_read_uchar", webCLDevices, webCLCommandQueue, resultUChar, 1, 'w');
+    executeKernel(webCLContext, "test_stream_read_short", webCLDevices, webCLCommandQueue, resultShort, 2, (1<<8)+1);
+    executeKernel(webCLContext, "test_stream_read_ushort", webCLDevices, webCLCommandQueue, resultUShort, 2, (1<<8)+1);
+    executeKernel(webCLContext, "test_stream_read_int", webCLDevices, webCLCommandQueue, resultInt, 4, ((1<<16)+1));
+    executeKernel(webCLContext, "test_stream_read_uint", webCLDevices, webCLCommandQueue, resultUInt, 4, ((1<<16)+1));
+    executeKernel(webCLContext, "test_stream_read_long", webCLDevices, webCLCommandQueue, resultLong, 8, [1, 1]);
+    executeKernel(webCLContext, "test_stream_read_ulong", webCLDevices, webCLCommandQueue, resultULong, 8, [1, 1]);
+    executeKernel(webCLContext, "test_stream_read_float", webCLDevices, webCLCommandQueue, resultFloat, 4, (3.40282346638528860e+38));
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueWriteBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueWriteBuffer functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var data, result, bufferOffset, numberBytes;
+    var webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    data = new Int32Array(SIZE);
+    wtu.generateRandomNumberInRange(data, 0, 2147483647, SIZE);
+    result = new Int32Array(SIZE);
+
+   /*
+    *   Testing for writing first 10 values (of 4 bytes each) to buffer.
+    */
+    try  {
+        bufferOffset = 0;
+        partialWriteSize = 10 * data.BYTES_PER_ELEMENT;
+
+        wtu.enqueueWriteBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, partialWriteSize, data);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, 0, BUFFER_SIZE, result);
+        var aResult = new Int32Array(result.buffer, bufferOffset, 10);
+        wtu.verifyResult(data, aResult, 10, "writing first 10 values to buffer");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for writing last 20 values (of 4 bytes each) to buffer.
+     */
+
+    try {
+        var partialWriteSize = 20 * data.BYTES_PER_ELEMENT;
+        bufferOffset = BUFFER_SIZE - partialWriteSize;
+
+        wtu.enqueueWriteBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, partialWriteSize, data);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, 0, BUFFER_SIZE, result);
+        var aResult = new Int32Array(result.buffer, bufferOffset, 20);
+        wtu.verifyResult(data, aResult, 20, "writing last 20 values to buffer");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for writing whole buffer of 1024 values of 4 bytes each.
+     */
+
+    try {
+        bufferOffset = 0;
+        numberBytes = BUFFER_SIZE;
+
+        wtu.enqueueWriteBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, numberBytes, data);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, 0, BUFFER_SIZE, result);
+        wtu.verifyResult(data, result, SIZE, "writing whole buffer");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

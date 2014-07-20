@@ -1,0 +1,290 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCL constants check conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCL constants check test case.\n");
+
+    shouldBe("webcl.SUCCESS", "0");
+    shouldBe("webcl.DEVICE_NOT_FOUND", "-1");
+    shouldBe("webcl.DEVICE_NOT_AVAILABLE", "-2");
+    shouldBe("webcl.COMPILER_NOT_AVAILABLE", "-3");
+    shouldBe("webcl.MEM_OBJECT_ALLOCATION_FAILURE", "-4");
+    shouldBe("webcl.OUT_OF_RESOURCES", "-5");
+    shouldBe("webcl.OUT_OF_HOST_MEMORY", "-6");
+    shouldBe("webcl.PROFILING_INFO_NOT_AVAILABLE", "-7");
+    shouldBe("webcl.MEM_COPY_OVERLAP", "-8");
+    shouldBe("webcl.IMAGE_FORMAT_MISMATCH", "-9");
+    shouldBe("webcl.IMAGE_FORMAT_NOT_SUPPORTED", "-10");
+    shouldBe("webcl.BUILD_PROGRAM_FAILURE", "-11");
+    shouldBe("webcl.MAP_FAILURE", "-12");
+    shouldBe("webcl.MISALIGNED_SUB_BUFFER_OFFSET", "-13");
+    shouldBe("webcl.EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST", "-14");
+    shouldBe("webcl.INVALID_VALUE", "-30");
+    shouldBe("webcl.INVALID_DEVICE_TYPE", "-31");
+    shouldBe("webcl.INVALID_PLATFORM", "-32");
+    shouldBe("webcl.INVALID_DEVICE", "-33");
+    shouldBe("webcl.INVALID_CONTEXT", "-34");
+    shouldBe("webcl.INVALID_QUEUE_PROPERTIES", "-35");
+    shouldBe("webcl.INVALID_COMMAND_QUEUE", "-36");
+    shouldBe("webcl.INVALID_HOST_PTR", "-37");
+    shouldBe("webcl.INVALID_MEM_OBJECT", "-38");
+    shouldBe("webcl.INVALID_IMAGE_FORMAT_DESCRIPTOR", "-39");
+    shouldBe("webcl.INVALID_IMAGE_SIZE", "-40");
+    shouldBe("webcl.INVALID_SAMPLER", "-41");
+    shouldBe("webcl.INVALID_BINARY", "-42");
+    shouldBe("webcl.INVALID_BUILD_OPTIONS", "-43");
+    shouldBe("webcl.INVALID_PROGRAM", "-44");
+    shouldBe("webcl.INVALID_PROGRAM_EXECUTABLE", "-45");
+    shouldBe("webcl.INVALID_KERNEL_NAME", "-46");
+    shouldBe("webcl.INVALID_KERNEL_DEFINITION", "-47");
+    shouldBe("webcl.INVALID_KERNEL", "-48");
+    shouldBe("webcl.INVALID_ARG_INDEX", "-49");
+    shouldBe("webcl.INVALID_ARG_VALUE", "-50");
+    shouldBe("webcl.INVALID_ARG_SIZE", "-51");
+    shouldBe("webcl.INVALID_KERNEL_ARGS", "-52");
+    shouldBe("webcl.INVALID_WORK_DIMENSION", "-53");
+    shouldBe("webcl.INVALID_WORK_GROUP_SIZE", "-54");
+    shouldBe("webcl.INVALID_WORK_ITEM_SIZE", "-55");
+    shouldBe("webcl.INVALID_GLOBAL_OFFSET", "-56");
+    shouldBe("webcl.INVALID_EVENT_WAIT_LIST", "-57");
+    shouldBe("webcl.INVALID_EVENT", "-58");
+    shouldBe("webcl.INVALID_OPERATION", "-59");
+    shouldBe("webcl.INVALID_BUFFER_SIZE", "-61");
+    shouldBe("webcl.INVALID_GLOBAL_WORK_SIZE", "-63");
+    shouldBe("webcl.INVALID_PROPERTY", "-64");
+    shouldBe("webcl.FALSE", "0");
+    shouldBe("webcl.TRUE", "1");
+    shouldBe("webcl.PLATFORM_PROFILE", "0x0900");
+    shouldBe("webcl.PLATFORM_VERSION", "0x0901");
+    shouldBe("webcl.PLATFORM_NAME", "0x0902");
+    shouldBe("webcl.PLATFORM_VENDOR", "0x0903");
+    shouldBe("webcl.PLATFORM_EXTENSIONS", "0x0904");
+    shouldBe("webcl.DEVICE_TYPE_DEFAULT", "0x1");
+    shouldBe("webcl.DEVICE_TYPE_CPU", "0x2");
+    shouldBe("webcl.DEVICE_TYPE_GPU", "0x4");
+    shouldBe("webcl.DEVICE_TYPE_ACCELERATOR", "0x8");
+    shouldBe("webcl.DEVICE_TYPE_ALL", "0xFFFFFFFF");
+    shouldBe("webcl.DEVICE_TYPE", "0x1000");
+    shouldBe("webcl.DEVICE_VENDOR_ID", "0x1001");
+    shouldBe("webcl.DEVICE_MAX_COMPUTE_UNITS", "0x1002");
+    shouldBe("webcl.DEVICE_MAX_WORK_ITEM_DIMENSIONS", "0x1003");
+    shouldBe("webcl.DEVICE_MAX_WORK_GROUP_SIZE", "0x1004");
+    shouldBe("webcl.DEVICE_MAX_WORK_ITEM_SIZES", "0x1005");
+    shouldBe("webcl.DEVICE_PREFERRED_VECTOR_WIDTH_CHAR", "0x1006");
+    shouldBe("webcl.DEVICE_PREFERRED_VECTOR_WIDTH_SHORT", "0x1007");
+    shouldBe("webcl.DEVICE_PREFERRED_VECTOR_WIDTH_INT", "0x1008");
+    shouldBe("webcl.DEVICE_PREFERRED_VECTOR_WIDTH_LONG", "0x1009");
+    shouldBe("webcl.DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT", "0x100A");
+    shouldBe("webcl.DEVICE_MAX_CLOCK_FREQUENCY", "0x100C");
+    shouldBe("webcl.DEVICE_ADDRESS_BITS", "0x100D");
+    shouldBe("webcl.DEVICE_MAX_READ_IMAGE_ARGS", "0x100E");
+    shouldBe("webcl.DEVICE_MAX_WRITE_IMAGE_ARGS", "0x100F");
+    shouldBe("webcl.DEVICE_MAX_MEM_ALLOC_SIZE", "0x1010");
+    shouldBe("webcl.DEVICE_IMAGE2D_MAX_WIDTH", "0x1011");
+    shouldBe("webcl.DEVICE_IMAGE2D_MAX_HEIGHT", "0x1012");
+    shouldBe("webcl.DEVICE_IMAGE3D_MAX_WIDTH", "0x1013");
+    shouldBe("webcl.DEVICE_IMAGE3D_MAX_HEIGHT", "0x1014");
+    shouldBe("webcl.DEVICE_IMAGE3D_MAX_DEPTH", "0x1015");
+    shouldBe("webcl.DEVICE_IMAGE_SUPPORT", "0x1016");
+    shouldBe("webcl.DEVICE_MAX_PARAMETER_SIZE", "0x1017");
+    shouldBe("webcl.DEVICE_MAX_SAMPLERS", "0x1018");
+    shouldBe("webcl.DEVICE_MEM_BASE_ADDR_ALIGN", "0x1019");
+    shouldBe("webcl.DEVICE_SINGLE_FP_CONFIG", "0x101B");
+    shouldBe("webcl.DEVICE_GLOBAL_MEM_CACHE_TYPE", "0x101C");
+    shouldBe("webcl.DEVICE_GLOBAL_MEM_CACHELINE_SIZE", "0x101D");
+    shouldBe("webcl.DEVICE_GLOBAL_MEM_CACHE_SIZE", "0x101E");
+    shouldBe("webcl.DEVICE_GLOBAL_MEM_SIZE", "0x101F");
+    shouldBe("webcl.DEVICE_MAX_CONSTANT_BUFFER_SIZE", "0x1020");
+    shouldBe("webcl.DEVICE_MAX_CONSTANT_ARGS", "0x1021");
+    shouldBe("webcl.DEVICE_LOCAL_MEM_TYPE", "0x1022");
+    shouldBe("webcl.DEVICE_LOCAL_MEM_SIZE", "0x1023");
+    shouldBe("webcl.DEVICE_ERROR_CORRECTION_SUPPORT", "0x1024");
+    shouldBe("webcl.DEVICE_PROFILING_TIMER_RESOLUTION", "0x1025");
+    shouldBe("webcl.DEVICE_ENDIAN_LITTLE", "0x1026");
+    shouldBe("webcl.DEVICE_AVAILABLE", "0x1027");
+    shouldBe("webcl.DEVICE_COMPILER_AVAILABLE", "0x1028");
+    shouldBe("webcl.DEVICE_EXECUTION_CAPABILITIES", "0x1029");
+    shouldBe("webcl.DEVICE_QUEUE_PROPERTIES", "0x102A");
+    shouldBe("webcl.DEVICE_NAME", "0x102B");
+    shouldBe("webcl.DEVICE_VENDOR", "0x102C");
+    shouldBe("webcl.DRIVER_VERSION", "0x102D");
+    shouldBe("webcl.DEVICE_EXTENSIONS", "0x1030");
+    shouldBe("webcl.DEVICE_PROFILE", "0x102E");
+    shouldBe("webcl.DEVICE_VERSION", "0x102F");
+    shouldBe("webcl.DEVICE_PLATFORM", "0x1031");
+    shouldBe("webcl.DEVICE_HOST_UNIFIED_MEMORY", "0x1035");
+    shouldBe("webcl.DEVICE_NATIVE_VECTOR_WIDTH_CHAR", "0x1036");
+    shouldBe("webcl.DEVICE_NATIVE_VECTOR_WIDTH_SHORT", "0x1037");
+    shouldBe("webcl.DEVICE_NATIVE_VECTOR_WIDTH_INT", "0x1038");
+    shouldBe("webcl.DEVICE_NATIVE_VECTOR_WIDTH_LONG", "0x1039");
+    shouldBe("webcl.DEVICE_NATIVE_VECTOR_WIDTH_FLOAT", "0x103A");
+    shouldBe("webcl.DEVICE_OPENCL_C_VERSION", "0x103D");
+    shouldBe("webcl.FP_DENORM", "0x1");
+    shouldBe("webcl.FP_INF_NAN", "0x2");
+    shouldBe("webcl.FP_ROUND_TO_NEAREST", "0x4");
+    shouldBe("webcl.FP_ROUND_TO_ZERO", "0x8");
+    shouldBe("webcl.FP_ROUND_TO_INF", "0x10");
+    shouldBe("webcl.FP_FMA", "0x20");
+    shouldBe("webcl.FP_SOFT_FLOAT", "0x40");
+    shouldBe("webcl.NONE", "0x0");
+    shouldBe("webcl.READ_ONLY_CACHE", "0x1");
+    shouldBe("webcl.READ_WRITE_CACHE", "0x2");
+    shouldBe("webcl.LOCAL", "0x1");
+    shouldBe("webcl.GLOBAL", "0x2");
+    shouldBe("webcl.EXEC_KERNEL", "0x1");
+    shouldBe("webcl.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE", "0x1");
+    shouldBe("webcl.QUEUE_PROFILING_ENABLE", "0x2");
+    shouldBe("webcl.CONTEXT_DEVICES", "0x1081");
+    shouldBe("webcl.CONTEXT_NUM_DEVICES", "0x1083");
+    shouldBe("webcl.CONTEXT_PLATFORM", "0x1084");
+    shouldBe("webcl.QUEUE_CONTEXT", "0x1090");
+    shouldBe("webcl.QUEUE_DEVICE", "0x1091");
+    shouldBe("webcl.QUEUE_PROPERTIES", "0x1093");
+    shouldBe("webcl.MEM_READ_WRITE", "0x1");
+    shouldBe("webcl.MEM_WRITE_ONLY", "0x2");
+    shouldBe("webcl.MEM_READ_ONLY", "0x4");
+    shouldBe("webcl.R", "0x10B0");
+    shouldBe("webcl.A", "0x10B1");
+    shouldBe("webcl.RG", "0x10B2");
+    shouldBe("webcl.RA", "0x10B3");
+    shouldBe("webcl.RGB", "0x10B4");
+    shouldBe("webcl.RGBA", "0x10B5");
+    shouldBe("webcl.BGRA", "0x10B6");
+    shouldBe("webcl.ARGB", "0x10B7");
+    shouldBe("webcl.INTENSITY", "0x10B8");
+    shouldBe("webcl.LUMINANCE", "0x10B9");
+    shouldBe("webcl.Rx", "0x10BA");
+    shouldBe("webcl.RGx", "0x10BB");
+    shouldBe("webcl.RGBx", "0x10BC");
+    shouldBe("webcl.SNORM_INT8", "0x10D0");
+    shouldBe("webcl.SNORM_INT16", "0x10D1");
+    shouldBe("webcl.UNORM_INT8", "0x10D2");
+    shouldBe("webcl.UNORM_INT16", "0x10D3");
+    shouldBe("webcl.UNORM_SHORT_565", "0x10D4");
+    shouldBe("webcl.UNORM_SHORT_555", "0x10D5");
+    shouldBe("webcl.UNORM_INT_101010", "0x10D6");
+    shouldBe("webcl.SIGNED_INT8", "0x10D7");
+    shouldBe("webcl.SIGNED_INT16", "0x10D8");
+    shouldBe("webcl.SIGNED_INT32", "0x10D9");
+    shouldBe("webcl.UNSIGNED_INT8", "0x10DA");
+    shouldBe("webcl.UNSIGNED_INT16", "0x10DB");
+    shouldBe("webcl.UNSIGNED_INT32", "0x10DC");
+    shouldBe("webcl.HALF_FLOAT", "0x10DD");
+    shouldBe("webcl.FLOAT", "0x10DE");
+    shouldBe("webcl.MEM_OBJECT_BUFFER", "0x10F0");
+    shouldBe("webcl.MEM_OBJECT_IMAGE2D", "0x10F1");
+    shouldBeValueOrUndefined("webcl.MEM_OBJECT_IMAGE3D", "0x10F2");
+    shouldBe("webcl.MEM_TYPE", "0x1100");
+    shouldBe("webcl.MEM_FLAGS", "0x1101");
+    shouldBe("webcl.MEM_SIZE", "0x1102");
+    shouldBe("webcl.MEM_CONTEXT", "0x1106");
+    shouldBe("webcl.MEM_ASSOCIATED_MEMOBJECT", "0x1107");
+    shouldBe("webcl.MEM_OFFSET", "0x1108");
+    shouldBe("webcl.IMAGE_FORMAT", "0x1110");
+    shouldBe("webcl.IMAGE_ELEMENT_SIZE", "0x1111");
+    shouldBe("webcl.IMAGE_ROW_PITCH", "0x1112");
+    shouldBe("webcl.IMAGE_WIDTH", "0x1114");
+    shouldBe("webcl.IMAGE_HEIGHT", "0x1115");
+    shouldBe("webcl.ADDRESS_CLAMP_TO_EDGE", "0x1131");
+    shouldBe("webcl.ADDRESS_CLAMP", "0x1132");
+    shouldBe("webcl.ADDRESS_REPEAT", "0x1133");
+    shouldBe("webcl.ADDRESS_MIRRORED_REPEAT", "0x1134");
+    shouldBe("webcl.FILTER_NEAREST", "0x1140");
+    shouldBe("webcl.FILTER_LINEAR", "0x1141");
+    shouldBe("webcl.SAMPLER_CONTEXT", "0x1151");
+    shouldBe("webcl.SAMPLER_NORMALIZED_COORDS", "0x1152");
+    shouldBe("webcl.SAMPLER_ADDRESSING_MODE", "0x1153");
+    shouldBe("webcl.SAMPLER_FILTER_MODE", "0x1154");
+    shouldBe("webcl.MAP_READ", "0x1");
+    shouldBe("webcl.MAP_WRITE", "0x2");
+    shouldBe("webcl.PROGRAM_CONTEXT", "0x1161");
+    shouldBe("webcl.PROGRAM_NUM_DEVICES", "0x1162");
+    shouldBe("webcl.PROGRAM_DEVICES", "0x1163");
+    shouldBe("webcl.PROGRAM_SOURCE", "0x1164");
+    shouldBe("webcl.PROGRAM_BUILD_STATUS", "0x1181");
+    shouldBe("webcl.PROGRAM_BUILD_OPTIONS", "0x1182");
+    shouldBe("webcl.PROGRAM_BUILD_LOG", "0x1183");
+    shouldBe("webcl.BUILD_SUCCESS", "0");
+    shouldBe("webcl.BUILD_NONE", "-1");
+    shouldBe("webcl.BUILD_ERROR", "-2");
+    shouldBe("webcl.BUILD_IN_PROGRESS", "-3");
+    shouldBe("webcl.KERNEL_FUNCTION_NAME", "0x1190");
+    shouldBe("webcl.KERNEL_NUM_ARGS", "0x1191");
+    shouldBe("webcl.KERNEL_CONTEXT", "0x1193");
+    shouldBe("webcl.KERNEL_PROGRAM", "0x1194");
+    shouldBe("webcl.KERNEL_WORK_GROUP_SIZE", "0x11B0");
+    shouldBe("webcl.KERNEL_COMPILE_WORK_GROUP_SIZE", "0x11B1");
+    shouldBe("webcl.KERNEL_LOCAL_MEM_SIZE", "0x11B2");
+    shouldBe("webcl.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE", "0x11B3");
+    shouldBe("webcl.KERNEL_PRIVATE_MEM_SIZE", "0x11B4");
+    shouldBe("webcl.EVENT_COMMAND_QUEUE", "0x11D0");
+    shouldBe("webcl.EVENT_COMMAND_TYPE", "0x11D1");
+    shouldBe("webcl.EVENT_COMMAND_EXECUTION_STATUS", "0x11D3");
+    shouldBe("webcl.EVENT_CONTEXT", "0x11D4");
+    shouldBe("webcl.COMMAND_NDRANGE_KERNEL", "0x11F0");
+    shouldBe("webcl.COMMAND_TASK", "0x11F1");
+    shouldBe("webcl.COMMAND_READ_BUFFER", "0x11F3");
+    shouldBe("webcl.COMMAND_WRITE_BUFFER", "0x11F4");
+    shouldBe("webcl.COMMAND_COPY_BUFFER", "0x11F5");
+    shouldBe("webcl.COMMAND_READ_IMAGE", "0x11F6");
+    shouldBe("webcl.COMMAND_WRITE_IMAGE", "0x11F7");
+    shouldBe("webcl.COMMAND_COPY_IMAGE", "0x11F8");
+    shouldBe("webcl.COMMAND_COPY_IMAGE_TO_BUFFER", "0x11F9");
+    shouldBe("webcl.COMMAND_COPY_BUFFER_TO_IMAGE", "0x11FA");
+    shouldBe("webcl.COMMAND_MARKER", "0x11FE");
+    shouldBe("webcl.COMMAND_READ_BUFFER_RECT", "0x1201");
+    shouldBe("webcl.COMMAND_WRITE_BUFFER_RECT", "0x1202");
+    shouldBe("webcl.COMMAND_COPY_BUFFER_RECT", "0x1203");
+    shouldBe("webcl.COMMAND_USER", "0x1204");
+    shouldBe("webcl.COMPLETE", "0x0");
+    shouldBe("webcl.RUNNING", "0x1");
+    shouldBe("webcl.SUBMITTED", "0x2");
+    shouldBe("webcl.QUEUED", "0x3");
+    shouldBe("webcl.PROFILING_COMMAND_QUEUED", "0x1280");
+    shouldBe("webcl.PROFILING_COMMAND_SUBMIT", "0x1281");
+    shouldBe("webcl.PROFILING_COMMAND_START", "0x1282");
+    shouldBe("webcl.PROFILING_COMMAND_END", "0x1283");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

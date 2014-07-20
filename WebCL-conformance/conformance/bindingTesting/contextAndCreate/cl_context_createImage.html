@@ -1,0 +1,178 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext createImage conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCLContext createImage test case.");
+    debug("(CLenum memFlags, WebCLImageDescriptor descriptor, optional ArrayBufferView hostPtr = null)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var imageWidth = 100;
+    var imageHeight = 100;
+
+    var webCLImageDescriptorRead = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    var webCLImageDescriptorWrite = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_WRITE_ONLY, imageWidth, imageHeight);
+    var webCLImageDescriptorReadWrite = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+
+    var arrayType = wtu.getArrayTypeForChanneltype(webCLImageDescriptorRead.channelType);
+    var hostPtr = eval("new " + arrayType + "(imageWidth * imageHeight * wtu.getBytesForChannelOrder(webCLImageDescriptorRead.channelOrder))");
+    wtu.generateRandomNumberInRange(hostPtr, 0, 255, hostPtr.length);
+
+    // Testing for MEM_READ_ONLY images.
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorRead)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorRead, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorWrite, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorReadWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, webCLImageDescriptorReadWrite, hostPtr)", WebCLImage);
+
+    // Testing for MEM_WRITE_ONLY images.
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorRead)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorRead, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorWrite, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorReadWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, webCLImageDescriptorReadWrite, hostPtr)", WebCLImage);
+
+    // Testing for MEM_READ_WRITE images.
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorRead)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorRead, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorWrite, hostPtr)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorReadWrite)", WebCLImage);
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorReadWrite, hostPtr)", WebCLImage);
+
+    // Testing for Exceptions.
+    shouldThrowExceptionName("webCLContext.createImage(invalid_CLenum, webCLImageDescriptorReadWrite);", "INVALID_VALUE");
+
+    // Testing for invalid values of Image width and height.
+    var invalidImageWidth = 0;
+    webCLImageDescriptorZeroWidth = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, invalidImageWidth, imageHeight);
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorZeroWidth);", "INVALID_IMAGE_SIZE");
+
+    var invalidImageHeight = 0;
+    webCLImageDescriptorZeroHeight = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, invalidImageHeight);
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorZeroHeight);", "INVALID_IMAGE_SIZE");
+
+    /*
+    var webCLImageDescriptorWidthString = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, "10", imageHeight);
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorWidthString);", "INVALID_IMAGE_SIZE");
+
+    var webCLImageDescriptorHeightString = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, "10");
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorHeightString);", "INVALID_IMAGE_SIZE");
+    */
+
+    var contextDeviceArray = webCLContext.getInfo(webcl.CONTEXT_DEVICES);
+    var contextWidthMax = contextDeviceArray[0].getInfo(webcl.DEVICE_IMAGE2D_MAX_WIDTH);
+    var contextHeightMax = contextDeviceArray[0].getInfo(webcl.DEVICE_IMAGE2D_MAX_HEIGHT);
+    // finding the max value of the DEVICE_IMAGE2D_MAX_WIDTH & DEVICE_IMAGE2D_MAX_HEIGHT for the context devices.
+    for (i = 1; i < contextDeviceArray.length; i++) {
+        var deviceMaxWidth = contextDeviceArray[i].getInfo(webcl.DEVICE_IMAGE2D_MAX_WIDTH);
+        if (deviceMaxWidth > contextWidthMax)
+            contextWidthMax = deviceMaxWidth;
+        var deviceMaxHeight = contextDeviceArray[i].getInfo(webcl.DEVICE_IMAGE2D_MAX_HEIGHT);
+        if (deviceMaxHeight > contextHeightMax)
+            contextHeightMax = deviceMaxHeight;
+    }
+    invalidImageWidth = contextWidthMax  + 1;
+    webCLImageDescriptorInvalidImageWidth = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, invalidImageWidth, imageHeight);
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorInvalidImageWidth);", "INVALID_IMAGE_SIZE");
+
+    invalidImageHeight = contextHeightMax + 1;
+    webCLImageDescriptorInvalidImageHeight = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, invalidImageHeight);
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorInvalidImageHeight);", "INVALID_IMAGE_SIZE");
+
+    // Testing for invalid value of channelOrder and channelType.
+    var webCLImageDescriptorObjectInvalidChannelOrder = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    webCLImageDescriptorObjectInvalidChannelOrder.channelOrder = invalid_CLenum;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorObjectInvalidChannelOrder);", "INVALID_IMAGE_FORMAT_DESCRIPTOR");
+
+    var webCLImageDescriptorObjectInvalidChannelType = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    webCLImageDescriptorObjectInvalidChannelType.channelType = invalid_CLenum;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorObjectInvalidChannelType);", "INVALID_IMAGE_FORMAT_DESCRIPTOR");
+
+    var webCLImageDescriptorChannelOrderString = {width: imageWidth, height: imageHeight, channelOrder: "webcl.RGBA", channelType: webcl.UNORM_INT8};
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorChannelOrderString);", "INVALID_IMAGE_FORMAT_DESCRIPTOR");
+
+    var webCLImageDescriptorChannelTypeString = {width: imageWidth, height: imageHeight, channelOrder: webcl.RGBA, channelType: "webcl.UNORM_INT8"};
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorChannelTypeString);", "INVALID_IMAGE_FORMAT_DESCRIPTOR");
+
+    // Testing for values of rowPitch.
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    webCLImageDescriptor.rowPitch = 10;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptor);", "INVALID_IMAGE_SIZE");
+
+    var webCLImageDescriptorRowPitchString = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptorRowPitchString.channelOrder);
+    var bytesPerElement = eval(wtu.getArrayTypeForChanneltype(webCLImageDescriptorRowPitchString.channelType) + ".BYTES_PER_ELEMENT");
+    webCLImageDescriptorRowPitchString.rowPitch = (imageWidth * elementsPerPixel * bytesPerElement).toString();
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorRowPitchString);", "INVALID_IMAGE_SIZE");
+
+    webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    webCLImageDescriptor.rowPitch = (imageWidth * hostPtr.BYTES_PER_ELEMENT) - 1;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptor, hostPtr);", "INVALID_IMAGE_SIZE");
+
+    var webCLImageDescriptorValidRowPitch = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptorValidRowPitch.channelOrder);
+    var bytesPerElement = eval(wtu.getArrayTypeForChanneltype(webCLImageDescriptorValidRowPitch.channelType) + ".BYTES_PER_ELEMENT");
+    webCLImageDescriptorValidRowPitch.rowPitch = imageWidth * elementsPerPixel * bytesPerElement;
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorValidRowPitch, hostPtr)", WebCLImage);
+
+    var webCLImageDescriptorInvalidRowPitch = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptorInvalidRowPitch.channelOrder);
+    var bytesPerElement = eval(wtu.getArrayTypeForChanneltype(webCLImageDescriptorInvalidRowPitch.channelType) + ".BYTES_PER_ELEMENT");
+    webCLImageDescriptorInvalidRowPitch.rowPitch = (imageWidth - 1) * elementsPerPixel * bytesPerElement;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptorInvalidRowPitch, hostPtr);", "INVALID_IMAGE_SIZE");
+
+    //Testing for INVALID_HOST_POINTER.
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, imageWidth, imageHeight);
+    var invalidHostPointer = eval("new " + arrayType + "((webCLImageDescriptor.width * webCLImageDescriptor.height) - 1)");
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, webCLImageDescriptor, invalidHostPointer);", "INVALID_HOST_PTR");
+
+    // FIXME :: To add test case to verify exception: IMAGE_FORMAT_NOT_SUPPORTED
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

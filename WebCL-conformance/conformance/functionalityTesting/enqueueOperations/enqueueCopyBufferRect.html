@@ -1,0 +1,344 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueCopyBufferRect functionality test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueCopyBufferRect functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var srcBuffer, dstBuffer;
+    var result, data;
+
+    var numberOfValues = 256;
+    var BUFFER_SIZE_IN_BYTES = 1024; /* 256 Int32 elements */
+    data = new Int32Array(numberOfValues);
+    var maxInt32Value = 2147483647;
+    wtu.generateRandomNumberInRange (data, 0, maxInt32Value, numberOfValues);
+    srcBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES, data);
+
+    var srcOriginConst = [0, 0, 0];
+    var dstOriginConst = [0, 0, 0];
+    var srcRowPitchConst = 0;
+    var srcSlicePitchConst = 0;
+    var dstRowPitchConst = 0;
+    var dstSlicePitchConst = 0;
+
+    /*
+     *   Testing for copying whole buffer of 256 values, of 4 bytes each using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 0, 0];
+        dstOrigin = [0, 0, 0];
+        region = [16 * 4, 4, 4]; /* Read as 4 rows of 16 int32 elements each with 4 slice.*/
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(numberOfValues);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, BUFFER_SIZE_IN_BYTES, result);
+        wtu.verifyResult(data, result, numberOfValues, "copying whole buffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying first 10 int32 values from srcBuffer to dstBuffer using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 0, 0];
+        dstOrigin = [0, 0, 0];
+        region = [10 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(10);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 10 * Int32Array.BYTES_PER_ELEMENT, result);
+        wtu.verifyResult(data, result, 10, "copying first 10 int32 values from srcBuffer to dstBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying last 16 int32 values from srcBuffer using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 3, 3];
+        dstOrigin = [0, 0, 0];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, 64, 256, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(16);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 16 * 4, result);
+        var aData = new Int32Array(data.buffer, 1024 - 64, 16);
+        wtu.verifyResult(aData, result, 16, "copying last 16 values from srcBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying into last 16 locations of dstBuffer using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 0, 0];
+        dstOrigin = [0, 3, 3];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, 64, 256);
+
+        var result = new Int32Array(256);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        var aResult = new Int32Array(result.buffer, 1024 - 64, 16);
+        wtu.verifyResult(data, aResult, 16, "copying into last 16 locations of dstBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+   /*
+    *  Testing for copying a row of 16 int32 values from 3rd row of srcBuffer using copyBufferRect.
+    */
+    try {
+        srcOrigin = [0, 3, 0];
+        dstOrigin = [0, 0, 0];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(256);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        var aData = new Int32Array(data.buffer, region[0] * srcOrigin[1], 16);
+        wtu.verifyResult(aData, result, aData.length, "copying from 3rd row of 16 int32 values of srcBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying a row of 16 int32 values into 3rd row of dstBuffer using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 0, 0];
+        dstOrigin = [0, 3, 0];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(256);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        var aResult = new Int32Array(result.buffer, region[0] * dstOrigin[1], 16);
+        wtu.verifyResult(data, aResult, aResult.length, "copying into 3rd row of 16 int32 values of dstBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying from 2nd slice of 16 int32 values of srcBuffer using copyBufferRect.
+    */
+    try {
+        srcOrigin = [0, 0, 2];
+        dstOrigin = [0, 0, 0];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(256);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        // Saving 2nd slice of a row of 16 values of srcBuffer to aData.
+        var aData = new Int32Array(data.buffer, region[0] * region[1] * srcOrigin[2], 16 * region[1]);
+        wtu.verifyResult(aData, result, aData.length, "copying from 2nd slice of 16 int32 values of srcBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for copying into 2nd slice of 16 int32 values of dstBuffer using copyBufferRect.
+     */
+    try {
+        srcOrigin = [0, 0, 0];
+        dstOrigin = [0, 0, 2];
+        region = [16 * 4, 1, 1];
+        dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOrigin, dstOrigin, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        var result = new Int32Array(256);
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        // Saving 2nd slice of a row of 16 values of dstBuffer to aResult.
+        var aResult = new Int32Array(result.buffer, region[0] * region[1] * dstOrigin[2], 16 * region[1]);
+        wtu.verifyResult(data, aResult, aResult.length, "copying into 2nd slice of 16 int32 values of dstBuffer using copyBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    var valuesPerRow = 16;
+    var numberOfRows = 4;
+    var numberOfSlices = 4;
+    regionConst = [valuesPerRow * Int32Array.BYTES_PER_ELEMENT, numberOfRows, numberOfSlices];
+
+    /*
+     *  Testing for copying from alternate rows of srcBuffer using copyBufferRect.
+     */
+    try {
+        region = [16 * 4, 2, 1];
+        srcRowPitch = region[0] * 2;
+        result = new Int32Array(numberOfValues);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOriginConst, dstOriginConst, region, srcRowPitch, srcSlicePitchConst, dstRowPitchConst, dstSlicePitchConst);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        // Verifying alternate rows of buffer.
+        for (i = 0, j = 0; i < region[0]; i += 2 * valuesPerRow, j+= valuesPerRow) {
+            for (z = 0; z < valuesPerRow; z++) {
+                if (data[i + z] != result[j + z]) {
+                     flag = true;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            testPassed("Test passed for copying from alternate rows of a slice of srcBuffer using copyBufferRect.");
+        else
+            testFailed("Test failed for copying from alternate rows of a slice of srcBuffer using copyBufferRect.");
+    } catch(e) {
+        testFailed(e.description);
+    }
+    srcRowPitch = 0;
+
+    /*
+     *  Testing for copying into alternate rows of dstBuffer using copyBufferRect.
+     */
+    try {
+        region = [16 * 4, 2, 1];
+        dstRowPitch = region[0] * 2;
+        result = new Int32Array(numberOfValues);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOriginConst, dstOriginConst, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitch, dstSlicePitchConst);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+         for (i = 0, j = 0; i < region[0]; i += 2 * valuesPerRow, j+= valuesPerRow) {
+            for (z = 0; z < valuesPerRow; z++) {
+                if (data[i + z] != result[j + z]) {
+                     flag = true;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            testPassed("Test passed for copying into alternate rows of a slice of dstBuffer using copyBufferRect.");
+        else
+            testFailed("Test failed for copying into alternate rows of a slice of dstBuffer using copyBufferRect.");
+    } catch(e) {
+        testFailed(e.description);
+    }
+    dstRowPitch = 0;
+
+    /*
+     *  Testing for copying from alternate slices of srcBuffer using copyBufferRect.
+     */
+    try {
+        region = [16 * 4, 2, 2];
+        srcSlicePitch = region[0] * region[1] * 2;
+        result = new Int32Array(numberOfValues);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOriginConst, dstOriginConst, region, srcRowPitchConst, srcSlicePitch, dstRowPitchConst, dstSlicePitchConst);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        var flag = false;
+        for (i = 0, j = 0; i < regionConst[0]; i += 2 * valuesPerRow * region[1], j += valuesPerRow * region[1]) {
+            for (z = 0; z < valuesPerRow * region[1] /* 16 * 2 */; z++) {
+                if (data[i + z] != result[j + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            testPassed("Test passed for copying from alternate slices of srcBuffer using copyBufferRect.");
+        else
+            testFailed("Test failed for copying from alternate slices of srcBuffer using copyBufferRect.");
+    } catch(e) {
+        testFailed(e.description);
+    }
+    srcSlicePitch = 0;
+
+    /*
+     *  Testing for copying into alternate slices of dstBuffer using copyBufferRect.
+     */
+    try {
+        region = [16 * 4, 2, 2];
+        dstSlicePitch = region[0] * region[1] * 2;
+        result = new Int32Array(numberOfValues);
+
+        wtu.enqueueCopyBufferRect(webCLCommandQueue, srcBuffer, dstBuffer, srcOriginConst, dstOriginConst, region, srcRowPitchConst, srcSlicePitchConst, dstRowPitchConst, dstSlicePitch);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, dstBuffer, true, 0, 256 * 4, result);
+        var flag = false;
+        for (i = 0, j = 0; i < regionConst[0]; i += 2 * valuesPerRow * region[1], j += valuesPerRow * region[1]) {
+            for (z = 0; z < valuesPerRow * region[1] /* 16 * 2 */; z++) {
+                if (data[i + z] != result[j + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for copying into alternate slices of dstBuffer using copyBufferRect.");
+        else
+            testFailed("Test failed for copying into alternate slices of dstBuffer using copyBufferRect.");
+    } catch(e) {
+        testFailed(e.description);
+    }
+    dstSlicePitch = 0;
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

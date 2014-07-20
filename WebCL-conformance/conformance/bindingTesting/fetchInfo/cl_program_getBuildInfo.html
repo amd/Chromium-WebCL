@@ -1,0 +1,88 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLProgram getBuildInfo conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCLProgram :: getBuildInfo test case.");
+    debug("(WebCLDevice device, CLenum name)");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLDevice = webCLDevices[0];
+    var kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices, "-cl-single-precision-constant");
+
+    shouldBeNonNull("webCLProgram.getBuildInfo(webCLDevice, webcl.PROGRAM_BUILD_STATUS);");
+    shouldBe("typeof " + "webCLProgram.getBuildInfo(webCLDevice, webcl.PROGRAM_BUILD_OPTIONS);", "'string'");
+    shouldBe("typeof " + "webCLProgram.getBuildInfo(webCLDevice, webcl.PROGRAM_BUILD_LOG);", "'string'");
+
+    // Testing for huge build log.
+    kernelSource = wtu.readKernel("../../../resources/kernels/nbody_simulation_bad.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    try {
+        wtu.build(webCLProgram, webCLDevices);
+    } catch(e) {
+        shouldBe("typeof " + "webCLProgram.getBuildInfo(webCLDevice, webcl.PROGRAM_BUILD_LOG);", "'string'");
+    }
+
+    // Testing for Exceptions.
+    shouldThrowExceptionName("webCLProgram.getBuildInfo(webCLDevice, null);", "INVALID_VALUE");
+
+    // Testing for exception : INVALID_DEVICE. 
+    var devices = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    if (devices.length > 1) {
+        var webCLDevice1 = devices[0];
+        var webCLContext1 = wtu.createContext(webCLDevice1);
+
+        kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+        var webCLProgram1 = wtu.createProgram(webCLContext1, kernelSource);
+        wtu.build(webCLProgram1, [webCLDevice1]);
+        var webCLDevice2 = devices[1];
+        shouldThrowExceptionName("webCLProgram1.getBuildInfo(webCLDevice2, webcl.PROGRAM_BUILD_STATUS);", "INVALID_DEVICE");
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

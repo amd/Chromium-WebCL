@@ -1,0 +1,123 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>buildOption conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("buildOptions functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var kernelSource, webCLKernel;
+    var correct, input, output, optionIndex;
+    var count = SIZE;
+    var data = new Float32Array(SIZE);
+    var result = new Int32Array(SIZE);
+
+    var optimization_options = [
+        "-D SIZE",
+        "-D SIZE=1024",
+        "-cl-opt-disable",
+        "-cl-single-precision-constant",
+        "-cl-denorms-are-zero",
+        "-cl-mad-enable",
+        "-cl-no-signed-zeros",
+        "-cl-unsafe-math-optimizations",
+        "-cl-finite-math-only",
+        "-cl-fast-relaxed-math",
+        "-w",
+        "-Werror"];
+    /*
+     *   Testing for kernel options_test_kernel
+     *   Rounds off float value to an int.
+     */
+
+    wtu.generateRandomFloat(data, count);
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/options_test_kernel.cl");
+
+    for (optionIndex = 0; optionIndex < optimization_options.length; optionIndex++) {
+        try {
+            webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+            wtu.build(webCLProgram, webCLDevices, optimization_options[optionIndex]);
+            webCLKernel = wtu.createKernel(webCLProgram, "options_test_kernel");
+
+            if (webCLProgram.getBuildInfo(webCLDevices[0], webcl.PROGRAM_BUILD_STATUS) != 0) {
+                testFailed("Failed to build for option : " + optimization_options[optionIndex] + ".");
+                continue;
+            }
+            if (webCLProgram.getBuildInfo(webCLDevices[0], webcl.PROGRAM_BUILD_OPTIONS).indexOf(optimization_options[optionIndex])) {
+                testFailed("Failed to fetch build option from WebCLProgram object : " + optimization_options[optionIndex] + ".");
+                continue;
+            }
+
+            input = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+            output = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+            wtu.enqueueWriteBuffer(webCLCommandQueue, input, true, 0, BUFFER_SIZE, data);
+            wtu.setArg(webCLKernel, 0, input);
+            wtu.setArg(webCLKernel, 1, output);
+
+            var globalWorkSize = [SIZE];
+            var localWorkSize = [webCLKernel.getWorkGroupInfo(webCLDevices[0], webcl.KERNEL_WORK_GROUP_SIZE)];
+
+            wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, globalWorkSize.length, null, globalWorkSize, localWorkSize);
+
+            wtu.enqueueReadBuffer(webCLCommandQueue, output, true, 0, BUFFER_SIZE, result);
+
+            for (correct = 0, i = 0; i < count; i++) {
+                if (result[i] == Math.floor(data[i]))
+                    correct++;
+            }
+            if (correct == count)
+                testPassed("Test passed for all " + count + " values for kernel: \"options_test_kernel\" with option : " + optimization_options[optionIndex] + ".");
+            else
+                testFailed("Test failed with build-option : " + optimization_options[optionIndex] + ". Computed " + correct + " / " + count + "correct values.");
+        } catch(e) {
+            testFailed("Failed to build program for option [" + optimization_options[optionIndex] + "] with exception :" + e.description + ".");
+            continue;
+        }
+    }
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

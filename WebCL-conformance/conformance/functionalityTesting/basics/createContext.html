@@ -1,0 +1,216 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createContext conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("CreateContext functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLPlatform = wtu.getPlatform();
+    var webCLContext, contextDevices, contextDevicesCount;
+
+    var createAndVerifyContext = function(param1, param2) {
+        try {
+            param1 = (param1 != undefined) ? param1 : null;
+            param2 = (param2 != undefined) ? param2 : null;
+            // 'createContext' is not called through WTU to avoid usage of globally selected platform and device(s).
+            if (param2 != undefined)
+                webCLContext = webcl.createContext(param1, param2);
+            else if (param1 != undefined)
+                webCLContext = webcl.createContext(param1);
+            else
+                webCLContext = webcl.createContext();
+
+            if (!(webCLContext instanceof WebCLContext)) {
+                testFailed("Failed to create a valid instance of a WebCLContext with parameters : " + param1 + " and " + param2);
+                return;
+            }
+
+            contextDevices = webCLContext.getInfo(webcl.CONTEXT_DEVICES);
+            contextDevicesCount = webCLContext.getInfo(webcl.CONTEXT_NUM_DEVICES);
+
+            if (param1 == undefined) {
+                testPassed("Creating and validating WebCLContext without parameters");
+                return;
+            }
+
+            if (typeof(param1) == 'number') {
+                if (param1 == webcl.DEVICE_TYPE_DEFAULT) {
+                    testPassed("Creating and validating WebCLContext with parameters : " + param1 + " and " + param2);
+                    return;
+                }
+                if (contextDevices[0].getInfo(webcl.DEVICE_TYPE) !== param1) {
+                    testFailed("Falied in validating createContext on devieType. " +
+                    "Expected: " + param1 + ". Obtained : " + contextDevices[0].getInfo(webcl.DEVICE_TYPE));
+                    return;
+                }
+                testPassed("Creating and validating WebCLContext with deviceType : " + param1);
+                return;
+            }
+
+            if (param1 instanceof Array) {
+                if (contextDevicesCount != param1.length) {
+                    testFailed("Failed in validating  count of devices. Expected : " + contextDevicesCount + ". Obtained : " + param1.length);
+                    return;
+                }
+                for (i = 0; i < contextDevices.length; i++)
+                    if (contextDevices[i] !== param1[i]) {
+                        testFailed("Failed in validating devices[" + i + "]. Expected : " + param1[i] + ". Obtained : " + contextDevices[i]);
+                        return;
+                    }
+            }
+
+            if (param1 instanceof WebCLDevice) {
+                if (contextDevices[0] !== param1) {
+                    testFailed("Failed in validating devices[" + i + "]. Expected : " + param1[i] + ". Obtained : " + contextDevices[i]);
+                    return;
+                }
+            }
+
+            if (param1 instanceof WebCLPlatform) {
+                if (contextDevices[0].getInfo(webcl.DEVICE_PLATFORM) === param1) {
+                    if (param2) {
+                        if (contextDevices[0].getInfo(webcl.DEVICE_TYPE) !== param2) {
+                            testFailed("Failed in validating deviceType used to create WebCLContext." +
+                            "Expected : " + param2 + ". Obtained : " + contextDevices[0].getInfo(webcl.DEVICE_TYPE));
+                            return;
+                        }
+                    }
+                } else {
+                    testFailed("Failed in validating platform used to create WebCLContext." +
+                    "Expected : " + param1 + ". Obtained : " + contextDevices[i].getInfo(webcl.DEVICE_PLATFORM));
+                    return;
+                }
+            }
+
+            testPassed("Creating and validating WebCLContext with parameters : " + param1 + " and " + param2);
+        } catch(e) {
+            e.description = "Exception thrown while creating and validating context : " + e.name;
+            if (e.name == "DEVICE_NOT_FOUND")
+                testPassed("Creating and validating WebCLContext threw DEVICE_NOT_FOUND for the parameters : " + param1 + " and " + param2);
+            else
+                testFailed(e.description);
+            return;
+        }
+    }
+
+    var getAndValidateDevices = function(webCLPlatform, type) {
+        try {
+            var webCLDevice = wtu.getDevices(webCLPlatform, type);
+            return webCLDevice;
+        } catch(e) {
+            if (e.name === "DEVICE_NOT_FOUND")
+                testPassed("For the deviceType : " + type + " DEVICE_NOT_FOUND exception was thrown.");
+            else
+                testFailed("For the deviceType : " + type + " exception : " + e.name + " was thrown while obtaining device from the platform.");
+            return null;
+        }
+    }
+
+    createAndVerifyContext();
+    createAndVerifyContext(webCLPlatform);
+
+    /*
+     *  Creating context on type : CPU
+     */
+    createAndVerifyContext(webcl.DEVICE_TYPE_CPU);
+    createAndVerifyContext(webCLPlatform, webcl.DEVICE_TYPE_CPU);
+    if (getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_CPU)) {
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_CPU)[0]);
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_CPU));
+    }
+
+    /*
+     *  Creating context on type : GPU
+     */
+    createAndVerifyContext(webcl.DEVICE_TYPE_GPU);
+    createAndVerifyContext(webCLPlatform, webcl.DEVICE_TYPE_GPU);
+    if (getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_GPU)) {
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_GPU)[0]);
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_GPU));
+    }
+
+    /*
+     *  Creating context on type : ACCELERATOR
+     */
+    createAndVerifyContext(webcl.DEVICE_TYPE_ACCELERATOR);
+    createAndVerifyContext(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);
+    if (getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR)) {
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR)[0]);
+        createAndVerifyContext(wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR));
+    }
+
+    /*
+     *  Creating context on type : DEFAULT
+     */
+    var webCLDevicesDEFAULT = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);
+    createAndVerifyContext(webcl.DEVICE_TYPE_DEFAULT);
+    createAndVerifyContext(webCLDevicesDEFAULT);
+
+    /*
+     *  Creating context on type : ALL
+     */
+    var webCLDevicesALL = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    createAndVerifyContext(webCLDevicesALL);
+
+    /*
+     *  Creating context with at least one available valid device type.
+     */
+
+    var flag = false, webCLContextOnDeviceType;
+    var deviceTypeArray = [webcl.DEVICE_TYPE_GPU, webcl.DEVICE_TYPE_CPU, webcl.DEVICE_TYPE_ACCELERATOR];
+    for (var i = 0; i < deviceTypeArray.length; i++) {
+        try {
+            webCLContextOnDeviceType = webcl.createContext(deviceTypeArray[i]);
+        } catch(e) {}
+        if (webCLContextOnDeviceType instanceof WebCLContext) {
+            flag = true;
+            testPassed("createContext for " + deviceTypeArray[i] + ".");
+            break;
+        }
+    }
+    if (!flag)
+        testFailed("Failed to create context on any of device {GPU, CPU, ACCELERATOR};");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("CreateBuffer functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLBuffer, bufferContext, bufferFlag, bufferSize, buffer;
+
+    var createAndVerifyBuffer = function(memFlagString, size, origin, buffer) {
+        try {
+            memFlag = eval(memFlagString);
+
+            if (origin != undefined)
+                webCLBuffer = wtu.createSubBuffer(buffer, memFlag, origin, size);
+            else
+                webCLBuffer = wtu.createBuffer(webCLContext, memFlag, size);
+
+            if (webCLBuffer.getInfo(webcl.MEM_TYPE) != webcl.MEM_OBJECT_BUFFER) {
+                testFailed("Verification of buffer's type to be webcl.MEM_OBJECT_BUFFER");
+                return;
+            }
+
+            bufferContext = webCLBuffer.getInfo(webcl.MEM_CONTEXT);
+            if (bufferContext != webCLContext) {
+                testFailed("Verification of context associated with buffer.");
+                return;
+            }
+
+            bufferFlag = webCLBuffer.getInfo(webcl.MEM_FLAGS);
+            if (bufferFlag != memFlag) {
+                testFailed("Verification of flag associated with buffer. Expected: " + memFlag + " Obtained: " + bufferFlag);
+                return;
+            }
+
+            bufferSize = webCLBuffer.getInfo(webcl.MEM_SIZE);
+            if (bufferSize != size) {
+                    testFailed("Verification of size of sub-buffer with flag: " + memFlagString +
+                        ". Expected: " + size + " Obtained: " + bufferSize);
+                    return;
+            }
+
+            // Verification specific to sub-buffer.
+            if (origin != undefined) {
+                if (webCLBuffer.getInfo(webcl.MEM_ASSOCIATED_MEMOBJECT) != buffer) {
+                    testFailed("Verification of associated memoryObject for subbuffer was not webCLBuffer.");
+                    return;
+                }
+
+                if (webCLBuffer.getInfo(webcl.MEM_OFFSET) != origin) {
+                    testFailed("Verification of memoryOffset of subbuffer. Expected: " + origin + " Obtained: " + webCLBuffer.getInfo(webcl.MEM_OFFSET));
+                    return;
+                }
+
+                testPassed("Creating and validating sub-buffer with flag: " + memFlagString +
+                    " size: " + size + " and origin: " + origin);
+                return;
+            } else {
+                if ((webCLBuffer.getInfo(webcl.MEM_ASSOCIATED_MEMOBJECT) != null) || webCLBuffer.getInfo(webcl.MEM_OFFSET)) {
+                    testFailed("Verification of associated memoryObject was found to be non-null or Memory Offset was not 0.");
+                    return;
+                }
+
+                testPassed("Creating and validating buffer with flag : " + memFlagString + " and size : " + size);
+                return;
+            }
+
+        } catch(e) {
+            testFailed("Exception thrown while creating and validating buffer: " + e.name);
+        }
+    }
+
+    var getRandomTwoDigitNumber = function() {
+        return Math.ceil(Math.random() * 99);
+    }
+
+    /*
+     * Randomly one of the single digit multiple of deviceBaseAddrAlignement is selected
+     * as the size of parent buffer is 10 times the deviceBaseAddrAlignement value.
+     */
+    var generateValidOrigin = function(deviceBaseAddrAlignement) {
+        return (Math.floor(Math.random() * 10)) * deviceBaseAddrAlignement;
+    }
+
+    // Creating buffer with different memory flags and randomly generated buffer size.
+    createAndVerifyBuffer("webcl.MEM_READ_ONLY", getRandomTwoDigitNumber());
+    createAndVerifyBuffer("webcl.MEM_WRITE_ONLY", getRandomTwoDigitNumber());
+    createAndVerifyBuffer("webcl.MEM_READ_WRITE", getRandomTwoDigitNumber());
+
+    /*
+     *  Creating sub-buffers on buffer of size of atleast 10 times the value of device's base address alignement,
+     *  with different valid memory flags and randomly generated valid origin and sub-buffer size.
+     */
+    var contextDevices = webCLContext.getInfo(webcl.CONTEXT_DEVICES);
+    for (i = 0; i < contextDevices.length; i++) {
+        var deviceBaseAddrAlignement = contextDevices[i].getInfo(webcl.DEVICE_MEM_BASE_ADDR_ALIGN);
+
+        buffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, deviceBaseAddrAlignement * 10);
+        createAndVerifyBuffer("webcl.MEM_READ_ONLY", getRandomTwoDigitNumber(), generateValidOrigin(deviceBaseAddrAlignement), buffer);
+
+        buffer = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, deviceBaseAddrAlignement * 10);
+        createAndVerifyBuffer("webcl.MEM_WRITE_ONLY", getRandomTwoDigitNumber(), generateValidOrigin(deviceBaseAddrAlignement), buffer);
+
+        buffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, deviceBaseAddrAlignement * 10);
+        createAndVerifyBuffer("webcl.MEM_READ_ONLY", getRandomTwoDigitNumber(), generateValidOrigin(deviceBaseAddrAlignement), buffer);
+        createAndVerifyBuffer("webcl.MEM_WRITE_ONLY", getRandomTwoDigitNumber(), generateValidOrigin(deviceBaseAddrAlignement), buffer);
+        createAndVerifyBuffer("webcl.MEM_READ_WRITE", getRandomTwoDigitNumber(), generateValidOrigin(deviceBaseAddrAlignement), buffer);
+    }
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

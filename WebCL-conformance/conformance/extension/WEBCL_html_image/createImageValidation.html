@@ -1,0 +1,133 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext createImage functionality test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<canvas id="inputCanvas" width="100" height="100" ></canvas>
+<canvas id="inputCanvasForImageData" width="100" height="100"></canvas>
+<canvas id="inputCanvasForImage" width="240" height="400"></canvas>
+<script>
+debug("WebCLContext createImage functionality test case.");
+
+var wtu = WebCLTestUtils;
+debug("WebCLContext :: createBuffer with html image types functionality test case .");
+if (!wtu.enableExtension(webcl, "WEBCL_html_image")) {
+    throw { description : "Failed to enable extension : WEBCL_html_image. Exitting..." };
+}
+var webCLContext = wtu.createContext();
+var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+var imageWidth = 100;
+var imageHeight = 100;
+var origin = [0, 0];
+var region = [imageWidth, imageHeight];
+var hostRowPitch = 0;
+
+/*
+ *   Creating image and filling it with imageData.
+ */
+try {
+    var canvasForImageData = document.getElementById("inputCanvasForImageData");
+    var canvasContextForImageData = canvasForImageData.getContext("2d");
+    var imgData = canvasContextForImageData.createImageData(100, 100);
+    wtu.generateRandomNumberInRange(imgData.data, 0, 255, imgData.data.length);
+    canvasContextForImageData.putImageData(imgData, 0, 0);
+
+    var webCLImageWithImageData = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, imgData);
+
+    // Source pixel format is treated as 32-bit RGBA (8-bits per component) with non-premultiplied alpha
+    var resultArraySize = canvasForImageData.width * canvasForImageData.height * 4;
+    var resultArray = new Uint8Array(resultArraySize);
+    wtu.enqueueReadImage(webCLCommandQueue, webCLImageWithImageData, true, origin, region, hostRowPitch, resultArray);
+    wtu.verifyResult(imgData.data, resultArray, resultArray.length, "Validation of data filled in WebCLImage created from ImageData.");
+} catch(e) {
+    testFailed(e.description);
+}
+
+/*
+ * Creating Buffer with HTMLCanvasElement.
+*/
+try {
+    var canvas = document.getElementById("inputCanvas");
+    var canvasContext = canvas.getContext("2d");
+    canvasContext.fillStyle="#FF0000";
+    canvasContext.fillRect(0, 0, 100, 100);
+    var canvasData = canvasContext.getImageData(0, 0, canvas.width, canvas.height);
+
+    var webCLImageWithCanvas = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, canvasData);
+
+    // Source pixel format is treated as 32-bit RGBA (8-bits per component) with non-premultiplied alpha
+    resultArraySize = canvas.width * canvas.height * 4;
+    resultArray = new Uint8Array(resultArraySize);
+    wtu.enqueueReadImage(webCLCommandQueue, webCLImageWithCanvas, true, origin, region, hostRowPitch, resultArray);
+    wtu.verifyResult(resultArray, canvasData.data, resultArray.length, "Validation of buffer created using canvas with size (100 * 100)");
+} catch(e) {
+    testFailed(e.description);
+}
+
+/*
+ *   Creating image and filling it with Image element.
+ */
+try {
+    var image = new Image();
+    image.src = "../../../resources/pebbleHalf.jpg";
+    image.onload = execute;
+} catch(e) {
+    testFailed("Unable to load HTML image element : " + e.name);
+}
+function execute() {
+    try {
+        var canvasForImage = document.getElementById("inputCanvasForImage");
+        var canvasContextForImage = canvasForImage.getContext("2d");
+        canvasContextForImage.drawImage(image, 0, 0);
+        var dataOfImage = canvasContextForImage.getImageData(0, 0, canvasForImage.width, canvasForImage.height);
+
+        var webCLImageWithImage = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, image);
+
+        // Source pixel format is treated as 32-bit RGBA (8-bits per component) with non-premultiplied alpha
+        resultArraySize = canvasForImage.width * canvasForImage.height * 4;
+        resultArray = new Uint8Array(resultArraySize);
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImageWithImage, true, [0, 0], [canvasForImage.width, canvasForImage.height], 0, resultArray);
+
+        wtu.verifyResult(dataOfImage.data, resultArray, resultArray.length, "Validation of data filled in WebCLImage created from HTMLImage");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    wtu.appendPostJSToHTML(document);
+}
+successfullyParsed = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueReadImage conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueReadImage functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var data, result, readOrigin, readRegion;
+    var imageWidth = 20, imageHeight = 20;
+    var origin = [0, 0];
+    var region = [imageWidth, imageHeight];
+
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+    var arrayType = wtu.getArrayTypeForChanneltype(webCLImageDescriptor.channelType);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptor.channelOrder);
+    var imageSizeInBytes = imageWidth * imageHeight * elementsPerPixel;
+
+    data = eval("new " + arrayType + "(imageSizeInBytes)");
+    wtu.generateRandomInt(data, imageSizeInBytes);
+    var webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor, data);
+
+    /*
+     * Testing for reading whole image.
+     */
+    try {
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        readOrigin = [0, 0];
+        readRegion = [imageWidth, imageHeight];
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, readOrigin, readRegion, 0, result);
+
+        wtu.verifyResult(data, result, imageSizeInBytes, "reading whole image");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+    *   Testing for reading first 10 pixels from image.
+    */
+    try  {
+        var partialReadSize = 10 * elementsPerPixel;
+        result = eval("new " + arrayType + "(10 * elementsPerPixel)");
+        readOrigin = [0, 0];
+        readRegion = [10, 1];
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, readOrigin, readRegion, 0, result);
+
+        wtu.verifyResult(data, result, partialReadSize, "reading first 10 pixels from image");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *   Testing for reading last 20 pixels from an image.
+     */
+    try {
+        var partialReadSize = 20 * elementsPerPixel;
+        result = eval("new " + arrayType + "(20 * elementsPerPixel)");
+        readOrigin = [0, 19];
+        readRegion = [20, 1];
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, readOrigin, readRegion, 0, result);
+
+        var aData = eval("new " + arrayType + "(data.buffer, result.BYTES_PER_ELEMENT * 19 * partialReadSize, partialReadSize)");
+        wtu.verifyResult(aData, result, partialReadSize, "reading last 20 pixels from image");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading only 1 pixel (first pixel) per row.
+     */
+    try {
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        hostRowPitch = imageWidth * elementsPerPixel * result.BYTES_PER_ELEMENT;
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, hostRowPitch, result);
+
+        var flag = false;
+        for (i = 0; i < imageSizeInBytes; i += hostRowPitch) {
+            for(j = 0; j < elementsPerPixel; j++) {
+                if (result[i+j] != data[i+j]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for reading 1 pixel (first pixel) per row.");
+        else
+            testFailed("Test failed for reading 1 pixel (first pixel) per row.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

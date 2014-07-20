@@ -1,0 +1,123 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCL waitForEvents conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+var callback = function()
+{
+    console.log("inside callback");
+}
+try {
+    debug("WebCL :: waitForEvents test case.");
+    debug("(sequence<WebCLEvent> eventWaitList, optional WebCLCallback whenFinished)");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+
+    /*
+     *  Testcases with uninitialised WebCLEvents.
+     */
+    var webCLEvent = wtu.createEvent();
+    shouldThrowExceptionName("webcl.waitForEvents([webCLEvent]);", "INVALID_EVENT_WAIT_LIST");
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webcl.waitForEvents([webCLEvent], callback);");
+    shouldThrowTypeError("webcl.waitForEvents([webCLEvent], new Object());");
+
+    /*
+     *  Testcases with initialised WebCLEvents.
+     */
+    var webCLEvent = wtu.createEvent();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var bufferSize = 512;
+    var srcBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, bufferSize);
+    var dstBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, bufferSize);
+    var srcOffset = 0, dstOffset = 0;
+    var numBytes = bufferSize;
+
+    wtu.enqueueCopyBuffer(webCLCommandQueue, srcBuffer, dstBuffer, srcOffset, dstOffset, numBytes, [], webCLEvent);
+    webCLCommandQueue.flush();
+
+    shouldBeUndefined("webcl.waitForEvents([webCLEvent]);");
+    shouldBeUndefined("webcl.waitForEvents([webCLEvent], callback);");
+    shouldThrowTypeError("webcl.waitForEvents([webCLEvent], new Object());");
+
+    /*
+     *  Testcases with webCLUserEvent.
+     */
+    var webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldThrowExceptionName("webcl.waitForEvents([webCLUserEvent]);", "INVALID_EVENT_WAIT_LIST");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldBeUndefined("webcl.waitForEvents([webCLUserEvent], callback);");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldThrowTypeError("webcl.waitForEvents([webCLUserEvent], new Object());");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+
+    // Testing for exceptions.
+    shouldThrowExceptionName("webcl.waitForEvents([]);", "INVALID_VALUE");
+
+    var releasedEvent = wtu.createUserEvent(webCLContext);
+    wtu.release(releasedEvent);
+    shouldThrowExceptionName("webcl.waitForEvents([webCLUserEvent, releasedEvent], callback);", "INVALID_EVENT_WAIT_LIST");
+
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    wtu.setStatus(webCLUserEvent, -1);
+    shouldThrowExceptionName("webcl.waitForEvents([webCLUserEvent], callback);", "EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
+
+    var webCLContext1 = wtu.createContext();
+    var webCLCommandQueue1 = wtu.createCommandQueue(webCLContext1);
+    var webCLEvent1 = wtu.createEvent();
+    var webCLBuffer1 = wtu.createBuffer(webCLContext1, webcl.MEM_READ_ONLY, bufferSize);
+
+    var webCLContext2 = wtu.createContext();
+    var webCLCommandQueue2 = wtu.createCommandQueue(webCLContext2);
+    var webCLEvent2 = wtu.createEvent();
+    var webCLBuffer2 = wtu.createBuffer(webCLContext2, webcl.MEM_READ_ONLY, bufferSize);
+
+    var hostPtr = new Int32Array(bufferSize / 4);
+    wtu.enqueueReadBuffer(webCLCommandQueue1, webCLBuffer1, true, 0, numBytes, hostPtr, [], webCLEvent1);
+    wtu.enqueueReadBuffer(webCLCommandQueue2, webCLBuffer2, true, 0, numBytes, hostPtr, [], webCLEvent2);
+    shouldThrowExceptionName("webcl.waitForEvents([webCLEvent1, webCLEvent2]);", "INVALID_CONTEXT");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

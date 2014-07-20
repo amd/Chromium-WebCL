@@ -1,0 +1,147 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueWriteImage conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueWrite Image functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var data, result, writeOrigin, writeRegion;
+    var imageWidth = 20, imageHeight = 20;
+    var origin = [0, 0];
+    var region = [imageWidth, imageHeight];
+
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+    var arrayType = wtu.getArrayTypeForChanneltype(webCLImageDescriptor.channelType);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptor.channelOrder);
+    var imageSizeInBytes = imageWidth * imageHeight * elementsPerPixel;
+    var webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+    data = eval("new " + arrayType + "(imageSizeInBytes)");
+    wtu.generateRandomInt(data, imageSizeInBytes);
+    result = eval("new " + arrayType + "(imageSizeInBytes)");
+
+    /*
+    *   Testing for writing first 10 pixels to image.
+    */
+    try  {
+        var partialWriteSize = 10 * elementsPerPixel;
+        writeOrigin = [0, 0];
+        writeRegion = [10, 1];
+
+        wtu.enqueueWriteImage(webCLCommandQueue, webCLImage, true, writeOrigin, writeRegion, 0, data);
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, 0, result);
+        var aResult = eval("new " +  arrayType + "(result.buffer, 0, 10 * elementsPerPixel)");
+        wtu.verifyResult(data, aResult, 10, "writing first 10 pixels to image");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *   Testing for writing last 20 pixels to an image.
+     */
+
+    try {
+        var partialWriteSize = 20 * elementsPerPixel;
+        writeOrigin = [0, 19];
+        writeRegion = [20, 1];
+
+        wtu.enqueueWriteImage(webCLCommandQueue, webCLImage, true, writeOrigin, writeRegion, 0, data);
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, 0, result);
+        var aResult = eval("new " + arrayType + "(result.buffer, result.BYTES_PER_ELEMENT * 19 * partialWriteSize, partialWriteSize)");
+        wtu.verifyResult(data, aResult, 20, "writing last 20 pixels to image");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for writing only 1 pixel (first pixel) per row.
+     */
+    try {
+        hostRowPitch = imageWidth * elementsPerPixel * data.BYTES_PER_ELEMENT;
+
+        wtu.enqueueWriteImage(webCLCommandQueue, webCLImage, true, origin, region, hostRowPitch, data);
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, 0, result);
+        var flag = false;
+        for (i = 0; i < imageSizeInBytes; i += hostRowPitch) {
+            for(j = 0; j < elementsPerPixel; j++) {
+                if (result[i+j] != data[i+j]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for writing 1 pixel (first pixel) per row.");
+        else
+            testFailed("Test failed for writing 1 pixel (first pixel) per row.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+
+    /*
+     *  Testing for writing whole image.
+     */
+
+    try {
+        writeOrigin = [0, 0];
+        writeRegion = [imageWidth, imageHeight];
+
+        wtu.enqueueWriteImage(webCLCommandQueue, webCLImage, true, writeOrigin, writeRegion, 0, data);
+
+        wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, 0, result);
+        wtu.verifyResult(data, result, imageSizeInBytes, "writing whole image");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

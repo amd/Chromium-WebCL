@@ -1,0 +1,92 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext createFromGLRenderbuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+    <script src="../../../resources/clgl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" />
+</div>
+<script>
+try {
+    debug("WebCLContext :: createFromGLRenderbuffer test case.");
+    debug("\n(CLenum memFlags, WebGLRenderbuffer renderbuffer)");
+
+    var wtu = WebCLTestUtils;
+    var clgl = WebCLGLTestUtils;
+
+    var canvas = document.getElementById("inputCanvas");
+    var glContext = canvas.getContext("experimental-webgl");
+
+    if (!wtu.enableExtension(webcl, "KHR_gl_sharing")) {
+        throw { description : "Failed to enable extension : KHR_gl_sharing. Exitting..."};
+    }
+
+    var glRenderBuffer = clgl.createRenderbuffer(glContext);
+    clgl.bindRenderbuffer(glContext, glContext.RENDERBUFFER, glRenderBuffer);
+    var webCLGLContext = wtu.createContext(glContext);
+
+    // Testing for MEM_READ_ONLY Buffer.
+    shouldBeType("webCLGLContext.createFromGLRenderbuffer(webcl.MEM_READ_ONLY, glRenderBuffer);", "WebCLImage");
+
+    // Testing for MEM_WRITE_ONLY Buffer.
+    shouldBeType("webCLGLContext.createFromGLRenderbuffer(webcl.MEM_WRITE_ONLY, glRenderBuffer);", "WebCLImage");
+
+    // Testing for MEM_READ_WRITE Buffer.
+    shouldBeType("webCLGLContext.createFromGLRenderbuffer(webcl.MEM_READ_WRITE, glRenderBuffer);", "WebCLImage");
+
+    // Testing for invalid memFlags.
+    shouldThrowExceptionName("webCLGLContext.createFromGLRenderbuffer(invalid_CLenum, glRenderBuffer);", "INVALID_VALUE");
+
+    // Testing for invalid Renderbuffer
+    var glRenderBufferUnbound = clgl.createRenderbuffer(glContext)
+    shouldThrowExceptionName("webCLGLContext.createFromGLRenderbuffer(webcl.MEM_READ_ONLY, glRenderBufferUnbound);", "INVALID_GL_OBJECT");
+
+    /*
+    *  Creating without glContext.
+    */
+    var webCLContext = wtu.createContext();
+    shouldThrowExceptionName("webCLContext.createFromGLRenderbuffer(webcl.MEM_READ_WRITE, glRenderBuffer);", "INVALID_CONTEXT");
+
+    // FIXME : To add test cases to check exceptions INVALID_IMAGE_FORMAT_DESCRIPTOR and INVALID_OPERATION.
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

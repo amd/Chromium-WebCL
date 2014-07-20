@@ -1,0 +1,185 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLProgram build conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+var callback = function()
+{
+    console.log("Inside callback");
+}
+
+try {
+    debug("WebCLProgram :: build() test case.\n");
+    debug("(optional sequence<WebCLDevice>? devices, optional DOMString? options, optional WebCLCallback whenFinished)");
+    var wtu = WebCLTestUtils;
+    var kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevice, webCLContext, webCLProgram;
+
+    /*
+    *   This function gets the device of the 'type' on the 'webCLPlatform', sent as parameters to the function by caller.
+    *   And creates context upon that platform and deviceType and creates a program and returns device.
+    */
+
+    var createContextAndProgram = function (webCLPlatform, type) {
+        try {
+            webCLDevice = wtu.getDevices(webCLPlatform, type);
+            webCLContext = wtu.createContext(webCLDevice);
+            webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+            return webCLDevice;
+        } catch (e) {
+            if (e.name === "DEVICE_NOT_FOUND")
+                testPassed("For the device type : " + type + ", DEVICE_NOT_FOUND exception was thrown");
+            else
+                testFailed("For the device type : " + type + ", Exception was thrown while creating device specific context & program : " + e.name);
+            return null;
+        }
+    }
+
+    var webCLDeviceCPU = createContextAndProgram(webCLPlatform, webcl.DEVICE_TYPE_CPU);
+    if (webCLDeviceCPU)
+        shouldBeUndefined("webCLProgram.build(webCLDeviceCPU);");
+
+    var webCLDeviceGPU = createContextAndProgram(webCLPlatform, webcl.DEVICE_TYPE_GPU);
+    if (webCLDeviceGPU)
+        shouldBeUndefined("webCLProgram.build(webCLDeviceGPU);");
+
+    var webCLDeviceALL = createContextAndProgram(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    if (webCLDeviceALL)
+        shouldBeUndefined("webCLProgram.build(webCLDeviceALL);");
+
+    var webCLDeviceDEFAULT = createContextAndProgram(webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);
+    if (webCLDeviceDEFAULT)
+        shouldBeUndefined("webCLProgram.build(webCLDeviceDEFAULT);");
+
+    var webCLDeviceACCELERATOR = createContextAndProgram(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);
+    if (webCLDeviceACCELERATOR)
+        shouldBeUndefined("webCLProgram.build(webCLDeviceACCELERATOR);");
+
+    // Testing for build-options.
+    var webCLDevice = wtu.getDevices(webCLPlatform);
+    webCLContext = wtu.createContext();
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+
+    shouldBeUndefined("webCLProgram.build();");
+    shouldBeUndefined("webCLProgram.build(webCLDevice);");
+    shouldBeUndefined("webCLProgram.build(null, \"-cl-opt-disable\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-D SIZE\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-D SIZE=1024\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-opt-disable\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-single-precision-constant\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-denorms-are-zero\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-mad-enable\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-no-signed-zeros\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-unsafe-math-optimizations\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-finite-math-only\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-cl-fast-relaxed-math\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-w\");");
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-Werror\");");
+
+    shouldBeUndefined("webCLProgram.build(webCLDevice, \"-Werror -cl-fast-relaxed-math\");");
+
+    // Test for exception "INVALID_BUILD_OPTIONS".
+    shouldThrowExceptionName("webCLProgram.build(webCLDevice, \"-cl-strict-aliasing\");", "INVALID_BUILD_OPTIONS");
+    shouldThrowExceptionName("webCLProgram.build(webCLDevice, \"-invalid-build-option\");", "INVALID_BUILD_OPTIONS");
+    shouldThrowExceptionName("webCLProgram.build(webCLDevice, \"-cl-std=1.0\");", "INVALID_BUILD_OPTIONS");
+    shouldThrowExceptionName("webCLProgram.build(webCLDevice, \"-D\");", "INVALID_BUILD_OPTIONS");
+
+    // Testing with callback. Each time creating a new WebCLProgram, thereby not affecting build of any other program(s).
+    webCLProgram1 = wtu.createProgram(webCLContext, kernelSource);
+    shouldBeUndefined("webCLProgram1.build(null, null, callback);");
+
+    webCLProgram2 = wtu.createProgram(webCLContext, kernelSource);
+    shouldBeUndefined("webCLProgram2.build(webCLDevice, null, callback);");
+
+    webCLProgram3 = wtu.createProgram(webCLContext, kernelSource);
+    shouldBeUndefined("webCLProgram3.build(null, \"-cl-fast-relaxed-math\", callback);");
+
+    webCLProgram4 = wtu.createProgram(webCLContext, kernelSource);
+    shouldBeUndefined("webCLProgram4.build(webCLDevice, \"-cl-fast-relaxed-math\", callback);");
+
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowTypeError("webCLProgram.build(null, null, new Object());");
+
+    // Testing for exception "INVALID_OPERATION".
+    wtu.build(webCLProgram, webCLDevice);
+    wtu.createKernel(webCLProgram, "square");
+    shouldThrowExceptionName("webCLProgram.build(webCLDevice);", "INVALID_OPERATION");
+
+    // Testing for exception "BUILD_PROGRAM_FAILURE".
+    kernelSource = wtu.readKernel("../../../resources/kernels/nbody_simulation_bad.cl");
+    var webCLProgramBadKernel = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowExceptionName("webCLProgramBadKernel.build(webCLDevice);", "BUILD_PROGRAM_FAILURE");
+
+    /* Crashes AMD driver
+    kernelSource = wtu.readKernel("../../../resources/kernels/sample_kernel_bad_name.cl");
+    var webCLProgramBadKernelName = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowExceptionName("webCLProgramBadKernelName.build(webCLDevice);", "BUILD_PROGRAM_FAILURE");
+    */
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/kernel_with_struct_argument.cl");
+    var webCLProgramWithStructure = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowExceptionName("webCLProgramWithStructure.build(webCLDevice);", "BUILD_PROGRAM_FAILURE");
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/sample_kernel_code_bad.cl");
+    var webCLProgramBadCode = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowExceptionName("webCLProgramBadCode.build(webCLDevice);", "BUILD_PROGRAM_FAILURE");
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/empty_kernel.cl");
+    var webCLProgramEmptyKernel = wtu.createProgram(webCLContext, kernelSource);
+    shouldThrowExceptionName("webCLProgramEmptyKernel.build(webCLDevice);", "BUILD_PROGRAM_FAILURE");
+
+    // Testing for exception "INVALID_DEVICE".
+    var devices = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    if (devices.length > 1) {
+        var webCLDevice1 = devices[0];
+        var webCLContext1 = wtu.createContext(webCLDevice1);
+        kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+        var webCLProgram1 = wtu.createProgram(webCLContext1, kernelSource);
+        var webCLDevice2 = devices[1];
+        shouldThrowExceptionName("webCLProgram1.build([webCLDevice2]);", "INVALID_DEVICE");
+    }
+
+    // FIXME :: Add test case to verify exception "INVALID_OPERATION".
+
+} catch (e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

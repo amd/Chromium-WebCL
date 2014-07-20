@@ -1,0 +1,1120 @@
+<!--
+
+/*
+** Copyright (c) 2012 The Khronos Group Inc.
+**
+** Permission is hereby granted, free of charge, to any person obtaining a
+** copy of this software and/or associated documentation files (the
+** "Materials"), to deal in the Materials without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Materials, and to
+** permit persons to whom the Materials are furnished to do so, subject to
+** the following conditions:
+**
+** The above copyright notice and this permission notice shall be included
+** in all copies or substantial portions of the Materials.
+**
+** THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+*/
+
+// Modified by Samsung Electronics Corporation for WebCL
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebCL Conformance Tests</title>
+<style>
+  body {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      max-height:100%;
+      font-family: monospace;
+      overflow: hidden;
+    }
+
+  #testlist {
+    position:fixed;
+    top:355px;
+    left:0;
+    right:0;
+    bottom:0px;
+    overflow:auto;
+    padding:1em;
+  }
+
+  #header {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    overflow:auto;
+  }
+
+  #info {
+    text-align: center;
+    min-width: 300px;
+  }
+
+  table {
+    width: 100%;
+    height: 100%;
+  }
+  #frames td {
+      border: 1px solid black;
+      min-height: 1px;
+      min-width: 1px;
+  }
+  #frames t
+  .timeout { }
+  .success { }
+  .fail { }
+  .testpage { border: 1px solid black; background-color: #ccc; overflow:hidden; }
+  .testpagesuccess { border: 1px solid black; background-color: #8F8; }
+  .testpagefail { border: 1px solid black; background-color: #F88; }
+  .testpageskipped { border: 1px solid black; background-color: #eee; }
+  .testpagetimeout { border: 1px solid black; background-color: #FC8; }
+  .nowebcl { font-weight: bold; color: red; }
+  #error-wrap {
+      float: left;
+      position: relative;
+      left: 50%;
+  }
+  #error {
+     color: red;
+     float: left;
+     position: relative;
+     left: -50%;
+     text-align: left;
+  }
+  ul {
+    list-style: none;
+    padding-left: 1em;
+  }
+</style>
+
+<script type="text/javascript" src="resources/webcl-test-harness.js"></script>
+<script type="text/javascript" src="resources/cl_global.js"></script>
+<script>
+"use strict";
+var CONFORMANCE_TEST_VERSION = "Working Draft";
+
+var OPTIONS = {
+  version: CONFORMANCE_TEST_VERSION,
+  frames: 1,
+  allowSkip: 0
+};
+
+function start() {
+
+  loading.style.display = "block";
+  function log(msg) {
+    if (window.console && window.console.log) {
+      window.console.log(msg);
+    }
+  }
+
+  function createWebCLContext()
+  {
+    var context = self.webcl;
+    if(typeof(webcl) === "undefined" || !context) {
+        console.error("WebCL compute context is yet to be defined");
+        throw { name : "WebCLException", message : "WebCL compute context is yet to be defined."};
+    }
+    return context;
+  }
+
+  var reportType = WebCLTestHarnessModule.TestHarness.reportType;
+  var pageCount = 0;
+  var folderCount = 0;
+  var autoScroll = true;
+
+  var Page = function(reporter, folder, testIndex, url) {
+    this.reporter = reporter;
+    this.folder = folder;
+    this.url = url;
+    this.totalTests = 0;
+    this.totalSuccessful = 0;
+    this.totalTimeouts = 0;
+    this.totalSkipped = 0;
+    this.testIndex = testIndex;
+    var that = this;
+
+    this.elementId = "page" + pageCount++;
+    var li = reporter.localDoc.createElement('li');
+    li.id = this.elementId;
+    var div = reporter.localDoc.createElement('div');
+    var check = reporter.localDoc.createElement('input');
+    check.type = 'checkbox';
+    check.checked = true;
+    div.appendChild(check);
+    check.onclick = function() {
+        if (!that.folder.checked())
+            // Since parent is disabled, disabling this checkbox.
+            return false;
+        else {
+            if (!this.checked) {
+                that.totalsElem.textContent = ' SKIPPED';
+                that.elem.setAttribute("class", "testpageskipped");
+
+                // Removing all previous failure/skipped cases' description.
+                while (that.resultElem.hasChildNodes()) {
+                    that.resultElem.removeChild(that.resultElem.childNodes[0]);
+                }
+
+                // Disabling 'expandCollapseButton' button.
+                var divChildren = that.elem.getElementsByTagName('DIV')[0].children;
+                for (var i = 0; i < divChildren.length; i++) {
+                    if (divChildren[i].name == 'expandCollapseButton') {
+                        divChildren[i].disabled = true;
+                        divChildren[i].value = 'view more';
+                        break;
+                    }
+                }
+
+            } else {
+                that.totalsElem.textContent = ""; // Removing result of previous run.
+                that.elem.setAttribute("class", "testpage");
+            }
+        }
+
+    }
+    var button = reporter.localDoc.createElement('input');
+    button.type = 'button';
+    button.value = 'run';
+    button.onclick = function() {
+      autoScroll = false;
+      reporter.runTest(url);
+      Results.style.display = "block";
+    };
+
+    var expandCollapseButton = reporter.localDoc.createElement('input');
+    expandCollapseButton.type = 'button';
+    expandCollapseButton.disabled= true;
+    expandCollapseButton.setAttribute('name', 'expandCollapseButton');
+    expandCollapseButton.value = 'view more';
+    expandCollapseButton.style.float = "right";
+    expandCollapseButton.onclick = function() {
+        if (that.resultElem.style.display == "none") {
+            that.resultElem.style.display = "block";
+            this.value = 'view less';
+        } else {
+            that.resultElem.style.display = "none";
+            this.value = 'view more';
+        }
+    }
+
+    if (reporter.noWebCL) {
+      button.disabled = true;
+    }
+    div.appendChild(button);
+    var a = reporter.localDoc.createElement('a');
+    a.href = url;
+    a.target = "_blank";
+    var node = reporter.localDoc.createTextNode(url);
+    a.appendChild(node);
+    a.onclick = function() {
+        autoScroll = false;
+        reporter.runTest(url);
+        Results.style.display = "block";
+        return false;
+    };
+    div.appendChild(a);
+    li.setAttribute('class', 'testpage');
+    li.appendChild(div);
+    var ul = reporter.localDoc.createElement('ul');
+    var node = reporter.localDoc.createTextNode('');
+    li.appendChild(ul);
+    div.appendChild(node);
+    this.totalsElem = node;
+    this.resultElem = ul;
+    this.elem = li;
+    this.check = check;
+    div.appendChild(expandCollapseButton);
+  };
+
+  Page.prototype.addResult = function(msg, success, skipped) {
+    ++this.totalTests;
+    if (success === undefined) {
+      ++this.totalTimeouts;
+      var result = "timeout";
+      var css = "timeout";
+    } else if (skipped) {
+        ++this.totalSkipped;
+        // don't report skipped.
+        return;
+    } else if (success) {
+        ++this.totalSuccessful;
+      // don't report success.
+      return;
+    } else {
+      var result = this.totalTests + " : failed";
+      var css = "fail";
+      this.testFailures.push(this.totalTests);
+    }
+
+    var divChildren = this.elem.getElementsByTagName('DIV')[0].children;
+    for (var i = 0; i < divChildren.length; i++) {
+        if (divChildren[i].name == 'expandCollapseButton') {
+            divChildren[i].disabled = false;
+            break;
+        }
+    }
+
+    var node = this.reporter.localDoc.createTextNode(result + ': ' + msg);
+    var li = this.reporter.localDoc.createElement('li');
+    li.appendChild(node);
+    li.setAttribute('class', css);
+    this.resultElem.appendChild(li);
+    this.resultElem.style.display = "none";
+  };
+
+  Page.prototype.startPage = function() {
+    if (autoScroll && this.elem.scrollIntoView) {
+      this.elem.scrollIntoView(false);
+    }
+    this.totalTests = 0;
+    this.totalSuccessful = 0;
+    this.totalTimeouts = 0;
+    this.totalSkipped = 0;
+    this.testFailures = [];
+    // remove previous results.
+    while (this.resultElem.hasChildNodes()) {
+      this.resultElem.removeChild(this.resultElem.childNodes[0]);
+    }
+    this.totalsElem.textContent = '';
+    return this.check.checked && this.folder.checked();
+  };
+
+  Page.prototype.firstTestIndex = function() {
+    return this.testIndex;
+  };
+
+  Page.prototype.finishPage = function(success, skipped, isFolder) {
+    if (isFolder) {
+        var frameElement = document.getElementById("frames");
+        while (frameElement.hasChildNodes()) {
+        if (frameElement.tagName == "IFRAME")
+            break;
+        else
+            frameElement = frameElement.childNodes[0];
+        }
+        var frameConsole = frameElement.contentDocument.getElementById("console");
+        if (frameConsole) {
+            while (frameConsole.hasChildNodes()) {
+                frameConsole.removeChild(frameConsole.childNodes[0]);
+            }
+        }
+    }
+    document.getElementById('platformDevices').style.display = 'block';
+    if(this.totalSkipped) {
+      var msg = '  SKIPPED';
+    } else {
+      var msg = ' (' + this.totalSuccessful + ' of ' + this.totalTests + ' passed)';
+    }
+
+    if (success === undefined) {
+      var css = 'testpagetimeout';
+      msg = '(*timeout*)';
+      ++this.totalTests;
+      ++this.totalTimeouts;
+    } else if (this.totalSkipped) {
+      var css = 'testpageskipped';
+    } else if (this.totalSuccessful != this.totalTests) {
+      var css = 'testpagefail';
+    } else {
+      var css = 'testpagesuccess';
+    }
+    this.elem.setAttribute('class', css);
+    this.totalsElem.textContent = msg;
+  };
+
+  Page.prototype.enableTest = function(re) {
+    if (this.url.match(re)) {
+      this.check.checked = true;
+      this.folder.enableUp_();
+    }
+  };
+
+  Page.prototype.disableTest = function(re) {
+    if (this.url.match(re)) {
+      this.check.checked = false;
+    }
+  };
+
+  var Folder = function(reporter, folder, depth, opt_name) {
+    this.reporter = reporter;
+    this.depth = depth;
+    this.name = opt_name || "";
+    this.subFolders = {};
+    this.pages = [];
+    this.items = [];
+    this.folder = folder;
+    var that = this;
+
+    var doc = reporter.localDoc;
+    this.elementId = "folder" + folderCount++;
+    var li = doc.createElement('li');
+    li.id = this.elementId;
+    var div = doc.createElement('div');
+    var check = doc.createElement('input');
+    check.type = 'checkbox';
+    check.checked = true;
+    div.appendChild(check);
+    check.onclick = function() {
+        // Check if not root, and check for checked status of parent folder.
+        if (that.folder ? !(that.folder.checked()) : false)
+            // Since parent is disabled, disabling this checkbox.
+            return false;
+    }
+    var button = doc.createElement('input');
+    button.type = 'button';
+    button.value = 'run';
+    button.onclick = function() {
+      autoScroll = true;
+      that.run();
+      Results.style.display = "block";
+    };
+    if (reporter.noWebCL) {
+      button.disabled = true;
+    }
+    div.appendChild(button);
+    var h = doc.createElement('span');
+    h.appendChild(doc.createTextNode(this.name));
+    div.appendChild(h);
+    var ul = doc.createElement('ul');
+    li.appendChild(div);
+    li.appendChild(ul);
+    this.childUL = ul;
+    this.elem = li;
+    this.check = check;
+  };
+
+  Folder.prototype.checked = function() {
+    return this.check.checked &&
+        (this.folder ? this.folder.checked() : true);
+  };
+
+  Folder.prototype.firstTestIndex = function() {
+    return this.items[0].firstTestIndex();
+  };
+
+  Folder.prototype.numChildren = function() {
+    var numChildren = 0;
+    for (var name in this.subFolders) {
+      numChildren += this.subFolders[name].numChildren();
+    }
+    return numChildren + this.pages.length;
+  };
+
+  Folder.prototype.run = function() {
+    var firstTestIndex = this.firstTestIndex();
+    var count = this.numChildren();
+    log("run tests: " + firstTestIndex + " to " + (firstTestIndex + count - 1))
+    testHarness.runTests({start: firstTestIndex, count: count, isFolder: true});
+  };
+
+  Folder.prototype.getSubFolder = function(name) {
+    var subFolder = this.subFolders[name];
+    if (subFolder === undefined) {
+      subFolder = new Folder(this.reporter, this, this.depth + 1, name);
+      this.subFolders[name] = subFolder;
+      this.items.push(subFolder);
+      this.childUL.appendChild(subFolder.elem);
+    }
+    return subFolder;
+  };
+
+  Folder.prototype.getOrCreateFolder = function(url) {
+    var parts = url.split('/');
+    var folder = this;
+    for (var pp = 0; pp < parts.length - 1; ++pp) {
+      folder = folder.getSubFolder(parts[pp]);
+    }
+    return folder;
+  };
+
+  Folder.prototype.addPage = function(page) {
+    this.pages.push(page);
+    this.items.push(page);
+    this.childUL.appendChild(page.elem);
+  };
+
+  Folder.prototype.disableTest = function(re, opt_forceRecurse) {
+    var recurse = true;
+    if (this.name.match(re)) {
+      this.check.checked = false;
+      recurse = opt_forceRecurse;
+    }
+    if (recurse) {
+      for (var name in this.subFolders) {
+        this.subFolders[name].disableTest(re, opt_forceRecurse);
+      }
+      for (var ii = 0; ii < this.pages.length; ++ii) {
+        this.pages[ii].disableTest(re);
+      }
+    }
+  };
+
+  Folder.prototype.enableUp_ = function() {
+    this.check.checked = true;
+    var parent = this.folder;
+    if (parent) {
+      parent.enableUp_();
+    }
+  }
+
+  Folder.prototype.enableTest = function(re) {
+    if (this.name.match(re)) {
+      this.enableUp_();
+    }
+    for (var name in this.subFolders) {
+      this.subFolders[name].enableTest(re);
+    }
+    for (var ii = 0; ii < this.pages.length; ++ii) {
+      this.pages[ii].enableTest(re);
+    }
+  };
+
+  var Reporter = function(iframes) {
+    this.localDoc = document;
+    this.resultElem = document.getElementById("results");
+    this.fullResultsElem = document.getElementById("fullresults");
+    var node = this.localDoc.createTextNode('');
+    this.fullResultsElem.appendChild(node);
+    this.fullResultsNode = node;
+    this.iframes = iframes;
+    this.currentPageElem = null;
+    this.totalPages = 0;
+    this.pagesByURL = {};
+    //var canvas = document.getElementById("webclcheck");
+    var ctx = createWebCLContext();
+    this.noWebCL = !ctx;
+    this.contextInfo = {};
+    this.root = new Folder(this, null, 0, "all");
+    while (this.resultElem.hasChildNodes()) {
+        this.resultElem.removeChild(this.resultElem.childNodes[0]);
+    }
+    this.resultElem.appendChild(this.root.elem);
+    this.callbacks = { };
+
+};
+
+  Reporter.prototype.enableTest = function(name) {
+    this.root.enableTest(name);
+  };
+
+  Reporter.prototype.disableTest = function(name) {
+    this.root.disableTest(name);
+  };
+
+  Reporter.prototype.disableAllTests = function() {
+    this.root.disableTest(".*", true);
+  };
+
+  Reporter.prototype.addEventListener = function(type, func) {
+    if (!this.callbacks[type]) {
+      this.callbacks[type] = [];
+    }
+    this.callbacks[type].push(func);
+  };
+
+  Reporter.prototype.executeListenerEvents_ = function(type) {
+    var callbacks = this.callbacks[type].slice(0);
+    for (var ii = 0; ii < callbacks.length; ++ii) {
+      setTimeout(callbacks[ii], 0);
+    }
+  };
+
+  Reporter.prototype.runTest = function(url) {
+    var page = this.pagesByURL[url];
+    document.getElementById('platformDevices').style.display = 'none';
+    testHarness.runTests({start: page.firstTestIndex(), count: 1, isFolder: false});
+  };
+
+  Reporter.prototype.getFolder = function(url) {
+    return this.root.getOrCreateFolder(url);
+  };
+
+  Reporter.prototype.addPage = function(url) {
+    var folder = this.getFolder(url);
+    var page = new Page(this, folder, this.totalPages, url);
+    folder.addPage(page);
+    ++this.totalPages;
+    this.pagesByURL[url] = page;
+  };
+
+  Reporter.prototype.startPage = function(url) {
+    var page = this.pagesByURL[url];
+    return page.startPage();
+  };
+
+  Reporter.prototype.addResult = function(url, msg, success, skipped) {
+    var page = this.pagesByURL[url];
+    page.addResult(msg, success, skipped);
+  };
+
+  Reporter.prototype.finishPage = function(url, success, skipped, isFolder) {
+    var page = this.pagesByURL[url];
+    document.getElementById('platformDevices').style.display = 'block';
+    page.finishPage(success, skipped, isFolder);
+  };
+
+  Reporter.prototype.displayFinalResults = function(msg, success) {
+    if (success) {
+      var totalTests = 0;
+      var totalSuccessful = 0;
+      var totalTimeouts = 0;
+      var totalSkipped = 0;
+      for (var url in this.pagesByURL) {
+        var page = this.pagesByURL[url];
+        totalTests += page.totalTests;
+        totalSuccessful += page.totalSuccessful;
+        totalTimeouts += page.totalTimeouts;
+        totalSkipped += page.totalSkipped;
+      }
+      var timeout = '';
+      if (totalTimeouts > 0) {
+        timeout = ', ' + totalTimeouts + ' timed out';
+      }
+      var msg = ' (' + totalSuccessful + ' of ' +
+                (totalTests-totalSkipped) + ' passed)'
+                + '  (' + totalSkipped + ' skipped)';
+      this.fullResultsNode.textContent = msg;
+
+      // generate a text summary
+      var tx = "";
+      tx += "WebCL Conformance Test Results\n";
+      tx += "Version " + OPTIONS.version + "\n";
+      tx += "\n";
+      tx += "-------------------\n\n";
+      tx += "User Agent: " + (navigator.userAgent ? navigator.userAgent : "(navigator.userAgent is null)") + "\n";
+      tx += "\n";
+      tx += "-------------------\n\n";
+      tx += "Test Summary (" + totalTests + " total tests):\n";
+      tx += "Tests PASSED: " + totalSuccessful + "\n";
+      tx += "Tests FAILED: " + (totalTests - totalSuccessful - totalSkipped) + "\n";
+      tx += "Tests TIMED OUT: " + totalTimeouts + "\n";
+      tx += "Tests SKIPPED: " + totalSkipped + "\n";
+      tx += "\n";
+      tx += "-------------------\n\n";
+      if (totalSuccessful < totalTests) {
+        tx += "Failures:\n\n";
+        for (var url in this.pagesByURL) {
+            var page = this.pagesByURL[url];
+            var pageTotalFail = page.totalTests - page.totalSuccessful - page.totalSkipped;
+            if (!(page.totalTests == 0 && page.totalTimeouts == 0) &&
+                pageTotalFail > 0)
+            {
+            tx += url + ": " + pageTotalFail + " tests failed. \t And they are : ";
+            tx += page.testFailures + ".";
+            if (page.totalTimeouts)
+                tx += " (" + page.totalTimeouts + " timed out)";
+            tx += "\n";
+            }
+        }
+      } else {
+        tx += "All tests PASSED\n\n";
+      }
+      tx += "\n";
+      tx += "-------------------\n\n";
+      tx += "Complete Test Results :\n\n";
+      var r = document.getElementById("testResultsAsText");
+      while (r.firstChild) r.removeChild(r.firstChild);
+      r.appendChild(document.createTextNode(tx));
+
+      var resultTable = document.createElement("table");
+      resultTable.setAttribute("border", "1");
+        var row = resultTable.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = "URL";
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = "pass";
+            var cell3 = row.insertCell(2);
+            cell3.innerHTML = "fail";
+            var cell4 = row.insertCell(3);
+            cell4.innerHTML = "timeout";
+            var cell5 = row.insertCell(4);
+            cell5.innerHTML = "skipped";
+            var cell6 = row.insertCell(5);
+            cell6.innerHTML = "total";
+      for (var url in this.pagesByURL) {
+        var page = this.pagesByURL[url];
+        if (!(page.totalTests == 0 && page.totalTimeouts == 0)) {
+            var row = resultTable.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = url;
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = page.totalSuccessful;
+            var cell3 = row.insertCell(2);
+            var pageTotalFail = page.totalTests - page.totalSuccessful - page.totalSkipped;
+            cell3.innerHTML = pageTotalFail;
+            var cell4 = row.insertCell(3);
+            cell4.innerHTML = page.totalTimeouts;
+            var cell5 = row.insertCell(4);
+            cell5.innerHTML = page.totalSkipped;
+            var cell6 = row.insertCell(5);
+            cell6.innerHTML = page.totalTests;
+        }
+      }
+      r.appendChild(resultTable);
+      var tx = "";
+      tx += "\n";
+      tx += "-------------------\n\n";
+      tx += "Generated on: " + (new Date()).toString() + "\n";
+
+      r.appendChild(document.createTextNode(tx));
+      document.getElementById("showTextSummary").style.visibility = "visible";
+
+      this.postResultsToServer(tx);
+    } else {
+      var e = document.getElementById("error");
+      e.innerHTML = msg;
+      this.postResultsToServer(msg);
+    }
+  };
+
+  Reporter.prototype.postTestStartToServer = function(resultText) {
+    if(OPTIONS.postResults == undefined || OPTIONS.postResults == 0) {
+      return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "/start", true);
+    xhr.send(null);
+  };
+
+  Reporter.prototype.postResultsToServer = function(resultText) {
+    if(OPTIONS.postResults == undefined || OPTIONS.postResults == 0) {
+      return;
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "/finish", true);
+    xhr.setRequestHeader("Content-Type", "text/plain");
+    xhr.send(resultText);
+  };
+
+  Reporter.prototype.ready = function() {
+    var loading = document.getElementById("loading");
+    loading.style.display = "none";
+    if (!this.noWebCL) {
+      var button = document.getElementById("runTestsButton");
+      button.disabled = false;
+      this.executeListenerEvents_("ready");
+    }
+  };
+
+  Reporter.prototype.reportFunc = function(type, url, msg, success, skipped, isFolder) {
+    switch (type) {
+      case reportType.ADD_PAGE:
+        return this.addPage(msg);
+      case reportType.READY:
+        return this.ready();
+      case reportType.START_PAGE:
+        return this.startPage(url);
+      case reportType.TEST_RESULT:
+        return this.addResult(url, msg, success, skipped);
+      case reportType.FINISH_PAGE:
+        return this.finishPage(url, success, skipped, isFolder);
+      case reportType.FINISHED_ALL_TESTS:
+        return this.displayFinalResults(msg, success);
+      case reportType.GET_PAGE:
+        return this.pagesByURL[url].totalTests;
+      default:
+        throw 'unhandled';
+        break;
+    };
+  };
+
+  var getURLOptions = function(obj) {
+    var s = window.location.href;
+    var q = s.indexOf("?");
+    var e = s.indexOf("#");
+    if (e < 0) {
+      e = s.length;
+    }
+    var query = s.substring(q + 1, e);
+    var pairs = query.split("&");
+    for (var ii = 0; ii < pairs.length; ++ii) {
+      var keyValue = pairs[ii].split("=");
+      var key = keyValue[0];
+      var value = decodeURIComponent(keyValue[1]);
+      obj[key] = value;
+    }
+  };
+
+  getURLOptions(OPTIONS);
+
+  document.getElementById("testVersion").innerHTML = OPTIONS.version;
+
+  // Make iframes
+  var makeIFrames = function() {
+    var toparea = document.getElementById("toparea");
+    var frame = document.getElementById("frames");
+    while (frame.hasChildNodes()) {
+        frame.removeChild(frame.childNodes[0]);
+    }
+    var areaWidth = Math.max(100, toparea.clientWidth - 300);
+    var areaHeight = Math.max(100, frame.clientHeight);
+
+    var numCells = OPTIONS.frames;
+
+    var gridWidth = Math.max(1, Math.ceil(Math.sqrt(numCells)));
+    var gridHeight = gridWidth;
+    var bestAspect = 99999;
+    var bestNumEmptyCells = 99999;
+    var bestNumEmptyCellsColumns = 0;
+    var bestNumEmptyCellsAspect = 99999;
+    var minGoodAspect = 1 / 3;
+    var maxGoodAspect = 3 / 1;
+
+    for (var columns = 1; columns <= numCells; ++columns) {
+        var rows = Math.ceil(numCells / columns);
+        var cellWidth = areaWidth / columns;
+        var cellHeight = areaHeight / rows;
+        var cellAspect = cellWidth / cellHeight;
+        if (cellAspect >= minGoodAspect && cellAspect <= maxGoodAspect) {
+            var numEmptyCells = columns * rows - numCells;
+            // Keep the one with the least number of empty cells.
+            if (numEmptyCells < bestNumEmptyCells) {
+                bestNumEmptyCells = numEmptyCells;
+                bestNumEmptyCellsColumns = columns;
+                bestNumEmptyCellsAspect = cellAspect;
+            // If it's the same number of empty cells keep the one
+            // with the best aspect.
+            } else if (numEmptyCells == bestNumEmptyCells &&
+                  Math.abs(cellAspect - 1) <
+                  Math.abs(bestNumEmptyCellsAspect - 1)) {
+                bestNumEmptyCellsColumns = columns;
+                bestNumEmptyCellsAspect = cellAspect;
+            }
+        }
+        if (Math.abs(cellAspect - 1) < Math.abs(bestAspect - 1)) {
+            gridWidth = columns;
+            gridHeight = rows;
+            bestAspect = cellAspect;
+        }
+    }
+
+    // if we found an aspect with few empty cells use that.
+    var numEmptyCells = gridWidth * gridHeight - numCells;
+    if (bestNumEmptyCellsColumns && bestNumEmptyCells < numEmptyCells) {
+        gridWidth = bestNumEmptyCellsColumns;
+        gridHeight = Math.ceil(numCells / gridWidth);
+    }
+
+    var table = document.createElement("table");
+    table.style.height = areaHeight + "px";
+    var tbody = document.createElement("tbody");
+    var iframes = [];
+    for (var row = 0; row < gridHeight; ++row) {
+      var tr = document.createElement("tr");
+      for (var column = 0; column < gridWidth; ++column) {
+        var td = document.createElement("td");
+        if (numCells > 0) {
+          --numCells;
+          var iframe = document.createElement("iframe");
+          iframe.setAttribute("scrolling", "yes");
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          iframes.push(iframe);
+          td.appendChild(iframe);
+        }
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    frame.appendChild(table);
+    return iframes;
+  };
+  var iframes = makeIFrames();
+
+  var reporter = new Reporter(iframes);
+  var testHarness = new WebCLTestHarnessModule.TestHarness(
+      iframes,
+      '00_test_list.txt',
+      function(type, url, msg, success, skipped, isFolder) {
+        return reporter.reportFunc(type, url, msg, success, skipped, isFolder);
+      },
+      OPTIONS);
+  reporter.addEventListener("ready", function() {
+    // Set which tests to include.
+    if (OPTIONS.include) {
+      reporter.disableAllTests();
+      var includes = OPTIONS.include.split(",")
+      for (var ii = 0; ii < includes.length; ++ii) {
+        reporter.enableTest(new RegExp(includes[ii]));
+      }
+    }
+    // Remove tests based on skip=re1,re2 in URL.
+    if (OPTIONS.skip) {
+      var skips = OPTIONS.skip.split(",")
+      for (var ii = 0; ii < skips.length; ++ii) {
+        reporter.disableTest(new RegExp(skips[ii]));
+      }
+    }
+    // Auto run the tests if the run=1 in URL
+    if (OPTIONS.run != undefined && OPTIONS.run != 0) {
+      reporter.postTestStartToServer();
+      testHarness.runTests();
+    }
+  });
+  window.webclTestHarness = testHarness;
+  var button = document.getElementById("runTestsButton");
+  button.disabled = true;
+  button.onclick = function() {
+    autoScroll = true;
+    reporter.postTestStartToServer();
+    testHarness.runTests({isFolder: true});
+    Results.style.display = "block";
+  };
+  var textbutton = document.getElementById("showTextSummary");
+  textbutton.onclick = function() {
+    log("click");
+    var htmldiv = document.getElementById("testResultsHTML");
+    var textdiv = document.getElementById("testResultsText");
+    if (textdiv.style.display == "none") {
+      textdiv.style.display = "block";
+      htmldiv.style.display = "none";
+      textbutton.setAttribute("value", "display html summary");
+    } else {
+      textdiv.style.display = "none";
+      htmldiv.style.display = "block";
+      textbutton.setAttribute("value", "display text summary");
+    }
+  };
+  if (reporter.noWebCL) {
+    button.disabled = true;
+    var elem = document.getElementById("nowebcl");
+    elem.style.display = "";
+    reporter.postResultsToServer("Browser does not appear to support WebCL");
+  }
+}
+
+var webCLPlatforms;
+var webCLDevices;
+function initCL() {
+    // Fetch available platform and populate. By default, 0th platform is selected.
+    var option = document.createElement("option");
+    var platforms = document.getElementById("platforms");
+    webCLPlatforms = webcl.getPlatforms();
+
+    if (webCLPlatforms.length == 1) {
+        platforms.options[platforms.options.length] = new Option("Platform" + webCLPlatforms.length, webCLPlatforms.length - 1, true, true);
+        displayDevices();
+        var defaultDevice = webCLPlatforms[0].getDevices(webcl.DEVICE_TYPE_DEFAULT);
+        var defaultDeviceType = getDeviceType(defaultDevice[0]);
+        document.getElementById(defaultDeviceType).checked = true;
+        document.getElementById("platforms").disabled = true;
+        document.getElementById("lbl" + defaultDeviceType).innerHTML =
+            document.getElementById("lbl" + defaultDeviceType).innerHTML + " (default)";
+        getTestCases();
+    } else {
+        for (var i = 0; i < webCLPlatforms.length ; i++) {
+            platforms.options[platforms.options.length] = new Option("Platform" + (i + 1), i);
+        }
+    }
+
+    var webCLGlobalObject = CLGlobalVariables.getInstance();
+}
+
+var getDeviceType = function(webCLDevices) {
+    switch (webCLDevices.getInfo(webcl.DEVICE_TYPE)) {
+        case webcl.DEVICE_TYPE_CPU:
+            return 'CPU';
+        case webcl.DEVICE_TYPE_GPU:
+            return 'GPU';
+        case webcl.DEVICE_TYPE_ACCELERATOR:
+            return 'ACCELERATOR';
+        default:
+            return 'undefined';
+    }
+}
+
+function displayDevices() {
+    // Fetch the selected platform.
+    var results = document.getElementById("results");
+    for (var i = 0; i < results.childElementCount; i++) {
+        results.childNodes[i].style.display = "none";
+    }
+    var webCLPlatformIndex = document.getElementById('platforms').options[document.getElementById('platforms').selectedIndex].value;
+    var platform = webCLPlatforms[webCLPlatformIndex];
+    var webCLGlobalObject = CLGlobalVariables.getInstance();
+    webCLGlobalObject.setwebCLPlatformIndex(webCLPlatformIndex);
+
+    // Fetch available devices for selected platform and populate.
+    document.getElementById("devicesDiv").style.display = 'block';
+    var devices = document.getElementById("devices");
+    webCLDevices = platform.getDevices(webcl.DEVICE_TYPE_ALL);
+    while (devices.hasChildNodes()) {
+        devices.removeChild(devices.childNodes[0]);
+    }
+
+    if (webCLDevices != null) {
+        devices.innerHTML = devices.innerHTML + '<span  id="devicesSpan">Select device(s):</span>&nbsp;&nbsp;';
+        for (var j = 0; j < webCLDevices.length ; j++) {
+            var deviceType = getDeviceType(webCLDevices[j]);
+            var checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = j;
+            checkbox.id = deviceType;
+            devices.appendChild(checkbox);
+            var label = document.createElement('label');
+            label.appendChild(document.createTextNode((j+1) + "." + deviceType));
+            label.id="lbl" + deviceType;
+            devices.appendChild(label);
+        }
+        devices.innerHTML = devices.innerHTML;
+    } else {
+        console.error("Failed in fetching devices.");
+        return 0;
+    }
+}
+function displaySubmit() {
+    var inputElements = document.getElementsByTagName("input");
+    for (var i = 0; i < inputElements.length; i++) {
+        // Enabling "submit" button if atleast one of the devices is selected.
+        if (inputElements[i].type == "checkbox" && inputElements[i].checked) {
+                document.getElementById("submit").disabled = false;
+                return;
+        } else {
+            document.getElementById("submit").disabled = true;
+            console.error("No device is selected.");
+        }
+    }
+}
+
+function getTestCases() {
+    // Fetch selected device(s) and verify.
+    var finalResultText = document.getElementById("fullresults");
+    while (finalResultText.hasChildNodes()) {
+        finalResultText.removeChild(finalResultText.childNodes[0]);
+    }
+    var webCLGlobalObject = CLGlobalVariables.getInstance();
+
+    var selectedDeviceIndex = [];
+    var devices = document.getElementById("devices");
+    for (var j = 0; j < webCLDevices.length; j++) {
+        if (devices[j].checked)
+            selectedDeviceIndex.push(j);
+    }
+    webCLGlobalObject.setwebCLDevicesIndex(selectedDeviceIndex);
+
+    var strictModeCheckBox = document.getElementById("strictModeCheckBox");
+    var webCLGlobalObject = CLGlobalVariables.getInstance();
+    if (strictModeCheckBox.checked) {
+        webCLGlobalObject.setStrictFlag(true);
+    } else {
+        webCLGlobalObject.setStrictFlag(false);
+    }
+
+    // Display test cases.
+    document.getElementById("runTestsButton").disable = false;
+    document.getElementById("testResultsHTML").disbale = false;
+    document.getElementById("submit").disabled = true;
+    start();
+}
+
+</script>
+</head>
+<body onload="initCL()">
+
+<div id="testlist">
+
+        <div id="testResultsHTML">
+          <ul id="results">
+          </ul>
+        </div>
+        <div style="display: none;" id="testResultsText">
+          <pre id="testResultsAsText"></pre>
+        </div>
+
+</div> <!-- end of container -->
+
+<div id="header">
+
+    <div id="platformDevices">
+        <div id="platformDiv">
+            <span id="platformSpan">Select platform: <select autofocus="true" required="true" onChange="displayDevices(); return 0;" name="platforms" id="platforms"></span>
+                <option value="selectPlatform"> Select Platform</option>
+            </select>
+        </div>
+
+        <div id="strictMode" style="float: right;padding-right: 25px;">
+            <input type="checkbox" value="strictModeCheckBox" id="strictModeCheckBox" onclick="displaySubmit();"> Enable Strict-Mode</input>
+        </div>
+
+        <div id="devicesDiv" style="display: none;">
+                <form name="devices" id="devices" disabled=true onClick="displaySubmit(); return 0;" >
+                </form>
+        </div>
+
+        <span>
+            <input id="submit" type="button" name="submit" value="submit" onClick="getTestCases(); return 0;" disabled=true></input>
+        </span>
+    </div>
+
+<table border="2">
+  <tr style="height: 300px;">
+    <td>
+      <table id="toparea">
+        <tr>
+          <td style="width: 300px">
+            <div id="info">
+              <img src="resources/webcl-logo.png" /><br />
+              WebCL Conformance Test Runner<br/>
+              Version
+              <span id="testVersion">
+              </span>
+              <br/>
+              <input type="button" value="run tests" id="runTestsButton" disabled=true/>
+              <br/>
+              <input type="button" style="visibility: hidden;" value="display text summary" id="showTextSummary"/>
+              <div id="nowebcl" class="nowebcl" style="display: none;">
+                This browser does not appear to support WebCL
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+        <tr>
+
+         <td>
+            <div id="loading" style="display: none;">
+              Loading Tests...
+            </div>
+            <div id="Results" style="border: 1px; display: none;">
+              Results:
+              <span id="fullresults">
+              </span>
+            </div>
+            <canvas id="webclcheck" style="display: none;">
+            </canvas>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="error-wrap">
+              <pre id="error"></pre>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td id="frames"></td>
+  </tr>
+</table>
+</div> <!-- end of header -->
+
+</body>
+</html>

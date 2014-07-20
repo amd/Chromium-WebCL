@@ -1,0 +1,194 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueCopyImage conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueCopyImage functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var partialCopySize;
+    var data, result;
+    var dstImage, srcOrigin, dstOrigin, copySrcOrigin, copyDstOrigin, region, copyRegion;
+
+    var imageWidth = 20, imageHeight = 20;
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+    var arrayType = wtu.getArrayTypeForChanneltype(webCLImageDescriptor.channelType);
+    var elementsPerPixel = wtu.getBytesForChannelOrder(webCLImageDescriptor.channelOrder);
+    var imageSizeInBytes = imageWidth * imageHeight * elementsPerPixel;
+
+    // Create input buffer and populate with int8 values.
+    data = eval("new " + arrayType + "(imageSizeInBytes)");
+    wtu.generateRandomInt(data, imageSizeInBytes);
+    var srcImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor, data);
+    srcOrigin = [0, 0];
+    dstOrigin = [0, 0];
+    region = [imageWidth, imageHeight];
+
+    /*
+    *   Testing for copyImage with WebCLImages.
+    *   Copy whole image into destination image and verify.
+    */
+    try  {
+        copySrcOrigin = [0, 0];
+        copyDstOrigin = [0, 0];
+        copyRegion = [imageWidth, imageHeight];
+
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        dstImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+        wtu.enqueueCopyImage(webCLCommandQueue, srcImage, dstImage, copySrcOrigin, copyDstOrigin, copyRegion);
+
+        // Verify reading the dstImage -> result Array and check against input data array.
+        wtu.enqueueReadImage(webCLCommandQueue, dstImage, true, dstOrigin, region, 0, result);
+        wtu.verifyResult(data, result, imageSizeInBytes, "Test case for copying whole Image into destination image.");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+    *   Copies First 10 pixels of a source image to destination image.
+    */
+    try  {
+        partialCopySize = 10 * elementsPerPixel;
+        copySrcOrigin = [0, 0];
+        copyDstOrigin = [0, 0];
+        copyRegion = [10, 1];
+
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        dstImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+        wtu.enqueueCopyImage(webCLCommandQueue, srcImage, dstImage, copySrcOrigin, copyDstOrigin, copyRegion);
+
+        // Verify reading the dstImage -> result Array and check against input data array.
+        wtu.enqueueReadImage(webCLCommandQueue, dstImage, true, dstOrigin, region, 0, result);
+        wtu.verifyResult(data, result, partialCopySize, "Test case for copying first 10 pixels from srcImage into destination image.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+    *   Copies Last 20 pixels of a source image to destination image.
+    */
+    try  {
+        partialCopySize = 20 * elementsPerPixel;
+        copySrcOrigin = [0, 19];
+        copyDstOrigin = [0, 0];
+        copyRegion = [20, 1];
+
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        dstImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+        wtu.enqueueCopyImage(webCLCommandQueue, srcImage, dstImage, copySrcOrigin, copyDstOrigin, copyRegion);
+
+        // Verify reading the dstImage -> result Array and check against input data array.
+        wtu.enqueueReadImage(webCLCommandQueue, dstImage, true, dstOrigin, region, 0, result);
+        // Get a subarray of last row of data to validate it with copied values.
+        aData = eval("new " +  arrayType + "(data.buffer, result.BYTES_PER_ELEMENT * 20 * 19 * elementsPerPixel, 20 * elementsPerPixel)");
+        wtu.verifyResult(aData, result, partialCopySize, "Test case for copying last 20 pixels from srcImage into destination image.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+    *   Copies First pixel of a source image to destination image.
+    */
+    try  {
+        partialCopySize = 20 * elementsPerPixel;
+        copySrcOrigin = [0, 0];
+        copyDstOrigin = [0, 0];
+        copyRegion = [1, 20];
+
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        dstImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+        wtu.enqueueCopyImage(webCLCommandQueue, srcImage, dstImage, copySrcOrigin, copyDstOrigin, copyRegion);
+
+        // Verify reading the dstImage -> result Array and check against input data array.
+        wtu.enqueueReadImage(webCLCommandQueue, dstImage, true, dstOrigin, region, 0, result);
+        var results = 0;
+        for (var i = 0; i < result.length; i++)
+            if (result[i] != 0 && data[i] == result[i]) {
+                results++;
+                i = i + 3;
+            }
+
+        if (results == 20)
+            testPassed("Test passed for test case for copying first pixel from srcImage into destination image.");
+        else
+            testFailed("Test Failed for test case for copying first pixel from srcImage into destination image. Copied only " + results + " pixels. Expected " + partialCopySize+ ".");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+    /*
+    *   Copies first 40 pixels of a source image to end of destination image.
+    */
+    try  {
+        partialCopySize = 40 * elementsPerPixel;
+        copySrcOrigin = [0, 0];
+        copyDstOrigin = [0, 18];
+        copyRegion = [20, 2];
+        dstOrigin = [0, 18];
+
+        result = eval("new " + arrayType + "(imageSizeInBytes)");
+        dstImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+        wtu.enqueueCopyImage(webCLCommandQueue, srcImage, dstImage, copySrcOrigin, copyDstOrigin, copyRegion);
+
+        // Verify reading the dstImage -> result Array and check against input data array.
+        wtu.enqueueReadImage(webCLCommandQueue, dstImage, true, dstOrigin, copyRegion, 0, result);
+        // Get a subarray of last row of data to validate it with copied values.
+        wtu.verifyResult(data, result, partialCopySize, "Test case for copying first 40 pixels from srcImage to end of destination image.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

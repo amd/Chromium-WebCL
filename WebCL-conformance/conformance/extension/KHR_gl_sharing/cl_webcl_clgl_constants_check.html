@@ -1,0 +1,75 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCL CLGL constants check conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCL CLGL constants check test case.\n");
+    debug("Testing CLGL constants before enabling extension.\n");
+
+    shouldBeValueOrUndefined("webcl.INVALID_GL_OBJECT", "-60");
+    shouldBeValueOrUndefined("webcl.INVALID_MIP_LEVEL", "-62");
+    shouldBeValueOrUndefined("webcl.COMMAND_ACQUIRE_GL_OBJECTS", "0x11FF");
+    shouldBeValueOrUndefined("webcl.COMMAND_RELEASE_GL_OBJECTS", "0x1200");
+    shouldBeValueOrUndefined("webcl.GL_OBJECT_BUFFER", "0x2000");
+    shouldBeValueOrUndefined("webcl.GL_OBJECT_TEXTURE2D", "0x2001");
+    shouldBeValueOrUndefined("webcl.GL_OBJECT_RENDERBUFFER", "0x2003");
+    shouldBeValueOrUndefined("webcl.GL_TEXTURE_TARGET", "0x2004");
+    shouldBeValueOrUndefined("webcl.GL_MIPMAP_LEVEL", "0x2005");
+
+    debug("\nEnabling extension KHR_gl_sharing.\n");
+
+    var wtu = WebCLTestUtils;
+    wtu.enableExtension(webcl, "KHR_gl_sharing");
+
+    shouldEvaluateTo("webcl.INVALID_GL_OBJECT", "-60");
+    shouldEvaluateTo("webcl.INVALID_MIP_LEVEL", "-62");
+    shouldEvaluateTo("webcl.COMMAND_ACQUIRE_GL_OBJECTS", "0x11FF");
+    shouldEvaluateTo("webcl.COMMAND_RELEASE_GL_OBJECTS", "0x1200");
+    shouldEvaluateTo("webcl.GL_OBJECT_BUFFER", "0x2000");
+    shouldEvaluateTo("webcl.GL_OBJECT_TEXTURE2D", "0x2001");
+    shouldEvaluateTo("webcl.GL_OBJECT_RENDERBUFFER", "0x2003");
+    shouldEvaluateTo("webcl.GL_TEXTURE_TARGET", "0x2004");
+    shouldEvaluateTo("webcl.GL_MIPMAP_LEVEL", "0x2005");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createSampler conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("CreateSampler functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLSampler, samplerContext, samplerNormalizedCoords, samplerAddressingMode, samplerFilterMode;
+
+    var createAndVerifySampler = function(normalizedCoords, addressingModeString, filterModeString) {
+        try {
+            addressingMode = eval(addressingModeString);
+            filterMode = eval(filterModeString);
+            webCLSampler = wtu.createSampler(webCLContext, normalizedCoords, addressingMode, filterMode);
+
+            samplerContext = webCLSampler.getInfo(webcl.SAMPLER_CONTEXT);
+            if (samplerContext != webCLContext) {
+                testFailed("Verification of context associated with sampler");
+                return;
+            }
+
+            samplerNormalizedCoords = webCLSampler.getInfo(webcl.SAMPLER_NORMALIZED_COORDS);
+            if (samplerNormalizedCoords != normalizedCoords) {
+                testFailed("Verification of normalizedCoords associated with sampler");
+                return;
+            }
+
+            samplerAddressingMode = webCLSampler.getInfo(webcl.SAMPLER_ADDRESSING_MODE);
+            if (samplerAddressingMode != addressingMode) {
+                testFailed("Verification of addressingMode associated with sampler");
+                return;
+            }
+
+            samplerFilterMode = webCLSampler.getInfo(webcl.SAMPLER_FILTER_MODE);
+            if (samplerFilterMode != filterMode) {
+                testFailed("Verification of filterMode associated with sampler");
+                return;
+            }
+
+            testPassed("Creating and validating sampler with parameters : " + normalizedCoords + ", " + addressingModeString + " and " + filterModeString);
+            return;
+
+        } catch(e) {
+            testFailed("Exception thrown while creating and validating sampler: " + e.name);
+        }
+    }
+
+    // Creating sampler with addressing mode : ADDRESS_MIRRORED_REPEAT.
+    createAndVerifySampler(true, "webcl.ADDRESS_MIRRORED_REPEAT", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(true, "webcl.ADDRESS_MIRRORED_REPEAT", "webcl.FILTER_LINEAR");
+
+    // Creating sampler with addressing mode : ADDRESS_REPEAT.
+    createAndVerifySampler(true, "webcl.ADDRESS_REPEAT", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(true, "webcl.ADDRESS_REPEAT", "webcl.FILTER_LINEAR");
+
+    // Creating sampler with addressing mode : ADDRESS_CLAMP_TO_EDGE.
+    createAndVerifySampler(true, "webcl.ADDRESS_CLAMP_TO_EDGE", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(false, "webcl.ADDRESS_CLAMP_TO_EDGE", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(true, "webcl.ADDRESS_CLAMP_TO_EDGE", "webcl.FILTER_LINEAR");
+    createAndVerifySampler(false, "webcl.ADDRESS_CLAMP_TO_EDGE", "webcl.FILTER_LINEAR");
+
+    // Creating sampler with addressing mode : ADDRESS_CLAMP.
+    createAndVerifySampler(true, "webcl.ADDRESS_CLAMP", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(false, "webcl.ADDRESS_CLAMP", "webcl.FILTER_NEAREST");
+    createAndVerifySampler(true, "webcl.ADDRESS_CLAMP", "webcl.FILTER_LINEAR");
+    createAndVerifySampler(false, "webcl.ADDRESS_CLAMP", "webcl.FILTER_LINEAR");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

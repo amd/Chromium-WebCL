@@ -1,0 +1,129 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createCommandQueue conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("CreateCommandQueue functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDeviceALL = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    var webCLContext = wtu.createContext(webCLDeviceALL);
+
+    var createAndVerifyCommandQueue = function(device, properties, exceptionName) {
+        try {
+            var webCLCommandQueue;
+            // 'createCommandQueue' is not called through WTU to avoid usage of globally selected platform and device(s).
+            if (properties != undefined) {
+                try {
+                    webCLCommandQueue = webCLContext.createCommandQueue(device, properties);
+                } catch (e) {
+                    // Relaxing this, as it is not mandatory that a device supports QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE as per OpenCL 1.1 spec.
+                    if (e.name == exceptionName) {
+                        testPassed("Creation of commandQueue with property : " + properties + " threw exception : " + exceptionName);
+                        return;
+                    } else
+                        throw e;
+                }
+            } else if (device != undefined)
+                webCLCommandQueue = webCLContext.createCommandQueue(device);
+            else
+                webCLCommandQueue = webCLContext.createCommandQueue();
+
+            if (!(webCLCommandQueue instanceof WebCLCommandQueue)) {
+                testFailed("Failed to create a valid instance of commandQueue.");
+                return;
+            }
+
+            var commandQueueContext = webCLCommandQueue.getInfo(webcl.QUEUE_CONTEXT);
+            if (commandQueueContext != webCLContext) {
+                testFailed("Verification of context associated with commandQueue");
+                return;
+            }
+
+            if (properties != undefined) {
+                if (webCLCommandQueue.getInfo(webcl.QUEUE_PROPERTIES) !== properties) {
+                    testFailed("Verification of property associated with commandQueue");
+                    return;
+                }
+            }
+
+            if (device != undefined) {
+                if (webCLCommandQueue.getInfo(webcl.QUEUE_DEVICE) !== device) {
+                    testFailed("Verification of device associated with commandQueue");
+                    return;
+                }
+            }
+
+            properties = (properties != undefined) ? properties : null;
+            deviceType = (device != undefined) ? device.getInfo(webcl.DEVICE_TYPE) : null;
+            testPassed("Creating and validating commandQueue device of type :" + deviceType + " and property : " + properties);
+            return;
+        } catch(e) {
+            testFailed("Exception thrown while creating and validating commandQueue: " + e.name);
+        }
+    }
+
+    /*
+     *  Creating without optional params and with different properties.
+     */
+
+    createAndVerifyCommandQueue();
+
+    createAndVerifyCommandQueue(null, webcl.QUEUE_PROFILING_ENABLE);
+    createAndVerifyCommandQueue(null, webcl.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, "INVALID_QUEUE_PROPERTIES");
+
+    /*
+     *  Creating commandQueue with all available valid devices.
+     */
+    for (i = 0; i < webCLDeviceALL.length; i++) {
+        createAndVerifyCommandQueue(webCLDeviceALL[i]);
+        createAndVerifyCommandQueue(webCLDeviceALL[i], webcl.QUEUE_PROFILING_ENABLE);
+        // Calling this only if the device supports QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE.
+        var outOfOrderModeFlagMask = 0x1;
+        if (webCLDeviceALL[i].getInfo(webcl.DEVICE_QUEUE_PROPERTIES) & outOfOrderModeFlagMask)
+            createAndVerifyCommandQueue(webCLDeviceALL[i], webcl.QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, "INVALID_QUEUE_PROPERTIES");
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

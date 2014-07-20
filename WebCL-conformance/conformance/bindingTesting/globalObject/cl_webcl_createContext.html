@@ -1,0 +1,125 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCL createContext conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCL :: CreateContext test case.");
+
+    var wtu = WebCLTestUtils;
+
+    /*
+     *  Creating context on optional device type.
+     */
+    debug("\n(optional CLenum deviceType = WebCL.DEVICE_TYPE_DEFAULT)");
+    shouldBeType("webcl.createContext();", "WebCLContext");
+    shouldBeTypeOrException("webcl.createContext(webcl.DEVICE_TYPE_CPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(webcl.DEVICE_TYPE_GPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(webcl.DEVICE_TYPE_ACCELERATOR);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeType("webcl.createContext(webcl.DEVICE_TYPE_DEFAULT);", "WebCLContext");
+
+    shouldThrowExceptionName("webcl.createContext(invalid_CLenum);", "INVALID_DEVICE_TYPE");
+
+    /*
+     *  Creating context on platform and optional device Type.
+     */
+    debug("\n(WebCLPlatform platform, optional CLenum deviceType = WebCL.DEVICE_TYPE_DEFAULT)");
+    var webCLPlatform = wtu.getPlatform();
+    shouldBeType("webcl.createContext(webCLPlatform);", "WebCLContext");
+    shouldBeTypeOrException("webcl.createContext(webCLPlatform, webcl.DEVICE_TYPE_CPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(webCLPlatform, webcl.DEVICE_TYPE_GPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeType("webcl.createContext(webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);", "WebCLContext");
+    shouldBeType("webcl.createContext(webCLPlatform, webcl.DEVICE_TYPE_ALL);", "WebCLContext");
+
+    shouldThrowExceptionName("webcl.createContext(webCLPlatform, invalid_CLenum);", "INVALID_DEVICE_TYPE");
+
+    /*
+     *  Creating context on WebCLDevice and sequence of WebCLDevices.
+     */
+    debug("\n(WebCLDevice device)");
+    debug("(sequence<WebCLDevice> devices)");
+    var getAndValidateDevices = function(webCLPlatform, type) {
+        try {
+            var webCLDevice = wtu.getDevices(webCLPlatform, type);
+            return webCLDevice;
+        } catch(e) {
+            if (e.name === "DEVICE_NOT_FOUND")
+                testPassed("For the deviceType : " + type + " DEVICE_NOT_FOUND exception was thrown.");
+            else
+                testFailed("For the deviceType : " + type + " exception : " + e.name + " was thrown while obtaining device from the platform.");
+            return null;
+        }
+    }
+
+    var webCLDevicesCPU = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_CPU);
+    if (webCLDevicesCPU) {
+        shouldBeType("webcl.createContext(webCLDevicesCPU[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(webCLDevicesCPU);", "WebCLContext");
+    }
+
+    var webCLDevicesGPU = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_GPU);
+    if (webCLDevicesGPU) {
+        shouldBeType("webcl.createContext(webCLDevicesGPU[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(webCLDevicesGPU);", "WebCLContext");
+    }
+
+    var webCLDevicesACCELERATOR = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);
+    if (webCLDevicesACCELERATOR) {
+        shouldBeType("webcl.createContext(webCLDevicesACCELERATOR[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(webCLDevicesACCELERATOR);", "WebCLContext");
+    }
+
+    /*
+     *  Creating context on sequence of default and all devices.
+     */
+    var webCLDevicesDEFAULT = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);
+    shouldBeType("webcl.createContext(webCLDevicesDEFAULT);", "WebCLContext");
+    var webCLDevicesALL = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    shouldBeType("webcl.createContext(webCLDevicesALL);", "WebCLContext");
+
+    shouldThrowExceptionName("webcl.createContext([]);", "INVALID_VALUE");
+
+    // FIXME To add testcases to verify exceptions INVALID_OPERATION, DEVICE_NOT_FOUND, DEVICE_NOT_AVAILABLE, INVALID_PLATFORM, INVALID_DEVICE.
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

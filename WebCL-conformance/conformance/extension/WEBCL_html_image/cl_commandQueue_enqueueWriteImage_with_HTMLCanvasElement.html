@@ -1,0 +1,172 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLCommandQueue enqueueWriteImage with canvasElement conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" width = 200 height = 100/>
+    <canvas id="invalidCanvas" width = 0 height = 0/>
+</div>
+<script>
+try {
+    debug("WebCLCommandQueue enqueueWriteImage with canvasElement test case. \n");
+    debug("( WebCLImage image, CLboolean blockingWrite, sequence<CLuint> origin, sequence<CLuint> region, HTMLCanvasElement srcCanvas, optional sequence<WebCLEvent>? eventWaitList, optional WebCLEvent? event)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var origin = [0, 0];
+    var canvas = document.getElementById("inputCanvas");
+    var invalid_canvas = document.getElementById("invalidCanvas");
+
+    var imageWidth = 100;
+    var imageHeight = 100;
+    var region = [imageWidth, imageHeight];
+    var webCLImageDescriptorReadWrite = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+
+    var webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptorReadWrite);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImage, true, origin, region, canvas);", "WEBCL_EXTENSION_NOT_ENABLED");
+    if (!wtu.enableExtension(webcl, "WEBCL_html_image")) {
+        throw { description : "Failed to enable extension : WEBCL_html_image. Exitting..." };
+    }
+
+    wtu.releaseAll(webCLContext);
+    webCLContext = wtu.createContext();
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    // Testing with image as MEM_READ_ONLY memory object.
+    var webCLImageRead = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, webCLImageDescriptorReadWrite);
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageRead, true, origin, region, canvas);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageRead, false, origin, region, canvas);");
+
+    // Testing with image as MEM_WRITE_ONLY memory object.
+    var webCLImageWrite = wtu.createImage(webCLContext, webcl.MEM_WRITE_ONLY, webCLImageDescriptorReadWrite);
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageWrite, true, origin, region, canvas);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageWrite, false, origin, region, canvas);");
+
+    // Testing with image as MEM_READ_WRITE memory object.
+    var webCLImageReadWrite = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptorReadWrite);
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, false, origin, region, canvas);");
+
+    // Testing for nullable parameters.
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, []);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, [], null);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, null);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, null, null);");
+    var webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, [], webCLEvent);");
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, null, webCLEvent);");
+
+    var originNonZero = [10, 10];
+    var regionSmall = [imageWidth - 10, imageHeight - 10];
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, originNonZero, regionSmall, canvas);");
+    shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, regionSmall, canvas);");
+
+    // Testing for exceptions.
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, originNonZero, region, canvas);", "INVALID_VALUE");
+
+    var releasedImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptorReadWrite);
+    wtu.release(releasedImage);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(releasedImage, true, origin, region, canvas);", "INVALID_MEM_OBJECT");
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, invalid_canvas);", "INVALID_HOST_PTR");
+
+    var originInvalid = [];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, originInvalid, region, canvas);", "INVALID_VALUE");
+    originInvalid = [0];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, originInvalid, region, canvas);", "INVALID_VALUE");
+    var originOutOfBound = [imageWidth + 1, imageHeight + 1];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, originOutOfBound, region, canvas);", "INVALID_VALUE");
+
+    var regionInvalid = [];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, regionInvalid, canvas);", "INVALID_VALUE");
+    regionInvalid = [0];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, regionInvalid, canvas);", "INVALID_VALUE");
+    var regionOutOfBound = [imageWidth + 1, imageHeight + 1];
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, regionOutOfBound, canvas);", "INVALID_VALUE");
+
+    // Testing for exception "INVALID_CONTEXT"
+    var webCLPlatform = wtu.getPlatform();
+    var devices = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    if (devices.length > 1) {
+        var webCLDevice1 = devices[0];
+        var webCLContext1 = wtu.createContext(webCLDevice1);
+        var webCLCommandQueue1 = wtu.createCommandQueue(webCLContext1, webCLDevice1);
+        var webCLImageDescriptor1 = wtu.getSupportedImageFormats(webCLContext1, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+        var webCLImage1 = wtu.createImage(webCLContext1, webcl.MEM_READ_WRITE, webCLImageDescriptor1);
+
+        var webCLDevice2 = devices[1];
+        var webCLContext2 = wtu.createContext(webCLDevice2);
+        var webCLCommandQueue2 = wtu.createCommandQueue(webCLContext2, webCLDevice2);
+        var webCLImageDescriptor2 = wtu.getSupportedImageFormats(webCLContext2, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+        var webCLImage2 = wtu.createImage(webCLContext2, webcl.MEM_READ_WRITE, webCLImageDescriptor2);
+
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage2, true, origin, region, canvas);", "INVALID_CONTEXT");
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage1, true, origin, region, canvas);", "INVALID_CONTEXT");
+
+        var webCLUserEvent1 = wtu.createUserEvent(webCLContext1);
+        var webCLUserEvent2 = wtu.createUserEvent(webCLContext2);
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage1, false, origin, region, canvas, [webCLUserEvent2]);", "INVALID_CONTEXT");
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage2, false, origin, region, canvas, [webCLUserEvent1]);", "INVALID_CONTEXT");
+        wtu.setStatus(webCLUserEvent1, webcl.COMPLETE);
+        wtu.setStatus(webCLUserEvent2, webcl.COMPLETE);
+
+        var webCLEvent1 = wtu.createEvent();
+        webCLCommandQueue1.enqueueWriteImage(webCLImage1, true, origin, region, canvas, [], webCLEvent1);
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage2, true, origin, region, canvas, [], webCLEvent1);", "INVALID_CONTEXT");
+        var webCLEvent2 = wtu.createEvent();
+        webCLCommandQueue2.enqueueWriteImage(webCLImage2, true, origin, region, canvas, [], webCLEvent2);
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage1, true, origin, region, canvas, [], webCLEvent2);", "INVALID_CONTEXT");
+    }
+
+    var releasedEvent = wtu.createUserEvent(webCLContext);
+    wtu.release(releasedEvent);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, [releasedEvent]);", "INVALID_EVENT_WAIT_LIST");
+
+    var webCLUserEvent = wtu.createUserEvent(webCLContext);
+    wtu.setStatus(webCLUserEvent, -1);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImageReadWrite, true, origin, region, canvas, [webCLUserEvent]);", "EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST");
+
+    // FIXME To add test case to verify exception : INVALID_IMAGE_SIZE
+
+} catch (e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

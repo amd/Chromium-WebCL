@@ -1,0 +1,133 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCL createContext with WebGLRenderingContext conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" />
+</div>
+<script>
+try {
+    debug("WebCL :: createContext with WebGLRenderingContext test case.");
+
+    var wtu = WebCLTestUtils;
+
+    var canvas = document.getElementById("inputCanvas");
+    var glContext = canvas.getContext("experimental-webgl");
+
+    shouldThrowExceptionName("webcl.createContext(glContext);", "WEBCL_EXTENSION_NOT_ENABLED");
+    if (!wtu.enableExtension(webcl, "KHR_gl_sharing")) {
+        throw { description : "Failed to enable extension : KHR_gl_sharing. Exitting..."};
+    }
+
+    /*
+     *  Creating context on optional device type.
+     */
+    debug("\n(WebGLRenderingContext gl, optional CLenum deviceType)");
+    shouldBeType("webcl.createContext(glContext);", "WebCLContext");
+    shouldBeTypeOrException("webcl.createContext(glContext, webcl.DEVICE_TYPE_CPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(glContext, webcl.DEVICE_TYPE_GPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(glContext, webcl.DEVICE_TYPE_ACCELERATOR);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeType("webcl.createContext(glContext, webcl.DEVICE_TYPE_DEFAULT);", "WebCLContext");
+
+    shouldThrowExceptionName("webcl.createContext(glContext, invalid_CLenum);", "INVALID_DEVICE_TYPE");
+
+    /*
+     *  Creating context on platform and optional device Type.
+     */
+    debug("\nWebGLRenderingContext gl, WebCLPlatform platform, optional CLenum deviceType)");
+    var webCLPlatform = wtu.getPlatform();
+    shouldBeType("webcl.createContext(glContext, webCLPlatform);", "WebCLContext");
+    shouldBeTypeOrException("webcl.createContext(glContext, webCLPlatform, webcl.DEVICE_TYPE_CPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(glContext, webCLPlatform, webcl.DEVICE_TYPE_GPU);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeTypeOrException("webcl.createContext(glContext, webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);", "WebCLContext", "DEVICE_NOT_FOUND");
+    shouldBeType("webcl.createContext(glContext, webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);", "WebCLContext");
+    shouldBeType("webcl.createContext(glContext, webCLPlatform, webcl.DEVICE_TYPE_ALL);", "WebCLContext");
+
+    shouldThrowExceptionName("webcl.createContext(glContext, webCLPlatform, invalid_CLenum);", "INVALID_DEVICE_TYPE");
+
+    var getAndValidateDevices = function(webCLPlatform, type) {
+        try {
+            var webCLDevice = wtu.getDevices(webCLPlatform, type);
+            return webCLDevice;
+        } catch(e) {
+            if (e.name === "DEVICE_NOT_FOUND")
+                testPassed("For the deviceType : " + type + " DEVICE_NOT_FOUND exception was thrown.");
+            else
+                testFailed("For the deviceType : " + type + " exception : " + e.name + " was thrown while obtaining device from the platform.");
+            return null;
+        }
+    }
+
+    debug("\nWebGLRenderingContext gl, WebCLDevice device)");
+    debug("WebGLRenderingContext gl, sequence<WebCLDevice> devices)");
+
+    /*
+     *  Creating context on WebCLDevice.
+     *  Creating context on sequence of devices.
+     */
+    var webCLDevicesCPU = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_CPU);
+    if (webCLDevicesCPU) {
+        shouldBeType("webcl.createContext(glContext, webCLDevicesCPU[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(glContext, webCLDevicesCPU);", "WebCLContext");
+    }
+
+    var webCLDevicesGPU = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_GPU);
+    if (webCLDevicesGPU) {
+        shouldBeType("webcl.createContext(glContext, webCLDevicesGPU[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(glContext, webCLDevicesGPU);", "WebCLContext");
+    }
+
+    var webCLDevicesACCELERATOR = getAndValidateDevices(webCLPlatform, webcl.DEVICE_TYPE_ACCELERATOR);
+    if(webCLDevicesACCELERATOR) {
+        shouldBeType("webcl.createContext(glContext, webCLDevicesACCELERATOR[0]);", "WebCLContext");
+        shouldBeType("webcl.createContext(glContext, webCLDevicesACCELERATOR);", "WebCLContext");
+    }
+
+    var webCLDevicesDEFAULT = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_DEFAULT);
+    shouldBeType("webcl.createContext(glContext, webCLDevicesDEFAULT);", "WebCLContext");
+    var webCLDevicesALL = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    shouldBeType("webcl.createContext(glContext, webCLDevicesALL);", "WebCLContext");
+
+    // FIXME :: add test case to validate invalid WebGL context.
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

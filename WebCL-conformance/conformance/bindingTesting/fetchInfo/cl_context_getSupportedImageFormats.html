@@ -1,0 +1,81 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext getSupportedImageFormats conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+
+try {
+    debug("WebCLContext getSupportedImageFormats test case.");
+    debug("(optional CLenum memFlags = MEM_READ_WRITE)");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+
+    shouldBeArrayOfType("webCLContext.getSupportedImageFormats()", "WebCLImageDescriptor");
+    shouldBeArrayOfType("webCLContext.getSupportedImageFormats(webcl.MEM_READ_ONLY)", "WebCLImageDescriptor");
+    shouldBeArrayOfType("webCLContext.getSupportedImageFormats(webcl.MEM_WRITE_ONLY)", "WebCLImageDescriptor");
+    shouldBeArrayOfType("webCLContext.getSupportedImageFormats(webcl.MEM_READ_WRITE)", "WebCLImageDescriptor");
+
+    // Testing for equivalence [Specification : Omitting the memory flag is equivalent to specifying MEM_READ_WRITE.]
+    var formatsWithoutMemFlag = webCLContext.getSupportedImageFormats();
+    var formatsWithReadWriteFlag = webCLContext.getSupportedImageFormats(webcl.MEM_READ_WRITE);
+    var i = 0;
+    if (formatsWithoutMemFlag.length == formatsWithReadWriteFlag.length) {
+        for (i = 0; i < formatsWithoutMemFlag.length; i++) {
+            if (formatsWithoutMemFlag[i].channelOrder !== formatsWithReadWriteFlag[i].channelOrder ||
+                formatsWithoutMemFlag[i].channelType !== formatsWithReadWriteFlag[i].channelType ||
+                formatsWithoutMemFlag[i].width !== formatsWithReadWriteFlag[i].width ||
+                formatsWithoutMemFlag[i].height !== formatsWithReadWriteFlag[i].height ||
+                formatsWithoutMemFlag[i].rowPitch !== formatsWithReadWriteFlag[i].rowPitch)
+                break;
+        }
+    }
+    if (i == formatsWithoutMemFlag.length)
+        testPassed("webCLContext.getSupportedImageFormats() is webCLContext.getSupportedImageFormats(webcl.MEM_READ_WRITE)");
+    else
+        testFailed("webCLContext.getSupportedImageFormats() should be webCLContext.getSupportedImageFormats(webcl.MEM_READ_WRITE)");
+
+    // Testing for Exception.
+    shouldThrowExceptionName("webCLContext.getSupportedImageFormats(invalid_CLenum);", "INVALID_VALUE");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

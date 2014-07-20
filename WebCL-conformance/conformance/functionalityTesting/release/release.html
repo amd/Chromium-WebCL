@@ -1,0 +1,120 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>release functionality test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+var callback = function()
+{
+    console.log("Inside callback");
+}
+try {
+    debug("release functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var imageWidth = 100;
+    var imageHeight = 100;
+    var origin = [0, 0];
+    var region = [imageWidth, imageHeight];
+    var hostRowPitch = 0;
+    var numberBytes = BUFFER_SIZE;
+    var bufferOffset = 0;
+    var hostPtr = new Float32Array(BUFFER_SIZE);
+    var webCLContext, webCLCommandQueue, webCLSampler, webCLEvent, webCLUserEvent, kernelSource, webCLProgram, webCLKernel, webCLBuffer, webCLImageDescriptor, webCLImage;
+
+    /*
+     *  Testing for release of WebCL objects individually.
+     */
+    webCLContext = wtu.createContext();
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    webCLSampler = wtu.createSampler(webCLContext, true, webcl.ADDRESS_CLAMP, webcl.FILTER_LINEAR);
+    webCLEvent = wtu.createEvent();
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+    webCLKernel = wtu.createKernel(webCLProgram, "square");
+
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+    webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+
+    wtu.release(webCLUserEvent);
+    debug("\nAfter webCLUserEvent :: release :");
+    shouldThrowExceptionName("webCLUserEvent.setStatus(webcl.COMPLETE);", "INVALID_EVENT");
+
+    wtu.release(webCLEvent);
+    debug("\nAfter webCLEvent :: release :");
+    shouldThrowExceptionName("webCLEvent.setCallback(webcl.COMPLETE, callback);", "INVALID_EVENT");
+
+    wtu.release(webCLSampler);
+    debug("\nAfter webCLSampler :: release :");
+    shouldThrowExceptionName("webCLKernel.setArg(0, webCLSampler);", "INVALID_SAMPLER");
+
+    wtu.release(webCLKernel);
+    debug("\nAfter webCLKernel :: release :");
+    shouldThrowExceptionName("webCLKernel.setArg(0, webCLBuffer);", "INVALID_KERNEL");
+
+    wtu.release(webCLProgram);
+    debug("\nAfter webCLProgram :: release :");
+    shouldThrowExceptionName("webCLProgram.build(webCLDevices);", "INVALID_PROGRAM");
+
+    wtu.release(webCLImage);
+    debug("\nAfter webCLImage :: release :");
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadImage(webCLImage, true, origin, region, hostRowPitch, hostPtr);", "INVALID_MEM_OBJECT");
+
+    wtu.release(webCLBuffer);
+    debug("\nAfter webCLBuffer :: release :");
+    shouldThrowExceptionName("webCLCommandQueue.enqueueReadBuffer(webCLBuffer, true, bufferOffset, numberBytes, hostPtr);", "INVALID_MEM_OBJECT");
+
+    wtu.release(webCLCommandQueue);
+    debug("\nAfter webCLCommandQueue :: release :");
+    shouldThrowExceptionName("webCLCommandQueue.finish();", "INVALID_COMMAND_QUEUE");
+
+    wtu.release(webCLContext);
+    debug("\nAfter webCLContext :: release :");
+    shouldThrowExceptionName("webCLContext.createSampler(true, webcl.ADDRESS_CLAMP, webcl.FILTER_LINEAR);", "INVALID_CONTEXT");
+
+} catch (e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

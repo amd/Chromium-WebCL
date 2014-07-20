@@ -1,0 +1,175 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLKernel setArg() basic type testing.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<div id="description"></div>
+<div id="console"></div>
+<body>
+<script>
+
+/* Generic function to run a "kernel" which copies the input values "inputArray" into a output buffer.
+   Later verify the values read from the output buffer into a "resultArray" against "inputArray". */
+var runAndTest = function(commandqueue, kernel, inputArray, resultArray, ulongFlag)
+{
+    try {
+        var kernelName = kernel.getInfo(webcl.KERNEL_FUNCTION_NAME);
+        if (inputArray.length != resultArray.length) {
+            testFailed("WebCLKernel setArg() basic test for kernel[" + kernelName + "] failed due to Invalid Input. ");
+            return;
+        }
+        var output = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, inputArray.BYTES_PER_ELEMENT * resultArray.length);
+        wtu.setArg(kernel, 0, inputArray);
+        wtu.setArg(kernel, 1, output);
+
+        var globalWorkSize = [1024];
+        wtu.enqueueNDRangeKernel(commandqueue, kernel, globalWorkSize.length, [], globalWorkSize, []);
+        wtu.enqueueReadBuffer(commandqueue, output, true, 0, resultArray.BYTES_PER_ELEMENT * resultArray.length, resultArray);
+
+        if(ulongFlag == undefined)
+            ulongFlag = 0;
+        var flag = true, resultString = "";
+        for (y = 0; y < resultArray.length; y++) {
+            resultString = resultString + resultArray[y] + ", ";
+            if (resultArray[y].toPrecision(2) != (inputArray[y] + ulongFlag).toPrecision(2)) {
+                flag = false;
+                break;
+            }
+        }
+        if (flag && y == inputArray.length)
+            testPassed("Test passed for kernel [" + kernelName + "]. Got expected value : " + resultString);
+        else
+            testFailed("Test failed. Expected value : " + inputArray + " Obtained value: " + resultString);
+    } catch (e) {
+        testFailed("WebCLKernel setArg() basic test throws exception: " + e.description);
+    }
+}
+
+/* Run a kernel for vector size and verify the output. Runs only for one set of data. */
+var runForAlltypes = function(vectorSize, kernelSource)
+{
+    try {
+        debug("<br/>WebCLKernel setArg() vector" + vectorSize + " input testing.");
+
+        webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+        wtu.build(webCLProgram, webCLDevices);
+
+        webCLKernel = webCLProgram.createKernel("kernelChar");
+        var inputArray = wtu.generateData(Int8Array, vectorSize);
+        var results = new Int8Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        webCLKernel = webCLProgram.createKernel("kernelUChar");
+        inputArray = wtu.generateData(Uint8Array, vectorSize);
+        results = new Uint8Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        webCLKernel = webCLProgram.createKernel("kernelShort");
+        inputArray = wtu.generateData(Int16Array, vectorSize);
+        results = new Int16Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        webCLKernel = webCLProgram.createKernel("kernelUShort");
+        inputArray = wtu.generateData(Uint16Array, vectorSize);
+        results = new Uint16Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        webCLKernel = webCLProgram.createKernel("kernelInt");
+        inputArray = wtu.generateData(Int32Array, vectorSize);
+        results = new Int32Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        webCLKernel = webCLProgram.createKernel("kernelUInt");
+        inputArray = wtu.generateData(Uint32Array, vectorSize);
+        results = new Uint32Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+        // Since Int64Aray is not supoprted by WebKit need to use vectorSize Int3vectorSize elements.
+        // So copy the input into a Int32Array of length * vectorSize size and pass it as input.
+        var input = wtu.generateData(Int32Array, vectorSize * 2);
+        results = new Int32Array(vectorSize * 2);
+        webCLKernel = webCLProgram.createKernel("kernelLong");
+        runAndTest(webCLCommandQueue, webCLKernel, input, results);
+
+        input = wtu.generateData(Uint32Array, vectorSize * 2);
+        results = new Uint32Array(vectorSize * 2);
+        webCLKernel = webCLProgram.createKernel("kernelULong");
+        runAndTest(webCLCommandQueue, webCLKernel, input, results, 1);
+
+        webCLKernel = webCLProgram.createKernel("kernelFloat");
+        inputArray = wtu.generateData(Float32Array, vectorSize);
+        results = new Float32Array(vectorSize);
+        runAndTest(webCLCommandQueue, webCLKernel, inputArray, results);
+
+    } catch (e) {
+        testFailed("WebCLKernel setArg() vector" + vectorSize + " input testing." + e.message);
+        return;
+    }
+}
+
+var wtu, webCLPlatform, webCLDevices, webCLContext, webCLCommandQueue, webCLProgram, webCLKernel;
+try {
+    debug("WebCLKernel setArg() VectorvectorSize type testing.");
+    wtu = WebCLTestUtils;
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+
+    webCLContext = wtu.createContext();
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    var kernelSource = wtu.readKernel("../../../resources/kernels/setArg_Vector2.cl");
+    runForAlltypes(2, kernelSource);
+
+    /* AMD driver doesn't like multiples of 3, throws INVALID_ARG_SIZE
+    kernelSource = wtu.readKernel("../../../resources/kernels/setArg_Vector3.cl");
+    runForAlltypes(3, kernelSource);
+    */
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/setArg_Vector4.cl");
+    runForAlltypes(4, kernelSource);
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/setArg_Vector8.cl");
+    runForAlltypes(8, kernelSource);
+
+    kernelSource = wtu.readKernel("../../../resources/kernels/setArg_Vector16.cl");
+    runForAlltypes(16, kernelSource);
+
+} catch (e) {
+    testFailed("WebCLKernel setArg() vector test throws exception: " + e.description);
+}
+
+
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

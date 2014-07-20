@@ -1,0 +1,148 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLCommandQueue enqueueWriteImage with HTMLVideoElement conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+<video width="320" height="240" controls id = "videoID">
+    <source src="../../../resources/red-green.mp4" type="video/mp4" visibility="hidden">
+</video>
+</div>
+<script>
+try {
+    video = document.getElementById("videoID");
+    video.addEventListener('loadeddata', runVideoInteropTests);
+} catch (e) {
+    testFailed("Failed to add listener to video element : " + e.name);
+}
+var video, webCLContext, webCLCommandQueue, webCLImage, webCLImageDescriptor, webCLEvent, releasedImage, imageWidth, imageHeight;
+var webCLPlatform, webCLContext1, webCLContext2, webCLCommandQueue1, webCLCommandQueue2, webCLImage1, webCLImage2;
+var webCLEvent1, webCLEvent2, webCLUserEvent1, webCLUserEvent2, releasedEvent, webCLUserEvent;
+function runVideoInteropTests() {
+    try {
+        debug("WebCLCommandQueue enqueueWriteImage with HTMLVideoElement test case.");
+        debug("(WebCLImage image, CLboolean blockingWrite, HTMLVideoElement srcVideo, optional sequence<WebCLEvent>? eventWaitList, optional WebCLEvent? event)\n");
+
+        var wtu = WebCLTestUtils;
+        webCLContext = wtu.createContext();
+        webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+        imageWidth = 100;
+        imageHeight = 100;
+
+        webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+        webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, webCLImageDescriptor);
+        shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video);", "WEBCL_EXTENSION_NOT_ENABLED");
+
+        if (!wtu.enableExtension(webcl, "WEBCL_html_video")) {
+            throw { description : "Failed to enable extension : WEBCL_html_video. Exitting..."};
+        }
+
+        wtu.releaseAll(webCLContext);
+        webCLContext = wtu.createContext();
+        webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+        webCLEvent =  new WebCLEvent();
+        webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, webCLImageDescriptor);
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video);");
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, false, video, [], webCLEvent);");
+        wtu.waitForEvents([webCLEvent]);
+
+        // Testing for nullable parameters.
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, []);");
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, null);");
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, null, null);");
+        webCLEvent = wtu.createEvent();
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, null, webCLEvent);");
+
+        // Testing with events.
+        webCLEvent = wtu.createEvent();
+        webCLCommandQueue.enqueueWriteImage(webCLImage, false, video, [], webCLEvent);
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, false, video, [webCLEvent]);");
+        webCLUserEvent = wtu.createUserEvent(webCLContext);
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, false, video, [webCLUserEvent]);");
+        wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+        webCLEvent = wtu.createEvent();
+        shouldBeUndefined("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, [], webCLEvent);");
+
+        // Testing for exceptions.
+        shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImage, true, invalid_video);", "INVALID_HOST_PTR");
+
+        releasedImage = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, video);
+        wtu.release(releasedImage);
+        shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(releasedImage, true, video);", "INVALID_MEM_OBJECT");
+
+        // Testing for exception "INVALID_CONTEXT"
+        webCLContext1 = wtu.createContext();
+        webCLCommandQueue1 = wtu.createCommandQueue(webCLContext1);
+        webCLImage1 = wtu.createImage(webCLContext1, webcl.MEM_READ_ONLY, video);
+
+        webCLContext2 = wtu.createContext();
+        webCLCommandQueue2 = wtu.createCommandQueue(webCLContext2);
+        webCLImage2 = wtu.createImage(webCLContext2, webcl.MEM_READ_ONLY, video);
+
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage2, true, video);", "INVALID_CONTEXT");
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage1, true, video);", "INVALID_CONTEXT");
+
+        webCLUserEvent1 = wtu.createUserEvent(webCLContext1);
+        webCLUserEvent2 = wtu.createUserEvent(webCLContext2);
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage1, false, video, [webCLUserEvent2]);", "INVALID_CONTEXT");
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage2, false, video, [webCLUserEvent1]);", "INVALID_CONTEXT");
+        wtu.setStatus(webCLUserEvent1, webcl.COMPLETE);
+        wtu.setStatus(webCLUserEvent2, webcl.COMPLETE);
+
+        webCLEvent1 = wtu.createEvent();
+        webCLCommandQueue1.enqueueWriteImage(webCLImage1, true, video, [], webCLEvent1);
+        shouldThrowExceptionName("webCLCommandQueue2.enqueueWriteImage(webCLImage2, true, video, [webCLEvent1]);", "INVALID_CONTEXT");
+        webCLEvent2 = wtu.createEvent();
+        webCLCommandQueue2.enqueueWriteImage(webCLImage2, true, video, [], webCLEvent2);
+        shouldThrowExceptionName("webCLCommandQueue1.enqueueWriteImage(webCLImage1, true, video, [webCLEvent2]);", "INVALID_CONTEXT");
+
+        releasedEvent = wtu.createUserEvent(webCLContext);
+        shouldThrowExceptionName("webCLCommandQueue.enqueueWriteImage(webCLImage, true, video, [releasedEvent], webCLEvent);", "INVALID_EVENT_WAIT_LIST");
+
+        // FIXME To add test case to verify exception : INVALID_IMAGE_SIZE & INVALID_MEM_OBJECT.
+
+        setTimeout(function() {
+            wtu.appendPostJSToHTML(document);
+        }, 500);
+
+    } catch(e) {
+        testFailed(e.description);
+        wtu.appendPostJSToHTML(document);
+    }
+}
+successfullyParsed = true;
+</script>
+</body>
+</html>

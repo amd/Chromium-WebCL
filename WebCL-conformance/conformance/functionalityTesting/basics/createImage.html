@@ -1,0 +1,116 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createImage conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("CreateImage functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLImage, memFlag, imageInfo, imageFormat, elementsPerPixel, bytesPerElement, expectedRowPitch;
+
+    var createAndVerifyImage = function(memFlagString, imageDescriptor) {
+        try {
+            memFlag = eval(memFlagString);
+            webCLImage = wtu.createImage(webCLContext, memFlag, imageDescriptor);
+
+            imageInfo = webCLImage.getInfo();
+
+            if (!(imageInfo instanceof WebCLImageDescriptor)) {
+                testFailed("webCLImage.getInfo was not of the type WebCLImageDescriptor.");
+                return;
+            }
+
+            if (imageInfo.width != imageDescriptor.width) {
+                testFailed("Verification of image's width. Expected : " + imageDescriptor.width + ". Obtained : " + imageInfo.width);
+                return;
+            }
+
+            if (imageInfo.height != imageDescriptor.height) {
+                testFailed("Verification of image's height. Expected : " + imageDescriptor.height + ". Obtained : " + imageInfo.height);
+                return;
+            }
+
+            if (imageInfo.channelOrder != imageDescriptor.channelOrder) {
+                testFailed("Verification of image's channelOrder. Expected : " + imageDescriptor.channelOrder + ". Obtained : " + imageInfo.channelOrder);
+                return;
+            }
+
+            if (imageInfo.channelType != imageDescriptor.channelType) {
+                testFailed("Verification of image's channelType. Expected : " + imageDescriptor.channelType + ". Obtained : " + imageInfo.channelType);
+                return;
+            }
+
+            elementsPerPixel = wtu.getBytesForChannelOrder(imageDescriptor.channelOrder);
+            bytesPerElement = eval(wtu.getArrayTypeForChanneltype(imageDescriptor.channelType) + ".BYTES_PER_ELEMENT");
+            expectedRowPitch = imageDescriptor.width * elementsPerPixel * bytesPerElement;
+            if (imageInfo.rowPitch != expectedRowPitch) {
+                testFailed("Verification of image's rowPitch. Expected : " + expectedRowPitch + ". Obtained : " + imageInfo.rowPitch);
+                return;
+            }
+
+            testPassed("Creating and validating image with flag : " + memFlagString + " and width : " + imageInfo.width + " , height : " + imageInfo.height +
+                        ", rowPitch: " + imageInfo.rowPitch + ", channelOrder: " + imageInfo.channelOrder + " and channelType: " + imageInfo.channelType);
+            return;
+        } catch(e) {
+            testFailed("Exception thrown while creating and validating image: " + e.name);
+        }
+    }
+
+    getRandomPositiveNumber = function() {
+        return Math.floor(Math.random() * 100) + 1;
+    }
+
+    debug("\nCreating and validating images with all supported image formats: ");
+    var supportedImageFormats = webCLContext.getSupportedImageFormats();
+    var memFlagArray = ["webcl.MEM_READ_WRITE", "webcl.MEM_READ_ONLY", "webcl.MEM_WRITE_ONLY"];
+    for (i = 0; i < supportedImageFormats.length; i++) {
+        imageFormat = {width: getRandomPositiveNumber(), height: getRandomPositiveNumber(), rowPitch: 0,
+                        channelOrder: supportedImageFormats[i].channelOrder, channelType: supportedImageFormats[i].channelType};
+        // Randomly selecting a valid memory flag.
+        memFlag = memFlagArray[Math.floor(Math.random() * memFlagArray.length)];
+        createAndVerifyImage(memFlag.toString(), imageFormat);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueReadBufferRect conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueReadBufferRect functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var data, result, bufferOrigin, hostOrigin, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch;
+
+    var numberOfValues = 256;
+    var BUFFER_SIZE_IN_BYTES = 1024; /* 256 Int32 elements */
+    data = new Int32Array(numberOfValues);
+    var maxInt32Value = 2147483647;
+    wtu.generateRandomNumberInRange (data, 0, maxInt32Value, numberOfValues);
+
+    var webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE_IN_BYTES, data);
+
+    var bufferOriginConst = [0, 0, 0];
+    var hostOriginConst = [0, 0, 0];
+    var bufferRowPitch = 0;
+    var bufferSlicePitch = 0;
+    var hostRowPitch = 0;
+    var hostSlicePitch = 0;
+
+    /*
+     *  Testing for reading whole buffer of 256 int32 values.
+     */
+    try {
+        region = [16 * 4, 4, 4]; /* Read as 4 rows of 16 int32 elements each with 4 slice.*/
+        result = new Int32Array(numberOfValues);
+
+        wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        wtu.verifyResult(data, result, numberOfValues, "reading whole buffer using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading first 10 int32 values from buffer using readBufferRect.
+     */
+    try {
+        region = [10 * 4, 1, 1];
+        result = new Int32Array(10);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        wtu.verifyResult(data, result, 10, "reading first 10 int32 values of buffer using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading 16 int32 values from end of buffer using readBufferRect.
+     */
+    try {
+        bufferOrigin = [0, 3, 3];
+        region = [16 * 4, 1, 1];
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOrigin, hostOriginConst, region, 64, 256, hostRowPitch, hostSlicePitch, result);
+
+        var aData = new Int32Array(data.buffer, BUFFER_SIZE_IN_BYTES - (16 * Int32Array.BYTES_PER_ELEMENT), 16);
+        wtu.verifyResult(aData, result, 16, "reading last 16 int32 values of buffer using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading from 3rd row of buffer using readBufferRect.
+     */
+    try {
+        bufferOrigin = [0, 3, 0];
+        region = [16 * 4, 1, 1];
+        result = new Int32Array(16);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOrigin, hostOriginConst, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        // Copying values of 3rd row of input array to aData.
+        var aData = new Int32Array(data.buffer, region[0] * bufferOrigin[1], 16);
+        wtu.verifyResult(aData, result, aData.length, "reading from 3rd row of 16 int32 values of buffer using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading from 2nd slice of buffer using readBufferRect.
+     */
+    try {
+        bufferOrigin = [0, 0, 2];
+        region = [16 * 4, 1, 1];
+        result = new Int32Array(16);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOrigin, hostOriginConst, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        // Copying values of 2nd slice of input array to aData.
+        var aData = new Int32Array(data.buffer, region[0] * region[1] * bufferOrigin[2], 16 * region[1]);
+        wtu.verifyResult(aData, result, aData.length, "reading from 2nd slice 16 in32 values of 1 row of buffer using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading first 16 values from buffer, to be written into 2nd row of hostPtr.
+     */
+    try {
+        hostOrigin = [0, 1, 0];
+        region = [16 * 4, 1, 1];
+        result = new Int32Array(region[0] + 16);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOrigin, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        // Copying values from 2nd row of hostPtr to aResult.
+        var aResult = new Int32Array(result.buffer, region[0], 16);
+        wtu.verifyResult(data, aResult, aResult.length, "reading 16 int32 values of buffer written to 2nd row of hostPtr, using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading a slice of values from buffer, to be written into 2nd slice of hostPtr.
+     */
+    try {
+        hostOrigin = [0, 0, 2];
+        region = [16 * 4, 2, 2];
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOrigin, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        // Copying values from 2nd slice of hostPtr to aResult.
+        var aResult = new Int32Array(result.buffer, region[0] * region[1] * hostOrigin[2], 16 * region[1]);
+        wtu.verifyResult(data, aResult, aResult.length, "reading 16 int32 values of buffer written to 2nd slice of hostPtr, using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading 16 int32 values to be written from 4th location of hostPtr using readBufferRect.
+     */
+    try {
+        hostOrigin = [4 * 4, 0, 0];
+        region = [16 * 4, 1, 1];
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOrigin, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        var aResult = new Int32Array(result.buffer, hostOrigin[0], 16);
+        wtu.verifyResult(data, aResult, aResult.length, "reading whole buffer written from 4th location of hostPtr, using readBufferRect");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    var valuesPerRow = 16;
+    var numberOfRows = 4;
+    var numberOfSlices = 4;
+    regionConst = [valuesPerRow * Int32Array.BYTES_PER_ELEMENT, numberOfRows, numberOfSlices];
+
+    /*
+     *  Testing for reading from alternate rows of buffer using readBufferRect.
+     */
+    try {
+        region = [16 * 4, 2, 1];
+        bufferRowPitch = region[0] * 2;
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, region, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        var flag = false;
+        // Verifying alternate rows of buffer.
+        for (i = 0, j = 0; i < region[0]; i += 2 * valuesPerRow, j+= valuesPerRow) {
+            for (z = 0; z < valuesPerRow; z++) {
+                if (data[i + z] != result[j + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for reading from alternate rows of a slice of buffer using readBufferRect.");
+        else
+            testFailed("Test failed for reading from alternate rows of a slice of buffer using readBufferRect.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+    bufferRowPitch = 0;
+
+    /*
+     *  Testing for reading from alternate slices of buffer using readBufferRect.
+     */
+    try {
+        regionValid = [16 * 4, 2, 2];
+        bufferSlicePitch = regionValid[0] * regionValid[1] * 2;
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, regionValid, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        var flag = false;
+        for (i = 0, j = 0; i < regionConst[0]; i += 2 * valuesPerRow * regionValid[1], j += valuesPerRow * regionValid[1]) {
+            for (z = 0; z < valuesPerRow * regionValid[1] /* 16 * 2 */; z++) {
+                if (data[i + z] != result[j + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+      if (!flag)
+            testPassed("Test passed for reading from alternate slices of buffer using readBufferRect.");
+        else
+            testFailed("Test failed for reading from alternate slices of buffer using readBufferRect.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+    bufferSlicePitch = 0;
+
+    /*
+     *  Testing for reading from alternate rows of buffer, written into hostPtr using readBufferRect.
+     */
+    try {
+        var regionValid = [16 * 4, 2, 1];
+        hostRowPitch = regionValid[0] * 2;
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, regionValid, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        var flag = false;
+        for (i = 0, j = 0; i < regionValid[0]; i += 2 * valuesPerRow, j += valuesPerRow) {
+            for (z = 0; z < valuesPerRow; z++) {
+                if (data[j + z] != result[i + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for reading from alternate rows of buffer, written into hostPtr using readBufferRect.");
+        else
+            testFailed("Test failed for reading from alternate rows of buffer, written into hostPtr using readBufferRect.");
+
+    } catch(e) {
+        testFailed(e.description);
+    }
+    hostRowPitch = 0;
+
+    /*
+     *  Testing for reading from alternate slices of buffer, written into hostPtr using readBufferRect.
+     */
+    try {
+        regionValid = [16 * 4, 2, 2];
+        hostSlicePitch = regionValid[0] * regionValid[1] * 2;
+        result = new Int32Array(numberOfValues);
+
+        //wtu.enqueueReadBufferRect(webCLCommandQueue, webCLBuffer, true, bufferOriginConst, hostOriginConst, regionValid, bufferRowPitch, bufferSlicePitch, hostRowPitch, hostSlicePitch, result);
+
+        var flag = false;
+        for (i = 0, j = 0; i < regionConst[0]; i += 2 * valuesPerRow * regionValid[1], j += valuesPerRow * regionValid[1]) {
+            for (z = 0; z < valuesPerRow * regionValid[1] /* 16 * 2 */; z++) {
+                if (data[j + z] != result[i + z]) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        if (!flag)
+            testPassed("Test passed for reading from alternate slices of buffer, written into hostPtr using readBufferRect.");
+        else
+            testFailed("Test failed for reading from alternate slices of buffer, written into hostPtr using readBufferRect.");
+
+        hostSlicePitch = 0;
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

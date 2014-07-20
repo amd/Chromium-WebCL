@@ -1,0 +1,163 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLCommandQueue enqueueCopyBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCLCommandQueue enqueueCopyBuffer test case. \n");
+    debug("(WebCLBuffer srcBuffer, WebCLBuffer dstBuffer, CLuint srcOffset, CLuint dstOffset, CLuint numBytes, optional sequence<WebCLEvent>? eventWaitList, optional WebCLEvent? event)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    var srcOffset = 0;
+    var dstOffset = 0;
+    var numBytes = BUFFER_SIZE;
+
+    var srcBufferRead = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    var dstBufferRead = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    var srcBufferWrite = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+    var dstBufferWrite = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+    var srcBufferReadWrite = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    var dstBufferReadWrite = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+
+    // Testing with destination buffer as MEM_READ_ONLY memory object.
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferRead, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferWrite, dstBufferRead, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferRead, srcOffset, dstOffset, numBytes)");
+
+    // Testing with destination buffer as MEM_WRITE_ONLY memory object.
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferWrite, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferWrite, dstBufferWrite, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferWrite, srcOffset, dstOffset, numBytes)");
+
+    // Testing with destination buffer as MEM_READ_WRITE memory object.
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferReadWrite, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes)");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes)");
+
+    // Testing for nullable parameters.
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, []);");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [], null);");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, null);");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, null, null);");
+    var webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, null, webCLEvent);");
+
+    // Testing with events.
+    webCLEvent = wtu.createEvent();
+    wtu.enqueueCopyBuffer(webCLCommandQueue, srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [], webCLEvent);
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [webCLEvent]);");
+    var webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [webCLUserEvent]);");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [], webCLEvent);");
+
+    // Testing for exceptions.
+    var releasedEvent = wtu.createUserEvent(webCLContext);
+    wtu.release(releasedEvent);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [releasedEvent], webCLEvent);", "INVALID_EVENT_WAIT_LIST");
+
+    webCLEvent = wtu.createEvent();
+    wtu.enqueueCopyBuffer(webCLCommandQueue, srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [webCLUserEvent], webCLEvent);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferReadWrite, dstBufferReadWrite, srcOffset, dstOffset, numBytes, [webCLUserEvent], webCLEvent);", "INVALID_EVENT");
+
+    // Source and destination offsets test case.
+    var srcOffsetInvalid = BUFFER_SIZE + 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferReadWrite, srcOffsetInvalid, dstOffset, numBytes)", "INVALID_VALUE");
+    var dstOffsetInvalid = BUFFER_SIZE + 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferReadWrite, srcOffset, dstOffsetInvalid, numBytes)", "INVALID_VALUE");
+
+    // Number of bytes to be copied test cases.
+    var numBytesInvalid = BUFFER_SIZE + 1;
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, dstBufferReadWrite, srcOffset, dstOffset, numBytesInvalid)", "INVALID_VALUE");
+
+    // Overlapping copy.
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(dstBufferReadWrite, dstBufferReadWrite, srcOffset, srcOffset, numBytes)", "MEM_COPY_OVERLAP");
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(dstBufferReadWrite, dstBufferReadWrite, 100, 0, 300)", "MEM_COPY_OVERLAP");
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(dstBufferReadWrite, dstBufferReadWrite, 0, 100, 101)", "MEM_COPY_OVERLAP");
+    shouldBeUndefined("webCLCommandQueue.enqueueCopyBuffer(dstBufferReadWrite, dstBufferReadWrite, 300, 0, 100)");
+
+    var releasedBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    wtu.release(releasedBuffer);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(releasedBuffer, dstBufferReadWrite, srcOffset, dstOffset, numBytes)", "INVALID_MEM_OBJECT");
+    releasedBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    wtu.release(releasedBuffer);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueCopyBuffer(srcBufferRead, releasedBuffer, srcOffset, dstOffset, numBytes)", "INVALID_MEM_OBJECT");
+
+    // Testing for exception "INVALID_CONTEXT"
+    var webCLContext1 = wtu.createContext();
+    var webCLCommandQueue1 = wtu.createCommandQueue(webCLContext1);
+    var srcBuffer1 = wtu.createBuffer(webCLContext1, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    var dstBuffer1 = wtu.createBuffer(webCLContext1, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+
+    var webCLContext2 = wtu.createContext();
+    var webCLCommandQueue2 = wtu.createCommandQueue(webCLContext2);
+    var srcBuffer2 = wtu.createBuffer(webCLContext2, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    var dstBuffer2 = wtu.createBuffer(webCLContext2, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueCopyBuffer(srcBuffer1, srcBuffer2, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueCopyBuffer(srcBuffer2, srcBuffer1, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueCopyBuffer(srcBuffer2, dstBuffer2, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueCopyBuffer(srcBuffer2, srcBuffer1, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueCopyBuffer(srcBuffer1, srcBuffer2, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueCopyBuffer(srcBuffer1, dstBuffer1, srcOffset, dstOffset, numBytes)", "INVALID_CONTEXT");
+
+    var webCLUserEvent1 = wtu.createUserEvent(webCLContext1);
+    var webCLUserEvent2 = wtu.createUserEvent(webCLContext2);
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueCopyBuffer(srcBuffer1, dstBuffer1, srcOffset, dstOffset, numBytes, [webCLUserEvent2])", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueCopyBuffer(srcBuffer2, dstBuffer2, srcOffset, dstOffset, numBytes, [webCLUserEvent1])", "INVALID_CONTEXT");
+    wtu.setStatus(webCLUserEvent1, webcl.COMPLETE);
+    wtu.setStatus(webCLUserEvent2, webcl.COMPLETE);
+
+    var webCLEvent1 = wtu.createEvent();
+    wtu.enqueueCopyBuffer(webCLCommandQueue1, srcBuffer1, dstBuffer1, srcOffset, dstOffset, numBytes, [], webCLEvent1);
+    shouldThrowExceptionName("webCLCommandQueue2.enqueueCopyBuffer(srcBuffer2, dstBuffer2, srcOffset, dstOffset, numBytes, [webCLEvent1])", "INVALID_CONTEXT");
+    var webCLEvent2 = wtu.createEvent();
+    wtu.enqueueCopyBuffer(webCLCommandQueue2, srcBuffer2, dstBuffer2, srcOffset, dstOffset, numBytes, [], webCLEvent2);
+    shouldThrowExceptionName("webCLCommandQueue1.enqueueCopyBuffer(srcBuffer1, dstBuffer1, srcOffset, dstOffset, numBytes, [webCLEvent2])", "INVALID_CONTEXT");
+
+} catch (e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

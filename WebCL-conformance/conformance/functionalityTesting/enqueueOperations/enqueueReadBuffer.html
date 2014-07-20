@@ -1,0 +1,103 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>enqueueReadBuffer conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("enqueueReadBuffer functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+    var data, result, bufferOffset, numberBytes;
+    data = new Int32Array(SIZE);
+    wtu.generateRandomNumberInRange (data, 0, 2147483647, SIZE);
+    var webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE, data);
+
+    /*
+     *  Testing for reading whole buffer of 1024 values, of 4 bytes each.
+     */
+    try {
+        bufferOffset = 0;
+        numberBytes = BUFFER_SIZE;
+        result = new Int32Array(SIZE);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, numberBytes, result);
+
+        wtu.verifyResult(data, result, SIZE, "reading whole buffer");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *  Testing for reading first 10 values (of 4 bytes each) from buffer.
+     */
+    try  {
+        bufferOffset = 0;
+        partialReadSize = 10 * data.BYTES_PER_ELEMENT;
+        result = new Int32Array(10);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, partialReadSize, result);
+
+        wtu.verifyResult(data, result, 10, "reading first 10 bytes");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+    /*
+     *   Testing for reading last 20 values (of 4 bytes each) from buffer.
+     */
+    try {
+        partialReadSize = 20 * data.BYTES_PER_ELEMENT;
+        bufferOffset = BUFFER_SIZE - partialReadSize;
+        result = new Int32Array(20);
+
+        wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, partialReadSize, result);
+
+        var aData = new Int32Array(data.buffer, bufferOffset, 20);
+        wtu.verifyResult(aData, result, 20, "reading last 20 values");
+    } catch(e) {
+        testFailed(e.description);
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

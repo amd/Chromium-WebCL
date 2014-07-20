@@ -1,0 +1,144 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>createProgram conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+var createValidateAndBuildProgram = function (webCLContext, kernelSource, kernelName) {
+    try {
+        webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+
+        if (!(webCLProgram instanceof WebCLProgram)) {
+            testFailed("Failed to create a valid instance of program for kernel " + kernelName);
+            return;
+        }
+
+        if (webCLProgram.getInfo(webcl.PROGRAM_CONTEXT) !== webCLContext) {
+            testFailed("Verification of context associated with the program for kernel " + kernelName);
+            return;
+        }
+
+        var associatedDevices = webCLProgram.getInfo(webcl.PROGRAM_DEVICES);
+        if (!associatedDevices && !associatedDevices.length) {
+            testFailed("verification of count of devices associated with the program for kernel " + kernelName);
+            return;
+        } else {
+            for (i = 0; i < associatedDevices.length; i++) {
+                if (!(associatedDevices[i] instanceof WebCLDevice)) {
+                    testFailed("Verification of devices associated with the program for kernel " + kernelName);
+                    return;
+                }
+            }
+        }
+
+        if (typeof(webCLProgram.getInfo(webcl.PROGRAM_NUM_DEVICES)) != 'number') {
+            testFailed("Verification of number of devices associated with program for kernel " + kernelName);
+            return;
+        }
+
+        if (webCLProgram.getInfo(webcl.PROGRAM_SOURCE) !== kernelSource) {
+            testFailed("Verification of source used to create program for kernel " + kernelName +
+            ". Expected: " + kernelSource + ". Obtained: " + webCLProgram.getInfo(webcl.PROGRAM_SOURCE));
+            return;
+        }
+
+        wtu.build(webCLProgram, webCLDevices);
+
+        testPassed("Creating, validating and building program for " + kernelName);
+
+    } catch(e) {
+        testFailed("Exception thrown while creating program and building for " + kernelName + " with exception: " + e.name);
+    }
+}
+try {
+    debug("createProgram functionality test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLProgram, kernelSource;
+
+    /*
+     *   Building for "kernel : sample_copy_kernel"
+     *   Copies int values from i/p to o/p.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/sample_copy_kernel.cl");
+    createValidateAndBuildProgram(webCLContext, kernelSource, "\"sample_copy_kernel\"");
+
+    /*
+     *   Building for "kernel : square"
+     *   Squares a float value.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    createValidateAndBuildProgram(webCLContext, kernelSource, "\"square\"");
+
+    /*
+     *   Building for "kernel : sample_single_kernel"
+     *   Rounds off float to an int.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/sample_single_kernel.cl");
+    createValidateAndBuildProgram(webCLContext, kernelSource, "\"sample_single_kernel\"");
+
+    /*
+     *  Building for "kernel : sample_two_kernels_in_one"
+     *  Consists of 2 kernels: converting float to int and int to float.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/sample_two_kernels_in_one.cl");
+    createValidateAndBuildProgram(webCLContext, kernelSource, "sample_two_kernels_in_one (\"sample_test\" and \"sample_test2\")");
+
+    /*
+     *  Building for kernels : square and sample_single_kernel
+     *  Concatenation of 2 kernels : to square and to roundoff a float to an int.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    kernelSource = kernelSource.concat(wtu.readKernel("../../../resources/kernels/sample_single_kernel.cl"));
+    createValidateAndBuildProgram(webCLContext, kernelSource, "\"square\" and \"sample_single_kernel\"");
+
+    /*
+     *  Building for "kernel : basic_image_buffer_sampler"
+     *  Takes buffer, image and samper inputs.
+     */
+    kernelSource = wtu.readKernel("../../../resources/kernels/basic_image_buffer_sampler.cl");
+    createValidateAndBuildProgram(webCLContext, kernelSource, "\"basic_image_buffer_sampler\"");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

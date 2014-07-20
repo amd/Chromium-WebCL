@@ -1,0 +1,132 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext createFromGLTexture conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+    <script src="../../../resources/clgl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" />
+</div>
+<script>
+try {
+    debug("WebCLContext :: createFromGLTexture test case.");
+    debug("\n(CLenum memFlags, GLenum textureTarget, CLint miplevel, WebGLTexture texture)");
+
+    var wtu = WebCLTestUtils;
+    var clgl = WebCLGLTestUtils;
+
+    var canvas = document.getElementById("inputCanvas");
+    var glContext = canvas.getContext("experimental-webgl");
+
+    if (!wtu.enableExtension(webcl, "KHR_gl_sharing")) {
+        throw { description : "Failed to enable extension : KHR_gl_sharing. Exitting..."};
+    }
+
+    var webCLGLContext = wtu.createContext(glContext);
+    var glTexture = clgl.createTexture(glContext);
+    clgl.bindTexture(glContext, glContext.TEXTURE_2D, glTexture);
+
+    var width = 512;
+    var height = 512;
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "rgba(127, 127, 127, 1)";
+    ctx.fillRect(0, 0, width, height);
+    glContext.texImage2D(glContext.TEXTURE_2D, 0, glContext.RGBA, glContext.RGBA, glContext.UNSIGNED_BYTE, canvas);
+
+    // Generate valid mipLevel randomly in range [0..q], where q = log2(max(width, height)). This defines level of detail for the texture.
+    var minLevel = 0;
+    var maxLevel = Math.floor(Math.log(Math.max(width, height)) / Math.log(2));
+    var mipLevel = Math.floor(Math.random() * (maxLevel - minLevel) + minLevel);
+
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, mipLevel, glTexture);", "WebCLImage");
+
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_Z, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Z, mipLevel, glTexture);", "WebCLImage");
+
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_POSITIVE_Z, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_WRITE_ONLY, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Z, mipLevel, glTexture);", "WebCLImage");
+
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_POSITIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_NEGATIVE_X, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_POSITIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Y, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_POSITIVE_Z, mipLevel, glTexture);", "WebCLImage");
+    shouldBeType("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP_NEGATIVE_Z, mipLevel, glTexture);", "WebCLImage");
+
+    //Testing for exception INVALID_VALUE
+    shouldThrowExceptionName("webCLGLContext.createFromGLTexture(invalid_CLenum, glContext.TEXTURE_2D, mipLevel, glTexture);", "INVALID_VALUE");
+    shouldThrowExceptionName("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_CUBE_MAP, mipLevel, glTexture);", "INVALID_VALUE");
+
+    //Testing for exception INVALID_MIP_LEVEL
+    var invalidMipLevel = minLevel - 1;
+    shouldThrowExceptionName("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, invalidMipLevel, glTexture);", "INVALID_MIP_LEVEL");
+
+    invalidMipLevel = maxLevel + 1;
+    shouldThrowExceptionName("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, invalidMipLevel, glTexture);", "INVALID_MIP_LEVEL");
+
+    // Testing for exception INVALID_GL_OBJECT
+    var glTextureUnbound = clgl.createTexture(glContext);
+    shouldThrowExceptionName("webCLGLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, mipLevel, glTextureUnbound);", "INVALID_GL_OBJECT");
+
+    // Creating context without glContext.
+    var webCLContext = wtu.createContext();
+    shouldThrowExceptionName("webCLContext.createFromGLTexture(webcl.MEM_READ_WRITE, glContext.TEXTURE_2D, mipLevel, glTexture);", "INVALID_CONTEXT");
+
+    // FIXME : To add test case to check exception INVALID_IMAGE_FORMAT_DESCRIPTOR.
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

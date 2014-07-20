@@ -1,0 +1,192 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLKernel setArg conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+</script>
+<script>
+try {
+    debug("WebCLKernel :: setArg() test case.");
+    debug("(CLuint index, WebCLMemoryObject memObject)");
+    debug("(CLuint index, WebCLSampler sampler)");
+    debug("(CLuint index, ArrayBufferView value)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+
+    // Testing for MemoryObjects as values for kernel input.
+    var kernelSource = wtu.readKernel("../../../resources/kernels/basic_image_buffer_sampler.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLSquareKernel = wtu.createKernel(webCLProgram, "basic");
+
+    var webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    shouldBeUndefined("webCLSquareKernel.setArg(0, webCLBuffer);");
+
+    var webCLImageDescriptorObject  = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_ONLY, 100, 100);
+    var webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_ONLY, webCLImageDescriptorObject);
+    shouldBeUndefined("webCLSquareKernel.setArg(1, webCLImage);");
+
+    var webCLSampler = wtu.createSampler(webCLContext, true, webcl.ADDRESS_MIRRORED_REPEAT, webcl.FILTER_NEAREST);
+    shouldBeUndefined("webCLSquareKernel.setArg(2, webCLSampler);");
+
+    // Testing for "number" as values for kernel input.
+    var kernelSource = wtu.readKernel("../../../resources/kernels/setArg_basic.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+
+    var webCLKernel = wtu.createKernel(webCLProgram, "kernelAllDatatypes");
+    shouldBeUndefined("webCLKernel.setArg(0, wtu.generateData(Int8Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(1, wtu.generateData(Uint8Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(2, wtu.generateData(Int16Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(3, wtu.generateData(Uint16Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(4, wtu.generateData(Int32Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(5, wtu.generateData(Uint32Array, 1));");
+    shouldBeUndefined("webCLKernel.setArg(6, wtu.generateData(Int32Array, 2));");
+    shouldBeUndefined("webCLKernel.setArg(7, wtu.generateData(Uint32Array, 2));");
+    shouldBeUndefined("webCLKernel.setArg(8, wtu.generateData(Float32Array, 1));");
+
+
+    // testing __local params.
+    var kernelSource = wtu.readKernel("../../../resources/kernels/setArg_local.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLLocalKernel = wtu.createKernel(webCLProgram, "setArgLocal");
+    shouldBeUndefined("webCLLocalKernel.setArg(3, wtu.generateData(Uint32Array, 1));");
+
+    // Testing Vector kernel inputs.
+    kernelSource = wtu.readKernel("../../../resources/kernels/setArg_basic_vectors.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+
+    var webCLKernelVector2 = wtu.createKernel(webCLProgram, "kernelVectorTwo");
+    shouldBeUndefined("webCLKernelVector2.setArg(0, wtu.generateData(Int8Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(1, wtu.generateData(Uint8Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(2, wtu.generateData(Int16Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(3, wtu.generateData(Uint16Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(4, wtu.generateData(Int32Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(5, wtu.generateData(Uint32Array, 2));");
+    shouldBeUndefined("webCLKernelVector2.setArg(6, wtu.generateData(Int32Array, 4));");
+    shouldBeUndefined("webCLKernelVector2.setArg(7, wtu.generateData(Uint32Array, 4));");
+    shouldBeUndefined("webCLKernelVector2.setArg(8, wtu.generateData(Float32Array, 2));");
+
+    var webCLKernelVector3 = wtu.createKernel(webCLProgram, "kernelVectorThree");
+    shouldBeUndefined("webCLKernelVector3.setArg(0, wtu.generateData(Int8Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(1, wtu.generateData(Uint8Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(2, wtu.generateData(Int16Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(3, wtu.generateData(Uint16Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(4, wtu.generateData(Int32Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(5, wtu.generateData(Uint32Array, 3));");
+    shouldBeUndefined("webCLKernelVector3.setArg(6, wtu.generateData(Int32Array, 6));");
+    shouldBeUndefined("webCLKernelVector3.setArg(7, wtu.generateData(Uint32Array, 6));");
+    shouldBeUndefined("webCLKernelVector3.setArg(8, wtu.generateData(Float32Array, 3));");
+
+    var webCLKernelVector4 = wtu.createKernel(webCLProgram, "kernelVectorFour");
+    shouldBeUndefined("webCLKernelVector4.setArg(0, wtu.generateData(Int8Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(1, wtu.generateData(Uint8Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(2, wtu.generateData(Int16Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(3, wtu.generateData(Uint16Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(4, wtu.generateData(Int32Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(5, wtu.generateData(Uint32Array, 4));");
+    shouldBeUndefined("webCLKernelVector4.setArg(6, wtu.generateData(Int32Array, 8));");
+    shouldBeUndefined("webCLKernelVector4.setArg(7, wtu.generateData(Uint32Array, 8));");
+    shouldBeUndefined("webCLKernelVector4.setArg(8, wtu.generateData(Float32Array, 4));");
+
+    var webCLKernelVector8 = wtu.createKernel(webCLProgram,"kernelVectorEight");
+    shouldBeUndefined("webCLKernelVector8.setArg(0, wtu.generateData(Int8Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(1, wtu.generateData(Uint8Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(2, wtu.generateData(Int16Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(3, wtu.generateData(Uint16Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(4, wtu.generateData(Int32Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(5, wtu.generateData(Uint32Array, 8));");
+    shouldBeUndefined("webCLKernelVector8.setArg(6, wtu.generateData(Int32Array, 16));");
+    shouldBeUndefined("webCLKernelVector8.setArg(7, wtu.generateData(Uint32Array, 16));");
+    shouldBeUndefined("webCLKernelVector8.setArg(8, wtu.generateData(Float32Array, 8));");
+
+    var webCLKernelVector16 = wtu.createKernel(webCLProgram, "kernelVectorSixteen");
+    shouldBeUndefined("webCLKernelVector16.setArg(0, wtu.generateData(Int8Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(1, wtu.generateData(Uint8Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(2, wtu.generateData(Int16Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(3, wtu.generateData(Uint16Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(4, wtu.generateData(Int32Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(5, wtu.generateData(Uint32Array, 16));");
+    shouldBeUndefined("webCLKernelVector16.setArg(6, wtu.generateData(Int32Array, 32));");
+    shouldBeUndefined("webCLKernelVector16.setArg(7, wtu.generateData(Uint32Array, 32));");
+    shouldBeUndefined("webCLKernelVector16.setArg(8, wtu.generateData(Float32Array, 16));");
+
+    // Testing for Exception.
+    var kernelNumArgs = webCLSquareKernel.getInfo(webcl.KERNEL_NUM_ARGS);
+    shouldThrowExceptionName("webCLSquareKernel.setArg((kernelNumArgs + 1), webCLBuffer);", "INVALID_ARG_INDEX");
+
+    shouldThrowExceptionName("webCLSquareKernel.setArg(0, new Int32Array([10]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernelVector4.setArg(0, new Int32Array([10, 90, 89, 78, 67]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLLocalKernel.setArg(2, new Uint32Array ([1000, 35]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLLocalKernel.setArg(2, new Int32Array ([1000]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(0, [10.90]);", "INVALID_ARG_VALUE");
+
+    // Testing for Validation of ArrayBufferView types against the type in Kernel signature.
+    shouldThrowExceptionName("webCLKernel.setArg(0, new Uint8Array([255]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(1, new Int8Array([-128]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(2, new Uint16Array([65536]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(3, new Int16Array([-32768]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(4, new Uint32Array([4294967295]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(5, new Int32Array([-2147483648]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(6, new Uint32Array([4294967295, 4294967295]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(7, new Int32Array([-2147483648, -2147483648]));", "INVALID_ARG_VALUE");
+    shouldThrowExceptionName("webCLKernel.setArg(8, new Int32Array([-2147483648]));", "INVALID_ARG_VALUE");
+
+    shouldThrowExceptionName("webCLKernelVector2.setArg(0, new Int32Array([10, 90, 89]));", "INVALID_ARG_SIZE");
+    shouldThrowExceptionName("webCLLocalKernel.setArg(2, new Uint32Array(0));", "INVALID_ARG_SIZE");
+
+    wtu.release(webCLBuffer);
+    shouldThrowExceptionName("webCLSquareKernel.setArg(1, webCLBuffer);", "INVALID_MEM_OBJECT");
+    wtu.release(webCLImage);
+    shouldThrowExceptionName("webCLSquareKernel.setArg(1, webCLImage);", "INVALID_MEM_OBJECT");
+    wtu.release(webCLSampler);
+    shouldThrowExceptionName("webCLSquareKernel.setArg(0, webCLSampler);", "INVALID_SAMPLER");
+    wtu.release(webCLSquareKernel);
+    shouldThrowExceptionName("webCLSquareKernel.setArg(1, webCLBuffer);", "INVALID_KERNEL");
+
+} catch (e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

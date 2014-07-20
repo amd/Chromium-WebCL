@@ -1,0 +1,96 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLContext createImage with HTMLCanvasElement conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" width = 200 height = 100/>
+    <canvas id="invalidCanvas" width = 0 height = 0/>
+</div>
+<script>
+try {
+    debug("WebCLContext :: createImage with HTMLCanvasElement test case.");
+    debug("(CLenum memFlags, HTMLCanvasElement srcCanvas)\n");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var canvas = document.getElementById("inputCanvas");
+    var invalid_canvas = document.getElementById("invalidCanvas");
+
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_ONLY, canvas);", "WEBCL_EXTENSION_NOT_ENABLED");
+    if (!wtu.enableExtension(webcl, "WEBCL_html_image")) {
+        throw { description : "Failed to enable extension : WEBCL_html_image. Exitting..."};
+    }
+
+    wtu.releaseAll(webCLContext);
+    webCLContext = wtu.createContext();
+
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_ONLY, canvas);", "WebCLImage");
+    shouldBeType("webCLContext.createImage(webcl.MEM_WRITE_ONLY, canvas);", "WebCLImage");
+    shouldBeType("webCLContext.createImage(webcl.MEM_READ_WRITE, canvas);", "WebCLImage");
+
+    // Testing for exceptions.
+    shouldThrowExceptionName("webCLContext.createImage(invalid_CLenum, canvas);", "INVALID_VALUE");
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, invalid_canvas);", "INVALID_HOST_PTR");
+
+    var contextDeviceArray = webCLContext.getInfo(webcl.CONTEXT_DEVICES);
+    var contextWidthMax = contextDeviceArray[0].getInfo(webcl.DEVICE_IMAGE2D_MAX_WIDTH);
+    var contextHeightMax = contextDeviceArray[0].getInfo(webcl.DEVICE_IMAGE2D_MAX_HEIGHT);
+    // finding the max value of the DEVICE_IMAGE2D_MAX_WIDTH & DEVICE_IMAGE2D_MAX_HEIGHT for the context devices.
+    for (i = 1; i < contextDeviceArray.length; i++) {
+        var deviceMaxWidth = contextDeviceArray[i].getInfo(webcl.DEVICE_IMAGE2D_MAX_WIDTH);
+        if (deviceMaxWidth > contextWidthMax)
+            contextWidthMax = deviceMaxWidth;
+        var deviceMaxHeight = contextDeviceArray[i].getInfo(webcl.DEVICE_IMAGE2D_MAX_HEIGHT);
+        if (deviceMaxHeight > contextHeightMax)
+            contextHeightMax = deviceMaxHeight;
+    }
+
+    var canvasInvalidWidth = document.getElementById("inputCanvas");
+    canvasInvalidWidth.width = contextWidthMax + 1;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, canvasInvalidWidth);", "INVALID_IMAGE_SIZE");
+
+    var canvasInvalidHeight = document.getElementById("inputCanvas");
+    canvasInvalidHeight.width = contextHeightMax + 1;
+    shouldThrowExceptionName("webCLContext.createImage(webcl.MEM_READ_WRITE, canvasInvalidHeight);", "INVALID_IMAGE_SIZE");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

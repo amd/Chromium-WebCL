@@ -1,0 +1,103 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLEvent getProfilingInfo conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCLEvent :: getProfilingInfo test case.");
+    debug("(CLenum name)");
+
+    var wtu = WebCLTestUtils;
+    var webCLEvent = wtu.createEvent();
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_QUEUED);", "INVALID_EVENT");
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_SUBMIT);", "INVALID_EVENT");
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_START);", "INVALID_EVENT");
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_END);", "INVALID_EVENT");
+
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLContext = wtu.createContext();
+    var data = new Float32Array(SIZE);
+    var count = SIZE;
+    wtu.generateRandomFloat(data, count);
+    var kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext, webCLDevices[0], webcl.QUEUE_PROFILING_ENABLE);
+    webCLEvent = wtu.createEvent();
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLKernel = wtu.createKernel(webCLProgram, "square");
+    var workGroupSize = webCLKernel.getWorkGroupInfo(webCLDevices[0], webcl.KERNEL_WORK_GROUP_SIZE);
+    var globalWorkSize = [2, workGroupSize/2];
+    var localWorkSize = [2, 1];
+    var workDim = globalWorkSize.length;
+
+    input = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    output = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+    wtu.enqueueWriteBuffer(webCLCommandQueue, input, true, 0, BUFFER_SIZE, data);
+    wtu.setArg(webCLKernel, 0, input);
+    wtu.setArg(webCLKernel, 1, output);
+    wtu.setArg(webCLKernel, 2, new Uint32Array([count]));
+
+    var webCLUserEvent = wtu.createUserEvent(webCLContext);
+    wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, workDim, null, globalWorkSize, localWorkSize, [webCLUserEvent], webCLEvent);
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_SUBMIT);", "PROFILING_INFO_NOT_AVAILABLE");
+    wtu.setStatus(webCLUserEvent, webcl.COMPLETE);
+    webCLCommandQueue.finish();
+
+    shouldBe("typeof " + "webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_QUEUED);", "'number'");
+    shouldBe("typeof " + "webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_SUBMIT);", "'number'");
+    shouldBe("typeof " + "webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_START);", "'number'");
+    shouldBe("typeof " + "webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_END);", "'number'");
+
+    // Testing for Exceptions.
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(invalid_CLenum);", "INVALID_VALUE");
+
+    webCLUserEvent = wtu.createUserEvent(webCLContext);
+    shouldThrowExceptionName("webCLUserEvent.getProfilingInfo(webcl.PROFILING_COMMAND_SUBMIT);", "PROFILING_INFO_NOT_AVAILABLE");
+
+    var webCLCommandQueueNew = wtu.createCommandQueue(webCLContext, webCLDevices[0]);
+    var webCLEvent = wtu.createEvent();
+    wtu.enqueueNDRangeKernel(webCLCommandQueueNew, webCLKernel, workDim, null, globalWorkSize, localWorkSize, null, webCLEvent);
+    shouldThrowExceptionName("webCLEvent.getProfilingInfo(webcl.PROFILING_COMMAND_SUBMIT);", "PROFILING_INFO_NOT_AVAILABLE");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

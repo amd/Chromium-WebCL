@@ -1,0 +1,198 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>memory Initialization test.</title>
+    <link rel="stylesheet" href="../../resources/js-test-style.css"/>
+    <script src="../../resources/js-test-pre.js"></script>
+    <script src="../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("Check for memory intialization.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    /*
+     *  Creation of buffer.
+     */
+    var result = new Int8Array(SIZE);
+    for (index = 0; index < SIZE; index++)
+        result[index] = -1;
+    var bufferOffset = 0;
+    var BUFFER_SIZE = Int8Array.BYTES_PER_ELEMENT * SIZE;
+
+    var webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, BUFFER_SIZE);
+    wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, BUFFER_SIZE, result);
+    wtu.verifyArrayForZeroValues(result, SIZE, "Validation of contents of a webCLBuffer to 0.");
+
+    /*
+     *  Creation of image.
+     */
+    var imageWidth = 10;
+    var imageHeight = 10;
+    var origin = [0, 0];
+    var region = [imageWidth, imageHeight];
+    var hostRowPitch = 0;
+
+    var webCLImageDescriptor = wtu.getSupportedImageFormats(webCLContext, webcl.MEM_READ_WRITE, imageWidth, imageHeight);
+    var arrayType = wtu.getArrayTypeForChanneltype(webCLImageDescriptor.channelType);
+    var result = eval("new " + arrayType + "(imageWidth * imageHeight * wtu.getBytesForChannelOrder(webCLImageDescriptor.channelOrder))");
+    for (index = 0; index < result.length; index++)
+        result[index] = -1;
+    var webCLImage = wtu.createImage(webCLContext, webcl.MEM_READ_WRITE, webCLImageDescriptor);
+    wtu.enqueueReadImage(webCLCommandQueue, webCLImage, true, origin, region, 0, result);
+    wtu.verifyArrayForZeroValues(result, result.length, "Validation of contents of a webCLImage to 0.");
+
+    /*
+     *  Validation of memory location (buffer) within kernel acception char input.
+     */
+    var kernelSource = wtu.readKernel("../../resources/kernels/memoryCheckChar.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLKernel = wtu.createKernel(webCLProgram, "memoryCheckChar");
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, SIZE * Int8Array.BYTES_PER_ELEMENT);
+
+    var result = new Int32Array([0]);
+    var resultBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, 4, result);
+
+    wtu.setArg(webCLKernel, 0, webCLBuffer);
+    wtu.setArg(webCLKernel, 1, resultBuffer);
+    wtu.setArg(webCLKernel, 2, new Uint32Array([SIZE]));
+
+    wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, 1, null, [1], null);
+    wtu.enqueueReadBuffer(webCLCommandQueue, resultBuffer, true, 0, 4, result);
+    if (result[0])
+        testFailed("Validation of a memory location (webCLBuffer) within kernel accepting char input. " + result[0] + " values are non zero.");
+    else
+        testPassed("Validation of a memory location (webCLBuffer) within kernel accepting char input.");
+
+    /*
+     *  Validation of memory location (buffer) within kernel acception short input.
+     */
+    kernelSource = wtu.readKernel("../../resources/kernels/memoryCheckShort.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+    wtu.build(webCLProgram, webCLDevices);
+    webCLKernel = wtu.createKernel(webCLProgram, "memoryCheckShort");
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, SIZE * Int16Array.BYTES_PER_ELEMENT);
+
+    result = new Int32Array([0]);
+    resultBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, 4, result);
+
+    wtu.setArg(webCLKernel, 0, webCLBuffer);
+    wtu.setArg(webCLKernel, 1, resultBuffer);
+    wtu.setArg(webCLKernel, 2, new Uint32Array([SIZE]));
+
+    wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, 1, null, [1], null);
+    wtu.enqueueReadBuffer(webCLCommandQueue, resultBuffer, true, 0, 4, result);
+    if (result[0])
+        testFailed("Validation of a memory location (webCLBuffer) within kernel accepting short input. " + result[0] + " values are non zero.");
+    else
+        testPassed("Validation of a memory location (webCLBuffer) within kernel accepting short input.");
+
+    /*
+     *  Validation of memory location (buffer) within kernel acception int input.
+     */
+    kernelSource = wtu.readKernel("../../resources/kernels/memoryCheckInt.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+    wtu.build(webCLProgram, webCLDevices);
+    webCLKernel = wtu.createKernel(webCLProgram, "memoryCheckInt");
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, SIZE * Int32Array.BYTES_PER_ELEMENT);
+
+    result = new Int32Array([0]);
+    resultBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, 4, result);
+
+    wtu.setArg(webCLKernel, 0, webCLBuffer);
+    wtu.setArg(webCLKernel, 1, resultBuffer);
+    wtu.setArg(webCLKernel, 2, new Uint32Array([SIZE]));
+
+    wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, 1, null, [1], null);
+    wtu.enqueueReadBuffer(webCLCommandQueue, resultBuffer, true, 0, 4, result);
+    if (result[0])
+        testFailed("Validation of a memory location (webCLBuffer) within kernel accepting int input. " + result[0] + " values are non zero.");
+    else
+        testPassed("Validation of a memory location (webCLBuffer) within kernel accepting int input.");
+
+    /*
+     *  Validation of memory location (buffer) within kernel acception long input.
+     */
+    kernelSource = wtu.readKernel("../../resources/kernels/memoryCheckLong.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+    wtu.build(webCLProgram, webCLDevices);
+    webCLKernel = wtu.createKernel(webCLProgram, "memoryCheckLong");
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, SIZE * Int32Array.BYTES_PER_ELEMENT * 2);
+
+    result = new Int32Array([0]);
+    resultBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, 4, result);
+
+    wtu.setArg(webCLKernel, 0, webCLBuffer);
+    wtu.setArg(webCLKernel, 1, resultBuffer);
+    wtu.setArg(webCLKernel, 2, new Uint32Array([SIZE]));
+
+    wtu.enqueueNDRangeKernel(webCLCommandQueue, webCLKernel, 1, null, [1], null);
+    wtu.enqueueReadBuffer(webCLCommandQueue, resultBuffer, true, 0, 4, result);
+    if (result[0])
+        testFailed("Validation of a memory location (webCLBuffer) within kernel accepting long input. " + result[0] + " values are non zero.");
+    else
+        testPassed("Validation of a memory location (webCLBuffer) within kernel accepting long input.");
+
+    /*
+     *  Creation of buffer of size DEVICE_MAX_CONSTANT_BUFFER_SIZE.
+     */
+
+    var deviceMaxBufferSize = webCLDevices[0].getInfo(webcl.DEVICE_MAX_CONSTANT_BUFFER_SIZE);
+    result = new Int32Array(deviceMaxBufferSize / Int32Array.BYTES_PER_ELEMENT);
+    for (index = 0; index < deviceMaxBufferSize; index++)
+        result[index] = -1;
+    bufferOffset = 0;
+
+    webCLBuffer = wtu.createBuffer(webCLContext, webcl.MEM_READ_WRITE, deviceMaxBufferSize);
+    wtu.enqueueReadBuffer(webCLCommandQueue, webCLBuffer, true, bufferOffset, deviceMaxBufferSize, result);
+    wtu.verifyArrayForZeroValues(result, SIZE, "Validation of contents of a webCLBuffer of size DEVICE_MAX_CONSTANT_BUFFER_SIZE to 0.");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../resources/js-test-post.js"></script>
+</body>
+</html>

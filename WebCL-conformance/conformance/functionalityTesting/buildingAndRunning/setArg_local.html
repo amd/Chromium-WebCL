@@ -1,0 +1,94 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLKernel setArg() local type testing.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<div id="description"></div>
+<div id="console"></div>
+<body>
+<script>
+var input, output, count = SIZE;
+var webCLPlatform, webCLDevices, webCLContext, webCLCommandQueue, webCLProgram, webCLKernel;
+var data = new Float32Array(SIZE);
+var results = new Float32Array(SIZE);
+
+try {
+    debug("WebCLKernel setArg() local type testing.");
+
+    var i;
+    for (i = 0; i < count; i++)
+        data[i] = Math.random();
+
+    var wtu = WebCLTestUtils;
+    webCLPlatform = wtu.getPlatform();
+    webCLDevices = wtu.getDevices(webCLPlatform);
+
+    webCLContext = wtu.createContext();
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext);
+
+    var kernelSource = wtu.readKernel("../../../resources/kernels/setArg_local.cl");
+    webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    wtu.build(webCLProgram, webCLDevices);
+
+    webCLKernel = webCLProgram.createKernel("setArgLocal");
+    input = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    output = wtu.createBuffer(webCLContext, webcl.MEM_WRITE_ONLY, BUFFER_SIZE);
+    webCLCommandQueue.enqueueWriteBuffer(input, true, 0, BUFFER_SIZE, data);
+
+    globalWorkSize = [count];
+    localWorkSize = [webCLKernel.getWorkGroupInfo(webCLDevices[0], webcl.KERNEL_WORK_GROUP_SIZE)];
+
+    webCLKernel.setArg(0, input);
+    webCLKernel.setArg(1, output);
+    webCLKernel.setArg(2, new Uint32Array([localWorkSize[0] * Float32Array.BYTES_PER_ELEMENT]));
+    webCLKernel.setArg(3, new Uint32Array([count]));
+
+    webCLCommandQueue.enqueueNDRangeKernel(webCLKernel, 1, [], globalWorkSize, localWorkSize);
+
+    webCLCommandQueue.enqueueReadBuffer(output, true, 0, BUFFER_SIZE, results);
+    correct = 0;
+    for(i = 0; i < count; i++)
+        if(results[i].toFixed(2) == ((2 + data[i]) * (2 + data[i])).toFixed(2))
+                correct++;
+
+    if (correct == count)
+        testPassed("Test passed for all " + count + " values for kernel: \"setArg_local\"");
+    else
+        testFailed("Test failed for kernel: \"setArg_local\". Computed " + correct + " / " + count + " correct values.");
+} catch (e) {
+    testFailed("WebCLKernel setArg() local type throws exception: " + e.message);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

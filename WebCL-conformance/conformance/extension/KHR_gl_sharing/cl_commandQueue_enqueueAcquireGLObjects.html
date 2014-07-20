@@ -1,0 +1,119 @@
+<!--
+ Copyright (C) 2014 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following condition
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+<html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLCommandQueue enqueueAcquireGLObjects conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+    <script src="../../../resources/clgl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<div style="position:absolute; left:0px; top:0px; visibility:hidden" id="x">
+    <canvas id="inputCanvas" />
+</div>
+<script>
+try {
+    debug("WebCLCommandQueue :: enqueueAcquireGLObjects test case.");
+    debug("\n(sequence<WebCLMemoryObject> memObjects, optional sequence<WebCLEvent>? eventWaitList, optional WebCLEvent? event)\n");
+
+    var wtu = WebCLTestUtils;
+    var clgl = WebCLGLTestUtils;
+
+    var canvas = document.getElementById("inputCanvas");
+    var glContext = canvas.getContext("experimental-webgl");
+
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+
+    var webCLContext = wtu.createContext(webCLDevices);
+    var webCLCommandQueue = wtu.createCommandQueue(webCLContext, webCLDevices[0]);
+    var webCLMemoryObject = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+    shouldThrowExceptionName("webCLCommandQueue.enqueueAcquireGLObjects([webCLMemoryObject]);", "WEBCL_EXTENSION_NOT_ENABLED");
+
+    if (!wtu.enableExtension(webcl, "KHR_gl_sharing")) {
+        throw { description : "Failed to enable extension : KHR_gl_sharing. Exitting..."};
+    }
+
+    webCLContext = wtu.createContext(webCLDevices);
+    webCLCommandQueue = wtu.createCommandQueue(webCLContext, webCLDevices[0]);
+    webCLMemoryObject = wtu.createBuffer(webCLContext, webcl.MEM_READ_ONLY, BUFFER_SIZE);
+
+    var glBuffer = clgl.createBuffer(glContext);
+    clgl.bindBuffer(glContext, glContext.ARRAY_BUFFER, glBuffer);
+    var webCLGLContext = wtu.createContext(glContext, webCLDevices);
+    var webCLGLMemoryObject = clgl.createFromGLBuffer(webCLGLContext, webcl.MEM_READ_ONLY, glBuffer);
+    var webCLGLMemoryObject1 = clgl.createFromGLBuffer(webCLGLContext, webcl.MEM_READ_ONLY, glBuffer);
+    var webCLGLCommandQueue = wtu.createCommandQueue(webCLGLContext, webCLDevices[0]);
+
+    shouldBeUndefined("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject]);");
+    clgl.enqueueReleaseGLObjects(webCLGLCommandQueue, [webCLGLMemoryObject]);
+    shouldBeUndefined("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject, webCLGLMemoryObject1]);");
+    clgl.enqueueReleaseGLObjects(webCLGLCommandQueue, [webCLGLMemoryObject, webCLGLMemoryObject1]);
+    var webCLEvent = wtu.createEvent();
+    var webCLUserEvent1 = wtu.createUserEvent(webCLGLContext);
+    var webCLUserEvent2 = wtu.createUserEvent(webCLGLContext);
+    shouldBeUndefined("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [webCLUserEvent1]);");
+    wtu.setStatus(webCLUserEvent1, webcl.COMPLETE);
+    clgl.enqueueReleaseGLObjects(webCLGLCommandQueue, [webCLGLMemoryObject]);
+    shouldBeUndefined("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [webCLUserEvent1, webCLUserEvent2]);");
+    wtu.setStatus(webCLUserEvent2, webcl.COMPLETE);
+    clgl.enqueueReleaseGLObjects(webCLGLCommandQueue, [webCLGLMemoryObject]);
+    webCLEvent = wtu.createEvent();
+    shouldBeUndefined("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [], webCLEvent);");
+    clgl.enqueueReleaseGLObjects(webCLGLCommandQueue, [webCLGLMemoryObject]);
+
+    //Testing for exceptions
+    shouldThrowExceptionName("webCLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject]);", "INVALID_CONTEXT");
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLMemoryObject]);", "INVALID_GL_OBJECT");
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject, webCLMemoryObject]);", "INVALID_GL_OBJECT");
+
+    var releasedEvent = wtu.createUserEvent(webCLGLContext);
+    wtu.release(releasedEvent);
+    webCLEvent = wtu.createEvent();
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [webCLEvent]);", "INVALID_EVENT_WAIT_LIST");
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [releasedEvent]);", "INVALID_EVENT_WAIT_LIST");
+
+    webCLEvent = wtu.createEvent();
+    webCLUserEvent1 = wtu.createUserEvent(webCLGLContext);
+    var hostPtr = new Int32Array(BUFFER_SIZE / 4);
+    wtu.enqueueReadBuffer(webCLCommandQueue, webCLMemoryObject, true, 0, hostPtr.byteLength, hostPtr, [], webCLEvent);
+
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [], webCLEvent);", "INVALID_EVENT");
+    shouldThrowExceptionName("webCLGLCommandQueue.enqueueAcquireGLObjects([webCLGLMemoryObject], [webCLUserEvent1], webCLEvent);", "INVALID_EVENT");
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>

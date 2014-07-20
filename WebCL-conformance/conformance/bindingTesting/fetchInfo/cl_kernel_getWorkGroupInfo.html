@@ -1,0 +1,111 @@
+<!--
+ Copyright (C) 2013 Samsung Electronics Corporation. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided the following conditions
+ are met:
+
+ 1.  Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+ 2.  Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY SAMSUNG ELECTRONICS CORPORATION AND ITS
+ CONTRIBUTORS "AS IS", AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING
+ BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL SAMSUNG
+ ELECTRONICS CORPORATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS, OR BUSINESS INTERRUPTION), HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT(INCLUDING
+ NEGLIGENCE OR OTHERWISE ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+ <html>
+<head>
+<meta charset="utf-8">
+    <title>WebCLKernel getWorkGroupInfo conformance test.</title>
+    <link rel="stylesheet" href="../../../resources/js-test-style.css"/>
+    <script src="../../../resources/js-test-pre.js"></script>
+    <script src="../../../resources/cl_utils.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<script>
+try {
+    debug("WebCLKernel :: getWorkGroupInfo(WebCLDevice? device, CLenum name) test case.");
+
+    var wtu = WebCLTestUtils;
+    var webCLContext = wtu.createContext();
+    var kernelSource = wtu.readKernel("../../../resources/kernels/square.cl");
+    var webCLProgram = wtu.createProgram(webCLContext, kernelSource);
+    var webCLPlatform = wtu.getPlatform();
+    var webCLDevices = wtu.getDevices(webCLPlatform);
+    var webCLDevice = webCLDevices[0];
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLKernel = wtu.createKernel(webCLProgram, "square");
+
+    for (var i = 0; i < webCLDevices.length; i++) {
+        shouldBe("typeof " + "webCLKernel.getWorkGroupInfo(webCLDevices[" + i + "], webcl.KERNEL_WORK_GROUP_SIZE);", "'number'");
+        shouldBe("typeof " + "webCLKernel.getWorkGroupInfo(webCLDevices[" + i + "], webcl.KERNEL_LOCAL_MEM_SIZE);", "'number'");
+        shouldBe("typeof " + "webCLKernel.getWorkGroupInfo(webCLDevices[" + i + "], webcl.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE);", "'number'");
+        shouldBe("typeof " + "webCLKernel.getWorkGroupInfo(webCLDevices[" + i + "], webcl.KERNEL_PRIVATE_MEM_SIZE);", "'number'");
+        shouldBeType("webCLKernel.getWorkGroupInfo(webCLDevices[" + i + "], webcl.KERNEL_COMPILE_WORK_GROUP_SIZE);", "Array");
+    }
+
+    var squareKernelWithAttributes = wtu.readKernel("../../../resources/kernels/square_with_attribute.cl");
+    webCLProgram = wtu.createProgram(webCLContext, squareKernelWithAttributes);
+    wtu.build(webCLProgram, webCLDevices);
+    var webCLKernelSquareWithAttribute = wtu.createKernel(webCLProgram, "square_with_attribute");
+    shouldBe("webCLKernelSquareWithAttribute.getWorkGroupInfo(webCLDevice, webcl.KERNEL_COMPILE_WORK_GROUP_SIZE);", "[1, 1, 1]");
+
+    // Testing for passing null in the place of devices where kernel is associated with only 1 device.
+    var webCLContextOnOneDevice = wtu.createContext(webCLDevice);
+    var webCLProgramOnOneDevice = wtu.createProgram(webCLContextOnOneDevice, kernelSource);
+    wtu.build(webCLProgramOnOneDevice, [webCLDevice]);
+    var webCLKernelOnOneDevice = wtu.createKernel(webCLProgramOnOneDevice, "square");
+
+    var workGroupSizeWithOneDevice = webCLKernelOnOneDevice.getWorkGroupInfo(webCLDevice, webcl.KERNEL_WORK_GROUP_SIZE);
+    shouldBe("webCLKernelOnOneDevice.getWorkGroupInfo(null, webcl.KERNEL_WORK_GROUP_SIZE);", "workGroupSizeWithOneDevice");
+    var localMemSizeWithOneDevice = webCLKernelOnOneDevice.getWorkGroupInfo(webCLDevice, webcl.KERNEL_LOCAL_MEM_SIZE);
+    shouldBe("webCLKernelOnOneDevice.getWorkGroupInfo(null, webcl.KERNEL_LOCAL_MEM_SIZE);", "localMemSizeWithOneDevice");
+    var preferredWorkGroupSizeMultipleWithOneDevice = webCLKernelOnOneDevice.getWorkGroupInfo(webCLDevice, webcl.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE);
+    shouldBe("webCLKernelOnOneDevice.getWorkGroupInfo(null, webcl.KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE);", "preferredWorkGroupSizeMultipleWithOneDevice");
+    var privateMemSizeWithOneDevice = webCLKernelOnOneDevice.getWorkGroupInfo(webCLDevice, webcl.KERNEL_PRIVATE_MEM_SIZE);
+    shouldBe("webCLKernelOnOneDevice.getWorkGroupInfo(null, webcl.KERNEL_PRIVATE_MEM_SIZE);", "privateMemSizeWithOneDevice");
+    var compileWorkGroupSizeWithOneDevice = webCLKernelOnOneDevice.getWorkGroupInfo(webCLDevice, webcl.KERNEL_COMPILE_WORK_GROUP_SIZE);
+    shouldBe("webCLKernelOnOneDevice.getWorkGroupInfo(null, webcl.KERNEL_COMPILE_WORK_GROUP_SIZE);", "compileWorkGroupSizeWithOneDevice");
+
+    // Testing for Exceptions.
+    shouldThrowExceptionName("webCLKernel.getWorkGroupInfo(webCLDevice, invalid_CLenum);", "INVALID_VALUE");
+
+    var devices = wtu.getDevices(webCLPlatform, webcl.DEVICE_TYPE_ALL);
+    if (devices.length > 1) {
+        var webCLDevice1 = devices[0];
+        var webCLContext1 = wtu.createContext(webCLDevice1);
+
+        var webCLProgram1 = wtu.createProgram(webCLContext1, kernelSource);
+        wtu.build(webCLProgram1, [webCLDevice1]);
+        var webCLKernel1 = wtu.createKernel(webCLProgram1, "square");
+        var webCLDevice2 = devices[1];
+        shouldThrowExceptionName("webCLKernel1.getWorkGroupInfo(webCLDevice2, webcl.KERNEL_WORK_GROUP_SIZE);", "INVALID_DEVICE");
+
+        var webCLContextOnMultipleDevices = wtu.createContext(devices);
+        var webCLProgramOnMultipleDevices = wtu.createProgram(webCLContextOnMultipleDevices, kernelSource);
+        wtu.build(webCLProgramOnMultipleDevices, devices);
+        var webCLKernelOnMultipleDevices = wtu.createKernel(webCLProgramOnMultipleDevices, "square");
+        shouldThrowExceptionName("webCLKernelOnMultipleDevices.getWorkGroupInfo(null, webcl.KERNEL_WORK_GROUP_SIZE);", "INVALID_DEVICE");
+    }
+
+} catch(e) {
+    testFailed(e.description);
+}
+successfullyParsed = true;
+</script>
+<script src="../../../resources/js-test-post.js"></script>
+</body>
+</html>
