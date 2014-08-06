@@ -91,6 +91,12 @@ void ComputeExtensions::initializeGlobalExtensions()
 
 bool ComputeExtensions::supportsExtension(const WTF::String& name) const
 {
+	// ScalableVision:
+	// AMD driver does not return cl_khr_gl_sharing from clGetPlatformInfo
+	// It returns:
+	// "cl_khr_icd cl_amd_event_callback cl_amd_offline_devices cl_khr_d3d10_sharing cl_khr_d3d11_sharing"k
+	// Therefore, this way of verifying extension by clGetPlatformInfo doesn't work
+	// with ATI graphics.
     if (name == "cl_khr_gl_sharing") {
 //#if PLATFORM(MAC)
 //        return m_globalExtensions.contains("cl_APPLE_gl_sharing");

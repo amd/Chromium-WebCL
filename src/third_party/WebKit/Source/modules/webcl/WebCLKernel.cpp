@@ -43,6 +43,7 @@
 
 #include "ArrayBufferView.h"
 #include "Float32Array.h"
+#include "Float64Array.h"
 #include "Int16Array.h"
 #include "Int32Array.h"
 #include "Int8Array.h"
@@ -273,6 +274,10 @@ void WebCLKernel::setArg(CCuint index, ArrayBufferView* bufferView, ExceptionObj
     case (ArrayBufferView::TypeFloat32): // FLOAT
         bufferData = static_cast<Float32Array*>(bufferView)->data();
         arrayLength = bufferView->byteLength() / 4;
+        break;
+    case (ArrayBufferView::TypeFloat64): // DOUBLE
+        bufferData = static_cast<Float64Array*>(bufferView)->data();
+        arrayLength = bufferView->byteLength() / 8;
         break;
     case (ArrayBufferView::TypeUint32): // UINT
         bufferData = static_cast<Uint32Array*>(bufferView)->data();

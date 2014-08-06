@@ -41,8 +41,21 @@ inline bool WebCLExtensionsAccessor<T>::enableExtension(const String& name)
         m_enabledExtensions.add("WEBCL_html_image");
         return true;
     }
+    if (equalIgnoringCase(name, "KHR_fp64")) {
+         //bool khrFP64 = m_accessor ? ComputeExtensions::get().supports("cl_khr_fp64", m_accessor)
+         //    : ComputeExtensions::get().supports("cl_khr_fp64");
+         //if (khrFP64)
+             m_enabledExtensions.add("KHR_fp64");
+	     return true;
+         //return khrFP64;
+
+     }
+
     if (equalIgnoringCase(name, "KHR_gl_sharing")) {
 #if ENABLE(WEBGL)
+		bool tmp = m_accessor ? ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor)
+                                    : ComputeExtensions::get().supports("cl_khr_gl_sharing");
+
         bool khrGLSharing = true; //m_accessor ? ComputeExtensions::get().supports("cl_khr_gl_sharing", m_accessor)
         //                            : ComputeExtensions::get().supports("cl_khr_gl_sharing");
         //if (khrGLSharing)
@@ -59,6 +72,8 @@ Vector<String> WebCLExtensionsAccessor<T>::getSupportedExtensions()
     Vector<String> result;
     // WEBCL_html_image is always enabled in WebKit.
     result.append("WEBCL_html_image");
+    
+    result.append("KHR_fp64");
 
     if (m_accessor) {
 #if ENABLE(WEBGL)

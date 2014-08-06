@@ -396,6 +396,19 @@ WebCLGetInfo WebCLDevice::getInfo(CCenum infoType, ExceptionObject& exception)
 			if (err == CL_SUCCESS)
 				return WebCLGetInfo(static_cast<unsigned int>(sizet_units));
 			break;
+
+    case ComputeContext::DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE:
+    //case ComputeContext::DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE: 
+		{
+         //if (!isEnabledExtension("KHR_fp64"))
+         //    return WebCLGetInfo(0);
+         CCuint infoValue = 0;
+         err = platformObject()->getDeviceInfo(infoType, &infoValue);
+         if (err == ComputeContext::SUCCESS)
+             return WebCLGetInfo(static_cast<CCuint>(infoValue));
+         break;
+     }
+
 		case ComputeContext::DEVICE_LOCAL_MEM_SIZE:
 			err = clGetDeviceInfo(device_id, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), &ulong_units, NULL);
 			if (err == CL_SUCCESS)
